@@ -7,7 +7,9 @@ import jakarta.persistence.EntityManager;
 
 import static com.example.namo2.domain.schedule.domain.QImage.image;
 
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class ImageRepositoryImpl implements ImageRepositoryCustom {
     private final JPAQueryFactory queryFactory;
     private final EntityManager em;

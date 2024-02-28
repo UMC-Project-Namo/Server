@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.stereotype.Repository;
 
 import com.example.namo2.domain.moim.application.converter.MoimScheduleResponseConverter;
 import com.example.namo2.domain.moim.domain.MoimAndUser;
@@ -35,6 +36,7 @@ import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Repository
 public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
