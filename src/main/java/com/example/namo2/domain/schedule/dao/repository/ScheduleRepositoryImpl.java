@@ -1,4 +1,4 @@
-package com.example.namo2.domain.schedule.dao.impl;
+package com.example.namo2.domain.schedule.dao.repository;
 
 import static com.example.namo2.domain.category.domain.QCategory.*;
 import static com.example.namo2.domain.category.domain.QPalette.*;
@@ -36,7 +36,6 @@ import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Repository
 public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
