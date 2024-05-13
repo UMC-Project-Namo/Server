@@ -135,8 +135,8 @@ public class GroupDiaryController {
 		return BaseResponse.ok();
 	}
 
-	@Operation(summary = "모임 기록 전체 삭제", description = "모임 기록 전체 삭제 API")
-	@DeleteMapping("/all/{moimDiaryId}")
+	@Operation(summary = "모임 기록 전체 삭제", description = "일정에 대한 모임 기록 전체 삭제 API")
+	@DeleteMapping("/all/{moimScheduleId}")
 	@ApiErrorCodes(value = {
 		BaseResponseStatus.EMPTY_ACCESS_KEY,
 		BaseResponseStatus.EXPIRATION_ACCESS_TOKEN,
@@ -144,9 +144,9 @@ public class GroupDiaryController {
 		BaseResponseStatus.INTERNET_SERVER_ERROR
 	})
 	public BaseResponse<Object> removeMoimMemo(
-		@Parameter(description = "모임 기록 ID") @PathVariable Long moimDiaryId
+		@Parameter(description = "모임 일정 ID") @PathVariable Long moimScheduleId
 	) {
-		moimMemoFacade.removeMoimMemo(moimDiaryId);
+		moimMemoFacade.removeMoimMemo(moimScheduleId);
 		return BaseResponse.ok();
 	}
 

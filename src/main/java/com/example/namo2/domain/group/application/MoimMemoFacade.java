@@ -148,8 +148,8 @@ public class MoimMemoFacade {
     }
 
     @Transactional(readOnly = false)
-    public void removeMoimMemo(Long memoId) {
-        MoimMemo moimMemoWithLocations = moimMemoService.getMoimMemoWithLocations(memoId);
+    public void removeMoimMemo(Long moimScheduleId) {
+        MoimMemo moimMemoWithLocations = moimMemoService.getMoimMemoWithLocations(moimScheduleId);
         for (MoimMemoLocation moimMemoLocation : moimMemoWithLocations.getMoimMemoLocations()) {
             removeMoimMemoLocation(moimMemoLocation.getId());
         }
