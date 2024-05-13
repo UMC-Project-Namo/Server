@@ -248,7 +248,12 @@ public class UserFacade {
 	public void removeKakaoUser(HttpServletRequest request, String kakaoAccessToken) {
 		//유저 토큰 만료시 예외 처리
 		String accessToken = request.getHeader("Authorization");
+
+		logger.info("accessToken : {}", accessToken);
+
 		userService.checkAccessTokenValidation(accessToken);
+
+		logger.info("kakaoAccessToken {}", kakaoAccessToken);
 
 		kakaoAuthClient.unlinkKakao(kakaoAccessToken);
 
