@@ -11,6 +11,8 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,20 +21,25 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.namo2.domain.individual.application.converter.CategoryConverter;
-import com.example.namo2.domain.individual.application.impl.CategoryService;
-import com.example.namo2.domain.individual.application.impl.PaletteService;
-import com.example.namo2.domain.individual.domain.Category;
-import com.example.namo2.domain.individual.domain.constant.CategoryKind;
-import com.example.namo2.domain.group.application.impl.MoimMemoLocationService;
 import com.example.namo2.domain.group.application.impl.MoimAndUserService;
+import com.example.namo2.domain.group.application.impl.MoimMemoLocationService;
 import com.example.namo2.domain.group.application.impl.MoimScheduleAndUserService;
 import com.example.namo2.domain.group.domain.MoimScheduleAndUser;
+import com.example.namo2.domain.individual.application.converter.CategoryConverter;
 import com.example.namo2.domain.individual.application.impl.AlarmService;
+import com.example.namo2.domain.individual.application.impl.CategoryService;
 import com.example.namo2.domain.individual.application.impl.ImageService;
+import com.example.namo2.domain.individual.application.impl.PaletteService;
 import com.example.namo2.domain.individual.application.impl.ScheduleService;
+import com.example.namo2.domain.individual.domain.Category;
 import com.example.namo2.domain.individual.domain.Image;
 import com.example.namo2.domain.individual.domain.Schedule;
+import com.example.namo2.domain.individual.domain.constant.CategoryKind;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
 import com.example.namo2.domain.user.application.converter.TermConverter;
 import com.example.namo2.domain.user.application.converter.UserConverter;
 import com.example.namo2.domain.user.application.converter.UserResponseConverter;
@@ -54,10 +61,6 @@ import com.example.namo2.global.utils.FileUtils;
 import com.example.namo2.global.utils.JwtUtils;
 import com.example.namo2.global.utils.SocialUtils;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -104,7 +107,7 @@ public class UserFacade {
 
 		String[] tokens = jwtUtils.generateTokens(savedUser.getId());
 		UserResponse.SignUpDto signUpRes = UserResponseConverter.toSignUpDto(tokens[0], tokens[1],
-				isNewUser); //access, refresh순
+			isNewUser); //access, refresh순
 		userService.updateRefreshToken(savedUser.getId(), signUpRes.getRefreshToken());
 		return signUpRes;
 	}
@@ -140,17 +143,17 @@ public class UserFacade {
 
 		//identityToken 검증
 		AppleResponse.ApplePublicKeyDto applePublicKey =
-				AppleResponseConverter.toApplePublicKey(applePublicKeys, alg, kid);
+			AppleResponseConverter.toApplePublicKey(applePublicKeys, alg, kid);
 
 		PublicKey publicKey = userService.getPublicKey(applePublicKey);
 		userService.validateToken(publicKey, req.getIdentityToken());
 
 		//identity에서 email뽑기
 		Claims claims = Jwts.parserBuilder()
-				.setSigningKey(publicKey)
-				.build()
-				.parseClaimsJws(req.getIdentityToken())
-				.getBody();
+			.setSigningKey(publicKey)
+			.build()
+			.parseClaimsJws(req.getIdentityToken())
+			.getBody();
 		String appleOauthId = claims.get("sub", String.class);
 		String appleEmail = claims.get("email", String.class);
 		log.debug("email: {}, oauthId : {}", appleEmail, appleOauthId);
@@ -221,18 +224,18 @@ public class UserFacade {
 
 	private void makeBaseCategory(User save) {
 		Category baseCategory = CategoryConverter.toCategory(
-				CategoryKind.SCHEDULE.getCategoryName(),
-				paletteService.getReferenceById(1L),
-				Boolean.TRUE,
-				save,
-				CategoryKind.SCHEDULE
+			CategoryKind.SCHEDULE.getCategoryName(),
+			paletteService.getReferenceById(1L),
+			Boolean.TRUE,
+			save,
+			CategoryKind.SCHEDULE
 		);
 		Category groupCategory = CategoryConverter.toCategory(
-				CategoryKind.MOIM.getCategoryName(),
-				paletteService.getReferenceById(4L),
-				Boolean.TRUE,
-				save,
-				CategoryKind.MOIM
+			CategoryKind.MOIM.getCategoryName(),
+			paletteService.getReferenceById(4L),
+			Boolean.TRUE,
+			save,
+			CategoryKind.MOIM
 		);
 
 		categoryService.create(baseCategory);
@@ -249,8 +252,13 @@ public class UserFacade {
 	@Transactional
 	public void removeKakaoUser(HttpServletRequest request, String kakaoAccessToken) {
 		//유저 토큰 만료시 예외 처리
-		String accessToken = request.getHeader("Authorization");
+		String accessToken = jwtUtils.getAccessToken(request);
+
+		logger.info("accessToken : {}", accessToken);
+
 		userService.checkAccessTokenValidation(accessToken);
+
+		logger.info("kakaoAccessToken {}", kakaoAccessToken);
 
 		kakaoAuthClient.unlinkKakao(kakaoAccessToken);
 
@@ -260,7 +268,7 @@ public class UserFacade {
 	@Transactional
 	public void removeNaverUser(HttpServletRequest request, String naverAccessToken) {
 		//유저 토큰 만료시 예외 처리
-		String accessToken = request.getHeader("Authorization");
+		String accessToken = jwtUtils.getAccessToken(request);
 		userService.checkAccessTokenValidation(accessToken);
 
 		naverAuthClient.tokenAvailability(naverAccessToken);
@@ -272,7 +280,7 @@ public class UserFacade {
 	@Transactional
 	public void removeAppleUser(HttpServletRequest request, String authorizationCode) {
 		//유저 토큰 만료시 예외 처리
-		String accessToken = request.getHeader("Authorization");
+		String accessToken = jwtUtils.getAccessToken(request);
 		userService.checkAccessTokenValidation(accessToken);
 
 		String clientSecret = "";
@@ -288,18 +296,18 @@ public class UserFacade {
 
 	public String createClientSecret() {
 		Date expirationDate = Date.from(
-				LocalDateTime.now().plusDays(30).atZone(ZoneId.systemDefault()).toInstant());
+			LocalDateTime.now().plusDays(30).atZone(ZoneId.systemDefault()).toInstant());
 
 		return Jwts.builder()
-				.setHeaderParam("kid", appleProperties.getKeyId())
-				.setHeaderParam("alg", "ES256")
-				.setIssuer(appleProperties.getTeamId())
-				.setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(expirationDate)
-				.setAudience("https://appleid.apple.com")
-				.setSubject(appleProperties.getClientId())
-				.signWith(SignatureAlgorithm.ES256, userService.getPrivateKey())
-				.compact();
+			.setHeaderParam("kid", appleProperties.getKeyId())
+			.setHeaderParam("alg", "ES256")
+			.setIssuer(appleProperties.getTeamId())
+			.setIssuedAt(new Date(System.currentTimeMillis()))
+			.setExpiration(expirationDate)
+			.setAudience("https://appleid.apple.com")
+			.setSubject(appleProperties.getClientId())
+			.signWith(SignatureAlgorithm.ES256, userService.getPrivateKey())
+			.compact();
 	}
 
 	private void setUserInactive(HttpServletRequest request) {
@@ -307,7 +315,8 @@ public class UserFacade {
 		user.setStatus(UserStatus.INACTIVE);
 
 		//token 만료처리
-		String accessToken = request.getHeader("Authorization");
+		String accessToken = jwtUtils.getAccessToken(request);
+		//request.getHeader("Authorization");
 		Long expiration = jwtUtils.getExpiration(accessToken);
 		redisTemplate.opsForValue().set(accessToken, "delete", expiration, TimeUnit.MILLISECONDS);
 	}
@@ -328,10 +337,10 @@ public class UserFacade {
 	public void removeUserFromDB() {
 		List<User> users = userService.getInactiveUser();
 		users.forEach(
-				user -> { //db에서 삭제
-					logger.debug("[Delete] user name : " + user.getName());
+			user -> { //db에서 삭제
+				logger.debug("[Delete] user name : " + user.getName());
 
-					categoryService.removeCategoriesByUser(user);
+				categoryService.removeCategoriesByUser(user);
 
 					List<Schedule> schedules = scheduleService.getSchedulesByUser(user);
 					alarmService.removeAlarmsBySchedules(schedules);
@@ -341,15 +350,15 @@ public class UserFacade {
 					imageService.removeImgsBySchedules(schedules);
 					scheduleService.removeSchedules(schedules);
 
-					moimAndUserService.removeMoimAndUsersByUser(user);
+				moimAndUserService.removeMoimAndUsersByUser(user);
 
-					List<MoimScheduleAndUser> moimScheduleAndUsers = moimScheduleAndUserService.getAllByUser(user);
-					moimScheduleAndUserService.removeMoimScheduleAlarms(moimScheduleAndUsers);
-					moimScheduleAndUserService.removeMoimScheduleAndUsers(moimScheduleAndUsers);
+				List<MoimScheduleAndUser> moimScheduleAndUsers = moimScheduleAndUserService.getAllByUser(user);
+				moimScheduleAndUserService.removeMoimScheduleAlarms(moimScheduleAndUsers);
+				moimScheduleAndUserService.removeMoimScheduleAndUsers(moimScheduleAndUsers);
 
-					moimMemoLocationService.removeMoimMemoLocationAndUsersByUser(user);
-					userService.removeUser(user);
-				}
+				moimMemoLocationService.removeMoimMemoLocationAndUsersByUser(user);
+				userService.removeUser(user);
+			}
 		);
 
 	}
