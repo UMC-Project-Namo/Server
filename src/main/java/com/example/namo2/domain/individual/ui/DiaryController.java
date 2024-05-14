@@ -59,7 +59,7 @@ public class DiaryController {
 	}
 
 	@Operation(summary = "일정 기록 월간 조회", description = "일정 기록 월간 조회 API")
-	@GetMapping("/{month}")
+	@GetMapping("/month/{month}")
 	@ApiErrorCodes(value = {
 		BaseResponseStatus.EMPTY_ACCESS_KEY,
 		BaseResponseStatus.EXPIRATION_ACCESS_TOKEN,
