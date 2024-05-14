@@ -83,6 +83,6 @@ public class DiaryFacade {
 			.map(Image::getImgUrl)
 			.toList();
 		imageService.removeImgsBySchedule(schedule);
-		fileUtils.deleteImages(urls);
+		fileUtils.deleteImages(urls, FilePath.INVITATION_ACTIVITY_IMG);
 	}
 }

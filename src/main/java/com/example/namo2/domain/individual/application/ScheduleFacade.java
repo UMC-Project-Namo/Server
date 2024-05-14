@@ -33,6 +33,7 @@ import com.example.namo2.domain.individual.ui.dto.ScheduleResponse;
 import com.example.namo2.domain.user.application.impl.UserService;
 import com.example.namo2.domain.user.domain.User;
 
+import com.example.namo2.global.common.constant.FilePath;
 import com.example.namo2.global.utils.FileUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -131,8 +132,8 @@ public class ScheduleFacade {
 			alarmService.removeAlarmsBySchedule(schedule);
 			List<String> urls = schedule.getImages().stream()
 				.map(Image::getImgUrl)
-				.collect(Collectors.toList());
-			fileUtils.deleteImages(urls);
+				.toList();
+			fileUtils.deleteImages(urls, FilePath.INVITATION_ACTIVITY_IMG);
 			imageService.removeImgsBySchedule(schedule);
 			scheduleService.removeSchedule(schedule);
 			return;

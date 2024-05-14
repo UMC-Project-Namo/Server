@@ -42,8 +42,8 @@ public class MoimMemoService {
 		return moimMemoRepository.save(moimMemo);
 	}
 
-	public MoimMemo getMoimMemoWithLocations(Long moimMemoId) {
-		return moimMemoRepository.findMoimMemoAndLocationsByMoimSchedule(moimMemoId)
+	public MoimMemo getMoimMemoWithLocations(Long moimScheduleId) {
+		return moimMemoRepository.findMoimMemoAndLocationsByMoimSchedule(moimScheduleId)
 			.orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_MOIM_MEMO_FAILURE));
 	}
 }

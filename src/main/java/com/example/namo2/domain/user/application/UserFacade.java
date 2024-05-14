@@ -50,6 +50,7 @@ import com.example.namo2.domain.user.domain.constant.UserStatus;
 import com.example.namo2.domain.user.ui.dto.UserRequest;
 import com.example.namo2.domain.user.ui.dto.UserResponse;
 
+import com.example.namo2.global.common.constant.FilePath;
 import com.example.namo2.global.feignclient.apple.AppleAuthClient;
 import com.example.namo2.global.feignclient.apple.AppleProperties;
 import com.example.namo2.global.feignclient.apple.AppleResponse;
@@ -341,13 +342,13 @@ public class UserFacade {
 
 				categoryService.removeCategoriesByUser(user);
 
-				List<Schedule> schedules = scheduleService.getSchedulesByUser(user);
-				alarmService.removeAlarmsBySchedules(schedules);
-				List<Image> images = imageService.getImagesBySchedules(schedules);
-				List<String> urls = images.stream().map(Image::getImgUrl).collect(Collectors.toList());
-				fileUtils.deleteImages(urls);
-				imageService.removeImgsBySchedules(schedules);
-				scheduleService.removeSchedules(schedules);
+					List<Schedule> schedules = scheduleService.getSchedulesByUser(user);
+					alarmService.removeAlarmsBySchedules(schedules);
+					List<Image> images = imageService.getImagesBySchedules(schedules);
+					List<String> urls = images.stream().map(Image::getImgUrl).collect(Collectors.toList());
+					fileUtils.deleteImages(urls, FilePath.INVITATION_ACTIVITY_IMG);
+					imageService.removeImgsBySchedules(schedules);
+					scheduleService.removeSchedules(schedules);
 
 				moimAndUserService.removeMoimAndUsersByUser(user);
 

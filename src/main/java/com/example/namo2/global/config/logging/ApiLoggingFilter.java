@@ -105,8 +105,8 @@ public class ApiLoggingFilter extends OncePerRequestFilter {
 	}
 
 	private static void logResponse(ContentCachingResponseWrapper response) throws IOException {
-
-		logPayload("Response", response.getContentType(), response.getContentAsByteArray());
+		String contentType = contentTypeCheck(response.getContentType());
+		logPayload("Response", contentType, response.getContentAsByteArray());
 	}
 
 	private static void logPayload(String prefix, String contentType, byte[] rowData) throws IOException {
