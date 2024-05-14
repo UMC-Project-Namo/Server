@@ -70,21 +70,22 @@ public class FileUtils {
 		return objectMetadata;
 	}
 
-	public void deleteImages(List<String> urls) throws BaseException {
+	public void deleteImages(List<String> urls, FilePath filePath) throws BaseException {
 		try {
 			for (String url : urls) {
-				delete(url);
+				delete(url, filePath);
 			}
 		} catch (SdkClientException e) {
 			throw new BaseException(S3_FAILURE);
 		}
 	}
 
-	private void delete(String url) throws BaseException {
+	private void delete(String url, FilePath filePath) throws BaseException {
 		try {
-			int indexOf = url.indexOf("memo");
-			String key = url.substring(indexOf);
-			s3Uploader.delete(key);
+			String key = url.substring(url.lastIndexOf(filePath.getPath()));
+			if (!key.isEmpty()) {
+				s3Uploader.delete(key);
+			}
 		} catch (SdkClientException e) {
 			throw new BaseException(S3_FAILURE);
 		}

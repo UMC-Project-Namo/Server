@@ -39,6 +39,7 @@ import com.example.namo2.domain.individual.domain.Schedule;
 import com.example.namo2.domain.user.application.impl.UserService;
 import com.example.namo2.domain.user.domain.User;
 
+import com.example.namo2.global.common.constant.FilePath;
 import com.example.namo2.global.utils.FileUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -139,8 +140,8 @@ public class MoimScheduleFacade {
 			= moimMemoLocationService.getMoimMemoLocationImgs(moimMemoLocations);
 		List<String> urls = moimMemoLocationImgs.stream()
 			.map(MoimMemoLocationImg::getUrl)
-			.collect(Collectors.toList());
-		fileUtils.deleteImages(urls);
+			.toList();
+		fileUtils.deleteImages(urls, FilePath.GROUP_ACTIVITY_IMG);
 		moimMemoLocationService.removeMoimMemoLocationImgs(moimMemoLocations);
 	}
 
