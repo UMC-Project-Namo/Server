@@ -6,7 +6,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class ScheduleRequest {
 	private ScheduleRequest() {
@@ -14,7 +16,9 @@ public class ScheduleRequest {
 	}
 
 	@Getter
+	@Builder
 	@AllArgsConstructor
+	@NoArgsConstructor
 	public static class PostScheduleDto {
 		@NotBlank
 		private String name;
