@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import com.example.namo2.domain.user.domain.constant.UserStatus;
 import com.example.namo2.global.common.entity.BaseTimeEntity;
 
 import lombok.AccessLevel;

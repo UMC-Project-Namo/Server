@@ -1,11 +1,9 @@
 # [blankline-between-import-group]
-13=lombok
-12=com.example.namo2.global
-11=com.example.namo2.domain.user
-10=com.example.namo2.domain.schedule
-9=com.example.namo2.domain.moim
-8=com.example.namo2.domain.memo
-7=com.example.namo2.domain.category
+11=lombok
+10=com.example.namo2.global
+9=com.example.namo2.domain.group
+8=com.example.namo2.domain.individual
+7=com.example.namo2.domain.user
 6=
 5=com
 4=net

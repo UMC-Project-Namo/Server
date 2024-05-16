@@ -54,14 +54,6 @@ public class SwaggerConfig {
 				.info(getInfo());
 	}
 
-	@Bean
-	public GroupedOpenApi publicApi() {
-		return GroupedOpenApi.builder()
-				.group("v1")
-				.pathsToMatch("/api/v1/**")
-				.build();
-	}
-
 	private static List<SecurityRequirement> getSecurity() {
 		SecurityRequirement securityRequirement = new SecurityRequirement()
 				.addList(AUTHORIZATION);

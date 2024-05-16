@@ -3,7 +3,7 @@ package com.example.namo2.domain.user.application.converter;
 import java.util.Map;
 
 import com.example.namo2.domain.user.domain.User;
-import com.example.namo2.domain.user.domain.UserStatus;
+import com.example.namo2.domain.user.domain.constant.UserStatus;
 
 public class UserConverter {
 

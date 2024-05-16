@@ -38,7 +38,7 @@ import com.example.namo2.domain.user.dao.repository.TermRepository;
 import com.example.namo2.domain.user.dao.repository.UserRepository;
 import com.example.namo2.domain.user.domain.Term;
 import com.example.namo2.domain.user.domain.User;
-import com.example.namo2.domain.user.domain.UserStatus;
+import com.example.namo2.domain.user.domain.constant.UserStatus;
 import com.example.namo2.domain.user.ui.dto.UserRequest;
 
 import com.example.namo2.global.common.exception.BaseException;

@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
+import com.example.namo2.domain.user.domain.constant.Content;
 import com.example.namo2.global.common.entity.BaseTimeEntity;
 
 import lombok.AccessLevel;

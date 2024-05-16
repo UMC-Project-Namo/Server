@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.example.namo2.domain.user.domain.User;
-import com.example.namo2.domain.user.domain.UserStatus;
+import com.example.namo2.domain.user.domain.constant.UserStatus;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 	Optional<User> findUserByEmail(String email);
