@@ -72,15 +72,39 @@ dependencies {
     implementation 'org.bouncycastle:bcpkix-jdk18on:1.77'
     implementation 'org.bouncycastle:bcutil-jdk18on:1.77'
 
-
+    // javax bind
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
 }
 
-
 clean {
     delete file('src/main/generated')
 }
 
+jar {
+    enabled = false
+}
+
+bootJar {
+    layered {
+        application {
+            intoLayer("spring-boot-loader") {
+                include "org/springframework/boot/loader/**"
+            }
+            intoLayer("application")
+        }
+        dependencies {
+            intoLayer("application") {
+                includeProjectDependencies()
+            }
+            intoLayer("snapshot-dependencies") {
+                include "*:*:*SNAPSHOT"
+            }
+            intoLayer("dependencies")
+        }
+        layerOrder = ["dependencies", "spring-boot-loader", "snapshot-dependencies", "application"]
+    }
+}

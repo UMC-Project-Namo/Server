@@ -298,11 +298,9 @@ Defferences from the Naver coding convention: detail is in the Notion page.
                       net.,
                       /com\.(?!example.namo2.global.|example.namo2.domain.)/,
                       /(?!java\.|javax\.|com\.|org\.|net\.)/,
-                      com.example.namo2.domain.category.,
-                      com.example.namo2.domain.memo.,
-                      com.example.namo2.domain.moim.,
-                      com.example.namo2.domain.schedule.,
                       com.example.namo2.domain.user.,
+                      com.example.namo2.domain.individual.,
+                      com.example.namo2.domain.group.,
                       com.example.namo2.global.,
                       lombok."/>
             <property name="ordered" value="true"/>

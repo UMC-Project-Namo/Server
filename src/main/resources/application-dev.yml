@@ -14,10 +14,17 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+        use_sql_comments: true
         default_batch_fetch_size: 100
 
 logging:
   level:
-    org.hibernate.SQL: debug
-    org.hibernate.type: trace
-    com.example.namo2: debug
+    ROOT: INFO
+    org.hibernate:
+      sql: DEBUG
+      type.descriptor.sql: TRACE
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.orm: TRACE
+    org.springframework.transaction: TRACE
+    com.zaxxer.hikari: TRACE
+    com.mysql.cj.jdbc: TRACE

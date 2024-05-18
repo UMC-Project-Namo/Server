@@ -14,5 +14,13 @@ public class UserResponse {
 	public static class SignUpDto {
 		private String accessToken;
 		private String refreshToken;
+		private boolean newUser;
+	}
+
+	@Getter
+	@Builder
+	public static class ReissueDto {
+		private String accessToken;
+		private String refreshToken;
 	}
 }

@@ -7,8 +7,16 @@ public class UserResponseConverter {
 		throw new IllegalStateException("Utility class");
 	}
 
-	public static UserResponse.SignUpDto toSignUpDto(String accessToken, String refreshToken) {
+	public static UserResponse.SignUpDto toSignUpDto(String accessToken, String refreshToken, boolean isNewUser) {
 		return UserResponse.SignUpDto.builder()
+			.accessToken(accessToken)
+			.refreshToken(refreshToken)
+			.newUser(isNewUser)
+			.build();
+	}
+
+	public static UserResponse.ReissueDto toReissueDto(String accessToken, String refreshToken) {
+		return UserResponse.ReissueDto.builder()
 			.accessToken(accessToken)
 			.refreshToken(refreshToken)
 			.build();

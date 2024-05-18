@@ -3,7 +3,7 @@ package com.example.namo2.domain.user.application.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.namo2.domain.user.domain.Content;
+import com.example.namo2.domain.user.domain.constant.Content;
 import com.example.namo2.domain.user.domain.Term;
 import com.example.namo2.domain.user.domain.User;
 import com.example.namo2.domain.user.ui.dto.UserRequest;

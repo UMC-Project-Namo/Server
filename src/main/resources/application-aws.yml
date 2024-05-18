@@ -23,3 +23,6 @@ cloud:
     redis:
       host: ${REDIS_HOST:localhost}
       port: ${REDIS_PORT:6379}
+
+moim:
+  base-url-image: ${BASE_MOIM_IMAGE_URL}

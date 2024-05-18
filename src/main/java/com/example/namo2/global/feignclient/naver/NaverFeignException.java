@@ -20,9 +20,7 @@ public class NaverFeignException implements ErrorDecoder {
 				case 401 -> new BaseException(BaseResponseStatus.NAVER_UNAUTHORIZED);
 				case 403 -> new BaseException(BaseResponseStatus.NAVER_FORBIDDEN);
 				case 404 -> new BaseException(BaseResponseStatus.NAVER_NOT_FOUND);
-				default -> throw new IllegalStateException(
-					"Unexpected value: " + response.status()
-				);
+				default -> new BaseException(BaseResponseStatus.SOCIAL_WITHDRAWAL_FAILURE);
 			};
 		} else {
 			return new BaseException(BaseResponseStatus.FEIGN_SERVER_ERROR);

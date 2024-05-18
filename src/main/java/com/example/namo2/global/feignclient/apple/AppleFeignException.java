@@ -12,8 +12,7 @@ public class AppleFeignException implements ErrorDecoder {
 		if (response.status() >= 400 && response.status() <= 499) {
 			return switch (response.status()) {
 				case 400 -> new BaseException(BaseResponseStatus.APPLE_UNAUTHORIZED);
-				default -> throw new IllegalStateException(
-					"Unexpected value: " + response.status());
+				default -> new BaseException(BaseResponseStatus.SOCIAL_WITHDRAWAL_FAILURE);
 			};
 		} else {
 			return new BaseException(BaseResponseStatus.FEIGN_SERVER_ERROR);

@@ -1,4 +1,4 @@
-<code_scheme name="Namo-Code-Conventions-v1.1" version="173">
+<code_scheme name="Namo-Code-Conventions-v1.2" version="173">
     <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="5"/>
     <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="3"/>
     <option name="IMPORT_LAYOUT_TABLE">
@@ -33,15 +33,11 @@
                 <emptyLine/>
                 <package name="" withSubpackages="true" static="false"/>
                 <emptyLine/>
-                <package name="com.example.namo2.domain.category" withSubpackages="true" static="false"/>
-                <emptyLine/>
-                <package name="com.example.namo2.domain.memo" withSubpackages="true" static="false"/>
-                <emptyLine/>
-                <package name="com.example.namo2.domain.moim" withSubpackages="true" static="false"/>
-                <emptyLine/>
-                <package name="com.example.namo2.domain.schedule" withSubpackages="true" static="false"/>
-                <emptyLine/>
                 <package name="com.example.namo2.domain.user" withSubpackages="true" static="false"/>
+                <emptyLine/>
+                <package name="com.example.namo2.domain.individual" withSubpackages="true" static="false"/>
+                <emptyLine/>
+                <package name="com.example.namo2.domain.group" withSubpackages="true" static="false"/>
                 <emptyLine/>
                 <package name="com.example.namo2.global" withSubpackages="true" static="false"/>
                 <emptyLine/>

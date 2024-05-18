@@ -21,8 +21,7 @@ public class KakaoFeignClientExceptionDecoder implements ErrorDecoder {
 			return switch (response.status()) {
 				case 401 -> new BaseException(BaseResponseStatus.KAKAO_UNAUTHORIZED);
 				case 403 -> new BaseException(BaseResponseStatus.KAKAO_FORBIDDEN);
-				default -> throw new IllegalStateException(
-					"Unexpected value: " + response.status());
+				default -> new BaseException(BaseResponseStatus.SOCIAL_WITHDRAWAL_FAILURE);
 			};
 		} else {
 			logger.debug("feign client  500번대 에러 발생 : {}", response.reason());

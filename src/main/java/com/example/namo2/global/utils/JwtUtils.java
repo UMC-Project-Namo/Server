@@ -19,9 +19,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
 
-import com.example.namo2.domain.user.application.converter.UserResponseConverter;
-import com.example.namo2.domain.user.ui.dto.UserResponse;
-
 import com.example.namo2.global.common.exception.BaseException;
 import com.example.namo2.global.common.response.BaseResponseStatus;
 
@@ -39,10 +36,10 @@ public class JwtUtils {
 	@Value("${jwt.secret-key}")
 	private String secretKey;
 
-	public UserResponse.SignUpDto generateTokens(Long userId) {
+	public String[] generateTokens(Long userId) {
 		String accessToken = createAccessToken(userId);
 		String refreshToken = createRefreshToken(userId);
-		return UserResponseConverter.toSignUpDto(accessToken, refreshToken);
+		return new String[] {accessToken, refreshToken};
 	}
 
 	private String createAccessToken(Long userId) {
@@ -80,7 +77,12 @@ public class JwtUtils {
 		if (accessToken == null || accessToken.length() == 0) {
 			throw new BaseException(BaseResponseStatus.EMPTY_ACCESS_KEY);
 		}
-		return accessToken;
+
+		return getJwtToken(accessToken);
+	}
+
+	private static String getJwtToken(String accessToken) {
+		return accessToken.replace("Bearer ", "");
 	}
 
 	private Long resolveToken(String accessToken) throws BaseException {
@@ -102,11 +104,11 @@ public class JwtUtils {
 		}
 	}
 
-	public boolean validateToken(String jwtToken) {
+	public boolean validateToken(String token) {
 		Jws<Claims> claims = Jwts.parserBuilder()
 			.setSigningKey(getSecretKey())
 			.build()
-			.parseClaimsJws(jwtToken);
+			.parseClaimsJws(getJwtToken(token));
 		return !claims.getBody().getExpiration().before(new Date());
 	}
 
