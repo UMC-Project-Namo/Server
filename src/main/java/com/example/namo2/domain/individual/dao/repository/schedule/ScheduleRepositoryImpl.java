@@ -81,22 +81,27 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
 	}
 
 	@Override
-	public List<ScheduleResponse.GetScheduleDto> findMoimSchedulesByUserId(User user, LocalDateTime startDate,
-		LocalDateTime endDate) {
+	public List<ScheduleResponse.GetScheduleDto> findMoimSchedulesByUserId(
+		User user,
+		LocalDateTime startDate, LocalDateTime endDate
+	) {
 		List<MoimScheduleAndUser> moimScheduleAndUsers = queryFactory
 			.select(moimScheduleAndUser).distinct()
 			.from(moimScheduleAndUser)
 			.join(moimScheduleAndUser.moimSchedule, moimSchedule).fetchJoin()
 			.leftJoin(moimScheduleAndUser.moimScheduleAlarms).fetchJoin()
 			.leftJoin(moimSchedule.moimMemo).fetchJoin()
-			.where(moimScheduleAndUser.user.eq(user),
+			.where(
+				moimScheduleAndUser.user.eq(user),
 				moimScheduleDateLoe(endDate),
 				moimScheduleDateGoe(startDate),
 				moimScheduleAndUser.visibleStatus.ne(VisibleStatus.NOT_SEEN_PERSONAL_SCHEDULE)
-			)
-			.fetch();
+			).fetch();
+
 		return moimScheduleAndUsers.stream()
-			.map(ScheduleResponseConverter::toGetScheduleRes).collect(Collectors.toList());
+			.filter(schedule -> schedule.getVisibleStatus() != VisibleStatus.NOT_SEEN_PERSONAL_SCHEDULE)
+			.map(ScheduleResponseConverter::toGetScheduleRes)
+			.toList();
 	}
 
 	private BooleanExpression moimScheduleDateGoe(LocalDateTime startDate) {
