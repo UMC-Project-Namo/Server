@@ -71,4 +71,8 @@ public class MoimDiaryResponseConverter {
 		Slice<GroupDiaryResponse.DiaryDto> diarySlices = moimSchedulesSlice.map(GroupDiaryResponse.DiaryDto::new);
 		return new GroupDiaryResponse.SliceDiaryDto<>(diarySlices);
 	}
+
+	public static GroupDiaryResponse.DiaryDto toDiaryDto(MoimScheduleAndUser moimScheduleAndUser) {
+		return new GroupDiaryResponse.DiaryDto(moimScheduleAndUser);
+	}
 }
