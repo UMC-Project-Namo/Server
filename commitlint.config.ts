@@ -19,21 +19,21 @@ module.exports = {
         /**
          * [Body]
          * 1. 본문은 비어있어도 됨
-         * 2. 본문은 빈 줄로 시작
+         * 2. 본문은 빈 줄 없이 시작
          * 3. 본문은 한 줄에 100자로 제한
          */
         "body-empty": [1, "never"],
-        "body-leading-blank": [2, "always"],
+        "body-leading-blank": [0, "never"],
         "body-max-line-length": [2, "always", 100],
 
         /**
          * [Footer]
          * 1. 푸터는 비어있어도 됨
-         * 2. 푸터는 빈 줄로 시작
+         * 2. 푸터는 빈 줄 없이 시작
          * 3. 푸터는 한 줄에 100자로 제한
          */
         "footer-empty": [1, "never"],
-        "footer-leading-blank": [2, "always"],
+        "footer-leading-blank": [0, "never"],
         "footer-max-line-length": [2, "always", 100],
 
         /**
