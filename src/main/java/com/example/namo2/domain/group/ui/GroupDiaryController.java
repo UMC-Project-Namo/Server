@@ -27,6 +27,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import com.example.namo2.domain.user.domain.User;
+
 import com.example.namo2.global.annotation.swagger.ApiErrorCodes;
 import com.example.namo2.global.common.response.BaseResponse;
 import com.example.namo2.global.common.response.BaseResponseStatus;
@@ -117,6 +119,24 @@ public class GroupDiaryController {
 			.getMonthMonthMoimMemo((Long)request.getAttribute("userId"), localDateTimes, pageable);
 		return new BaseResponse(diaryDto);
 	}
+
+	@Operation(summary = "모임 기록 상세 조회", description = "모임 기록 상세 조회 API")
+	@GetMapping("/detail/{moimScheduleId}")
+	@ApiErrorCodes(value = {
+		BaseResponseStatus.EMPTY_ACCESS_KEY,
+		BaseResponseStatus.EXPIRATION_ACCESS_TOKEN,
+		BaseResponseStatus.EXPIRATION_REFRESH_TOKEN,
+		BaseResponseStatus.INTERNET_SERVER_ERROR
+	})
+public BaseResponse<GroupDiaryResponse.DiaryDto> getMoimMemoDetail(
+		@Parameter(description = "모임 일정 ID") @PathVariable Long moimScheduleId,
+		HttpServletRequest request
+	) {
+		Long userId = (Long)request.getAttribute("userId");
+		GroupDiaryResponse.DiaryDto diaryDto = moimMemoFacade.getMoimDiaryDetail(moimScheduleId, userId);
+		return new BaseResponse(diaryDto);
+	}
+
 
 	@Operation(summary = "개인 페이지 모임 기록 삭제", description = "일정에 대한 모임 활동 기록 삭제 API")
 	@DeleteMapping("/person/{scheduleId}")

@@ -172,4 +172,11 @@ public class MoimMemoFacade {
 			= moimScheduleAndUserService.getMoimScheduleAndUser(moimSchedule, user);
 		moimScheduleAndUserService.removeMoimScheduleMemoInPersonalSpace(moimScheduleAndUser);
 	}
+
+	@Transactional(readOnly = true)
+	public GroupDiaryResponse.DiaryDto getMoimDiaryDetail(Long moimScheduleId, Long userId) {
+		User user = userService.getUser(userId);
+		MoimScheduleAndUser moimScheduleAndUser = moimScheduleAndUserService.getMoimScheduleAndUser(moimScheduleId, user);
+		return MoimDiaryResponseConverter.toDiaryDto(moimScheduleAndUser);
+	}
 }

@@ -110,4 +110,9 @@ public class MoimScheduleAndUserService {
 	public void removeMoimScheduleMemoInPersonalSpace(MoimScheduleAndUser moimScheduleAndUser) {
 		moimScheduleAndUser.handleDeletedPersonalMoimMemo();
 	}
+
+	public MoimScheduleAndUser getMoimScheduleAndUser(Long moimScheduleId, User user) {
+		MoimSchedule moimSchedule = MoimSchedule.builder().id(moimScheduleId).build();
+		return getMoimScheduleAndUser(moimSchedule, user);
+	}
 }
