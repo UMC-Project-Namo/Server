@@ -1,5 +1,7 @@
 package com.example.namo2.domain.user.application.converter;
 
+import java.util.List;
+
 import com.example.namo2.domain.user.ui.dto.UserResponse;
 
 public class UserResponseConverter {
@@ -7,11 +9,17 @@ public class UserResponseConverter {
 		throw new IllegalStateException("Utility class");
 	}
 
-	public static UserResponse.SignUpDto toSignUpDto(String accessToken, String refreshToken, boolean isNewUser) {
+	public static UserResponse.SignUpDto toSignUpDto(
+		String accessToken,
+		String refreshToken,
+		boolean isNewUser,
+		List<UserResponse.TermsDto> terms
+	) {
 		return UserResponse.SignUpDto.builder()
 			.accessToken(accessToken)
 			.refreshToken(refreshToken)
 			.newUser(isNewUser)
+			.terms(terms)
 			.build();
 	}
 
