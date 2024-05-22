@@ -1,4 +1,4 @@
-package com.example.namo2.domain.schedule.ui;
+package com.example.namo2.domain.individual.ui;
 
 import static java.util.Arrays.*;
 import static org.mockito.BDDMockito.*;
@@ -16,26 +16,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.example.namo2.domain.individual.application.ScheduleFacade;
+import com.example.namo2.domain.individual.ui.dto.ScheduleRequest;
+import com.example.namo2.domain.individual.ui.dto.ScheduleResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import com.example.namo2.domain.category.dao.repository.CategoryRepository;
-import com.example.namo2.domain.category.dao.repository.PaletteRepository;
-
-import com.example.namo2.domain.schedule.application.ScheduleFacade;
-import com.example.namo2.domain.schedule.dao.repository.ScheduleRepository;
-import com.example.namo2.domain.schedule.ui.dto.ScheduleRequest;
-import com.example.namo2.domain.schedule.ui.dto.ScheduleResponse;
-
-import com.example.namo2.domain.user.dao.repository.UserRepository;
 
 import com.example.namo2.global.config.interceptor.AuthenticationInterceptor;
 import com.example.namo2.global.utils.Converter;
-import com.example.namo2.global.utils.JwtUtils;
 
 @WebMvcTest(controllers = ScheduleController.class)
 public class ScheduleControllerTest {
@@ -47,22 +38,9 @@ public class ScheduleControllerTest {
 	private ObjectMapper objectMapper;
 
 	@MockBean
-	private ScheduleRepository scheduleRepository;
-	@MockBean
-	private UserRepository userRepository;
-	@MockBean
-	private CategoryRepository categoryRepository;
-	@MockBean
-	private PaletteRepository paletteRepository;
-
-	@MockBean
 	private ScheduleFacade scheduleFacade;
 	@MockBean
 	private Converter converter;
-	@MockBean
-	private JwtUtils jwtUtils;
-	@MockBean
-	private RedisTemplate<String, String> redisTemplate;
 
 	@MockBean
 	AuthenticationInterceptor authenticationInterceptor;
