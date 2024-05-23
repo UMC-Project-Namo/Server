@@ -46,6 +46,7 @@ import com.example.namo2.domain.user.application.converter.UserResponseConverter
 import com.example.namo2.domain.user.application.impl.UserService;
 import com.example.namo2.domain.user.domain.Term;
 import com.example.namo2.domain.user.domain.User;
+import com.example.namo2.domain.user.domain.constant.SocialType;
 import com.example.namo2.domain.user.domain.constant.UserStatus;
 import com.example.namo2.domain.user.ui.dto.UserRequest;
 import com.example.namo2.domain.user.ui.dto.UserResponse;
@@ -90,7 +91,7 @@ public class UserFacade {
 	private final AppleProperties appleProperties;
 
 	@Transactional
-	public UserResponse.SignUpDto signupKakao(UserRequest.SocialSignUpDto signUpDto) {
+	public UserResponse.SignUpDto signupKakao(UserRequest.SocialSignUpDto signUpDto, SocialType socialType) {
 		HttpURLConnection con = socialUtils.connectKakaoResourceServer(signUpDto);
 		socialUtils.validateSocialAccessToken(con);
 
@@ -99,7 +100,7 @@ public class UserFacade {
 		log.debug("result = " + result);
 
 		Map<String, String> response = socialUtils.findResponseFromKakako(result);
-		User user = UserConverter.toUser(response);
+		User user = UserConverter.toUser(response, signUpDto.getSocialRefreshToken(), socialType);
 
 		Object[] objects = saveOrNot(user);
 		User savedUser = (User)objects[0];
@@ -342,13 +343,13 @@ public class UserFacade {
 
 				categoryService.removeCategoriesByUser(user);
 
-					List<Schedule> schedules = scheduleService.getSchedulesByUser(user);
-					alarmService.removeAlarmsBySchedules(schedules);
-					List<Image> images = imageService.getImagesBySchedules(schedules);
-					List<String> urls = images.stream().map(Image::getImgUrl).collect(Collectors.toList());
-					fileUtils.deleteImages(urls, FilePath.INVITATION_ACTIVITY_IMG);
-					imageService.removeImgsBySchedules(schedules);
-					scheduleService.removeSchedules(schedules);
+				List<Schedule> schedules = scheduleService.getSchedulesByUser(user);
+				alarmService.removeAlarmsBySchedules(schedules);
+				List<Image> images = imageService.getImagesBySchedules(schedules);
+				List<String> urls = images.stream().map(Image::getImgUrl).collect(Collectors.toList());
+				fileUtils.deleteImages(urls, FilePath.INVITATION_ACTIVITY_IMG);
+				imageService.removeImgsBySchedules(schedules);
+				scheduleService.removeSchedules(schedules);
 
 				moimAndUserService.removeMoimAndUsersByUser(user);
 

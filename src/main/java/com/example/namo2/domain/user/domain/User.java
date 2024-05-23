@@ -49,13 +49,16 @@ public class User extends BaseTimeEntity {
 	private String socialRefreshToken;
 
 	@Builder
-	public User(Long id, String name, String email, String birthday, String refreshToken, UserStatus status) {
+	public User(Long id, String name, String email, String birthday, String refreshToken, UserStatus status,
+		SocialType socialType, String socialRefreshToken) {
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.birthday = birthday;
 		this.refreshToken = refreshToken;
 		this.status = status;
+		this.socialType = socialType;
+		this.socialRefreshToken = socialRefreshToken;
 	}
 
 	public void updateRefreshToken(String refreshToken) {

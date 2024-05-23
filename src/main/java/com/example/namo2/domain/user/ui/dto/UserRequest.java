@@ -36,6 +36,8 @@ public class UserRequest {
 	public static class SocialSignUpDto {
 		@NotBlank
 		private String accessToken;
+		@NotBlank
+		private String socialRefreshToken;
 	}
 
 	@Getter
