@@ -267,9 +267,10 @@ public class UserFacade {
 		logger.info("accessToken : {}", accessToken);
 		userService.checkAccessTokenValidation(accessToken);
 
-		User user = userService.getUser(jwtUtils.resolveRequest(request));
 		//kakao social access token 조회
+		User user = userService.getUser(jwtUtils.resolveRequest(request));
 		String kakaoAccessToken = kakaoAuthClient.getAccessToken(user.getSocialRefreshToken());
+
 		//kakao unlink
 		kakaoAuthClient.unlinkKakao(kakaoAccessToken);
 
@@ -282,9 +283,11 @@ public class UserFacade {
 		String accessToken = jwtUtils.getAccessToken(request);
 		userService.checkAccessTokenValidation(accessToken);
 
-		naverAuthClient.tokenAvailability(naverAccessToken);
+		//naver social access token 조회
 		User user = userService.getUser(jwtUtils.resolveRequest(request));
 		String naverAccessToken = naverAuthClient.getAccessToken(user.getRefreshToken());
+
+		//naver unlink
 		naverAuthClient.unlinkNaver(naverAccessToken);
 
 		setUserInactive(request, user);

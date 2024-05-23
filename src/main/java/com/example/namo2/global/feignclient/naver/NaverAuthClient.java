@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 public class NaverAuthClient {
 	private final Logger logger = LoggerFactory.getLogger(NaverAuthClient.class);
 	private final NaverAuthApi naverAuthApi;
-	private final NaverOpenApi naverOpenApi;
 	private final NaverProperties naverProperties;
 
 	public String getAccessToken(String refreshToken) {
@@ -45,12 +44,6 @@ public class NaverAuthClient {
 		);
 
 		logger.debug("네이버 탈퇴 res : {}, {}", dto.getAccessToken(), dto.getResult());
-	}
-
-	public void tokenAvailability(String accessToken) {
-		naverOpenApi.tokenAvailability(
-			"Bearer " + accessToken
-		);
 	}
 
 }
