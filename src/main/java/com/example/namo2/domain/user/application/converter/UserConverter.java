@@ -23,11 +23,13 @@ public class UserConverter {
 			.build();
 	}
 
-	public static User toUser(String email, String name) {
+	public static User toUser(String email, String name, String socialRefreshToken, SocialType socialType) {
 		return User.builder()
 			.email(email)
 			.name(name)
 			.status(UserStatus.ACTIVE)
+			.socialType(socialType)
+			.socialRefreshToken(socialRefreshToken)
 			.build();
 	}
 

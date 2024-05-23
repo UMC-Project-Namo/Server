@@ -83,7 +83,7 @@ public class AuthController {
 	public BaseResponse<UserResponse.SignUpDto> appleSignup(
 		@Valid @RequestBody UserRequest.AppleSignUpDto dto
 	) {
-		UserResponse.SignUpDto signupDto = userFacade.signupApple(dto);
+		UserResponse.SignUpDto signupDto = userFacade.signupApple(dto, SocialType.APPLE);
 		return new BaseResponse<>(signupDto);
 	}
 

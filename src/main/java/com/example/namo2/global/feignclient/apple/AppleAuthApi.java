@@ -15,7 +15,7 @@ public interface AppleAuthApi {
 	AppleResponse.ApplePublicKeyListDto getApplePublicKeys();
 
 	@PostMapping(value = "/token", consumes = "application/x-www-form-urlencoded")
-	AppleResponse.GetAccessToken getAppleToken(
+	AppleResponse.GetToken getAppleToken(
 		@RequestParam(name = "client_id") String clientId,
 		@RequestParam(name = "client_secret") String clientSecret,
 		@RequestParam(name = "code") String code,

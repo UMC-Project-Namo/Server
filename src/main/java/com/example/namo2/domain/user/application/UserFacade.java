@@ -134,8 +134,13 @@ public class UserFacade {
 	}
 
 	@Transactional
-	public UserResponse.SignUpDto signupApple(UserRequest.AppleSignUpDto req) {
-		AppleResponse.ApplePublicKeyListDto applePublicKeys = appleAuthClient.getApplePublicKeys();
+	public UserResponse.SignUpDto signupApple(UserRequest.AppleSignUpDto req, SocialType socialType) {
+		AppleResponse.ApplePublicKeyListDto applePublicKeys = appleAuthClient.getApplePublicKeys();//애플 퍼블릭 키 조회
+
+		//get apple refresh token
+		String clientSecret = createClientSecret();
+		AppleResponse.GetToken appleToken = appleAuthClient.getAppleToken(clientSecret, req.getAuthorizationCode());
+
 		String email = "";
 
 		JSONObject headerJson = userService.getHeaderJson(req);
@@ -172,12 +177,17 @@ public class UserFacade {
 		Optional<User> userByEmail = userService.getUserByEmail(email);
 		if (userByEmail.isEmpty()) { //첫로그인
 			userService.checkEmailAndName(req.getEmail(), req.getUsername());
-			savedUser = userService.createUser(UserConverter.toUser(req.getEmail(), req.getUsername()));
+			savedUser = userService.createUser(UserConverter.toUser(
+				req.getEmail(),
+				req.getUsername(),
+				appleToken.getRefreshToken(),
+				socialType));
 			makeBaseCategory(savedUser);
 			isNewUser = true;
 		} else { //재로그인
 			savedUser = userByEmail.get();
 			savedUser.setStatus(UserStatus.ACTIVE);
+			savedUser.updateSocialRefreshToken(appleToken.getRefreshToken());
 			isNewUser = false;
 		}
 
@@ -284,13 +294,11 @@ public class UserFacade {
 		String accessToken = jwtUtils.getAccessToken(request);
 		userService.checkAccessTokenValidation(accessToken);
 
-		String clientSecret = "";
+		String clientSecret = createClientSecret();
 
-		clientSecret = createClientSecret();
-
-		String appleToken = appleAuthClient.getAppleToken(clientSecret, authorizationCode);
-		logger.debug("appleToken {}", appleToken);
-		appleAuthClient.revoke(clientSecret, appleToken);
+		AppleResponse.GetToken appleToken = appleAuthClient.getAppleToken(clientSecret, authorizationCode);
+		logger.debug("appleToken {}", appleToken.getAccessToken());
+		appleAuthClient.revoke(clientSecret, appleToken.getAccessToken());
 
 		setUserInactive(request);
 	}

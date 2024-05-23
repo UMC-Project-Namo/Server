@@ -37,7 +37,7 @@ public class AppleResponse {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class GetAccessToken {
+	public static class GetToken {
 		@JsonProperty("access_token")
 		private String accessToken;
 		@JsonProperty("expires_in")

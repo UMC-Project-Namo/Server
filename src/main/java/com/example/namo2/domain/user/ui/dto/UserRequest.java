@@ -43,6 +43,8 @@ public class UserRequest {
 	@Getter
 	public static class AppleSignUpDto {
 		@NotBlank
+		private String authorizationCode;
+		@NotBlank
 		private String identityToken;
 		private String email;
 		private String username;
