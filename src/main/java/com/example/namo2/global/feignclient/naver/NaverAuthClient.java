@@ -17,8 +17,18 @@ public class NaverAuthClient {
 	private final NaverOpenApi naverOpenApi;
 	private final NaverProperties naverProperties;
 
+	public String getAccessToken(String refreshToken) {
+		NaverResponse.GetAccessToken getAccessToken = naverAuthApi.getAccessToken(
+			"refresh_token",
+			naverProperties.getClientId(),
+			naverProperties.getClientSecret(),
+			refreshToken
+		);
+		return getAccessToken.getAccessToken();
+	}
+
 	public void unlinkNaver(String accessToken) {
-		try { //URL인코딩
+		try { //accessToken URL인코딩
 			accessToken = URLEncoder.encode(accessToken, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();

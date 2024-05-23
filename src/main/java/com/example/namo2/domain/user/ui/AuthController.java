@@ -144,10 +144,9 @@ public class AuthController {
 		BaseResponseStatus.INTERNET_SERVER_ERROR
 	})
 	public BaseResponse<?> removeNaverUser(
-		HttpServletRequest request,
-		@Valid @RequestBody UserRequest.DeleteUserDto deleteUserDto
+		HttpServletRequest request
 	) {
-		userFacade.removeNaverUser(request, deleteUserDto.getAccessToken());
+		userFacade.removeNaverUser(request);
 		return BaseResponse.ok();
 	}
 

@@ -277,15 +277,17 @@ public class UserFacade {
 	}
 
 	@Transactional
-	public void removeNaverUser(HttpServletRequest request, String naverAccessToken) {
+	public void removeNaverUser(HttpServletRequest request) {
 		//유저 토큰 만료시 예외 처리
 		String accessToken = jwtUtils.getAccessToken(request);
 		userService.checkAccessTokenValidation(accessToken);
 
 		naverAuthClient.tokenAvailability(naverAccessToken);
+		User user = userService.getUser(jwtUtils.resolveRequest(request));
+		String naverAccessToken = naverAuthClient.getAccessToken(user.getRefreshToken());
 		naverAuthClient.unlinkNaver(naverAccessToken);
 
-		setUserInactive(request);
+		setUserInactive(request, user);
 	}
 
 	@Transactional
