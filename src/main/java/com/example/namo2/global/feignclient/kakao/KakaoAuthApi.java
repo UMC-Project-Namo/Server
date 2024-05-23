@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 	configuration = KakaoFeignConfiguration.class
 )
 public interface KakaoAuthApi {
-	@PostMapping(value = "/token", consumes = "application/x-www-form-urlencoded;charset=utf-8")
+	@PostMapping(value = "/token")
 	KakaoResponse.GetAccessToken getAccessToken(
 		@RequestParam("grant_type") String grantType,
 		@RequestParam("client_id") String clientId,

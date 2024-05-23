@@ -17,6 +17,7 @@ public class NaverAuthClient {
 	private final NaverProperties naverProperties;
 
 	public String getAccessToken(String refreshToken) {
+		logger.debug("naver refreshToken : " + refreshToken);
 		NaverResponse.GetAccessToken getAccessToken = naverAuthApi.getAccessToken(
 			"refresh_token",
 			naverProperties.getClientId(),

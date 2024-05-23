@@ -7,6 +7,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 import com.example.namo2.domain.user.domain.constant.SocialType;
 import com.example.namo2.domain.user.domain.constant.UserStatus;
@@ -21,6 +23,14 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Table(
+	uniqueConstraints = {
+		@UniqueConstraint(
+			name = "emailAndSocialType",
+			columnNames = {"email", "socialType"}
+		)
+	}
+)
 public class User extends BaseTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +40,7 @@ public class User extends BaseTimeEntity {
 	@Column(nullable = false, length = 20)
 	private String name;
 
-	@Column(nullable = false, length = 50, unique = true)
+	@Column(nullable = false, length = 50)
 	private String email;
 
 	@Column

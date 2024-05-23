@@ -108,7 +108,7 @@ public class UserFacade {
 
 		String[] tokens = jwtUtils.generateTokens(savedUser.getId());
 		UserResponse.SignUpDto signUpRes = UserResponseConverter.toSignUpDto(tokens[0], tokens[1],
-			isNewUser); //access, refresh순
+			isNewUser); //access, refresh 순
 		userService.updateRefreshToken(savedUser.getId(), signUpRes.getRefreshToken());
 		return signUpRes;
 	}
@@ -270,6 +270,7 @@ public class UserFacade {
 
 		//kakao social access token 조회
 		User user = userService.getUser(jwtUtils.resolveRequest(request));
+		logger.info("kakao SocialRefreshToken : {}", user.getSocialRefreshToken());
 		String kakaoAccessToken = kakaoAuthClient.getAccessToken(user.getSocialRefreshToken());
 
 		//kakao unlink
@@ -285,8 +286,9 @@ public class UserFacade {
 		userService.checkAccessTokenValidation(accessToken);
 
 		//naver social access token 조회
+		logger.debug("userId : " + jwtUtils.resolveRequest(request));
 		User user = userService.getUser(jwtUtils.resolveRequest(request));
-		String naverAccessToken = naverAuthClient.getAccessToken(user.getRefreshToken());
+		String naverAccessToken = naverAuthClient.getAccessToken(user.getSocialRefreshToken());
 
 		//naver unlink
 		naverAuthClient.unlinkNaver(naverAccessToken);
