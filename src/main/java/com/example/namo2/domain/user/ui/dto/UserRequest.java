@@ -66,10 +66,4 @@ public class UserRequest {
 		}
 	}
 
-	@Getter
-	public static class DeleteAppleUserDto {
-		@NotBlank
-		private String authorizationCode;
-	}
-
 }

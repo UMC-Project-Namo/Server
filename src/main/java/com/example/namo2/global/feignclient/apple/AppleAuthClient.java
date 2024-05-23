@@ -17,14 +17,13 @@ public class AppleAuthClient {
 		return appleAuthApi.getApplePublicKeys();
 	}
 
-	public AppleResponse.GetToken getAppleToken(String clientSecret, String code) {
+	public AppleResponse.GetToken getAppleToken(String clientSecret, String refreshToken) {
 		logger.debug("{}", appleProperties.getClientId());
 		AppleResponse.GetToken getToken = appleAuthApi.getAppleToken(
 			appleProperties.getClientId(),
 			clientSecret,
-			code,
-			"authorization_code",
-			appleProperties.getRedirectUri()
+			refreshToken,
+			"refresh_token"
 		);
 
 		logger.debug("getAppleToken : {}", getToken.getAccessToken());

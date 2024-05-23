@@ -18,9 +18,8 @@ public interface AppleAuthApi {
 	AppleResponse.GetToken getAppleToken(
 		@RequestParam(name = "client_id") String clientId,
 		@RequestParam(name = "client_secret") String clientSecret,
-		@RequestParam(name = "code") String code,
-		@RequestParam(name = "grant_type") String grantType,
-		@RequestParam(name = "redirect_uri") String redirectUri
+		@RequestParam(name = "refresh_token") String refreshToken,
+		@RequestParam(name = "grant_type") String grantType
 	);
 
 	@PostMapping(value = "/revoke", consumes = "application/x-www-form-urlencoded")

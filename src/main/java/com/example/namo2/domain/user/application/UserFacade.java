@@ -294,18 +294,22 @@ public class UserFacade {
 	}
 
 	@Transactional
-	public void removeAppleUser(HttpServletRequest request, String authorizationCode) {
+	public void removeAppleUser(HttpServletRequest request) {
 		//유저 토큰 만료시 예외 처리
 		String accessToken = jwtUtils.getAccessToken(request);
 		userService.checkAccessTokenValidation(accessToken);
 
 		String clientSecret = createClientSecret();
 
-		AppleResponse.GetToken appleToken = appleAuthClient.getAppleToken(clientSecret, authorizationCode);
+		//apple social access token 조회
+		User user = userService.getUser(jwtUtils.resolveRequest(request));
+		AppleResponse.GetToken appleToken = appleAuthClient.getAppleToken(clientSecret, user.getSocialRefreshToken());
 		logger.debug("appleToken {}", appleToken.getAccessToken());
+
+		//apple unlink
 		appleAuthClient.revoke(clientSecret, appleToken.getAccessToken());
 
-		setUserInactive(request);
+		setUserInactive(request, user);
 	}
 
 	public String createClientSecret() {
@@ -329,7 +333,6 @@ public class UserFacade {
 
 		//token 만료처리
 		String accessToken = jwtUtils.getAccessToken(request);
-		//request.getHeader("Authorization");
 		Long expiration = jwtUtils.getExpiration(accessToken);
 		redisTemplate.opsForValue().set(accessToken, "delete", expiration, TimeUnit.MILLISECONDS);
 	}

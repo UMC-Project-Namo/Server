@@ -160,10 +160,9 @@ public class AuthController {
 		BaseResponseStatus.INTERNET_SERVER_ERROR
 	})
 	public BaseResponse<?> removeAppleUser(
-		HttpServletRequest request,
-		@Valid @RequestBody UserRequest.DeleteAppleUserDto deleteAppleUserDto
+		HttpServletRequest request
 	) {
-		userFacade.removeAppleUser(request, deleteAppleUserDto.getAuthorizationCode());
+		userFacade.removeAppleUser(request);
 		return BaseResponse.ok();
 	}
 }
