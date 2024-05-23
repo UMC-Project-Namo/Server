@@ -261,19 +261,19 @@ public class UserFacade {
 	}
 
 	@Transactional
-	public void removeKakaoUser(HttpServletRequest request, String kakaoAccessToken) {
+	public void removeKakaoUser(HttpServletRequest request) {
 		//유저 토큰 만료시 예외 처리
 		String accessToken = jwtUtils.getAccessToken(request);
-
 		logger.info("accessToken : {}", accessToken);
-
 		userService.checkAccessTokenValidation(accessToken);
 
-		logger.info("kakaoAccessToken {}", kakaoAccessToken);
-
+		User user = userService.getUser(jwtUtils.resolveRequest(request));
+		//kakao social access token 조회
+		String kakaoAccessToken = kakaoAuthClient.getAccessToken(user.getSocialRefreshToken());
+		//kakao unlink
 		kakaoAuthClient.unlinkKakao(kakaoAccessToken);
 
-		setUserInactive(request);
+		setUserInactive(request, user);
 	}
 
 	@Transactional
@@ -319,8 +319,7 @@ public class UserFacade {
 			.compact();
 	}
 
-	private void setUserInactive(HttpServletRequest request) {
-		User user = userService.getUser(jwtUtils.resolveRequest(request));
+	private void setUserInactive(HttpServletRequest request, User user) {
 		user.setStatus(UserStatus.INACTIVE);
 
 		//token 만료처리

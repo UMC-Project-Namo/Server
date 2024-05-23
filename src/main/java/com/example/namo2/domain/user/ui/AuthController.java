@@ -130,10 +130,8 @@ public class AuthController {
 		BaseResponseStatus.INTERNET_SERVER_ERROR
 	})
 	public BaseResponse<?> removeKakaoUser(
-		HttpServletRequest request,
-		@Valid @RequestBody UserRequest.DeleteUserDto deleteUserDto
-	) {
-		userFacade.removeKakaoUser(request, deleteUserDto.getAccessToken());
+		HttpServletRequest request) {
+		userFacade.removeKakaoUser(request);
 		return BaseResponse.ok();
 	}
 
