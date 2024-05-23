@@ -102,7 +102,7 @@ public class UserFacade {
 		Map<String, String> response = socialUtils.findResponseFromKakako(result);
 		User user = UserConverter.toUser(response, signUpDto.getSocialRefreshToken(), socialType);
 
-		Object[] objects = saveOrNot(user, socialType); //기존 유저인지 확인하고 신규 유저이면 저장
+		Object[] objects = saveOrNot(user, socialType, signUpDto.getSocialRefreshToken()); //기존 유저인지 확인하고 신규 유저이면 저장
 		User savedUser = (User)objects[0];
 		boolean isNewUser = (boolean)objects[1];
 
@@ -123,7 +123,7 @@ public class UserFacade {
 		Map<String, String> response = socialUtils.findResponseFromNaver(result);
 		User user = UserConverter.toUser(response, signUpDto.getSocialRefreshToken(), socialType);
 
-		Object[] objects = saveOrNot(user, socialType);
+		Object[] objects = saveOrNot(user, socialType, signUpDto.getSocialRefreshToken());
 		User savedUser = (User)objects[0];
 		boolean isNewUser = (boolean)objects[1];
 
@@ -218,7 +218,7 @@ public class UserFacade {
 		redisTemplate.opsForValue().set(logoutDto.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
 	}
 
-	private Object[] saveOrNot(User user, SocialType socialType) {
+	private Object[] saveOrNot(User user, SocialType socialType, String socialRefreshToken) {
 		Optional<User> userByEmail = userService.getUserByEmailAndSocialType(user.getEmail(), socialType);
 		if (userByEmail.isEmpty()) {
 			log.debug("userByEmail is empty");
@@ -229,6 +229,7 @@ public class UserFacade {
 		}
 		User exitingUser = userByEmail.get();
 		exitingUser.setStatus(UserStatus.ACTIVE);
+		exitingUser.updateSocialRefreshToken(socialRefreshToken);
 		boolean isNewUser = false;
 		return new Object[] {exitingUser, isNewUser};
 	}
