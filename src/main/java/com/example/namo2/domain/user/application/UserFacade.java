@@ -102,7 +102,7 @@ public class UserFacade {
 		Map<String, String> response = socialUtils.findResponseFromKakako(result);
 		User user = UserConverter.toUser(response, signUpDto.getSocialRefreshToken(), socialType);
 
-		Object[] objects = saveOrNot(user); //기존 유저인지 확인하고 신규 유저이면 저장
+		Object[] objects = saveOrNot(user, socialType); //기존 유저인지 확인하고 신규 유저이면 저장
 		User savedUser = (User)objects[0];
 		boolean isNewUser = (boolean)objects[1];
 
@@ -123,7 +123,7 @@ public class UserFacade {
 		Map<String, String> response = socialUtils.findResponseFromNaver(result);
 		User user = UserConverter.toUser(response, signUpDto.getSocialRefreshToken(), socialType);
 
-		Object[] objects = saveOrNot(user);
+		Object[] objects = saveOrNot(user, socialType);
 		User savedUser = (User)objects[0];
 		boolean isNewUser = (boolean)objects[1];
 
@@ -174,7 +174,7 @@ public class UserFacade {
 		//로그인 분기처리
 		User savedUser;
 		boolean isNewUser;
-		Optional<User> userByEmail = userService.getUserByEmail(email);
+		Optional<User> userByEmail = userService.getUserByEmailAndSocialType(email, socialType);
 		if (userByEmail.isEmpty()) { //첫로그인
 			userService.checkEmailAndName(req.getEmail(), req.getUsername());
 			savedUser = userService.createUser(UserConverter.toUser(
@@ -218,8 +218,8 @@ public class UserFacade {
 		redisTemplate.opsForValue().set(logoutDto.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
 	}
 
-	private Object[] saveOrNot(User user) {
-		Optional<User> userByEmail = userService.getUserByEmail(user.getEmail());
+	private Object[] saveOrNot(User user, SocialType socialType) {
+		Optional<User> userByEmail = userService.getUserByEmailAndSocialType(user.getEmail(), socialType);
 		if (userByEmail.isEmpty()) {
 			log.debug("userByEmail is empty");
 			User save = userService.createUser(user);
