@@ -8,7 +8,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import com.example.namo2.domain.user.domain.constant.SocialType;
 import com.example.namo2.domain.user.domain.constant.UserStatus;
+
 import com.example.namo2.global.common.entity.BaseTimeEntity;
 
 import lombok.AccessLevel;
@@ -40,6 +42,11 @@ public class User extends BaseTimeEntity {
 	@Enumerated(EnumType.STRING)
 	@Column(columnDefinition = "VARCHAR(15) DEFAULT 'ACTIVE'")
 	private UserStatus status;
+
+	@Enumerated(EnumType.STRING)
+	private SocialType socialType;
+
+	private String socialRefreshToken;
 
 	@Builder
 	public User(Long id, String name, String email, String birthday, String refreshToken, UserStatus status) {
