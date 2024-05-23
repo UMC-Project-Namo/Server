@@ -66,7 +66,7 @@ public class AuthController {
 	public BaseResponse<UserResponse.SignUpDto> naverSignup(
 		@Valid @RequestBody UserRequest.SocialSignUpDto signUpDto
 	) {
-		UserResponse.SignUpDto signupDto = userFacade.signupNaver(signUpDto);
+		UserResponse.SignUpDto signupDto = userFacade.signupNaver(signUpDto, SocialType.NAVER);
 		return new BaseResponse<>(signupDto);
 	}
 

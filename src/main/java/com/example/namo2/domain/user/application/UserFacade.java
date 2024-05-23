@@ -102,7 +102,7 @@ public class UserFacade {
 		Map<String, String> response = socialUtils.findResponseFromKakako(result);
 		User user = UserConverter.toUser(response, signUpDto.getSocialRefreshToken(), socialType);
 
-		Object[] objects = saveOrNot(user);
+		Object[] objects = saveOrNot(user); //기존 유저인지 확인하고 신규 유저이면 저장
 		User savedUser = (User)objects[0];
 		boolean isNewUser = (boolean)objects[1];
 
@@ -114,14 +114,14 @@ public class UserFacade {
 	}
 
 	@Transactional
-	public UserResponse.SignUpDto signupNaver(UserRequest.SocialSignUpDto signUpDto) {
+	public UserResponse.SignUpDto signupNaver(UserRequest.SocialSignUpDto signUpDto, SocialType socialType) {
 		HttpURLConnection con = socialUtils.connectNaverResourceServer(signUpDto);
 		socialUtils.validateSocialAccessToken(con);
 
 		String result = socialUtils.findSocialLoginUsersInfo(con);
 
 		Map<String, String> response = socialUtils.findResponseFromNaver(result);
-		User user = UserConverter.toUser(response);
+		User user = UserConverter.toUser(response, signUpDto.getSocialRefreshToken(), socialType);
 
 		Object[] objects = saveOrNot(user);
 		User savedUser = (User)objects[0];
