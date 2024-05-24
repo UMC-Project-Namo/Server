@@ -139,7 +139,7 @@ public class UserFacade {
 
 		//get apple refresh token
 		String clientSecret = createClientSecret();
-		AppleResponse.GetToken appleToken = appleAuthClient.getAppleToken(clientSecret, req.getAuthorizationCode());
+		String appleRefreshToken = appleAuthClient.getAppleRefreshToken(clientSecret, req.getAuthorizationCode());
 
 		String email = "";
 
@@ -180,14 +180,14 @@ public class UserFacade {
 			savedUser = userService.createUser(UserConverter.toUser(
 				req.getEmail(),
 				req.getUsername(),
-				appleToken.getRefreshToken(),
+				appleRefreshToken,
 				socialType));
 			makeBaseCategory(savedUser);
 			isNewUser = true;
 		} else { //재로그인
 			savedUser = userByEmail.get();
 			savedUser.setStatus(UserStatus.ACTIVE);
-			savedUser.updateSocialRefreshToken(appleToken.getRefreshToken());
+			savedUser.updateSocialRefreshToken(appleRefreshToken);
 			isNewUser = false;
 		}
 
@@ -306,11 +306,11 @@ public class UserFacade {
 
 		//apple social access token 조회
 		User user = userService.getUser(jwtUtils.resolveRequest(request));
-		AppleResponse.GetToken appleToken = appleAuthClient.getAppleToken(clientSecret, user.getSocialRefreshToken());
-		logger.debug("appleToken {}", appleToken.getAccessToken());
+		String appleAccessToken = appleAuthClient.getAppleAccessToken(clientSecret, user.getSocialRefreshToken());
+		logger.debug("appleToken {}", appleAccessToken);
 
 		//apple unlink
-		appleAuthClient.revoke(clientSecret, appleToken.getAccessToken());
+		appleAuthClient.revoke(clientSecret, appleAccessToken);
 
 		setUserInactive(request, user);
 	}

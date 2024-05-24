@@ -17,9 +17,23 @@ public class AppleAuthClient {
 		return appleAuthApi.getApplePublicKeys();
 	}
 
-	public AppleResponse.GetToken getAppleToken(String clientSecret, String refreshToken) {
+	public String getAppleRefreshToken(String clientSecret, String autorizationCode) {
 		logger.debug("{}", appleProperties.getClientId());
-		AppleResponse.GetToken getToken = appleAuthApi.getAppleToken(
+		AppleResponse.GetToken getToken = appleAuthApi.getAppleRefreshToken(
+			appleProperties.getClientId(),
+			clientSecret,
+			autorizationCode,
+			"authorization_code",
+			appleProperties.getRedirectUri()
+		);
+
+		logger.debug("getAppleToken : {}", getToken.getAccessToken());
+		return getToken.getRefreshToken();
+	}
+
+	public String getAppleAccessToken(String clientSecret, String refreshToken) {
+		logger.debug("{}", appleProperties.getClientId());
+		AppleResponse.GetToken getToken = appleAuthApi.getAppleAccessToken(
 			appleProperties.getClientId(),
 			clientSecret,
 			refreshToken,
@@ -27,7 +41,7 @@ public class AppleAuthClient {
 		);
 
 		logger.debug("getAppleToken : {}", getToken.getAccessToken());
-		return getToken;
+		return getToken.getAccessToken();
 	}
 
 	public void revoke(String clientSecret, String token) {
