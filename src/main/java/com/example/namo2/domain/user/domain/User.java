@@ -54,8 +54,10 @@ public class User extends BaseTimeEntity {
 	private UserStatus status;
 
 	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
 	private SocialType socialType;
 
+	@Column(nullable = false)
 	private String socialRefreshToken;
 
 	@Builder
