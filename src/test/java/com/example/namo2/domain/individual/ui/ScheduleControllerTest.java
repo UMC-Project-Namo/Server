@@ -144,7 +144,7 @@ public class ScheduleControllerTest {
 
 		//when & then
 		mockMvc.perform(
-				get("/api/v1/schedules/moim/2024,02")
+				get("/api/v1/schedules/group/2024,02")
 					.header(HttpHeaders.FROM, "localhost")
 			).andDo(print())//테스트 실행 결과를 콘솔에 출력
 			.andExpect(status().isOk());
@@ -210,7 +210,7 @@ public class ScheduleControllerTest {
 
 		//when & then
 		mockMvc.perform(
-				get("/api/v1/schedules/moim/all")
+				get("/api/v1/schedules/group/all")
 					.header(HttpHeaders.FROM, "localhost")
 			).andDo(print())//테스트 실행 결과를 콘솔에 출력
 			.andExpect(status().isOk());
