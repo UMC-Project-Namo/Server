@@ -81,7 +81,7 @@ public class ScheduleControllerTest {
 					.contentType(MediaType.APPLICATION_JSON) //Content-Type 헤더를 application/json으로 설정
 			)
 			.andDo(print())//테스트 실행 결과를 콘솔에 출력
-			.andExpect(status().isOk());// HTTP 상태 코드가 200(OK)인지 검증
+			.andExpect(status().isOk());// HTTP 상태 코드가 200(OK)인지
 	}
 
 	@Test
@@ -111,10 +111,14 @@ public class ScheduleControllerTest {
 
 		//when & then
 		mockMvc.perform(
-				get("/api/v1/schedules/2024,02")
+				get("/api/v1/schedules/month")
+					.param("month", "2024,02")
 					.header(HttpHeaders.FROM, "localhost")
 			).andDo(print())//테스트 실행 결과를 콘솔에 출력
-			.andExpect(status().isOk());
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.code").value("200"))
+			.andExpect(jsonPath("$.message").value("요청 성공"))
+			.andExpect(jsonPath("$.result").isArray());
 	}
 
 	@Test
@@ -144,10 +148,15 @@ public class ScheduleControllerTest {
 
 		//when & then
 		mockMvc.perform(
-				get("/api/v1/schedules/group/2024,02")
+				get("/api/v1/schedules/group/month")
+					.param("month", "2024,02")
 					.header(HttpHeaders.FROM, "localhost")
 			).andDo(print())//테스트 실행 결과를 콘솔에 출력
-			.andExpect(status().isOk());
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.code").value("200"))
+			.andExpect(jsonPath("$.message").value("요청 성공"))
+			.andExpect(jsonPath("$.result").isArray());
+		;
 	}
 
 	@Test
@@ -180,7 +189,11 @@ public class ScheduleControllerTest {
 				get("/api/v1/schedules/all")
 					.header(HttpHeaders.FROM, "localhost")
 			).andDo(print())//테스트 실행 결과를 콘솔에 출력
-			.andExpect(status().isOk());
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.code").value("200"))
+			.andExpect(jsonPath("$.message").value("요청 성공"))
+			.andExpect(jsonPath("$.result").isArray());
+		;
 	}
 
 	@Test
@@ -213,7 +226,11 @@ public class ScheduleControllerTest {
 				get("/api/v1/schedules/group/all")
 					.header(HttpHeaders.FROM, "localhost")
 			).andDo(print())//테스트 실행 결과를 콘솔에 출력
-			.andExpect(status().isOk());
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.code").value("200"))
+			.andExpect(jsonPath("$.message").value("요청 성공"))
+			.andExpect(jsonPath("$.result").isArray());
+		;
 	}
 
 	@Test
