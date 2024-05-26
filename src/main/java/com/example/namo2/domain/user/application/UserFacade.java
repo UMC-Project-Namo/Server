@@ -106,9 +106,16 @@ public class UserFacade {
 		User savedUser = (User)objects[0];
 		boolean isNewUser = (boolean)objects[1];
 
+		List<UserResponse.TermsDto> terms = TermConverter.toTerms(userService.getTerms(savedUser));
+
 		String[] tokens = jwtUtils.generateTokens(savedUser.getId());
-		UserResponse.SignUpDto signUpRes = UserResponseConverter.toSignUpDto(tokens[0], tokens[1],
-			isNewUser); //access, refresh 순
+
+		UserResponse.SignUpDto signUpRes = UserResponseConverter.toSignUpDto(
+			tokens[0],
+			tokens[1],
+			isNewUser,
+			terms
+		); //access, refresh순
 		userService.updateRefreshToken(savedUser.getId(), signUpRes.getRefreshToken());
 		return signUpRes;
 	}
@@ -127,8 +134,10 @@ public class UserFacade {
 		User savedUser = (User)objects[0];
 		boolean isNewUser = (boolean)objects[1];
 
+		List<UserResponse.TermsDto> terms = TermConverter.toTerms(userService.getTerms(savedUser));
+
 		String[] tokens = jwtUtils.generateTokens(savedUser.getId());
-		UserResponse.SignUpDto signUpRes = UserResponseConverter.toSignUpDto(tokens[0], tokens[1], isNewUser);
+		UserResponse.SignUpDto signUpRes = UserResponseConverter.toSignUpDto(tokens[0], tokens[1], isNewUser, terms);
 		userService.updateRefreshToken(savedUser.getId(), signUpRes.getRefreshToken());
 		return signUpRes;
 	}
@@ -191,8 +200,9 @@ public class UserFacade {
 			isNewUser = false;
 		}
 
+		List<UserResponse.TermsDto> terms = TermConverter.toTerms(userService.getTerms(savedUser));
 		String[] tokens = jwtUtils.generateTokens(savedUser.getId());
-		UserResponse.SignUpDto signUpRes = UserResponseConverter.toSignUpDto(tokens[0], tokens[1], isNewUser);
+		UserResponse.SignUpDto signUpRes = UserResponseConverter.toSignUpDto(tokens[0], tokens[1], isNewUser, terms);
 		userService.updateRefreshToken(savedUser.getId(), signUpRes.getRefreshToken());
 		return signUpRes;
 	}

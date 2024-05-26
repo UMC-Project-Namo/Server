@@ -63,6 +63,10 @@ public class UserService {
 	private final JwtUtils jwtUtils;
 	private final RedisTemplate<String, String> redisTemplate;
 
+	public List<Term> getTerms(User user) {
+		return termRepository.findTermsByUser(user);
+	}
+
 	public User createUser(User user) {
 		return userRepository.save(user);
 	}
