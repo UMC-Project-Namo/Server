@@ -38,6 +38,7 @@ import com.example.namo2.domain.user.dao.repository.TermRepository;
 import com.example.namo2.domain.user.dao.repository.UserRepository;
 import com.example.namo2.domain.user.domain.Term;
 import com.example.namo2.domain.user.domain.User;
+import com.example.namo2.domain.user.domain.constant.SocialType;
 import com.example.namo2.domain.user.domain.constant.UserStatus;
 import com.example.namo2.domain.user.ui.dto.UserRequest;
 
@@ -79,8 +80,8 @@ public class UserService {
 		return userRepository.findUsersById(users);
 	}
 
-	public Optional<User> getUserByEmail(String email) {
-		return userRepository.findUserByEmail(email);
+	public Optional<User> getUserByEmailAndSocialType(String email, SocialType socialType) {
+		return userRepository.findUserByEmailAndSocialType(email, socialType);
 	}
 
 	public User getUserByRefreshToken(String refreshToken) {

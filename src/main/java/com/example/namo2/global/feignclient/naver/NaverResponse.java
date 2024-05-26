@@ -11,6 +11,12 @@ public class NaverResponse {
 	}
 
 	@Getter
+	public static class GetAccessToken {
+		@JsonProperty("access_token")
+		private String accessToken;
+	}
+
+	@Getter
 	@Setter
 	public static class UnlinkDto {
 		@JsonProperty("access_token")

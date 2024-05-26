@@ -36,10 +36,14 @@ public class UserRequest {
 	public static class SocialSignUpDto {
 		@NotBlank
 		private String accessToken;
+		@NotBlank
+		private String socialRefreshToken;
 	}
 
 	@Getter
 	public static class AppleSignUpDto {
+		@NotBlank
+		private String authorizationCode;
 		@NotBlank
 		private String identityToken;
 		private String email;
@@ -60,18 +64,6 @@ public class UserRequest {
 		public boolean getIsCheckPersonalInformationCollection() {
 			return isCheckPersonalInformationCollection;
 		}
-	}
-
-	@Getter
-	public static class DeleteUserDto {
-		@NotBlank
-		private String accessToken;
-	}
-
-	@Getter
-	public static class DeleteAppleUserDto {
-		@NotBlank
-		private String authorizationCode;
 	}
 
 }

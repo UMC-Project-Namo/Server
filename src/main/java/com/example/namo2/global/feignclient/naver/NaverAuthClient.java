@@ -14,11 +14,21 @@ import lombok.RequiredArgsConstructor;
 public class NaverAuthClient {
 	private final Logger logger = LoggerFactory.getLogger(NaverAuthClient.class);
 	private final NaverAuthApi naverAuthApi;
-	private final NaverOpenApi naverOpenApi;
 	private final NaverProperties naverProperties;
 
+	public String getAccessToken(String refreshToken) {
+		logger.debug("naver refreshToken : " + refreshToken);
+		NaverResponse.GetAccessToken getAccessToken = naverAuthApi.getAccessToken(
+			"refresh_token",
+			naverProperties.getClientId(),
+			naverProperties.getClientSecret(),
+			refreshToken
+		);
+		return getAccessToken.getAccessToken();
+	}
+
 	public void unlinkNaver(String accessToken) {
-		try { //URL인코딩
+		try { //accessToken URL인코딩
 			accessToken = URLEncoder.encode(accessToken, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -35,12 +45,6 @@ public class NaverAuthClient {
 		);
 
 		logger.debug("네이버 탈퇴 res : {}, {}", dto.getAccessToken(), dto.getResult());
-	}
-
-	public void tokenAvailability(String accessToken) {
-		naverOpenApi.tokenAvailability(
-			"Bearer " + accessToken
-		);
 	}
 
 }

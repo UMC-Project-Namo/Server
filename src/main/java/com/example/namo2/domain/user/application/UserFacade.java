@@ -46,6 +46,7 @@ import com.example.namo2.domain.user.application.converter.UserResponseConverter
 import com.example.namo2.domain.user.application.impl.UserService;
 import com.example.namo2.domain.user.domain.Term;
 import com.example.namo2.domain.user.domain.User;
+import com.example.namo2.domain.user.domain.constant.SocialType;
 import com.example.namo2.domain.user.domain.constant.UserStatus;
 import com.example.namo2.domain.user.ui.dto.UserRequest;
 import com.example.namo2.domain.user.ui.dto.UserResponse;
@@ -90,7 +91,7 @@ public class UserFacade {
 	private final AppleProperties appleProperties;
 
 	@Transactional
-	public UserResponse.SignUpDto signupKakao(UserRequest.SocialSignUpDto signUpDto) {
+	public UserResponse.SignUpDto signupKakao(UserRequest.SocialSignUpDto signUpDto, SocialType socialType) {
 		HttpURLConnection con = socialUtils.connectKakaoResourceServer(signUpDto);
 		socialUtils.validateSocialAccessToken(con);
 
@@ -99,15 +100,16 @@ public class UserFacade {
 		log.debug("result = " + result);
 
 		Map<String, String> response = socialUtils.findResponseFromKakako(result);
-		User user = UserConverter.toUser(response);
+		User user = UserConverter.toUser(response, signUpDto.getSocialRefreshToken(), socialType);
 
-		Object[] objects = saveOrNot(user);
+		Object[] objects = saveOrNot(user, socialType, signUpDto.getSocialRefreshToken()); //기존 유저인지 확인하고 신규 유저이면 저장
 		User savedUser = (User)objects[0];
 		boolean isNewUser = (boolean)objects[1];
 
 		List<UserResponse.TermsDto> terms = TermConverter.toTerms(userService.getTerms(savedUser));
 
 		String[] tokens = jwtUtils.generateTokens(savedUser.getId());
+
 		UserResponse.SignUpDto signUpRes = UserResponseConverter.toSignUpDto(
 			tokens[0],
 			tokens[1],
@@ -119,16 +121,16 @@ public class UserFacade {
 	}
 
 	@Transactional
-	public UserResponse.SignUpDto signupNaver(UserRequest.SocialSignUpDto signUpDto) {
+	public UserResponse.SignUpDto signupNaver(UserRequest.SocialSignUpDto signUpDto, SocialType socialType) {
 		HttpURLConnection con = socialUtils.connectNaverResourceServer(signUpDto);
 		socialUtils.validateSocialAccessToken(con);
 
 		String result = socialUtils.findSocialLoginUsersInfo(con);
 
 		Map<String, String> response = socialUtils.findResponseFromNaver(result);
-		User user = UserConverter.toUser(response);
+		User user = UserConverter.toUser(response, signUpDto.getSocialRefreshToken(), socialType);
 
-		Object[] objects = saveOrNot(user);
+		Object[] objects = saveOrNot(user, socialType, signUpDto.getSocialRefreshToken());
 		User savedUser = (User)objects[0];
 		boolean isNewUser = (boolean)objects[1];
 
@@ -141,8 +143,13 @@ public class UserFacade {
 	}
 
 	@Transactional
-	public UserResponse.SignUpDto signupApple(UserRequest.AppleSignUpDto req) {
-		AppleResponse.ApplePublicKeyListDto applePublicKeys = appleAuthClient.getApplePublicKeys();
+	public UserResponse.SignUpDto signupApple(UserRequest.AppleSignUpDto req, SocialType socialType) {
+		AppleResponse.ApplePublicKeyListDto applePublicKeys = appleAuthClient.getApplePublicKeys();//애플 퍼블릭 키 조회
+
+		//get apple refresh token
+		String clientSecret = createClientSecret();
+		String appleRefreshToken = appleAuthClient.getAppleRefreshToken(clientSecret, req.getAuthorizationCode());
+
 		String email = "";
 
 		JSONObject headerJson = userService.getHeaderJson(req);
@@ -176,15 +183,20 @@ public class UserFacade {
 		//로그인 분기처리
 		User savedUser;
 		boolean isNewUser;
-		Optional<User> userByEmail = userService.getUserByEmail(email);
+		Optional<User> userByEmail = userService.getUserByEmailAndSocialType(email, socialType);
 		if (userByEmail.isEmpty()) { //첫로그인
 			userService.checkEmailAndName(req.getEmail(), req.getUsername());
-			savedUser = userService.createUser(UserConverter.toUser(req.getEmail(), req.getUsername()));
+			savedUser = userService.createUser(UserConverter.toUser(
+				req.getEmail(),
+				req.getUsername(),
+				appleRefreshToken,
+				socialType));
 			makeBaseCategory(savedUser);
 			isNewUser = true;
 		} else { //재로그인
 			savedUser = userByEmail.get();
 			savedUser.setStatus(UserStatus.ACTIVE);
+			savedUser.updateSocialRefreshToken(appleRefreshToken);
 			isNewUser = false;
 		}
 
@@ -216,8 +228,8 @@ public class UserFacade {
 		redisTemplate.opsForValue().set(logoutDto.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
 	}
 
-	private Object[] saveOrNot(User user) {
-		Optional<User> userByEmail = userService.getUserByEmail(user.getEmail());
+	private Object[] saveOrNot(User user, SocialType socialType, String socialRefreshToken) {
+		Optional<User> userByEmail = userService.getUserByEmailAndSocialType(user.getEmail(), socialType);
 		if (userByEmail.isEmpty()) {
 			log.debug("userByEmail is empty");
 			User save = userService.createUser(user);
@@ -227,6 +239,7 @@ public class UserFacade {
 		}
 		User exitingUser = userByEmail.get();
 		exitingUser.setStatus(UserStatus.ACTIVE);
+		exitingUser.updateSocialRefreshToken(socialRefreshToken);
 		boolean isNewUser = false;
 		return new Object[] {exitingUser, isNewUser};
 	}
@@ -259,48 +272,57 @@ public class UserFacade {
 	}
 
 	@Transactional
-	public void removeKakaoUser(HttpServletRequest request, String kakaoAccessToken) {
+	public void removeKakaoUser(HttpServletRequest request) {
 		//유저 토큰 만료시 예외 처리
 		String accessToken = jwtUtils.getAccessToken(request);
-
 		logger.info("accessToken : {}", accessToken);
-
 		userService.checkAccessTokenValidation(accessToken);
 
-		logger.info("kakaoAccessToken {}", kakaoAccessToken);
+		//kakao social access token 조회
+		User user = userService.getUser(jwtUtils.resolveRequest(request));
+		logger.info("kakao SocialRefreshToken : {}", user.getSocialRefreshToken());
+		String kakaoAccessToken = kakaoAuthClient.getAccessToken(user.getSocialRefreshToken());
 
+		//kakao unlink
 		kakaoAuthClient.unlinkKakao(kakaoAccessToken);
 
-		setUserInactive(request);
+		setUserInactive(request, user);
 	}
 
 	@Transactional
-	public void removeNaverUser(HttpServletRequest request, String naverAccessToken) {
+	public void removeNaverUser(HttpServletRequest request) {
 		//유저 토큰 만료시 예외 처리
 		String accessToken = jwtUtils.getAccessToken(request);
 		userService.checkAccessTokenValidation(accessToken);
 
-		naverAuthClient.tokenAvailability(naverAccessToken);
+		//naver social access token 조회
+		logger.debug("userId : " + jwtUtils.resolveRequest(request));
+		User user = userService.getUser(jwtUtils.resolveRequest(request));
+		String naverAccessToken = naverAuthClient.getAccessToken(user.getSocialRefreshToken());
+
+		//naver unlink
 		naverAuthClient.unlinkNaver(naverAccessToken);
 
-		setUserInactive(request);
+		setUserInactive(request, user);
 	}
 
 	@Transactional
-	public void removeAppleUser(HttpServletRequest request, String authorizationCode) {
+	public void removeAppleUser(HttpServletRequest request) {
 		//유저 토큰 만료시 예외 처리
 		String accessToken = jwtUtils.getAccessToken(request);
 		userService.checkAccessTokenValidation(accessToken);
 
-		String clientSecret = "";
+		String clientSecret = createClientSecret();
 
-		clientSecret = createClientSecret();
+		//apple social access token 조회
+		User user = userService.getUser(jwtUtils.resolveRequest(request));
+		String appleAccessToken = appleAuthClient.getAppleAccessToken(clientSecret, user.getSocialRefreshToken());
+		logger.debug("appleToken {}", appleAccessToken);
 
-		String appleToken = appleAuthClient.getAppleToken(clientSecret, authorizationCode);
-		logger.debug("appleToken {}", appleToken);
-		appleAuthClient.revoke(clientSecret, appleToken);
+		//apple unlink
+		appleAuthClient.revoke(clientSecret, appleAccessToken);
 
-		setUserInactive(request);
+		setUserInactive(request, user);
 	}
 
 	public String createClientSecret() {
@@ -319,13 +341,11 @@ public class UserFacade {
 			.compact();
 	}
 
-	private void setUserInactive(HttpServletRequest request) {
-		User user = userService.getUser(jwtUtils.resolveRequest(request));
+	private void setUserInactive(HttpServletRequest request, User user) {
 		user.setStatus(UserStatus.INACTIVE);
 
 		//token 만료처리
 		String accessToken = jwtUtils.getAccessToken(request);
-		//request.getHeader("Authorization");
 		Long expiration = jwtUtils.getExpiration(accessToken);
 		redisTemplate.opsForValue().set(accessToken, "delete", expiration, TimeUnit.MILLISECONDS);
 	}
@@ -351,13 +371,13 @@ public class UserFacade {
 
 				categoryService.removeCategoriesByUser(user);
 
-					List<Schedule> schedules = scheduleService.getSchedulesByUser(user);
-					alarmService.removeAlarmsBySchedules(schedules);
-					List<Image> images = imageService.getImagesBySchedules(schedules);
-					List<String> urls = images.stream().map(Image::getImgUrl).collect(Collectors.toList());
-					fileUtils.deleteImages(urls, FilePath.INVITATION_ACTIVITY_IMG);
-					imageService.removeImgsBySchedules(schedules);
-					scheduleService.removeSchedules(schedules);
+				List<Schedule> schedules = scheduleService.getSchedulesByUser(user);
+				alarmService.removeAlarmsBySchedules(schedules);
+				List<Image> images = imageService.getImagesBySchedules(schedules);
+				List<String> urls = images.stream().map(Image::getImgUrl).collect(Collectors.toList());
+				fileUtils.deleteImages(urls, FilePath.INVITATION_ACTIVITY_IMG);
+				imageService.removeImgsBySchedules(schedules);
+				scheduleService.removeSchedules(schedules);
 
 				moimAndUserService.removeMoimAndUsersByUser(user);
 

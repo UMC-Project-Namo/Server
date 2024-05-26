@@ -1,21 +1,25 @@
 package com.example.namo2.domain.user.ui;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import com.example.namo2.domain.user.application.UserFacade;
+import com.example.namo2.domain.user.domain.constant.SocialType;
 import com.example.namo2.domain.user.ui.dto.UserRequest;
 import com.example.namo2.domain.user.ui.dto.UserResponse;
+
 import com.example.namo2.global.annotation.swagger.ApiErrorCodes;
 import com.example.namo2.global.common.response.BaseResponse;
 import com.example.namo2.global.common.response.BaseResponseStatus;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Tag(name = "1. Auth", description = "로그인, 회원가입 관련 API")
@@ -43,7 +47,7 @@ public class AuthController {
 	public BaseResponse<UserResponse.SignUpDto> kakaoSignup(
 		@Valid @RequestBody UserRequest.SocialSignUpDto signUpDto
 	) {
-		UserResponse.SignUpDto signupDto = userFacade.signupKakao(signUpDto);
+		UserResponse.SignUpDto signupDto = userFacade.signupKakao(signUpDto, SocialType.KAKAO);
 		return new BaseResponse<>(signupDto);
 	}
 
@@ -62,7 +66,7 @@ public class AuthController {
 	public BaseResponse<UserResponse.SignUpDto> naverSignup(
 		@Valid @RequestBody UserRequest.SocialSignUpDto signUpDto
 	) {
-		UserResponse.SignUpDto signupDto = userFacade.signupNaver(signUpDto);
+		UserResponse.SignUpDto signupDto = userFacade.signupNaver(signUpDto, SocialType.NAVER);
 		return new BaseResponse<>(signupDto);
 	}
 
@@ -79,7 +83,7 @@ public class AuthController {
 	public BaseResponse<UserResponse.SignUpDto> appleSignup(
 		@Valid @RequestBody UserRequest.AppleSignUpDto dto
 	) {
-		UserResponse.SignUpDto signupDto = userFacade.signupApple(dto);
+		UserResponse.SignUpDto signupDto = userFacade.signupApple(dto, SocialType.APPLE);
 		return new BaseResponse<>(signupDto);
 	}
 
@@ -126,10 +130,8 @@ public class AuthController {
 		BaseResponseStatus.INTERNET_SERVER_ERROR
 	})
 	public BaseResponse<?> removeKakaoUser(
-		HttpServletRequest request,
-		@Valid @RequestBody UserRequest.DeleteUserDto deleteUserDto
-	) {
-		userFacade.removeKakaoUser(request, deleteUserDto.getAccessToken());
+		HttpServletRequest request) {
+		userFacade.removeKakaoUser(request);
 		return BaseResponse.ok();
 	}
 
@@ -142,10 +144,9 @@ public class AuthController {
 		BaseResponseStatus.INTERNET_SERVER_ERROR
 	})
 	public BaseResponse<?> removeNaverUser(
-		HttpServletRequest request,
-		@Valid @RequestBody UserRequest.DeleteUserDto deleteUserDto
+		HttpServletRequest request
 	) {
-		userFacade.removeNaverUser(request, deleteUserDto.getAccessToken());
+		userFacade.removeNaverUser(request);
 		return BaseResponse.ok();
 	}
 
@@ -159,10 +160,9 @@ public class AuthController {
 		BaseResponseStatus.INTERNET_SERVER_ERROR
 	})
 	public BaseResponse<?> removeAppleUser(
-		HttpServletRequest request,
-		@Valid @RequestBody UserRequest.DeleteAppleUserDto deleteAppleUserDto
+		HttpServletRequest request
 	) {
-		userFacade.removeAppleUser(request, deleteAppleUserDto.getAuthorizationCode());
+		userFacade.removeAppleUser(request);
 		return BaseResponse.ok();
 	}
 }
