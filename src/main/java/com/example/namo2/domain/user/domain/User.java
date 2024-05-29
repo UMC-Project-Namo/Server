@@ -77,7 +77,7 @@ public class User extends BaseTimeEntity {
 		this.refreshToken = refreshToken;
 	}
 
-	public void updateSocialRefreshToken(String refreshToken) {
+	public void updateSocialRefreshToken(String socialRefreshToken) {
 		this.socialRefreshToken = socialRefreshToken;
 	}
 
