@@ -1,6 +1,4 @@
-package com.example.namo2.global.utils;
-
-import static com.example.namo2.global.common.response.BaseResponseStatus.*;
+package com.namo.spring.application.external.global.utils;
 
 import java.security.Key;
 import java.util.Date;
@@ -11,6 +9,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.core.common.exception.UtilsException;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
@@ -18,9 +19,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
-
-import com.example.namo2.global.common.exception.BaseException;
-import com.example.namo2.global.common.response.BaseResponseStatus;
 
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,20 +60,20 @@ public class JwtUtils {
 			.compact();
 	}
 
-	public Long resolveRequest(HttpServletRequest request) throws BaseException {
+	public Long resolveRequest(HttpServletRequest request) {
 		try {
 			String accessToken = getAccessToken(request);
 			return resolveToken(accessToken);
 		} catch (ExpiredJwtException e) {
-			throw new BaseException(EXPIRATION_ACCESS_TOKEN);
+			throw new UtilsException(ErrorStatus.EXPIRATION_ACCESS_TOKEN);
 		}
 	}
 
-	public String getAccessToken(HttpServletRequest request) throws BaseException {
+	public String getAccessToken(HttpServletRequest request) {
 		String accessToken = request.getHeader(HEADER);
 
 		if (accessToken == null || accessToken.length() == 0) {
-			throw new BaseException(BaseResponseStatus.EMPTY_ACCESS_KEY);
+			throw new UtilsException(ErrorStatus.EMPTY_ACCESS_KEY);
 		}
 
 		return getJwtToken(accessToken);
@@ -85,14 +83,14 @@ public class JwtUtils {
 		return accessToken.replace("Bearer ", "");
 	}
 
-	private Long resolveToken(String accessToken) throws BaseException {
+	private Long resolveToken(String accessToken) {
 		return Optional.ofNullable(Jwts.parserBuilder()
 				.setSigningKey(getSecretKey())
 				.build()
 				.parseClaimsJws(accessToken)
 				.getBody())
 			.map((c) -> c.get("userId", Long.class))
-			.orElseThrow(() -> new BaseException(BaseResponseStatus.EMPTY_ACCESS_KEY));
+			.orElseThrow(() -> new UtilsException(ErrorStatus.EMPTY_ACCESS_KEY));
 	}
 
 	public boolean validateRequest(HttpServletRequest request) {
@@ -125,7 +123,7 @@ public class JwtUtils {
 				.parseClaimsJws(accessToken);
 			return claims.getBody().getExpiration().getTime();
 		} catch (Exception e) {
-			throw new BaseException(EXPIRATION_ACCESS_TOKEN);
+			throw new UtilsException(ErrorStatus.EXPIRATION_ACCESS_TOKEN);
 		}
 	}
 }

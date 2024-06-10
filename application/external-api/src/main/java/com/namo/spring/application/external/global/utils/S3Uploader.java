@@ -1,4 +1,4 @@
-package com.example.namo2.global.utils;
+package com.namo.spring.application.external.global.utils;
 
 import java.io.InputStream;
 

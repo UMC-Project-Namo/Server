@@ -1,6 +1,4 @@
-package com.example.namo2.global.utils;
-
-import static com.example.namo2.global.common.response.BaseResponseStatus.*;
+package com.namo.spring.application.external.global.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,10 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-
-import com.example.namo2.global.common.constant.FilePath;
-import com.example.namo2.global.common.exception.BaseException;
-import com.example.namo2.global.common.response.BaseResponseStatus;
+import com.namo.spring.application.external.global.common.constant.FilePath;
+import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.core.common.exception.UtilsException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,19 +25,19 @@ import lombok.extern.slf4j.Slf4j;
 public class FileUtils {
 	private final S3Uploader s3Uploader;
 
-	private String createFileName(String originalFileName, FilePath filePath) throws BaseException {
+	private String createFileName(String originalFileName, FilePath filePath) {
 		return filePath.getPath() + UUID.randomUUID().toString().concat(getFileExtension(originalFileName));
 	}
 
-	private String getFileExtension(String fileName) throws BaseException {
+	private String getFileExtension(String fileName) {
 		try {
 			return fileName.substring(fileName.lastIndexOf("."));
 		} catch (StringIndexOutOfBoundsException e) {
-			throw new BaseException(FILE_NAME_EXCEPTION);
+			throw new UtilsException(ErrorStatus.FILE_NAME_EXCEPTION);
 		}
 	}
 
-	public List<String> uploadImages(List<MultipartFile> files, FilePath filePath) throws BaseException {
+	public List<String> uploadImages(List<MultipartFile> files, FilePath filePath) {
 		List<String> urls = new ArrayList<>();
 		for (MultipartFile file : files) {
 			if (Optional.ofNullable(file).isPresent()) {
@@ -50,14 +47,14 @@ public class FileUtils {
 		return urls;
 	}
 
-	public String uploadImage(MultipartFile file, FilePath filePath) throws BaseException {
+	public String uploadImage(MultipartFile file, FilePath filePath) {
 		String fileName = createFileName(file.getOriginalFilename(), filePath);
 		ObjectMetadata objectMetadata = getObjectMetadata(file);
 
 		try (InputStream inputStream = file.getInputStream()) {
 			s3Uploader.uploadFile(inputStream, objectMetadata, fileName);
 		} catch (IOException e) {
-			throw new BaseException(BaseResponseStatus.S3_FAILURE);
+			throw new UtilsException(ErrorStatus.S3_FAILURE);
 		}
 
 		return s3Uploader.getFileUrl(fileName);
@@ -70,24 +67,24 @@ public class FileUtils {
 		return objectMetadata;
 	}
 
-	public void deleteImages(List<String> urls, FilePath filePath) throws BaseException {
+	public void deleteImages(List<String> urls, FilePath filePath) {
 		try {
 			for (String url : urls) {
 				delete(url, filePath);
 			}
 		} catch (SdkClientException e) {
-			throw new BaseException(S3_FAILURE);
+			throw new UtilsException(ErrorStatus.S3_FAILURE);
 		}
 	}
 
-	private void delete(String url, FilePath filePath) throws BaseException {
+	private void delete(String url, FilePath filePath) {
 		try {
 			String key = url.substring(url.lastIndexOf(filePath.getPath()));
 			if (!key.isEmpty()) {
 				s3Uploader.delete(key);
 			}
 		} catch (SdkClientException e) {
-			throw new BaseException(S3_FAILURE);
+			throw new UtilsException(ErrorStatus.S3_FAILURE);
 		}
 	}
 }

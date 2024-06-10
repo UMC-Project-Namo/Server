@@ -1,6 +1,4 @@
-package com.example.namo2.global.utils;
-
-import static com.example.namo2.global.common.response.BaseResponseStatus.*;
+package com.namo.spring.application.external.global.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,10 +11,9 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
-
-import com.example.namo2.domain.user.ui.dto.UserRequest;
-
-import com.example.namo2.global.common.exception.BaseException;
+import com.namo.spring.application.external.domain.user.ui.dto.UserRequest;
+import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.core.common.exception.UtilsException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +33,7 @@ public class SocialUtils {
 			conn.setRequestProperty("Authorization", "Bearer " + signUpReq.getAccessToken());
 			return conn;
 		} catch (IOException e) {
-			throw new BaseException(SOCIAL_LOGIN_FAILURE);
+			throw new UtilsException(ErrorStatus.SOCIAL_LOGIN_FAILURE);
 		}
 	}
 
@@ -48,17 +45,17 @@ public class SocialUtils {
 			con.setRequestProperty("Authorization", "Bearer " + signUpReq.getAccessToken());
 			return con;
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			throw new UtilsException(ErrorStatus.SOCIAL_LOGIN_FAILURE);
 		}
 	}
 
 	public void validateSocialAccessToken(HttpURLConnection con) {
 		try {
 			if (con.getResponseCode() != 200) {
-				throw new BaseException(SOCIAL_LOGIN_FAILURE);
+				throw new UtilsException(ErrorStatus.SOCIAL_LOGIN_FAILURE);
 			}
 		} catch (IOException e) {
-			throw new BaseException(SOCIAL_LOGIN_FAILURE);
+			throw new UtilsException(ErrorStatus.SOCIAL_LOGIN_FAILURE);
 		}
 	}
 
@@ -72,17 +69,17 @@ public class SocialUtils {
 			}
 			return result;
 		} catch (IOException e) {
-			throw new BaseException(SOCIAL_LOGIN_FAILURE);
+			throw new UtilsException(ErrorStatus.SOCIAL_LOGIN_FAILURE);
 		}
 	}
 
-	public Map<String, String> findResponseFromNaver(String result) throws BaseException {
+	public Map<String, String> findResponseFromNaver(String result) {
 		Gson gson = new Gson();
 		Map<String, Object> jsonMap = new HashMap<>();
 		jsonMap = gson.fromJson(result, jsonMap.getClass());
 
 		if (!jsonMap.get("resultcode").equals("00")) {
-			throw new BaseException(SOCIAL_LOGIN_FAILURE);
+			throw new UtilsException(ErrorStatus.SOCIAL_LOGIN_FAILURE);
 		}
 		/**
 		 * 네이버 로그인 시에는 nickname이 null 값으로 받아집니다.
@@ -93,7 +90,7 @@ public class SocialUtils {
 		return response;
 	}
 
-	public Map<String, String> findResponseFromKakako(String result) throws BaseException {
+	public Map<String, String> findResponseFromKakako(String result) {
 		Gson gson = new Gson();
 		Map<String, Object> jsonMap = new HashMap<>();
 		jsonMap = gson.fromJson(result, jsonMap.getClass());
@@ -101,7 +98,7 @@ public class SocialUtils {
 		Map<String, String> properties = (Map<String, String>)jsonMap.get("properties");
 		Map<String, String> kakaoAccount = (Map<String, String>)jsonMap.get("kakao_account");
 		if (!(kakaoAccount.get("has_email") != "true")) {
-			throw new BaseException(SOCIAL_LOGIN_FAILURE);
+			throw new UtilsException(ErrorStatus.SOCIAL_LOGIN_FAILURE);
 		}
 		properties.put("email", kakaoAccount.get("email"));
 		if ((kakaoAccount.get("has_birthday") == "true")) {

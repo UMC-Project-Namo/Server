@@ -1,4 +1,4 @@
-package com.example.namo2.global.utils;
+package com.namo.spring.application.external.global.utils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.example.namo2.global.common.exception.BaseException;
-import com.example.namo2.global.common.response.BaseResponseStatus;
+import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.core.common.exception.UtilsException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,18 +28,18 @@ public class Converter {
 
 	private void validateFormat(String[] dateInformation) {
 		if (dateInformation.length != 2) {
-			throw new BaseException(BaseResponseStatus.INVALID_FORMAT_FAILURE);
+			throw new UtilsException(ErrorStatus.INVALID_FORMAT_FAILURE);
 		}
 		for (String element : dateInformation) {
 			if (!element.matches("\\d+")) {
-				throw new BaseException(BaseResponseStatus.INVALID_FORMAT_FAILURE);
+				throw new UtilsException(ErrorStatus.INVALID_FORMAT_FAILURE);
 			}
 		}
 	}
 
 	private void validateMonth(int year, int month) {
 		if (year < 0 || month > 12 || month <= 0) {
-			throw new BaseException(BaseResponseStatus.INVALID_FORMAT_FAILURE);
+			throw new UtilsException(ErrorStatus.INVALID_FORMAT_FAILURE);
 		}
 	}
 }
