@@ -26,70 +26,52 @@ subprojects {
     }
 
     dependencies {
-        // data
-        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-        runtimeOnly 'com.mysql:mysql-connector-j'
-        implementation group: 'org.hibernate', name: 'hibernate-spatial', version: '6.2.0.CR3' // point 저장
-
-        // application
-        implementation 'org.springframework.boot:spring-boot-starter-web'
+        // lombok
+        compileOnly "org.projectlombok:lombok:${lombokVersion}"
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
         // test
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    }
 
-        // lombok
-        compileOnly 'org.projectlombok:lombok:1.18.26'
-        annotationProcessor 'org.projectlombok:lombok:1.18.26'
+    bootJar.enabled = false
+    jar.enabled = true
 
-        // Security
-        implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-        runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
-        runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    test {
+        useJUnitPlatform {
+            excludeTags('develop')
+        }
+    }
 
-        // utils
-        implementation 'org.springframework.boot:spring-boot-starter-validation'
-        implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.1'
-        implementation 'com.google.code.gson:gson:2.10.1'
+    tasks.register('unitTest', Test) {
+        group = 'verification'
+        description = 'Run unit tests'
 
-        // querydsl 추가
-        implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-        annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
-        annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
-        annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
+        useJUnitPlatform {
+            excludeTags('develop', 'context')
+        }
+    }
 
-        // Aws s3
-        implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.4'
+    tasks.register('contextTest', Test) {
+        group = 'verification'
+        description = 'Run context tests'
 
-        // documentation
-        implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+        useJUnitPlatform {
+            includeTags('context')
+        }
+    }
 
-        // redis
-        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    tasks.register('developTest', Test) {
+        group = 'verification'
+        description = 'Run develop tests'
 
-        //openfeign
-        implementation platform("org.springframework.cloud:spring-cloud-dependencies:2023.0.0")
-        implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-
-        //json
-        implementation 'com.googlecode.json-simple:json-simple:1.1.1'
-
-        //PEM 파일 파싱
-        implementation 'org.bouncycastle:bcprov-jdk18on:1.77'
-        implementation 'org.bouncycastle:bcpkix-jdk18on:1.77'
-        implementation 'org.bouncycastle:bcutil-jdk18on:1.77'
-
-        // Mockito Core
-        testImplementation 'org.mockito:mockito-core:5.8.0'
-        // javax bind
-        implementation 'javax.xml.bind:jaxb-api:2.3.1'
+        useJUnitPlatform {
+            includeTags('develop')
+        }
     }
 
     clean {
         delete file('src/main/generated')
-    }
-
-    jar {
-        enabled = false
     }
 
     bootJar {

@@ -1,19 +1,8 @@
-plugins {
-    id 'java'
-}
-
-group = 'com.namo.spring'
-version = '0.0.1-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-}
+    // spring
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 
-test {
-    useJUnitPlatform()
+    // Jackson
+    api "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
+    api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 }
