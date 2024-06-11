@@ -27,8 +27,8 @@ import com.namo.spring.application.external.domain.user.repository.TermRepositor
 import com.namo.spring.application.external.domain.user.repository.UserRepository;
 import com.namo.spring.application.external.domain.user.ui.dto.UserRequest;
 import com.namo.spring.application.external.global.utils.JwtUtils;
-import com.namo.spring.client.social.apple.AppleProperties;
-import com.namo.spring.client.social.apple.AppleResponse;
+import com.namo.spring.client.social.common.properties.AppleProperties;
+import com.namo.spring.client.social.apple.dto.AppleResponse;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.exception.UserException;
 
