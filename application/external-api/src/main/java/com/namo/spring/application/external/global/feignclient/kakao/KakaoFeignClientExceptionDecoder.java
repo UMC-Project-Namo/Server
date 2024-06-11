@@ -1,13 +1,13 @@
-package com.example.namo2.global.feignclient.kakao;
+package com.namo.spring.application.external.global.feignclient.kakao;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.core.common.exception.KakaoClientException;
+
 import feign.Response;
 import feign.codec.ErrorDecoder;
-
-import com.example.namo2.global.common.exception.BaseException;
-import com.example.namo2.global.common.response.BaseResponseStatus;
 
 public class KakaoFeignClientExceptionDecoder implements ErrorDecoder {
 	Logger logger = LoggerFactory.getLogger(KakaoFeignClientExceptionDecoder.class);
@@ -19,18 +19,18 @@ public class KakaoFeignClientExceptionDecoder implements ErrorDecoder {
 		if (response.status() >= 400 && response.status() <= 499) {
 			logger.debug("feign 400번대 에러 발생 : {}", response.reason());
 			return switch (response.status()) {
-				case 401 -> new BaseException(BaseResponseStatus.KAKAO_UNAUTHORIZED);
-				case 403 -> new BaseException(BaseResponseStatus.KAKAO_FORBIDDEN);
-				default -> new BaseException(BaseResponseStatus.SOCIAL_WITHDRAWAL_FAILURE);
+				case 401 -> new KakaoClientException(ErrorStatus.KAKAO_UNAUTHORIZED);
+				case 403 -> new KakaoClientException(ErrorStatus.KAKAO_FORBIDDEN);
+				default -> new KakaoClientException(ErrorStatus.SOCIAL_WITHDRAWAL_FAILURE);
 			};
 		} else {
 			logger.debug("feign client  500번대 에러 발생 : {}", response.reason());
 
 			return switch (response.status()) {
-				case 500 -> new BaseException(BaseResponseStatus.KAKAO_INTERNAL_SERVER_ERROR);
-				case 502 -> new BaseException(BaseResponseStatus.KAKAO_BAD_GATEWAY);
-				case 503 -> new BaseException(BaseResponseStatus.KAKAO_SERVICE_UNAVAILABLE);
-				default -> new BaseException(BaseResponseStatus.FEIGN_SERVER_ERROR);
+				case 500 -> new KakaoClientException(ErrorStatus.KAKAO_INTERNAL_SERVER_ERROR);
+				case 502 -> new KakaoClientException(ErrorStatus.KAKAO_BAD_GATEWAY);
+				case 503 -> new KakaoClientException(ErrorStatus.KAKAO_SERVICE_UNAVAILABLE);
+				default -> new KakaoClientException(ErrorStatus.FEIGN_SERVER_ERROR);
 			};
 		}
 	}

@@ -1,4 +1,4 @@
-package com.example.namo2.global.feignclient.naver;
+package com.namo.spring.application.external.global.feignclient.naver;
 
 import org.springframework.context.annotation.Bean;
 
@@ -8,7 +8,7 @@ import feign.codec.ErrorDecoder;
 public class NaverFeignConfiguration {
 	@Bean
 	ErrorDecoder errorDecoder() {
-		return new NaverFeignException();
+		return new NaverFeignClientExceptionDecoder();
 	}
 
 	@Bean

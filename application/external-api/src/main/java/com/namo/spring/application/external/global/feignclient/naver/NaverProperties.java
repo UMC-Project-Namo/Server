@@ -1,4 +1,4 @@
-package com.example.namo2.global.feignclient.naver;
+package com.namo.spring.application.external.global.feignclient.naver;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

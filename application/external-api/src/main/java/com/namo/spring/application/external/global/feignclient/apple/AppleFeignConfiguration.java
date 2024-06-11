@@ -1,4 +1,4 @@
-package com.example.namo2.global.feignclient.apple;
+package com.namo.spring.application.external.global.feignclient.apple;
 
 import org.springframework.context.annotation.Bean;
 
@@ -8,7 +8,7 @@ import feign.codec.ErrorDecoder;
 public class AppleFeignConfiguration {
 	@Bean
 	ErrorDecoder errorDecoder() {
-		return new AppleFeignException();
+		return new AppleFeignClientExceptionDecoder();
 	}
 
 	@Bean

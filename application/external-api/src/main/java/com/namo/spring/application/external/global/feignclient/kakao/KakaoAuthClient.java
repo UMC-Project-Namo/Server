@@ -1,4 +1,4 @@
-package com.example.namo2.global.feignclient.kakao;
+package com.namo.spring.application.external.global.feignclient.kakao;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

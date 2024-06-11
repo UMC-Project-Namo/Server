@@ -1,11 +1,10 @@
-package com.example.namo2.global.feignclient.apple;
+package com.namo.spring.application.external.global.feignclient.apple;
 
-import static com.example.namo2.global.common.response.BaseResponseStatus.*;
-
-import com.example.namo2.global.common.exception.BaseException;
+import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.core.common.exception.AppleClientException;
 
 public class AppleResponseConverter {
-	public AppleResponseConverter() {
+	private AppleResponseConverter() {
 		throw new IllegalStateException("Utility class.");
 	}
 
@@ -17,6 +16,6 @@ public class AppleResponseConverter {
 		return applePublicKeys.getKeys().stream()
 			.filter(key -> key.getAlg().equals(alg) && key.getKid().equals(kid))
 			.findFirst()
-			.orElseThrow(() -> new BaseException(APPLE_REQUEST_ERROR));
+			.orElseThrow(() -> new AppleClientException(ErrorStatus.APPLE_REQUEST_ERROR));
 	}
 }

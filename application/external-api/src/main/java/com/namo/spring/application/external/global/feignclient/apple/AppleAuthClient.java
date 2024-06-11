@@ -1,4 +1,4 @@
-package com.example.namo2.global.feignclient.apple;
+package com.namo.spring.application.external.global.feignclient.apple;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

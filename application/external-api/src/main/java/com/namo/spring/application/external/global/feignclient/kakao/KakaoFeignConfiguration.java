@@ -1,4 +1,4 @@
-package com.example.namo2.global.feignclient.kakao;
+package com.namo.spring.application.external.global.feignclient.kakao;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
