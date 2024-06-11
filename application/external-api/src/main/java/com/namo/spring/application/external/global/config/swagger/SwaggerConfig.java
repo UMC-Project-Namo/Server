@@ -1,4 +1,4 @@
-package com.example.namo2.global.config.swagger;
+package com.namo.spring.application.external.global.config.swagger;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -7,17 +7,16 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springdoc.core.customizers.OperationCustomizer;
-import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.HandlerMethod;
 
-import com.example.namo2.global.annotation.swagger.ApiErrorCode;
-import com.example.namo2.global.annotation.swagger.ApiErrorCodes;
-import com.example.namo2.global.common.response.BaseResponse;
-import com.example.namo2.global.common.response.BaseResponseStatus;
-import com.example.namo2.global.config.properties.ExampleHolder;
+import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCode;
+import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
+import com.namo.spring.application.external.global.config.properties.ExampleHolder;
+import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.core.common.response.ResponseDto;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -93,7 +92,7 @@ public class SwaggerConfig {
 	 * @param operation
 	 * @param errorCodes
 	 */
-	private void generateErrorCodeResponse(Operation operation, BaseResponseStatus[] errorCodes) {
+	private void generateErrorCodeResponse(Operation operation, ErrorStatus[] errorCodes) {
 		ApiResponses responses = operation.getResponses();
 
 		Map<Integer, List<ExampleHolder>> statusWithExampleHolders = Arrays.stream(errorCodes)
@@ -115,7 +114,7 @@ public class SwaggerConfig {
 	 * @param operation
 	 * @param value
 	 */
-	private void generateErrorCodeResponse(Operation operation, BaseResponseStatus value) {
+	private void generateErrorCodeResponse(Operation operation, ErrorStatus value) {
 		ApiResponses responses = operation.getResponses();
 		ExampleHolder exampleHolder = ExampleHolder.builder()
 				.example(getSwaggerExample(value))
@@ -172,13 +171,13 @@ public class SwaggerConfig {
 	}
 
 	/**
-	 * {@code BaseResponseStatus}를 통해 {@code Example}를 생성하는 메소드
+	 * {@code ErrorStatus}를 통해 {@code Example}를 생성하는 메소드
 	 *
 	 * @param errorCode
 	 * @return
 	 */
-	private Example getSwaggerExample(BaseResponseStatus errorCode) {
-		BaseResponse<BaseResponseStatus> response = new BaseResponse<>(errorCode);
+	private Example getSwaggerExample(ErrorStatus errorCode) {
+		ResponseDto<ErrorStatus> response = ResponseDto.onFailure(errorCode.getCode(), errorCode.getMessage(), null);
 		Example example = new Example();
 		example.setValue(response);
 
