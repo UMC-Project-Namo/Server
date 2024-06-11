@@ -1,4 +1,4 @@
-package com.example.namo2.domain.individual.ui;
+package com.namo.spring.application.external.domain.individual.ui;
 
 import static java.util.Arrays.*;
 import static org.mockito.BDDMockito.*;
@@ -20,13 +20,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.example.namo2.domain.individual.application.ScheduleFacade;
-import com.example.namo2.domain.individual.ui.dto.ScheduleRequest;
-import com.example.namo2.domain.individual.ui.dto.ScheduleResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import com.example.namo2.global.config.interceptor.AuthenticationInterceptor;
-import com.example.namo2.global.utils.Converter;
+import com.namo.spring.application.external.domain.individual.application.ScheduleFacade;
+import com.namo.spring.application.external.domain.individual.ui.dto.ScheduleRequest;
+import com.namo.spring.application.external.domain.individual.ui.dto.ScheduleResponse;
+import com.namo.spring.application.external.global.config.interceptor.AuthenticationInterceptor;
+import com.namo.spring.application.external.global.utils.Converter;
 
 @WebMvcTest(controllers = ScheduleController.class)
 public class ScheduleControllerTest {
@@ -39,6 +38,7 @@ public class ScheduleControllerTest {
 
 	@MockBean
 	private ScheduleFacade scheduleFacade;
+
 	@MockBean
 	private Converter converter;
 
