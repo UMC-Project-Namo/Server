@@ -1,9 +1,10 @@
-package com.example.namo2.domain.individual.ui.dto;
+package com.namo.spring.application.external.domain.individual.ui.dto;
 
-import com.example.namo2.domain.group.domain.MoimMemoLocationImg;
-import com.example.namo2.domain.group.domain.MoimScheduleAndUser;
-import com.example.namo2.domain.individual.domain.Image;
-import com.example.namo2.domain.individual.domain.Schedule;
+import com.namo.spring.application.external.domain.group.domain.MoimMemoLocationImg;
+import com.namo.spring.application.external.domain.group.domain.MoimScheduleAndUser;
+import com.namo.spring.application.external.domain.individual.domain.Image;
+import com.namo.spring.application.external.domain.individual.domain.Schedule;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.example.namo2.domain.individual.domain;
+package com.namo.spring.application.external.domain.individual.domain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +16,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
-import com.example.namo2.domain.individual.domain.constant.Location;
-import com.example.namo2.domain.individual.domain.constant.Period;
-import com.example.namo2.domain.user.domain.User;
+import com.namo.spring.application.external.domain.individual.domain.constant.Location;
+import com.namo.spring.application.external.domain.individual.domain.constant.Period;
+import com.namo.spring.core.common.exception.IndividualException;
+import com.namo.spring.application.external.domain.user.domain.User;
 
-import com.example.namo2.global.common.entity.BaseTimeEntity;
-import com.example.namo2.global.common.exception.BaseException;
-import com.example.namo2.global.common.response.BaseResponseStatus;
+import com.namo.spring.application.external.global.common.entity.BaseTimeEntity;
+import com.namo.spring.core.common.code.status.ErrorStatus;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -99,7 +99,7 @@ public class Schedule extends BaseTimeEntity {
 
 	public void existDairy() {
 		if (!hasDiary) {
-			throw new BaseException(BaseResponseStatus.NOT_FOUND_DIARY_FAILURE);
+			throw new IndividualException(ErrorStatus.NOT_FOUND_DIARY_FAILURE);
 		}
 	}
 

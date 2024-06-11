@@ -1,4 +1,4 @@
-package com.example.namo2.global.config.amazon;
+package com.namo.spring.application.external.global.config.amazon;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

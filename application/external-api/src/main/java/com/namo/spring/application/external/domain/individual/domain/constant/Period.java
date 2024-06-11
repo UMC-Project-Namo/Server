@@ -1,4 +1,4 @@
-package com.example.namo2.domain.individual.domain.constant;
+package com.namo.spring.application.external.domain.individual.domain.constant;
 
 import java.time.Instant;
 import java.time.LocalDateTime;

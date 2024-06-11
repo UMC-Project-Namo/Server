@@ -1,6 +1,8 @@
 package com.namo.spring.application.external.domain.group.repository.diary;
 
+
 import static com.namo.spring.application.external.domain.group.domain.QMoimMemoLocation.*;
+import static com.namo.spring.application.external.domain.group.domain.QMoimMemoLocationAndUser.*;
 
 import java.util.List;
 

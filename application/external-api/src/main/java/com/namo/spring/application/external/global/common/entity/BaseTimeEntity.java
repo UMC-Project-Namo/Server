@@ -1,4 +1,4 @@
-package com.example.namo2.global.common.entity;
+package com.namo.spring.application.external.global.common.entity;
 
 import java.time.LocalDateTime;
 

@@ -1,4 +1,4 @@
-package com.example.namo2.domain.group.domain;
+package com.namo.spring.application.external.domain.group.domain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +18,12 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
-import com.example.namo2.domain.group.domain.constant.MoimScheduleStatus;
+import com.namo.spring.application.external.domain.group.domain.constant.MoimScheduleStatus;
 
-import com.example.namo2.domain.individual.domain.constant.Location;
-import com.example.namo2.domain.individual.domain.constant.Period;
+import com.namo.spring.application.external.domain.individual.domain.constant.Location;
+import com.namo.spring.application.external.domain.individual.domain.constant.Period;
 
-import com.example.namo2.global.common.entity.BaseTimeEntity;
+import com.namo.spring.application.external.global.common.entity.BaseTimeEntity;
 
 import lombok.Builder;
 import lombok.Getter;

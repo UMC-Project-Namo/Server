@@ -1,4 +1,4 @@
-package com.example.namo2.domain.group.domain;
+package com.namo.spring.application.external.domain.group.domain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +16,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-import com.example.namo2.domain.group.domain.constant.VisibleStatus;
+import com.namo.spring.application.external.domain.group.domain.constant.VisibleStatus;
 
-import com.example.namo2.domain.individual.domain.Category;
+import com.namo.spring.application.external.domain.individual.domain.Category;
 
-import com.example.namo2.domain.user.domain.User;
+import com.namo.spring.application.external.domain.user.domain.User;
 
-import com.example.namo2.global.common.entity.BaseTimeEntity;
+import com.namo.spring.application.external.global.common.entity.BaseTimeEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;

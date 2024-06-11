@@ -1,4 +1,4 @@
-package com.example.namo2.domain.individual.domain;
+package com.namo.spring.application.external.domain.individual.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
-import com.example.namo2.global.common.entity.BaseTimeEntity;
+import com.namo.spring.application.external.global.common.entity.BaseTimeEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;

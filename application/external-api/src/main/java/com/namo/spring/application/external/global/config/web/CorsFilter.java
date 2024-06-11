@@ -1,4 +1,4 @@
-package com.example.namo2.global.config.web;
+package com.namo.spring.application.external.global.config.web;
 
 import java.io.IOException;
 

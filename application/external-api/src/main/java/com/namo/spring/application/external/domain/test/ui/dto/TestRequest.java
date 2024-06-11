@@ -1,4 +1,4 @@
-package com.example.namo2.domain.test.ui.dto;
+package com.namo.spring.application.external.domain.test.ui.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

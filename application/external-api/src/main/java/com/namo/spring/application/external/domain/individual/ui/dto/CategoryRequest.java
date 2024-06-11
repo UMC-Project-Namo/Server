@@ -1,4 +1,4 @@
-package com.example.namo2.domain.individual.ui.dto;
+package com.namo.spring.application.external.domain.individual.ui.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

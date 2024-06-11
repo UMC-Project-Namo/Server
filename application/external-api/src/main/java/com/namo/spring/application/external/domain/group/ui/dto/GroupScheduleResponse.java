@@ -1,4 +1,4 @@
-package com.example.namo2.domain.group.ui.dto;
+package com.namo.spring.application.external.domain.group.ui.dto;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;

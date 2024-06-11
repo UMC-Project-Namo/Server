@@ -1,4 +1,4 @@
-package com.example.namo2.global.config.logging;
+package com.namo.spring.application.external.global.config.logging;
 
 import java.io.IOException;
 import java.util.Arrays;

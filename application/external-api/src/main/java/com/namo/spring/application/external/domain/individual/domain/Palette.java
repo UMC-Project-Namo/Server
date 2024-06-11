@@ -1,4 +1,4 @@
-package com.example.namo2.domain.individual.domain;
+package com.namo.spring.application.external.domain.individual.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

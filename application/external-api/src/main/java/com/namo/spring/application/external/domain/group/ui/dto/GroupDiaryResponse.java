@@ -1,4 +1,4 @@
-package com.example.namo2.domain.group.ui.dto;
+package com.namo.spring.application.external.domain.group.ui.dto;
 
 import java.time.ZoneId;
 import java.util.List;
@@ -6,13 +6,13 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Slice;
 
-import com.example.namo2.domain.group.domain.MoimMemo;
-import com.example.namo2.domain.group.domain.MoimMemoLocationAndUser;
-import com.example.namo2.domain.group.domain.MoimMemoLocationImg;
-import com.example.namo2.domain.group.domain.MoimScheduleAndUser;
+import com.namo.spring.application.external.domain.group.domain.MoimMemo;
+import com.namo.spring.application.external.domain.group.domain.MoimMemoLocationAndUser;
+import com.namo.spring.application.external.domain.group.domain.MoimMemoLocationImg;
+import com.namo.spring.application.external.domain.group.domain.MoimScheduleAndUser;
 
-import com.example.namo2.domain.individual.domain.Image;
-import com.example.namo2.domain.individual.domain.Schedule;
+import com.namo.spring.application.external.domain.individual.domain.Image;
+import com.namo.spring.application.external.domain.individual.domain.Schedule;
 
 import lombok.Builder;
 import lombok.Getter;

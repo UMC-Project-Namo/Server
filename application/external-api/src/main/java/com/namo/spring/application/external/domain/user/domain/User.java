@@ -1,4 +1,4 @@
-package com.example.namo2.domain.user.domain;
+package com.namo.spring.application.external.domain.user.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,10 +10,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
-import com.example.namo2.domain.user.domain.constant.SocialType;
-import com.example.namo2.domain.user.domain.constant.UserStatus;
+import com.namo.spring.application.external.domain.user.domain.constant.SocialType;
+import com.namo.spring.application.external.domain.user.domain.constant.UserStatus;
 
-import com.example.namo2.global.common.entity.BaseTimeEntity;
+import com.namo.spring.application.external.global.common.entity.BaseTimeEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;

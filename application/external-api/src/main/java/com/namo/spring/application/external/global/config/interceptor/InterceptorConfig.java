@@ -1,4 +1,4 @@
-package com.example.namo2.global.config.interceptor;
+package com.namo.spring.application.external.global.config.interceptor;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
