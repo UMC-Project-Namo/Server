@@ -1,4 +1,4 @@
-package com.example.namo2.domain.individual.ui;
+package com.namo.spring.application.external.domain.individual.ui;
 
 public class PaletteController {
 }

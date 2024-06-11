@@ -1,4 +1,4 @@
-package com.example.namo2.domain.test.ui;
+package com.namo.spring.application.external.domain.test.ui;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -6,14 +6,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.namo2.domain.test.ui.dto.TestRequest;
-import com.example.namo2.domain.test.ui.dto.TestResponse;
-import com.example.namo2.global.annotation.swagger.ApiErrorCode;
-import com.example.namo2.global.annotation.swagger.ApiErrorCodes;
-import com.example.namo2.global.common.response.BaseResponse;
-import com.example.namo2.global.common.response.BaseResponseStatus;
+import com.namo.spring.application.external.domain.test.ui.dto.TestRequest;
+import com.namo.spring.application.external.domain.test.ui.dto.TestResponse;
+import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCode;
+import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
+import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.core.common.response.ResponseDto;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+
 
 @Tag(name = "A. Test", description = "테스트 API")
 @RestController
@@ -21,9 +22,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class TestController {
 
 	@GetMapping("/log")
-	@ApiErrorCode(BaseResponseStatus.INTERNET_SERVER_ERROR)
-	public BaseResponse<TestResponse.TestDto> testLog() {
-		return new BaseResponse<>(
+	@ApiErrorCode(ErrorStatus.INTERNET_SERVER_ERROR)
+	public ResponseDto<TestResponse.TestDto> testLog() {
+		return ResponseDto.onSuccess(
 				TestResponse.TestDto.builder()
 						.test("test")
 						.build()
@@ -32,18 +33,18 @@ public class TestController {
 
 	@GetMapping("/authenticate")
 	@ApiErrorCodes({
-			BaseResponseStatus.EMPTY_ACCESS_KEY,
-			BaseResponseStatus.EXPIRATION_ACCESS_TOKEN,
-			BaseResponseStatus.EXPIRATION_REFRESH_TOKEN,
-			BaseResponseStatus.INTERNET_SERVER_ERROR
+			ErrorStatus.EMPTY_ACCESS_KEY,
+			ErrorStatus.EXPIRATION_ACCESS_TOKEN,
+			ErrorStatus.EXPIRATION_REFRESH_TOKEN,
+			ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public String test() {
-		return "인증 완료";
+	public ResponseDto<String> test() {
+		return ResponseDto.onSuccess("인증 완료");
 	}
 
 	@PostMapping("/log")
-	@ApiErrorCode(BaseResponseStatus.INTERNET_SERVER_ERROR)
-	public BaseResponse<TestResponse.LogTestDto> loggingTest(
+	@ApiErrorCode(ErrorStatus.INTERNET_SERVER_ERROR)
+	public ResponseDto<TestResponse.LogTestDto> loggingTest(
 			@RequestBody TestRequest.LogTestDto logTestDto
 	) {
 		TestResponse.LogTestDto dto = TestResponse.LogTestDto.builder()
@@ -51,6 +52,6 @@ public class TestController {
 				.number(logTestDto.getNumber())
 				.build();
 
-		return new BaseResponse<>(dto);
+		return ResponseDto.onSuccess(dto);
 	}
 }
