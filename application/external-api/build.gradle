@@ -42,16 +42,8 @@ dependencies {
     // redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-    //openfeign
-    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-
     //json
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
-
-    //PEM 파일 파싱
-    implementation 'org.bouncycastle:bcprov-jdk18on:1.77'
-    implementation 'org.bouncycastle:bcpkix-jdk18on:1.77'
-    implementation 'org.bouncycastle:bcutil-jdk18on:1.77'
 
     // Mockito Core
     testImplementation 'org.mockito:mockito-core:5.8.0'
