@@ -1,10 +1,10 @@
-package com.example.namo2.domain.user.application.converter;
+package com.namo.spring.application.external.domain.user.application.converter;
 
 import java.util.Map;
 
-import com.example.namo2.domain.user.domain.User;
-import com.example.namo2.domain.user.domain.constant.SocialType;
-import com.example.namo2.domain.user.domain.constant.UserStatus;
+import com.namo.spring.application.external.domain.user.domain.constant.UserStatus;
+import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.application.external.domain.user.domain.constant.SocialType;
 
 public class UserConverter {
 

@@ -1,4 +1,4 @@
-package com.example.namo2.domain.group.application.impl;
+package com.namo.spring.application.external.domain.group.application.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -8,18 +8,16 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.example.namo2.domain.group.dao.repository.schedule.MoimScheduleAlarmRepository;
-import com.example.namo2.domain.group.dao.repository.schedule.MoimScheduleAndUserRepository;
-import com.example.namo2.domain.group.domain.Moim;
-import com.example.namo2.domain.group.domain.MoimAndUser;
-import com.example.namo2.domain.group.domain.MoimSchedule;
-import com.example.namo2.domain.group.domain.MoimScheduleAlarm;
-import com.example.namo2.domain.group.domain.MoimScheduleAndUser;
-
-import com.example.namo2.domain.user.domain.User;
-
-import com.example.namo2.global.common.exception.BaseException;
-import com.example.namo2.global.common.response.BaseResponseStatus;
+import com.namo.spring.application.external.domain.group.domain.Moim;
+import com.namo.spring.application.external.domain.group.domain.MoimAndUser;
+import com.namo.spring.application.external.domain.group.domain.MoimSchedule;
+import com.namo.spring.application.external.domain.group.domain.MoimScheduleAlarm;
+import com.namo.spring.application.external.domain.group.domain.MoimScheduleAndUser;
+import com.namo.spring.application.external.domain.group.repository.schedule.MoimScheduleAlarmRepository;
+import com.namo.spring.application.external.domain.group.repository.schedule.MoimScheduleAndUserRepository;
+import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.core.common.exception.GroupException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +37,7 @@ public class MoimScheduleAndUserService {
 
 	private void validateMoimScheduleAndUserSize(List<MoimScheduleAndUser> moimScheduleAndUsers) {
 		if (moimScheduleAndUsers.size() == 0) {
-			throw new BaseException(BaseResponseStatus.EMPTY_USERS_FAILURE);
+			throw new GroupException(ErrorStatus.EMPTY_USERS_FAILURE);
 		}
 	}
 
@@ -50,7 +48,7 @@ public class MoimScheduleAndUserService {
 			.collect(Collectors.toSet());
 		for (MoimScheduleAndUser moimScheduleAndUser : moimScheduleAndUsers) {
 			if (!moimUsers.contains(moimScheduleAndUser.getUser())) {
-				throw new BaseException(BaseResponseStatus.NOT_USERS_IN_MOIM);
+				throw new GroupException(ErrorStatus.NOT_USERS_IN_MOIM);
 			}
 
 		}
@@ -70,7 +68,7 @@ public class MoimScheduleAndUserService {
 
 	public MoimScheduleAndUser getMoimScheduleAndUser(MoimSchedule moimSchedule, User user) {
 		return moimScheduleAndUserRepository.findMoimScheduleAndUserByMoimScheduleAndUser(moimSchedule, user)
-			.orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_MOIM_SCHEDULE_AND_USER_FAILURE));
+			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_MOIM_SCHEDULE_AND_USER_FAILURE));
 	}
 
 	public List<MoimScheduleAndUser> getAllByUser(User user) {

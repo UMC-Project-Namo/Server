@@ -1,46 +1,40 @@
-package com.example.namo2.domain.group.application;
+package com.namo.spring.application.external.domain.group.application;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.namo2.domain.individual.application.impl.CategoryService;
-import com.example.namo2.domain.individual.domain.Category;
-
-import com.example.namo2.domain.group.application.impl.MoimMemoLocationService;
-import com.example.namo2.domain.group.application.impl.MoimMemoService;
-import com.example.namo2.domain.group.domain.MoimMemo;
-import com.example.namo2.domain.group.domain.MoimMemoLocation;
-import com.example.namo2.domain.group.domain.MoimMemoLocationImg;
-
-import com.example.namo2.domain.group.application.converter.MoimAndUserConverter;
-import com.example.namo2.domain.group.application.converter.MoimScheduleConverter;
-import com.example.namo2.domain.group.application.converter.MoimScheduleResponseConverter;
-import com.example.namo2.domain.group.application.impl.MoimAndUserService;
-import com.example.namo2.domain.group.application.impl.MoimScheduleAndUserService;
-import com.example.namo2.domain.group.application.impl.MoimScheduleService;
-import com.example.namo2.domain.group.application.impl.MoimService;
-import com.example.namo2.domain.group.domain.Moim;
-import com.example.namo2.domain.group.domain.MoimAndUser;
-import com.example.namo2.domain.group.domain.MoimSchedule;
-import com.example.namo2.domain.group.domain.MoimScheduleAlarm;
-import com.example.namo2.domain.group.domain.MoimScheduleAndUser;
-import com.example.namo2.domain.group.ui.dto.GroupScheduleRequest;
-import com.example.namo2.domain.group.ui.dto.GroupScheduleResponse;
-
-import com.example.namo2.domain.individual.application.impl.ScheduleService;
-import com.example.namo2.domain.individual.domain.constant.Location;
-import com.example.namo2.domain.individual.domain.constant.Period;
-import com.example.namo2.domain.individual.domain.Schedule;
-
-import com.example.namo2.domain.user.application.impl.UserService;
-import com.example.namo2.domain.user.domain.User;
-
-import com.example.namo2.global.common.constant.FilePath;
-import com.example.namo2.global.utils.FileUtils;
+import com.namo.spring.application.external.domain.group.application.converter.MoimAndUserConverter;
+import com.namo.spring.application.external.domain.group.application.converter.MoimScheduleConverter;
+import com.namo.spring.application.external.domain.group.application.converter.MoimScheduleResponseConverter;
+import com.namo.spring.application.external.domain.group.application.impl.MoimAndUserService;
+import com.namo.spring.application.external.domain.group.application.impl.MoimMemoLocationService;
+import com.namo.spring.application.external.domain.group.application.impl.MoimMemoService;
+import com.namo.spring.application.external.domain.group.application.impl.MoimScheduleAndUserService;
+import com.namo.spring.application.external.domain.group.application.impl.MoimScheduleService;
+import com.namo.spring.application.external.domain.group.application.impl.MoimService;
+import com.namo.spring.application.external.domain.group.domain.Moim;
+import com.namo.spring.application.external.domain.group.domain.MoimAndUser;
+import com.namo.spring.application.external.domain.group.domain.MoimMemo;
+import com.namo.spring.application.external.domain.group.domain.MoimMemoLocation;
+import com.namo.spring.application.external.domain.group.domain.MoimMemoLocationImg;
+import com.namo.spring.application.external.domain.group.domain.MoimSchedule;
+import com.namo.spring.application.external.domain.group.domain.MoimScheduleAlarm;
+import com.namo.spring.application.external.domain.group.domain.MoimScheduleAndUser;
+import com.namo.spring.application.external.domain.group.ui.dto.GroupScheduleRequest;
+import com.namo.spring.application.external.domain.group.ui.dto.GroupScheduleResponse;
+import com.namo.spring.application.external.domain.individual.application.impl.CategoryService;
+import com.namo.spring.application.external.domain.individual.application.impl.ScheduleService;
+import com.namo.spring.application.external.domain.individual.domain.Category;
+import com.namo.spring.application.external.domain.individual.domain.Schedule;
+import com.namo.spring.application.external.domain.individual.domain.constant.Location;
+import com.namo.spring.application.external.domain.individual.domain.constant.Period;
+import com.namo.spring.application.external.domain.user.application.impl.UserService;
+import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.application.external.global.common.constant.FilePath;
+import com.namo.spring.application.external.global.utils.FileUtils;
 
 import lombok.RequiredArgsConstructor;
 

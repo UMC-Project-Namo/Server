@@ -1,10 +1,10 @@
-package com.example.namo2.domain.individual.application.converter;
+package com.namo.spring.application.external.domain.individual.application.converter;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.example.namo2.domain.individual.domain.Category;
-import com.example.namo2.domain.individual.ui.dto.CategoryResponse;
+import com.namo.spring.application.external.domain.individual.domain.Category;
+import com.namo.spring.application.external.domain.individual.ui.dto.CategoryResponse;
 
 public class CategoryResponseConverter {
 

@@ -1,4 +1,4 @@
-package com.example.namo2.domain.group.application;
+package com.namo.spring.application.external.domain.group.application;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,23 +10,21 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.namo2.domain.group.application.converter.MoimAndUserConverter;
-import com.example.namo2.domain.group.application.converter.MoimConverter;
-import com.example.namo2.domain.group.application.converter.GroupResponseConverter;
-import com.example.namo2.domain.group.application.impl.MoimAndUserService;
-import com.example.namo2.domain.group.application.impl.MoimService;
-import com.example.namo2.domain.group.domain.Moim;
-import com.example.namo2.domain.group.domain.MoimAndUser;
-import com.example.namo2.domain.group.ui.dto.GroupRequest;
-import com.example.namo2.domain.group.ui.dto.GroupResponse;
-
-import com.example.namo2.domain.user.application.impl.UserService;
-import com.example.namo2.domain.user.domain.User;
-
-import com.example.namo2.global.common.constant.FilePath;
-import com.example.namo2.global.common.exception.BaseException;
-import com.example.namo2.global.common.response.BaseResponseStatus;
-import com.example.namo2.global.utils.FileUtils;
+import com.namo.spring.application.external.domain.group.application.converter.GroupResponseConverter;
+import com.namo.spring.application.external.domain.group.application.converter.MoimAndUserConverter;
+import com.namo.spring.application.external.domain.group.application.converter.MoimConverter;
+import com.namo.spring.application.external.domain.group.application.impl.MoimAndUserService;
+import com.namo.spring.application.external.domain.group.application.impl.MoimService;
+import com.namo.spring.application.external.domain.group.domain.Moim;
+import com.namo.spring.application.external.domain.group.domain.MoimAndUser;
+import com.namo.spring.application.external.domain.group.ui.dto.GroupRequest;
+import com.namo.spring.application.external.domain.group.ui.dto.GroupResponse;
+import com.namo.spring.application.external.domain.user.application.impl.UserService;
+import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.application.external.global.common.constant.FilePath;
+import com.namo.spring.application.external.global.utils.FileUtils;
+import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.core.common.exception.GroupException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -102,6 +100,7 @@ public class MoimFacade {
 		return GroupResponseConverter.toMoimParticipantDto(moim);
 	}
 
+	// TODO: error throw 위치 변경 필요
 	private int selectColor(Moim moim) {
 		Set<Integer> colors = moim.getMoimAndUsers()
 			.stream()
@@ -110,7 +109,7 @@ public class MoimFacade {
 		return Arrays.stream(MOIM_USERS_COLOR)
 			.filter((color) -> !colors.contains(color))
 			.findFirst()
-			.orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_COLOR));
+			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_COLOR));
 	}
 
 	@Transactional(readOnly = false)

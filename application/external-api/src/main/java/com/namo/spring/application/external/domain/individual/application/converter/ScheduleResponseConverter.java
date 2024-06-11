@@ -1,10 +1,10 @@
-package com.example.namo2.domain.individual.application.converter;
+package com.namo.spring.application.external.domain.individual.application.converter;
 
-import com.example.namo2.domain.group.domain.MoimScheduleAlarm;
-import com.example.namo2.domain.group.domain.MoimScheduleAndUser;
-import com.example.namo2.domain.individual.domain.Alarm;
-import com.example.namo2.domain.individual.domain.Schedule;
-import com.example.namo2.domain.individual.ui.dto.ScheduleResponse;
+import com.namo.spring.application.external.domain.group.domain.MoimScheduleAlarm;
+import com.namo.spring.application.external.domain.group.domain.MoimScheduleAndUser;
+import com.namo.spring.application.external.domain.individual.domain.Alarm;
+import com.namo.spring.application.external.domain.individual.domain.Schedule;
+import com.namo.spring.application.external.domain.individual.ui.dto.ScheduleResponse;
 
 import java.time.ZoneId;
 import java.util.List;

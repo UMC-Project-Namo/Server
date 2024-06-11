@@ -1,12 +1,11 @@
-package com.example.namo2.domain.individual.application.converter;
+package com.namo.spring.application.external.domain.individual.application.converter;
 
-import com.example.namo2.domain.individual.domain.Category;
+import com.namo.spring.application.external.domain.individual.domain.Schedule;
+import com.namo.spring.application.external.domain.individual.domain.constant.Period;
+import com.namo.spring.application.external.domain.individual.ui.dto.ScheduleRequest;
+import com.namo.spring.application.external.domain.individual.domain.Category;
 
-import com.example.namo2.domain.individual.domain.constant.Period;
-import com.example.namo2.domain.individual.domain.Schedule;
-import com.example.namo2.domain.individual.ui.dto.ScheduleRequest;
-
-import com.example.namo2.domain.user.domain.User;
+import com.namo.spring.application.external.domain.user.domain.User;
 
 public class ScheduleConverter {
 	public static Period toPeriod(ScheduleRequest.PostScheduleDto dto) {

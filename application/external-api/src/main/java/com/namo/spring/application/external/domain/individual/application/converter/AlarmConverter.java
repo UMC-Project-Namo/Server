@@ -1,10 +1,10 @@
-package com.example.namo2.domain.individual.application.converter;
+package com.namo.spring.application.external.domain.individual.application.converter;
 
 import java.util.List;
 
-import com.example.namo2.domain.individual.domain.Alarm;
-import com.example.namo2.domain.individual.domain.Schedule;
-import com.example.namo2.domain.individual.ui.dto.ScheduleRequest;
+import com.namo.spring.application.external.domain.individual.domain.Alarm;
+import com.namo.spring.application.external.domain.individual.domain.Schedule;
+import com.namo.spring.application.external.domain.individual.ui.dto.ScheduleRequest;
 
 public class AlarmConverter {
 

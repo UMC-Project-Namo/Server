@@ -1,40 +1,36 @@
-package com.example.namo2.domain.individual.application;
+package com.namo.spring.application.external.domain.individual.application;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.namo2.domain.group.application.impl.MoimScheduleAndUserService;
-import com.example.namo2.domain.group.application.impl.MoimScheduleService;
-import com.example.namo2.domain.group.domain.MoimSchedule;
-import com.example.namo2.domain.group.domain.MoimScheduleAndUser;
-
-import com.example.namo2.domain.individual.application.converter.AlarmConverter;
-import com.example.namo2.domain.individual.application.converter.ScheduleConverter;
-import com.example.namo2.domain.individual.application.converter.ScheduleResponseConverter;
-import com.example.namo2.domain.individual.application.impl.AlarmService;
-import com.example.namo2.domain.individual.application.impl.CategoryService;
-import com.example.namo2.domain.individual.application.impl.ImageService;
-import com.example.namo2.domain.individual.application.impl.PeriodService;
-import com.example.namo2.domain.individual.application.impl.ScheduleService;
-import com.example.namo2.domain.individual.domain.Alarm;
-import com.example.namo2.domain.individual.domain.Category;
-import com.example.namo2.domain.individual.domain.Image;
-import com.example.namo2.domain.individual.domain.Schedule;
-import com.example.namo2.domain.individual.domain.constant.Period;
-import com.example.namo2.domain.individual.ui.dto.ScheduleRequest;
-import com.example.namo2.domain.individual.ui.dto.ScheduleResponse;
-
-import com.example.namo2.domain.user.application.impl.UserService;
-import com.example.namo2.domain.user.domain.User;
-
-import com.example.namo2.global.common.constant.FilePath;
-import com.example.namo2.global.utils.FileUtils;
+import com.namo.spring.application.external.domain.group.application.impl.MoimScheduleAndUserService;
+import com.namo.spring.application.external.domain.group.application.impl.MoimScheduleService;
+import com.namo.spring.application.external.domain.group.domain.MoimSchedule;
+import com.namo.spring.application.external.domain.group.domain.MoimScheduleAndUser;
+import com.namo.spring.application.external.domain.individual.application.converter.AlarmConverter;
+import com.namo.spring.application.external.domain.individual.application.converter.ScheduleConverter;
+import com.namo.spring.application.external.domain.individual.application.converter.ScheduleResponseConverter;
+import com.namo.spring.application.external.domain.individual.application.impl.AlarmService;
+import com.namo.spring.application.external.domain.individual.application.impl.CategoryService;
+import com.namo.spring.application.external.domain.individual.application.impl.ImageService;
+import com.namo.spring.application.external.domain.individual.application.impl.PeriodService;
+import com.namo.spring.application.external.domain.individual.application.impl.ScheduleService;
+import com.namo.spring.application.external.domain.individual.domain.Alarm;
+import com.namo.spring.application.external.domain.individual.domain.Category;
+import com.namo.spring.application.external.domain.individual.domain.Image;
+import com.namo.spring.application.external.domain.individual.domain.Schedule;
+import com.namo.spring.application.external.domain.individual.domain.constant.Period;
+import com.namo.spring.application.external.domain.individual.ui.dto.ScheduleRequest;
+import com.namo.spring.application.external.domain.individual.ui.dto.ScheduleResponse;
+import com.namo.spring.application.external.domain.user.application.impl.UserService;
+import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.application.external.global.common.constant.FilePath;
+import com.namo.spring.application.external.global.utils.FileUtils;
 
 import lombok.RequiredArgsConstructor;
 

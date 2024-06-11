@@ -1,7 +1,7 @@
-package com.example.namo2.domain.individual.application.converter;
+package com.namo.spring.application.external.domain.individual.application.converter;
 
-import com.example.namo2.domain.individual.domain.Image;
-import com.example.namo2.domain.individual.domain.Schedule;
+import com.namo.spring.application.external.domain.individual.domain.Image;
+import com.namo.spring.application.external.domain.individual.domain.Schedule;
 
 public class ImageConverter {
 

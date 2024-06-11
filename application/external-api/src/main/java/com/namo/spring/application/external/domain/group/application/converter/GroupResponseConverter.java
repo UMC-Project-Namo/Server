@@ -1,12 +1,12 @@
-package com.example.namo2.domain.group.application.converter;
+package com.namo.spring.application.external.domain.group.application.converter;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.example.namo2.domain.group.domain.Moim;
-import com.example.namo2.domain.group.domain.MoimAndUser;
-import com.example.namo2.domain.group.ui.dto.GroupResponse;
+import com.namo.spring.application.external.domain.group.domain.Moim;
+import com.namo.spring.application.external.domain.group.domain.MoimAndUser;
+import com.namo.spring.application.external.domain.group.ui.dto.GroupResponse;
 
 public class GroupResponseConverter {
 	private GroupResponseConverter() {

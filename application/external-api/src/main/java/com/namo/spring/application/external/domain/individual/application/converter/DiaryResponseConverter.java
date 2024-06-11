@@ -1,13 +1,13 @@
-package com.example.namo2.domain.individual.application.converter;
+package com.namo.spring.application.external.domain.individual.application.converter;
 
 import java.util.List;
 
 import org.springframework.data.domain.Slice;
 
-import com.example.namo2.domain.individual.domain.Image;
-import com.example.namo2.domain.individual.domain.Schedule;
-import com.example.namo2.domain.individual.ui.dto.DiaryResponse;
-import com.example.namo2.domain.individual.ui.dto.ScheduleResponse;
+import com.namo.spring.application.external.domain.individual.domain.Image;
+import com.namo.spring.application.external.domain.individual.domain.Schedule;
+import com.namo.spring.application.external.domain.individual.ui.dto.DiaryResponse;
+import com.namo.spring.application.external.domain.individual.ui.dto.ScheduleResponse;
 
 public class DiaryResponseConverter {
 

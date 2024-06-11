@@ -1,8 +1,7 @@
-package com.example.namo2.domain.group.application.converter;
+package com.namo.spring.application.external.domain.group.application.converter;
 
-import com.example.namo2.domain.group.domain.MoimMemo;
-
-import com.example.namo2.domain.group.domain.MoimSchedule;
+import com.namo.spring.application.external.domain.group.domain.MoimSchedule;
+import com.namo.spring.application.external.domain.group.domain.MoimMemo;
 
 public class MoimMemoConverter {
 	private MoimMemoConverter() {

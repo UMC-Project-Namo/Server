@@ -1,6 +1,4 @@
-package com.example.namo2.domain.individual.application.impl;
-
-import static com.example.namo2.global.common.response.BaseResponseStatus.*;
+package com.namo.spring.application.external.domain.individual.application.impl;
 
 import java.util.List;
 import java.util.Set;
@@ -8,17 +6,15 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.example.namo2.domain.individual.dao.repository.category.CategoryRepository;
-import com.example.namo2.domain.individual.domain.Category;
-import com.example.namo2.domain.individual.domain.constant.CategoryKind;
-import com.example.namo2.domain.individual.domain.constant.CategoryStatus;
-import com.example.namo2.domain.individual.domain.Palette;
-import com.example.namo2.domain.individual.ui.dto.CategoryRequest;
-
-import com.example.namo2.domain.user.domain.User;
-
-import com.example.namo2.global.common.exception.BaseException;
-import com.example.namo2.global.common.response.BaseResponseStatus;
+import com.namo.spring.application.external.domain.individual.domain.Category;
+import com.namo.spring.application.external.domain.individual.domain.Palette;
+import com.namo.spring.application.external.domain.individual.domain.constant.CategoryKind;
+import com.namo.spring.application.external.domain.individual.domain.constant.CategoryStatus;
+import com.namo.spring.application.external.domain.individual.repository.category.CategoryRepository;
+import com.namo.spring.application.external.domain.individual.ui.dto.CategoryRequest;
+import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.core.common.exception.IndividualException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -48,7 +44,7 @@ public class CategoryService {
 
 	public Category getCategory(Long categoryId) {
 		return categoryRepository.findById(categoryId)
-			.orElseThrow(() -> new BaseException(NOT_FOUND_CATEGORY_FAILURE));
+			.orElseThrow(() -> new IndividualException(ErrorStatus.NOT_FOUND_CATEGORY_FAILURE));
 	}
 
 	public Category modifyCategory(Long categoryId, CategoryRequest.PostCategoryDto dto, Palette palette, Long userId) {
@@ -60,13 +56,13 @@ public class CategoryService {
 
 	public void validateUsersCategory(Long userId, Category category) {
 		if (category.isNotCreatedByUser(userId)) {
-			throw new BaseException(BaseResponseStatus.NOT_USERS_CATEGORY);
+			throw new IndividualException(ErrorStatus.NOT_USERS_CATEGORY);
 		}
 	}
 
 	private void validateBaseCategory(Category category) {
 		if (category.isBaseCategory()) {
-			throw new BaseException(NOT_DELETE_BASE_CATEGORY_FAILURE);
+			throw new IndividualException(ErrorStatus.NOT_DELETE_BASE_CATEGORY_FAILURE);
 		}
 	}
 
@@ -81,7 +77,7 @@ public class CategoryService {
 			.map(Category::getUser)
 			.collect(Collectors.toSet());
 		if (users.size() != moimCategoriesUsers.size()) {
-			throw new BaseException(BaseResponseStatus.NOT_HAS_MOIM_CATEGORIES_USERS);
+			throw new IndividualException(ErrorStatus.NOT_HAS_MOIM_CATEGORIES_USERS);
 		}
 	}
 

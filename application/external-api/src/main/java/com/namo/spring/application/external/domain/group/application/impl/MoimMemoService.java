@@ -1,16 +1,14 @@
-package com.example.namo2.domain.group.application.impl;
+package com.namo.spring.application.external.domain.group.application.impl;
 
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.example.namo2.domain.group.dao.repository.diary.MoimMemoRepository;
-import com.example.namo2.domain.group.domain.MoimMemo;
-
-import com.example.namo2.domain.group.domain.MoimSchedule;
-
-import com.example.namo2.global.common.exception.BaseException;
-import com.example.namo2.global.common.response.BaseResponseStatus;
+import com.namo.spring.application.external.domain.group.domain.MoimMemo;
+import com.namo.spring.application.external.domain.group.domain.MoimSchedule;
+import com.namo.spring.application.external.domain.group.repository.diary.MoimMemoRepository;
+import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.core.common.exception.GroupException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +25,7 @@ public class MoimMemoService {
 
 	public MoimMemo getMoimMemo(MoimSchedule moimSchedule) {
 		return moimMemoRepository.findMoimMemoByMoimSchedule(moimSchedule)
-			.orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_MOIM_FAILURE));
+			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_MOIM_FAILURE));
 	}
 
 	public MoimMemo getMoimMemoWithUsers(MoimSchedule moimSchedule) {
@@ -44,6 +42,6 @@ public class MoimMemoService {
 
 	public MoimMemo getMoimMemoWithLocations(Long moimScheduleId) {
 		return moimMemoRepository.findMoimMemoAndLocationsByMoimSchedule(moimScheduleId)
-			.orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_MOIM_MEMO_FAILURE));
+			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_MOIM_MEMO_FAILURE));
 	}
 }

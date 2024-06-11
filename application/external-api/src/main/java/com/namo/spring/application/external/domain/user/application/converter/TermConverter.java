@@ -1,14 +1,14 @@
-package com.example.namo2.domain.user.application.converter;
+package com.namo.spring.application.external.domain.user.application.converter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.namo2.domain.user.domain.Term;
-import com.example.namo2.domain.user.domain.User;
-import com.example.namo2.domain.user.domain.constant.Content;
-import com.example.namo2.domain.user.ui.dto.UserRequest;
-import com.example.namo2.domain.user.ui.dto.UserResponse;
+import com.namo.spring.application.external.domain.user.domain.Term;
+import com.namo.spring.application.external.domain.user.domain.constant.Content;
+import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.application.external.domain.user.ui.dto.UserRequest;
+import com.namo.spring.application.external.domain.user.ui.dto.UserResponse;
 
 public class TermConverter {
 	public static List<Term> toTerms(UserRequest.TermDto termDto, User user) {

@@ -1,8 +1,8 @@
-package com.example.namo2.domain.user.application.converter;
+package com.namo.spring.application.external.domain.user.application.converter;
 
 import java.util.List;
 
-import com.example.namo2.domain.user.ui.dto.UserResponse;
+import com.namo.spring.application.external.domain.user.ui.dto.UserResponse;
 
 public class UserResponseConverter {
 	private UserResponseConverter() {

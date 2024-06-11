@@ -1,6 +1,4 @@
-package com.example.namo2.domain.user.application.impl;
-
-import static com.example.namo2.global.common.response.BaseResponseStatus.*;
+package com.namo.spring.application.external.domain.user.application.impl;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -31,22 +29,21 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.namo.spring.application.external.domain.user.domain.Term;
+import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.application.external.domain.user.domain.constant.SocialType;
+import com.namo.spring.application.external.domain.user.domain.constant.UserStatus;
+import com.namo.spring.application.external.domain.user.repository.TermRepository;
+import com.namo.spring.application.external.domain.user.repository.UserRepository;
+import com.namo.spring.application.external.domain.user.ui.dto.UserRequest;
+import com.namo.spring.application.external.global.feignclient.apple.AppleProperties;
+import com.namo.spring.application.external.global.feignclient.apple.AppleResponse;
+import com.namo.spring.application.external.global.utils.JwtUtils;
+import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.core.common.exception.UserException;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-
-import com.example.namo2.domain.user.dao.repository.TermRepository;
-import com.example.namo2.domain.user.dao.repository.UserRepository;
-import com.example.namo2.domain.user.domain.Term;
-import com.example.namo2.domain.user.domain.User;
-import com.example.namo2.domain.user.domain.constant.SocialType;
-import com.example.namo2.domain.user.domain.constant.UserStatus;
-import com.example.namo2.domain.user.ui.dto.UserRequest;
-
-import com.example.namo2.global.common.exception.BaseException;
-import com.example.namo2.global.common.response.BaseResponseStatus;
-import com.example.namo2.global.feignclient.apple.AppleProperties;
-import com.example.namo2.global.feignclient.apple.AppleResponse;
-import com.example.namo2.global.utils.JwtUtils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -73,7 +70,7 @@ public class UserService {
 
 	public User getUser(Long userId) {
 		return userRepository.findById(userId)
-			.orElseThrow(() -> new BaseException(NOT_FOUND_USER_FAILURE));
+			.orElseThrow(() -> new UserException(ErrorStatus.NOT_FOUND_USER_FAILURE));
 	}
 
 	public List<User> getUsersInMoimSchedule(List<Long> users) {
@@ -86,7 +83,7 @@ public class UserService {
 
 	public User getUserByRefreshToken(String refreshToken) {
 		return userRepository.findUserByRefreshToken(refreshToken)
-			.orElseThrow(() -> new BaseException(NOT_FOUND_USER_FAILURE));
+			.orElseThrow(() -> new UserException(ErrorStatus.NOT_FOUND_USER_FAILURE));
 	}
 
 	public List<User> getInactiveUser() {
@@ -94,14 +91,14 @@ public class UserService {
 	}
 
 	public void updateRefreshToken(Long userId, String refreshToken) {
-		User user = userRepository.findById(userId).orElseThrow(() -> new BaseException(NOT_FOUND_USER_FAILURE));
+		User user = userRepository.findById(userId).orElseThrow(() -> new UserException(ErrorStatus.NOT_FOUND_USER_FAILURE));
 		user.updateRefreshToken(refreshToken);
 	}
 
 	public void createTerm(List<Term> terms) {
 		for (Term term : terms) {
 			if (!term.getIsCheck()) {
-				throw new BaseException(NOT_CHECK_TERM_ERROR);
+				throw new UserException(ErrorStatus.NOT_CHECK_TERM_ERROR);
 			}
 			termRepository.findTermByContentAndUser(term.getContent(), term.getUser())
 				.ifPresentOrElse(
@@ -117,26 +114,26 @@ public class UserService {
 
 	public void checkEmailAndName(String email, String name) {
 		if (email.isBlank() || name.isBlank()) {
-			throw new BaseException(USER_POST_ERROR);
+			throw new UserException(ErrorStatus.USER_POST_ERROR);
 		}
 	}
 
 	public void checkAccessTokenValidation(String accessToken) {
 		if (!jwtUtils.validateToken(accessToken)) {
-			throw new BaseException(EXPIRATION_ACCESS_TOKEN);
+			throw new UserException(ErrorStatus.EXPIRATION_ACCESS_TOKEN);
 		}
 	}
 
 	public void checkRefreshTokenValidation(String refreshToken) {
 		if (!jwtUtils.validateToken(refreshToken)) {
-			throw new BaseException(EXPIRATION_REFRESH_TOKEN);
+			throw new UserException(ErrorStatus.EXPIRATION_REFRESH_TOKEN);
 		}
 	}
 
 	public void checkLogoutUser(UserRequest.SignUpDto signUpDto) {
 		String blackToken = redisTemplate.opsForValue().get(signUpDto.getAccessToken());
 		if (StringUtils.hasText(blackToken)) {
-			throw new BaseException(BaseResponseStatus.LOGOUT_ERROR);
+			throw new UserException(ErrorStatus.LOGOUT_ERROR);
 		}
 	}
 
@@ -167,7 +164,7 @@ public class UserService {
 			KeyFactory keyFactory = KeyFactory.getInstance(applePublicKey.getKty());
 			return keyFactory.generatePublic(publicKeySpec);
 		} catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
-			throw new BaseException(MAKE_PUBLIC_KEY_FAILURE);
+			throw new UserException(ErrorStatus.MAKE_PUBLIC_KEY_FAILURE);
 		}
 
 	}

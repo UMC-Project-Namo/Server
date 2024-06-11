@@ -1,17 +1,15 @@
-package com.example.namo2.domain.group.application.impl;
+package com.namo.spring.application.external.domain.group.application.impl;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.namo2.domain.group.dao.repository.group.MoimAndUserRepository;
-import com.example.namo2.domain.group.domain.Moim;
-import com.example.namo2.domain.group.domain.MoimAndUser;
-
-import com.example.namo2.domain.user.domain.User;
-
-import com.example.namo2.global.common.exception.BaseException;
-import com.example.namo2.global.common.response.BaseResponseStatus;
+import com.namo.spring.application.external.domain.group.domain.Moim;
+import com.namo.spring.application.external.domain.group.domain.MoimAndUser;
+import com.namo.spring.application.external.domain.group.repository.group.MoimAndUserRepository;
+import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.core.common.exception.GroupException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,13 +30,13 @@ public class MoimAndUserService {
 
 	private void validateExistsMoimAndUser(Moim moim, MoimAndUser moimAndUser) {
 		if (moim.containUser(moimAndUser.getUser())) {
-			throw new BaseException(BaseResponseStatus.DUPLICATE_PARTICIPATE_FAILURE);
+			throw new GroupException(ErrorStatus.DUPLICATE_PARTICIPATE_FAILURE);
 		}
 	}
 
 	private void validateMoimIsFull(Moim moim) {
 		if (moim.isFull()) {
-			throw new BaseException(BaseResponseStatus.MOIM_IS_FULL_ERROR);
+			throw new GroupException(ErrorStatus.MOIM_IS_FULL_ERROR);
 		}
 	}
 
@@ -56,7 +54,7 @@ public class MoimAndUserService {
 
 	public MoimAndUser getMoimAndUser(Moim moim, User user) {
 		return moimAndUserRepository.findMoimAndUserByUserAndMoim(user, moim)
-			.orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_MOIM_AND_USER_FAILURE));
+			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_MOIM_AND_USER_FAILURE));
 	}
 
 	public void removeMoimAndUser(MoimAndUser moimAndUser, Moim moim) {
@@ -70,7 +68,7 @@ public class MoimAndUserService {
 
 	private void validateNotExistsMoimAndUser(Moim moim, MoimAndUser moimAndUser) {
 		if (!moim.containUser(moimAndUser.getUser())) {
-			throw new BaseException(BaseResponseStatus.NOT_INCLUDE_MOIM_USER);
+			throw new GroupException(ErrorStatus.NOT_INCLUDE_MOIM_USER);
 		}
 	}
 

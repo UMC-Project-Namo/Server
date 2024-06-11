@@ -1,16 +1,22 @@
-package com.example.namo2.domain.group.application.impl;
-
-import com.example.namo2.domain.group.dao.repository.diary.MoimMemoLocationAndUserRepository;
-import com.example.namo2.domain.group.dao.repository.diary.MoimMemoLocationImgRepository;
-import com.example.namo2.domain.group.dao.repository.diary.MoimMemoLocationRepository;
-import com.example.namo2.domain.group.domain.*;
-import com.example.namo2.domain.user.domain.User;
-import com.example.namo2.global.common.exception.BaseException;
-import com.example.namo2.global.common.response.BaseResponseStatus;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+package com.namo.spring.application.external.domain.group.application.impl;
 
 import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.namo.spring.application.external.domain.group.domain.MoimMemo;
+import com.namo.spring.application.external.domain.group.domain.MoimMemoLocation;
+import com.namo.spring.application.external.domain.group.domain.MoimMemoLocationAndUser;
+import com.namo.spring.application.external.domain.group.domain.MoimMemoLocationImg;
+import com.namo.spring.application.external.domain.group.domain.MoimSchedule;
+import com.namo.spring.application.external.domain.group.repository.diary.MoimMemoLocationAndUserRepository;
+import com.namo.spring.application.external.domain.group.repository.diary.MoimMemoLocationImgRepository;
+import com.namo.spring.application.external.domain.group.repository.diary.MoimMemoLocationRepository;
+import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.core.common.exception.GroupException;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +27,7 @@ public class MoimMemoLocationService {
 
 	public MoimMemoLocation createMoimMemoLocation(MoimMemoLocation moimMemoLocation, MoimMemo moimMemo) {
 		if (moimMemo.isFullLocationSize()) {
-			throw new BaseException(BaseResponseStatus.MOIM_MEMO_IS_FULL_ERROR);
+			throw new GroupException(ErrorStatus.MOIM_MEMO_IS_FULL_ERROR);
 		}
 		return moimMemoLocationRepository.save(moimMemoLocation);
 	}
@@ -37,7 +43,7 @@ public class MoimMemoLocationService {
 
 	public MoimMemoLocation getMoimMemoLocationWithImgs(Long memoLocationId) {
 		return moimMemoLocationRepository.findMoimMemoLocationWithImgsById(memoLocationId)
-			.orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_MOIM_MEMO_LOCATION_FAILURE));
+			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_MOIM_MEMO_LOCATION_FAILURE));
 	}
 
 	public void removeMoimMemoLocationAndUsers(MoimMemoLocation moimMemoLocation) {

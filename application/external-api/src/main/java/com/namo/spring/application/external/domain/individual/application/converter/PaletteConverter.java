@@ -1,4 +1,4 @@
-package com.example.namo2.domain.individual.application.converter;
+package com.namo.spring.application.external.domain.individual.application.converter;
 
 public class PaletteConverter {
 }

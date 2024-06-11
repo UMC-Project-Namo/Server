@@ -1,19 +1,16 @@
-package com.example.namo2.domain.group.application.impl;
-
-import static com.example.namo2.global.common.response.BaseResponseStatus.*;
+package com.namo.spring.application.external.domain.group.application.impl;
 
 import org.springframework.stereotype.Service;
 
-import com.example.namo2.domain.group.dao.repository.diary.MoimMemoRepository;
-import com.example.namo2.domain.group.domain.MoimMemo;
-
-import com.example.namo2.domain.group.dao.repository.group.MoimRepository;
-import com.example.namo2.domain.group.dao.repository.schedule.MoimScheduleAndUserRepository;
-import com.example.namo2.domain.group.dao.repository.schedule.MoimScheduleRepository;
-import com.example.namo2.domain.group.domain.Moim;
-import com.example.namo2.domain.group.domain.MoimSchedule;
-
-import com.example.namo2.global.common.exception.BaseException;
+import com.namo.spring.application.external.domain.group.domain.Moim;
+import com.namo.spring.application.external.domain.group.domain.MoimMemo;
+import com.namo.spring.application.external.domain.group.domain.MoimSchedule;
+import com.namo.spring.application.external.domain.group.repository.diary.MoimMemoRepository;
+import com.namo.spring.application.external.domain.group.repository.group.MoimRepository;
+import com.namo.spring.application.external.domain.group.repository.schedule.MoimScheduleAndUserRepository;
+import com.namo.spring.application.external.domain.group.repository.schedule.MoimScheduleRepository;
+import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.core.common.exception.GroupException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,13 +30,13 @@ public class MoimService {
 
 	public Moim getMoimWithMoimAndUsersByMoimId(Long moimId) {
 		return moimRepository.findMoimWithMoimAndUsersByMoimId(moimId)
-			.orElseThrow(() -> new BaseException(NOT_FOUND_MOIM_FAILURE));
+			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_MOIM_FAILURE));
 	}
 
 	public Moim getMoimHavingLockById(Long moimId) {
 		Moim moim = moimRepository.findHavingLockById(moimId);
 		if (moim == null) {
-			throw new BaseException(NOT_FOUND_MOIM_FAILURE);
+			throw new GroupException(ErrorStatus.NOT_FOUND_MOIM_FAILURE);
 		}
 		return moim;
 	}
@@ -47,14 +44,14 @@ public class MoimService {
 	public Moim getMoimWithMoimAndUsersByCode(String code) {
 		Moim moim = moimRepository.findMoimHavingLockWithMoimAndUsersByCode(code);
 		if (moim == null) {
-			throw new BaseException(NOT_FOUND_MOIM_FAILURE);
+			throw new GroupException(ErrorStatus.NOT_FOUND_MOIM_FAILURE);
 		}
 		return moim;
 	}
 
 	public void removeSchedule(Long moimScheduleId) {
 		MoimSchedule moimSchedule = moimScheduleRepository.findById(moimScheduleId)
-			.orElseThrow(() -> new BaseException(NOT_FOUND_SCHEDULE_FAILURE));
+			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
 		MoimMemo moimMemo = moimMemoRepository.findMoimMemoAndLocationsByMoimSchedule(moimSchedule);
 
 		/*

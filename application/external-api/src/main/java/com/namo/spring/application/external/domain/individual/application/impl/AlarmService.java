@@ -1,15 +1,14 @@
-package com.example.namo2.domain.individual.application.impl;
+package com.namo.spring.application.external.domain.individual.application.impl;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.namo2.domain.individual.dao.repository.alarm.AlarmRepository;
-import com.example.namo2.domain.individual.domain.Alarm;
-import com.example.namo2.domain.individual.domain.Schedule;
-
-import com.example.namo2.global.common.exception.BaseException;
-import com.example.namo2.global.common.response.BaseResponseStatus;
+import com.namo.spring.application.external.domain.individual.domain.Alarm;
+import com.namo.spring.application.external.domain.individual.domain.Schedule;
+import com.namo.spring.application.external.domain.individual.repository.alarm.AlarmRepository;
+import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.core.common.exception.IndividualException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,7 +35,7 @@ public class AlarmService {
 					time != 10 &&
 					time != 30 &&
 					time != 60)
-					throw new BaseException(BaseResponseStatus.INVALID_ALARM);
+					throw new IndividualException(ErrorStatus.INVALID_ALARM);
 			}
 		);
 	}

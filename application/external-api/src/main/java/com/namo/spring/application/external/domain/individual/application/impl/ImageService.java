@@ -1,13 +1,13 @@
-package com.example.namo2.domain.individual.application.impl;
+package com.namo.spring.application.external.domain.individual.application.impl;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.example.namo2.domain.individual.dao.repository.image.ImageRepository;
-import com.example.namo2.domain.individual.domain.Image;
-import com.example.namo2.domain.individual.domain.Schedule;
+import com.namo.spring.application.external.domain.individual.domain.Image;
+import com.namo.spring.application.external.domain.individual.domain.Schedule;
+import com.namo.spring.application.external.domain.individual.repository.image.ImageRepository;
 
 import lombok.RequiredArgsConstructor;
 

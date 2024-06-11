@@ -1,4 +1,4 @@
-package com.example.namo2.domain.individual.application;
+package com.namo.spring.application.external.domain.individual.application;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -8,19 +8,19 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.namo2.domain.individual.application.converter.DiaryResponseConverter;
-import com.example.namo2.domain.individual.application.converter.ImageConverter;
-import com.example.namo2.domain.individual.application.impl.ImageService;
-import com.example.namo2.domain.individual.application.impl.ScheduleService;
-import com.example.namo2.domain.individual.domain.Image;
-import com.example.namo2.domain.individual.domain.Schedule;
-import com.example.namo2.domain.individual.ui.dto.DiaryResponse;
+import com.namo.spring.application.external.domain.individual.application.converter.DiaryResponseConverter;
+import com.namo.spring.application.external.domain.individual.application.impl.ScheduleService;
+import com.namo.spring.application.external.domain.individual.application.converter.ImageConverter;
+import com.namo.spring.application.external.domain.individual.application.impl.ImageService;
+import com.namo.spring.application.external.domain.individual.domain.Image;
+import com.namo.spring.application.external.domain.individual.domain.Schedule;
+import com.namo.spring.application.external.domain.individual.ui.dto.DiaryResponse;
 
-import com.example.namo2.domain.user.application.impl.UserService;
-import com.example.namo2.domain.user.domain.User;
+import com.namo.spring.application.external.domain.user.application.impl.UserService;
+import com.namo.spring.application.external.domain.user.domain.User;
 
-import com.example.namo2.global.common.constant.FilePath;
-import com.example.namo2.global.utils.FileUtils;
+import com.namo.spring.application.external.global.common.constant.FilePath;
+import com.namo.spring.application.external.global.utils.FileUtils;
 
 import lombok.RequiredArgsConstructor;
 

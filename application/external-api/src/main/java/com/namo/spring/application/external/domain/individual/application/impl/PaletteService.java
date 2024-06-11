@@ -1,13 +1,11 @@
-package com.example.namo2.domain.individual.application.impl;
-
-import static com.example.namo2.global.common.response.BaseResponseStatus.*;
+package com.namo.spring.application.external.domain.individual.application.impl;
 
 import org.springframework.stereotype.Service;
 
-import com.example.namo2.domain.individual.dao.repository.palette.PaletteRepository;
-import com.example.namo2.domain.individual.domain.Palette;
-
-import com.example.namo2.global.common.exception.BaseException;
+import com.namo.spring.application.external.domain.individual.domain.Palette;
+import com.namo.spring.application.external.domain.individual.repository.palette.PaletteRepository;
+import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.core.common.exception.IndividualException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +17,7 @@ public class PaletteService {
 
 	public Palette getPalette(Long paletteId) {
 		return paletteRepository.findById(paletteId)
-			.orElseThrow(() -> new BaseException(NOT_FOUND_PALETTE_FAILURE));
+			.orElseThrow(() -> new IndividualException(ErrorStatus.NOT_FOUND_PALETTE_FAILURE));
 	}
 
 	public Palette getReferenceById(Long id) {

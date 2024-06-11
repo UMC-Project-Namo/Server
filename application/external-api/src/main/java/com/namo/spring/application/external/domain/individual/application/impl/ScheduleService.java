@@ -1,6 +1,4 @@
-package com.example.namo2.domain.individual.application.impl;
-
-import static com.example.namo2.global.common.response.BaseResponseStatus.*;
+package com.namo.spring.application.external.domain.individual.application.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -8,14 +6,13 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.example.namo2.domain.individual.dao.repository.schedule.ScheduleRepository;
-import com.example.namo2.domain.individual.domain.Schedule;
-import com.example.namo2.domain.individual.ui.dto.DiaryResponse;
-import com.example.namo2.domain.individual.ui.dto.ScheduleResponse;
-
-import com.example.namo2.domain.user.domain.User;
-
-import com.example.namo2.global.common.exception.BaseException;
+import com.namo.spring.application.external.domain.individual.domain.Schedule;
+import com.namo.spring.application.external.domain.individual.repository.schedule.ScheduleRepository;
+import com.namo.spring.application.external.domain.individual.ui.dto.DiaryResponse;
+import com.namo.spring.application.external.domain.individual.ui.dto.ScheduleResponse;
+import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.core.common.exception.IndividualException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,7 +26,7 @@ public class ScheduleService {
 	}
 
 	public Schedule getScheduleById(Long scheduleId) {
-		return scheduleRepository.findById(scheduleId).orElseThrow(() -> new BaseException(NOT_FOUND_SCHEDULE_FAILURE));
+		return scheduleRepository.findById(scheduleId).orElseThrow(() -> new IndividualException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
 	}
 
 	public List<Schedule> getSchedulesByUser(User user) {

@@ -1,19 +1,18 @@
-package com.example.namo2.domain.group.application.impl;
+package com.namo.spring.application.external.domain.group.application.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.namo2.domain.group.dao.repository.schedule.MoimScheduleAndUserRepository;
-import com.example.namo2.domain.group.dao.repository.schedule.MoimScheduleRepository;
-import com.example.namo2.domain.group.domain.MoimSchedule;
-import com.example.namo2.domain.group.domain.MoimScheduleAndUser;
+import com.namo.spring.application.external.domain.group.repository.schedule.MoimScheduleAndUserRepository;
+import com.namo.spring.application.external.domain.group.repository.schedule.MoimScheduleRepository;
+import com.namo.spring.application.external.domain.group.domain.MoimSchedule;
+import com.namo.spring.application.external.domain.group.domain.MoimScheduleAndUser;
 
-import com.example.namo2.domain.user.domain.User;
-
-import com.example.namo2.global.common.exception.BaseException;
-import com.example.namo2.global.common.response.BaseResponseStatus;
+import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.core.common.exception.GroupException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,17 +35,17 @@ public class MoimScheduleService {
 
 	public MoimSchedule getMoimSchedule(Long id) {
 		return moimScheduleRepository.findById(id)
-			.orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_SCHEDULE_FAILURE));
+			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
 	}
 
 	public MoimSchedule getMoimScheduleWithMoimMemo(Long id) {
 		return moimScheduleRepository.findMoimScheduleWithMoimMemoById(id)
-			.orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_SCHEDULE_FAILURE));
+			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
 	}
 
 	public MoimSchedule getMoimScheduleWithMoimScheduleAndUsers(Long id) {
 		return moimScheduleRepository.findMoimSheduleAndMoimScheduleAndUsersById(id)
-			.orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_FOUND_SCHEDULE_FAILURE));
+			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
 	}
 
 	public void remove(MoimSchedule moimSchedule) {

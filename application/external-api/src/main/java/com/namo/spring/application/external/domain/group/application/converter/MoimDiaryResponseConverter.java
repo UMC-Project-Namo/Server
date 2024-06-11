@@ -1,4 +1,4 @@
-package com.example.namo2.domain.group.application.converter;
+package com.namo.spring.application.external.domain.group.application.converter;
 
 import java.util.List;
 import java.util.Map;
@@ -8,12 +8,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
-import com.example.namo2.domain.group.domain.MoimMemo;
-import com.example.namo2.domain.group.domain.MoimMemoLocation;
-import com.example.namo2.domain.group.domain.MoimMemoLocationAndUser;
-import com.example.namo2.domain.group.domain.MoimMemoLocationImg;
-import com.example.namo2.domain.group.domain.MoimScheduleAndUser;
-import com.example.namo2.domain.group.ui.dto.GroupDiaryResponse;
+import com.namo.spring.application.external.domain.group.domain.MoimMemo;
+import com.namo.spring.application.external.domain.group.domain.MoimMemoLocation;
+import com.namo.spring.application.external.domain.group.domain.MoimMemoLocationAndUser;
+import com.namo.spring.application.external.domain.group.domain.MoimMemoLocationImg;
+import com.namo.spring.application.external.domain.group.domain.MoimScheduleAndUser;
+import com.namo.spring.application.external.domain.group.ui.dto.GroupDiaryResponse;
 
 public class MoimDiaryResponseConverter {
 	private MoimDiaryResponseConverter() {

@@ -1,21 +1,21 @@
-package com.example.namo2.domain.group.application.converter;
+package com.namo.spring.application.external.domain.group.application.converter;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.example.namo2.domain.individual.domain.Category;
+import com.namo.spring.application.external.domain.group.ui.dto.GroupScheduleRequest;
+import com.namo.spring.application.external.domain.individual.domain.Category;
 
-import com.example.namo2.domain.group.domain.Moim;
-import com.example.namo2.domain.group.domain.MoimSchedule;
-import com.example.namo2.domain.group.domain.MoimScheduleAlarm;
-import com.example.namo2.domain.group.domain.MoimScheduleAndUser;
-import com.example.namo2.domain.group.ui.dto.GroupScheduleRequest;
+import com.namo.spring.application.external.domain.group.domain.Moim;
+import com.namo.spring.application.external.domain.group.domain.MoimSchedule;
+import com.namo.spring.application.external.domain.group.domain.MoimScheduleAlarm;
+import com.namo.spring.application.external.domain.group.domain.MoimScheduleAndUser;
 
-import com.example.namo2.domain.individual.domain.constant.Location;
-import com.example.namo2.domain.individual.domain.constant.Period;
+import com.namo.spring.application.external.domain.individual.domain.constant.Location;
+import com.namo.spring.application.external.domain.individual.domain.constant.Period;
 
-import com.example.namo2.domain.user.domain.User;
+import com.namo.spring.application.external.domain.user.domain.User;
 
 public class MoimScheduleConverter {
 	private MoimScheduleConverter() {
