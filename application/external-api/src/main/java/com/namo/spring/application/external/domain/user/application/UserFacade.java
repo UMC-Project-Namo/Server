@@ -46,12 +46,13 @@ import com.namo.spring.application.external.domain.user.domain.constant.UserStat
 import com.namo.spring.application.external.domain.user.ui.dto.UserRequest;
 import com.namo.spring.application.external.domain.user.ui.dto.UserResponse;
 import com.namo.spring.application.external.global.common.constant.FilePath;
-import com.namo.spring.application.external.global.feignclient.apple.AppleAuthClient;
-import com.namo.spring.application.external.global.feignclient.apple.AppleProperties;
-import com.namo.spring.application.external.global.feignclient.apple.AppleResponse;
-import com.namo.spring.application.external.global.feignclient.apple.AppleResponseConverter;
-import com.namo.spring.application.external.global.feignclient.kakao.KakaoAuthClient;
-import com.namo.spring.application.external.global.feignclient.naver.NaverAuthClient;
+import com.namo.spring.client.social.apple.AppleAuthClient;
+import com.namo.spring.client.social.apple.AppleProperties;
+import com.namo.spring.client.social.apple.AppleResponse;
+import com.namo.spring.client.social.apple.AppleResponseConverter;
+import com.namo.spring.client.social.apple.AppleUtils;
+import com.namo.spring.client.social.kakao.KakaoAuthClient;
+import com.namo.spring.client.social.naver.NaverAuthClient;
 import com.namo.spring.application.external.global.utils.FileUtils;
 import com.namo.spring.application.external.global.utils.JwtUtils;
 import com.namo.spring.application.external.global.utils.SocialUtils;
@@ -86,6 +87,7 @@ public class UserFacade {
 	private final KakaoAuthClient kakaoAuthClient;
 	private final NaverAuthClient naverAuthClient;
 	private final AppleAuthClient appleAuthClient;
+	private final AppleUtils appleUtils;
 	private final AppleProperties appleProperties;
 
 	@Transactional
@@ -335,7 +337,7 @@ public class UserFacade {
 			.setExpiration(expirationDate)
 			.setAudience("https://appleid.apple.com")
 			.setSubject(appleProperties.getClientId())
-			.signWith(SignatureAlgorithm.ES256, userService.getPrivateKey())
+			.signWith(SignatureAlgorithm.ES256, appleUtils.getPrivateKey())
 			.compact();
 	}
 
