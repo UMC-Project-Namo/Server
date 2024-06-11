@@ -1,4 +1,4 @@
-package com.example.namo2.global.config.interceptor;
+package com.namo.spring.application.external.global.config.interceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -9,11 +9,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.google.gson.Gson;
-
-import com.example.namo2.global.common.exception.BaseException;
-import com.example.namo2.global.common.response.BaseResponse;
-import com.example.namo2.global.common.response.BaseResponseStatus;
-import com.example.namo2.global.utils.JwtUtils;
+import com.namo.spring.application.external.global.utils.JwtUtils;
+import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.core.common.exception.AuthException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,9 +32,9 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 			validateLogout(jwtUtils.getAccessToken(request));
 			request.setAttribute("userId", userId);
 			return true;
-		} catch (BaseException e) {
+		} catch (AuthException e) {
 			Gson gson = new Gson();
-			String exception = gson.toJson(new BaseResponse(e.getStatus()));
+			String exception = gson.toJson(e.getErrorReasonHttpStatus());
 			response.setContentType("application/json;charset=UTF-8");
 			response.setStatus(403);
 			response.getWriter().print(exception);
@@ -47,7 +45,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 	private void validateLogout(String accessToken) {
 		String blackToken = redisTemplate.opsForValue().get(accessToken);
 		if (StringUtils.hasText(blackToken)) {
-			throw new BaseException(BaseResponseStatus.LOGOUT_ERROR);
+			throw new AuthException(ErrorStatus.LOGOUT_ERROR);
 		}
 	}
 }
