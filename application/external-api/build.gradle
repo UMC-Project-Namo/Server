@@ -43,7 +43,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
     //openfeign
-    implementation platform("org.springframework.cloud:spring-cloud-dependencies:2023.0.0")
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
     //json
