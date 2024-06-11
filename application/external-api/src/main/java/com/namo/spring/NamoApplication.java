@@ -1,9 +1,11 @@
-package com.namo.spring.application.external;
+package com.namo.spring;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 @SpringBootApplication
+@ConfigurationPropertiesScan
 public class NamoApplication {
 
 	public static void main(String[] args) {
