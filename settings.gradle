@@ -1,1 +1,16 @@
-rootProject.name = 'namo2'
+pluginManagement {
+    plugins {
+        id 'org.springframework.boot' version "${springBootVersion}"
+        id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
+    }
+}
+
+rootProject.name = 'namo-springboot'
+
+include 'application:external-api'
+include 'core:namo-common'
+include 'clients:social-client'
+include 'storage:db-mysql'
+include 'storage:db-redis'
+include 'support:logging'
+

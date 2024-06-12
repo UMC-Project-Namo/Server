@@ -1,0 +1,8 @@
+dependencies {
+    // spring
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Jackson
+    api "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
+    api "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+}

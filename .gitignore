@@ -62,7 +62,7 @@ hs_err_pid*
 /src/main/generated/
 
 # Environment
-/src/main/resources/*.p8
+*.p8
 
 # Logs
 logs

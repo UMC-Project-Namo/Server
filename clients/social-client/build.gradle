@@ -1,0 +1,14 @@
+dependencies {
+    implementation project(':core:namo-common')
+
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation 'io.github.openfeign:feign-hc5'
+    implementation 'io.github.openfeign:feign-micrometer'
+
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+    //PEM 파일 파싱
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.77'
+    implementation 'org.bouncycastle:bcpkix-jdk18on:1.77'
+    implementation 'org.bouncycastle:bcutil-jdk18on:1.77'
+}

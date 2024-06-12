@@ -1,0 +1,7 @@
+spring:
+  config:
+    activate:
+      on-profile: "auth"
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY}

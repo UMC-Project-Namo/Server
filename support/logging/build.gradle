@@ -1,0 +1,4 @@
+dependencies {
+    implementation 'io.micrometer:micrometer-tracing-brigde-brave'
+    implementation "io.sentry:sentry-logback:${properties["sentryVrsion"]}"
+}
