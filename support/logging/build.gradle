@@ -1,19 +1,4 @@
-plugins {
-    id 'java'
-}
-
-group = 'com.namo.spring.support.logging'
-version = '0.0.1-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-}
-
-test {
-    useJUnitPlatform()
+    implementation 'io.micrometer:micrometer-tracing-brigde-brave'
+    implementation "io.sentry:sentry-logback:${properties["sentryVrsion"]}"
 }

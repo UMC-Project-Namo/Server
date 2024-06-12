@@ -4,6 +4,7 @@ spring:
   config:
     import:
       - social-client.yml
+      - logging.yml
   web.resources.add-mappings: false
 
   profiles:
