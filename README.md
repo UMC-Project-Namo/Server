@@ -1,10 +1,10 @@
 <div align="center">
 
-# namo
+# Namo Server
   
 </div>
 
-![image](https://github.com/Namo-Mongmong/Server/assets/98688494/b0da1285-87f2-40ad-8c7d-9016132235d0)
+![banner](/docs/image/ios_header1_basic.jpg)
 
 
 ### 목차
