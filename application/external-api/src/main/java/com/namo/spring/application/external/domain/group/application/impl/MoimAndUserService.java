@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import com.namo.spring.application.external.domain.group.domain.Moim;
 import com.namo.spring.application.external.domain.group.domain.MoimAndUser;
 import com.namo.spring.application.external.domain.group.repository.group.MoimAndUserRepository;
-import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.domain.User;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.exception.GroupException;
 

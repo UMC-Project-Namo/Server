@@ -5,7 +5,7 @@ import com.namo.spring.application.external.domain.individual.domain.constant.Pe
 import com.namo.spring.application.external.domain.individual.ui.dto.ScheduleRequest;
 import com.namo.spring.application.external.domain.individual.domain.Category;
 
-import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.domain.User;
 
 public class ScheduleConverter {
 	public static Period toPeriod(ScheduleRequest.PostScheduleDto dto) {

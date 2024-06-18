@@ -12,7 +12,7 @@ import com.namo.spring.application.external.domain.individual.domain.constant.Ca
 import com.namo.spring.application.external.domain.individual.domain.constant.CategoryStatus;
 import com.namo.spring.application.external.domain.individual.repository.category.CategoryRepository;
 import com.namo.spring.application.external.domain.individual.ui.dto.CategoryRequest;
-import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.domain.User;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.exception.IndividualException;
 

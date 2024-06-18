@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.namo.spring.application.external.domain.individual.domain.Schedule;
 
-import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.domain.User;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long>, ScheduleRepositoryCustom {
 	@Query("select s from Schedule s join fetch s.user where s.user in :users and s.category.share = true ")

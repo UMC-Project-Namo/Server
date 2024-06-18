@@ -9,7 +9,7 @@ import com.namo.spring.application.external.domain.individual.domain.Schedule;
 import com.namo.spring.application.external.domain.individual.ui.dto.DiaryResponse;
 import com.namo.spring.application.external.domain.individual.ui.dto.ScheduleResponse;
 
-import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.domain.User;
 
 public interface ScheduleRepositoryCustom {
 	List<ScheduleResponse.GetScheduleDto> findSchedulesByUserId(User user, LocalDateTime startDate,

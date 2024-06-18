@@ -5,7 +5,7 @@ import com.namo.spring.application.external.domain.individual.domain.Palette;
 import com.namo.spring.application.external.domain.individual.domain.constant.CategoryKind;
 import com.namo.spring.application.external.domain.individual.ui.dto.CategoryRequest;
 
-import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.domain.User;
 
 public class CategoryConverter {
 

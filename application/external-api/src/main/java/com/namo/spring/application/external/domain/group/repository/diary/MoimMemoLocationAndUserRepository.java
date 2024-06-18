@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.namo.spring.application.external.domain.group.domain.MoimMemoLocation;
 import com.namo.spring.application.external.domain.group.domain.MoimMemoLocationAndUser;
 
-import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.domain.User;
 
 public interface MoimMemoLocationAndUserRepository extends JpaRepository<MoimMemoLocationAndUser, Long> {
 	@Modifying

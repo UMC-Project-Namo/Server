@@ -11,7 +11,7 @@ import org.springframework.data.repository.query.Param;
 import com.namo.spring.application.external.domain.group.domain.MoimSchedule;
 import com.namo.spring.application.external.domain.group.domain.MoimScheduleAndUser;
 
-import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.domain.User;
 
 public interface MoimScheduleAndUserRepository
 	extends JpaRepository<MoimScheduleAndUser, Long>, MoimScheduleAndUserRepositoryCustom {

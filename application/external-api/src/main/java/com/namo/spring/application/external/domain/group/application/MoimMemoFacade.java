@@ -24,8 +24,8 @@ import com.namo.spring.application.external.domain.group.domain.MoimScheduleAndU
 import com.namo.spring.application.external.domain.group.ui.dto.GroupDiaryRequest;
 import com.namo.spring.application.external.domain.group.ui.dto.GroupDiaryResponse;
 import com.namo.spring.application.external.domain.group.ui.dto.GroupScheduleRequest;
-import com.namo.spring.application.external.domain.user.application.impl.UserService;
-import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.application.external.api.user.service.UserService;
+import com.namo.spring.db.mysql.domains.user.domain.User;
 import com.namo.spring.application.external.global.common.constant.FilePath;
 import com.namo.spring.application.external.global.utils.FileUtils;
 

@@ -9,7 +9,7 @@ import com.namo.spring.application.external.domain.group.domain.MoimMemoLocation
 import com.namo.spring.application.external.domain.group.domain.MoimMemoLocationAndUser;
 import com.namo.spring.application.external.domain.group.domain.MoimMemoLocationImg;
 
-import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.domain.User;
 
 public class MoimMemoLocationConverter {
 	private MoimMemoLocationConverter() {

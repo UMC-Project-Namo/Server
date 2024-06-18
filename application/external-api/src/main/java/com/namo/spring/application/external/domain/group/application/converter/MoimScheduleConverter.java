@@ -15,7 +15,7 @@ import com.namo.spring.application.external.domain.group.domain.MoimScheduleAndU
 import com.namo.spring.application.external.domain.individual.domain.constant.Location;
 import com.namo.spring.application.external.domain.individual.domain.constant.Period;
 
-import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.domain.User;
 
 public class MoimScheduleConverter {
 	private MoimScheduleConverter() {

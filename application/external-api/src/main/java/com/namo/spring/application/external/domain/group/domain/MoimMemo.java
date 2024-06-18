@@ -1,6 +1,6 @@
 package com.namo.spring.application.external.domain.group.domain;
 
-import com.namo.spring.application.external.global.common.entity.BaseTimeEntity;
+import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

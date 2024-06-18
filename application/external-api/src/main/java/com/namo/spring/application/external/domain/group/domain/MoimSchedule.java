@@ -23,7 +23,7 @@ import com.namo.spring.application.external.domain.group.domain.constant.MoimSch
 import com.namo.spring.application.external.domain.individual.domain.constant.Location;
 import com.namo.spring.application.external.domain.individual.domain.constant.Period;
 
-import com.namo.spring.application.external.global.common.entity.BaseTimeEntity;
+import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 
 import lombok.Builder;
 import lombok.Getter;
