@@ -10,7 +10,7 @@ import com.namo.spring.application.external.domain.group.repository.schedule.Moi
 import com.namo.spring.application.external.domain.group.domain.MoimSchedule;
 import com.namo.spring.application.external.domain.group.domain.MoimScheduleAndUser;
 
-import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.domain.User;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.exception.GroupException;
 

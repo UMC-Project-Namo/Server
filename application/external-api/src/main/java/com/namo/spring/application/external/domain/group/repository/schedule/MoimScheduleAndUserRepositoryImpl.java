@@ -13,7 +13,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.namo.spring.application.external.domain.group.domain.MoimScheduleAndUser;
 import com.namo.spring.application.external.domain.group.domain.constant.VisibleStatus;
-import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.domain.User;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 

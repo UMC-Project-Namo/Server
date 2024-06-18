@@ -15,7 +15,7 @@ import com.namo.spring.application.external.domain.individual.ui.dto.CategoryReq
 import com.namo.spring.application.external.domain.individual.ui.dto.CategoryResponse;
 
 import com.namo.spring.application.external.domain.user.application.impl.UserService;
-import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.domain.User;
 
 import lombok.RequiredArgsConstructor;
 

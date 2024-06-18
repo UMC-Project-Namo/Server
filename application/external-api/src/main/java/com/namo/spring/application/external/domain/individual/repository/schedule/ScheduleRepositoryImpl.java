@@ -24,7 +24,7 @@ import com.namo.spring.application.external.domain.individual.application.conver
 import com.namo.spring.application.external.domain.individual.domain.Schedule;
 import com.namo.spring.application.external.domain.individual.ui.dto.DiaryResponse;
 import com.namo.spring.application.external.domain.individual.ui.dto.ScheduleResponse;
-import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.domain.User;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 

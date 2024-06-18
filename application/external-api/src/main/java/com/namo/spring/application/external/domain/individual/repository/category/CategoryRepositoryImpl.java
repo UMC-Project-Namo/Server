@@ -8,7 +8,7 @@ import jakarta.persistence.EntityManager;
 
 import com.namo.spring.application.external.domain.individual.domain.Category;
 import com.namo.spring.application.external.domain.individual.domain.constant.CategoryKind;
-import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.domain.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 public class CategoryRepositoryImpl implements CategoryRepositoryCustom {

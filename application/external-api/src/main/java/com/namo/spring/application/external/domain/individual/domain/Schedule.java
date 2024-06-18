@@ -19,7 +19,7 @@ import jakarta.persistence.OneToMany;
 import com.namo.spring.application.external.domain.individual.domain.constant.Location;
 import com.namo.spring.application.external.domain.individual.domain.constant.Period;
 import com.namo.spring.core.common.exception.IndividualException;
-import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.domain.User;
 
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import com.namo.spring.core.common.code.status.ErrorStatus;

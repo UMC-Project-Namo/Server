@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import com.namo.spring.application.external.domain.group.domain.Moim;
 import com.namo.spring.application.external.domain.group.domain.MoimAndUser;
 
-import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.domain.User;
 
 public class MoimAndUserConverter {
 	private MoimAndUserConverter() {

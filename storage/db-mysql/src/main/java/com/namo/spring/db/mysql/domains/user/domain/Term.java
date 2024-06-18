@@ -1,4 +1,4 @@
-package com.namo.spring.application.external.domain.user.domain;
+package com.namo.spring.db.mysql.domains.user.domain;
 
 import java.time.LocalDateTime;
 
@@ -13,7 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
-import com.namo.spring.application.external.domain.user.domain.constant.Content;
+import com.namo.spring.db.mysql.domains.user.type.Content;
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 
 import lombok.AccessLevel;
@@ -21,9 +21,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-/**
- * 네이밍 마음에 드는지 좀 봐주세요.
- */
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter

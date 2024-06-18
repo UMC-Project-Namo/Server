@@ -2,9 +2,9 @@ package com.namo.spring.application.external.domain.user.application.converter;
 
 import java.util.Map;
 
-import com.namo.spring.application.external.domain.user.domain.constant.UserStatus;
-import com.namo.spring.application.external.domain.user.domain.User;
-import com.namo.spring.application.external.domain.user.domain.constant.SocialType;
+import com.namo.spring.db.mysql.domains.user.type.UserStatus;
+import com.namo.spring.db.mysql.domains.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.type.SocialType;
 
 public class UserConverter {
 

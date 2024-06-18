@@ -19,12 +19,12 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.namo.spring.application.external.domain.user.domain.Term;
-import com.namo.spring.application.external.domain.user.domain.User;
-import com.namo.spring.application.external.domain.user.domain.constant.SocialType;
-import com.namo.spring.application.external.domain.user.domain.constant.UserStatus;
-import com.namo.spring.application.external.domain.user.repository.TermRepository;
-import com.namo.spring.application.external.domain.user.repository.UserRepository;
+import com.namo.spring.db.mysql.domains.user.domain.Term;
+import com.namo.spring.db.mysql.domains.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.type.SocialType;
+import com.namo.spring.db.mysql.domains.user.type.UserStatus;
+import com.namo.spring.db.mysql.domains.user.repository.TermRepository;
+import com.namo.spring.db.mysql.domains.user.repository.UserRepository;
 import com.namo.spring.application.external.domain.user.ui.dto.UserRequest;
 import com.namo.spring.application.external.global.utils.JwtUtils;
 import com.namo.spring.client.social.common.properties.AppleProperties;

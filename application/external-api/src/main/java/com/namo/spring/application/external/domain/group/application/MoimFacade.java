@@ -20,7 +20,7 @@ import com.namo.spring.application.external.domain.group.domain.MoimAndUser;
 import com.namo.spring.application.external.domain.group.ui.dto.GroupRequest;
 import com.namo.spring.application.external.domain.group.ui.dto.GroupResponse;
 import com.namo.spring.application.external.domain.user.application.impl.UserService;
-import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.domain.User;
 import com.namo.spring.application.external.global.common.constant.FilePath;
 import com.namo.spring.application.external.global.utils.FileUtils;
 import com.namo.spring.core.common.code.status.ErrorStatus;

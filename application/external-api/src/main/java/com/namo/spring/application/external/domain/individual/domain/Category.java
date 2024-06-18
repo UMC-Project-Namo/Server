@@ -13,7 +13,7 @@ import jakarta.persistence.ManyToOne;
 
 import com.namo.spring.application.external.domain.individual.domain.constant.CategoryKind;
 import com.namo.spring.application.external.domain.individual.domain.constant.CategoryStatus;
-import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.domain.User;
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 
 import lombok.AccessLevel;

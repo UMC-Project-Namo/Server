@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.namo.spring.application.external.domain.user.domain.Term;
-import com.namo.spring.application.external.domain.user.domain.constant.Content;
-import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.domain.Term;
+import com.namo.spring.db.mysql.domains.user.type.Content;
+import com.namo.spring.db.mysql.domains.user.domain.User;
 import com.namo.spring.application.external.domain.user.ui.dto.UserRequest;
 import com.namo.spring.application.external.domain.user.ui.dto.UserResponse;
 

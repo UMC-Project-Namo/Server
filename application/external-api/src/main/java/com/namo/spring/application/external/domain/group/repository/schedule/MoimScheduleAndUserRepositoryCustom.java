@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.namo.spring.application.external.domain.group.domain.MoimScheduleAndUser;
 
-import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.domain.User;
 
 public interface MoimScheduleAndUserRepositoryCustom {
 	List<MoimScheduleAndUser> findMoimScheduleAndUserWithMoimScheduleByUsersAndDates(LocalDateTime startDate,

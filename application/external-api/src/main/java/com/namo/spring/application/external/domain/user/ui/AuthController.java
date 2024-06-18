@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.namo.spring.application.external.domain.user.application.UserFacade;
-import com.namo.spring.application.external.domain.user.domain.constant.SocialType;
+import com.namo.spring.db.mysql.domains.user.type.SocialType;
 import com.namo.spring.application.external.domain.user.ui.dto.UserRequest;
 import com.namo.spring.application.external.domain.user.ui.dto.UserResponse;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;

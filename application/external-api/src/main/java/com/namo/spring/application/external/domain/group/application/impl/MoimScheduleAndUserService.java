@@ -15,7 +15,7 @@ import com.namo.spring.application.external.domain.group.domain.MoimScheduleAlar
 import com.namo.spring.application.external.domain.group.domain.MoimScheduleAndUser;
 import com.namo.spring.application.external.domain.group.repository.schedule.MoimScheduleAlarmRepository;
 import com.namo.spring.application.external.domain.group.repository.schedule.MoimScheduleAndUserRepository;
-import com.namo.spring.application.external.domain.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.domain.User;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.exception.GroupException;
 

@@ -39,10 +39,10 @@ import com.namo.spring.application.external.domain.user.application.converter.Te
 import com.namo.spring.application.external.domain.user.application.converter.UserConverter;
 import com.namo.spring.application.external.domain.user.application.converter.UserResponseConverter;
 import com.namo.spring.application.external.domain.user.application.impl.UserService;
-import com.namo.spring.application.external.domain.user.domain.Term;
-import com.namo.spring.application.external.domain.user.domain.User;
-import com.namo.spring.application.external.domain.user.domain.constant.SocialType;
-import com.namo.spring.application.external.domain.user.domain.constant.UserStatus;
+import com.namo.spring.db.mysql.domains.user.domain.Term;
+import com.namo.spring.db.mysql.domains.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.type.SocialType;
+import com.namo.spring.db.mysql.domains.user.type.UserStatus;
 import com.namo.spring.application.external.domain.user.ui.dto.UserRequest;
 import com.namo.spring.application.external.domain.user.ui.dto.UserResponse;
 import com.namo.spring.application.external.global.common.constant.FilePath;
