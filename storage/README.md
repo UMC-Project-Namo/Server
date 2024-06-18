@@ -46,4 +46,8 @@
 
 ## Update History
 
-- 2024.06.11: `core` 모듈 및 `core-common` 모듈 생성
+- 2024.06.11
+  - `core` 모듈 및 `core-common` 모듈 생성
+- 2024.06.18
+  - `jpa` 관련 설정 이관 (`external-api` 모듈에서 이동)
+  - `user` 도메인 모듈 분리 (`entity`, `repository` 패키지 `external-api` 모듈에서 이동)
