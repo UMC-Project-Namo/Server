@@ -1,4 +1,4 @@
-package com.namo.spring.application.external.global.common.entity;
+package com.namo.spring.db.mysql.common.model;
 
 import java.time.LocalDateTime;
 

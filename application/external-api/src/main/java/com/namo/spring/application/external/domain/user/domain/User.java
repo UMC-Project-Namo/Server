@@ -12,8 +12,7 @@ import jakarta.persistence.UniqueConstraint;
 
 import com.namo.spring.application.external.domain.user.domain.constant.SocialType;
 import com.namo.spring.application.external.domain.user.domain.constant.UserStatus;
-
-import com.namo.spring.application.external.global.common.entity.BaseTimeEntity;
+import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
