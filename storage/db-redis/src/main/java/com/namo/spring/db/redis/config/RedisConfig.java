@@ -1,4 +1,4 @@
-package com.namo.spring.application.external.global.config.amazon;
+package com.namo.spring.db.redis.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +12,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 @EnableRedisRepositories
-public class AWSRedisConfig {
+public class RedisConfig {
 	@Value("${cloud.aws.redis.host}")
 	private String redisHost;
 
