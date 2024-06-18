@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.namo.spring.db.redis.common.annotation.DomainRedisCacheManager;
 import com.namo.spring.db.redis.common.annotation.DomainRedisConnectionFactory;
 import com.namo.spring.db.redis.common.annotation.DomainRedisTemplate;
-import com.namo.spring.db.redis.features.RedisPackageLocation;
+import com.namo.spring.db.redis.cache.RedisPackageLocation;
 
 @Configuration
 @EnableRedisRepositories(basePackageClasses = RedisPackageLocation.class)
