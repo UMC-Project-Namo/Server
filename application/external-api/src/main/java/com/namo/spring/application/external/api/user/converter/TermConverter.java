@@ -1,14 +1,14 @@
-package com.namo.spring.application.external.domain.user.application.converter;
+package com.namo.spring.application.external.api.user.converter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.namo.spring.application.external.api.user.dto.UserRequest;
+import com.namo.spring.application.external.api.user.dto.UserResponse;
 import com.namo.spring.db.mysql.domains.user.domain.Term;
 import com.namo.spring.db.mysql.domains.user.type.Content;
 import com.namo.spring.db.mysql.domains.user.domain.User;
-import com.namo.spring.application.external.domain.user.ui.dto.UserRequest;
-import com.namo.spring.application.external.domain.user.ui.dto.UserResponse;
 
 public class TermConverter {
 	public static List<Term> toTerms(UserRequest.TermDto termDto, User user) {

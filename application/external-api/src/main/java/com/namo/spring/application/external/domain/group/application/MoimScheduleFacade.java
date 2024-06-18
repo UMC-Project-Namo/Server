@@ -31,7 +31,7 @@ import com.namo.spring.application.external.domain.individual.domain.Category;
 import com.namo.spring.application.external.domain.individual.domain.Schedule;
 import com.namo.spring.application.external.domain.individual.domain.constant.Location;
 import com.namo.spring.application.external.domain.individual.domain.constant.Period;
-import com.namo.spring.application.external.domain.user.application.impl.UserService;
+import com.namo.spring.application.external.api.user.service.UserService;
 import com.namo.spring.db.mysql.domains.user.domain.User;
 import com.namo.spring.application.external.global.common.constant.FilePath;
 import com.namo.spring.application.external.global.utils.FileUtils;

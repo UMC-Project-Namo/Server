@@ -1,4 +1,4 @@
-package com.namo.spring.application.external.domain.user.application.impl;
+package com.namo.spring.application.external.api.user.service;
 
 import java.math.BigInteger;
 import java.security.KeyFactory;
@@ -25,7 +25,7 @@ import com.namo.spring.db.mysql.domains.user.type.SocialType;
 import com.namo.spring.db.mysql.domains.user.type.UserStatus;
 import com.namo.spring.db.mysql.domains.user.repository.TermRepository;
 import com.namo.spring.db.mysql.domains.user.repository.UserRepository;
-import com.namo.spring.application.external.domain.user.ui.dto.UserRequest;
+import com.namo.spring.application.external.api.user.dto.UserRequest;
 import com.namo.spring.application.external.global.utils.JwtUtils;
 import com.namo.spring.client.social.common.properties.AppleProperties;
 import com.namo.spring.client.social.apple.dto.AppleResponse;

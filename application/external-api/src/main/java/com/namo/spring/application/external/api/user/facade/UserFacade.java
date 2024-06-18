@@ -1,4 +1,4 @@
-package com.namo.spring.application.external.domain.user.application;
+package com.namo.spring.application.external.api.user.facade;
 
 import java.net.HttpURLConnection;
 import java.security.PublicKey;
@@ -21,6 +21,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.namo.spring.application.external.api.user.converter.UserConverter;
+import com.namo.spring.application.external.api.user.converter.UserResponseConverter;
+import com.namo.spring.application.external.api.user.service.UserService;
 import com.namo.spring.application.external.domain.group.application.impl.MoimAndUserService;
 import com.namo.spring.application.external.domain.group.application.impl.MoimMemoLocationService;
 import com.namo.spring.application.external.domain.group.application.impl.MoimScheduleAndUserService;
@@ -35,16 +38,13 @@ import com.namo.spring.application.external.domain.individual.domain.Category;
 import com.namo.spring.application.external.domain.individual.domain.Image;
 import com.namo.spring.application.external.domain.individual.domain.Schedule;
 import com.namo.spring.application.external.domain.individual.domain.constant.CategoryKind;
-import com.namo.spring.application.external.domain.user.application.converter.TermConverter;
-import com.namo.spring.application.external.domain.user.application.converter.UserConverter;
-import com.namo.spring.application.external.domain.user.application.converter.UserResponseConverter;
-import com.namo.spring.application.external.domain.user.application.impl.UserService;
+import com.namo.spring.application.external.api.user.converter.TermConverter;
 import com.namo.spring.db.mysql.domains.user.domain.Term;
 import com.namo.spring.db.mysql.domains.user.domain.User;
 import com.namo.spring.db.mysql.domains.user.type.SocialType;
 import com.namo.spring.db.mysql.domains.user.type.UserStatus;
-import com.namo.spring.application.external.domain.user.ui.dto.UserRequest;
-import com.namo.spring.application.external.domain.user.ui.dto.UserResponse;
+import com.namo.spring.application.external.api.user.dto.UserRequest;
+import com.namo.spring.application.external.api.user.dto.UserResponse;
 import com.namo.spring.application.external.global.common.constant.FilePath;
 import com.namo.spring.client.social.apple.client.AppleAuthClient;
 import com.namo.spring.client.social.common.properties.AppleProperties;

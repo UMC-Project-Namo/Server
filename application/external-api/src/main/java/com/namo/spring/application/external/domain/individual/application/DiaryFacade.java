@@ -16,7 +16,7 @@ import com.namo.spring.application.external.domain.individual.domain.Image;
 import com.namo.spring.application.external.domain.individual.domain.Schedule;
 import com.namo.spring.application.external.domain.individual.ui.dto.DiaryResponse;
 
-import com.namo.spring.application.external.domain.user.application.impl.UserService;
+import com.namo.spring.application.external.api.user.service.UserService;
 import com.namo.spring.db.mysql.domains.user.domain.User;
 
 import com.namo.spring.application.external.global.common.constant.FilePath;

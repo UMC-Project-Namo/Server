@@ -1,4 +1,4 @@
-package com.namo.spring.application.external.domain.user.application.converter;
+package com.namo.spring.application.external.api.user.converter;
 
 import java.util.Map;
 

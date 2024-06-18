@@ -11,7 +11,7 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
-import com.namo.spring.application.external.domain.user.ui.dto.UserRequest;
+import com.namo.spring.application.external.api.user.dto.UserRequest;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.exception.UtilsException;
 

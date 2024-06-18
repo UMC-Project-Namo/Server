@@ -1,4 +1,4 @@
-package com.namo.spring.application.external.domain.user.ui;
+package com.namo.spring.application.external.api.user.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.namo.spring.application.external.domain.user.application.UserFacade;
-import com.namo.spring.application.external.domain.user.ui.dto.UserRequest;
+import com.namo.spring.application.external.api.user.dto.UserRequest;
+import com.namo.spring.application.external.api.user.facade.UserFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.response.ResponseDto;
