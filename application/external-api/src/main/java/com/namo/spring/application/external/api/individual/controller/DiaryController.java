@@ -1,4 +1,4 @@
-package com.namo.spring.application.external.domain.individual.ui;
+package com.namo.spring.application.external.api.individual.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,8 +21,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-import com.namo.spring.application.external.domain.individual.application.DiaryFacade;
-import com.namo.spring.application.external.domain.individual.ui.dto.DiaryResponse;
+import com.namo.spring.application.external.api.individual.facade.DiaryFacade;
+import com.namo.spring.application.external.api.individual.dto.DiaryResponse;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.utils.Converter;
 import com.namo.spring.core.common.code.status.ErrorStatus;

@@ -1,4 +1,4 @@
-package com.namo.spring.application.external.domain.individual.application;
+package com.namo.spring.application.external.api.individual.facade;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.namo.spring.application.external.domain.individual.application.converter.DiaryResponseConverter;
-import com.namo.spring.application.external.domain.individual.application.impl.ScheduleService;
-import com.namo.spring.application.external.domain.individual.application.converter.ImageConverter;
-import com.namo.spring.application.external.domain.individual.application.impl.ImageService;
-import com.namo.spring.application.external.domain.individual.domain.Image;
-import com.namo.spring.application.external.domain.individual.domain.Schedule;
-import com.namo.spring.application.external.domain.individual.ui.dto.DiaryResponse;
+import com.namo.spring.application.external.api.individual.converter.DiaryResponseConverter;
+import com.namo.spring.application.external.api.individual.service.ScheduleService;
+import com.namo.spring.application.external.api.individual.converter.ImageConverter;
+import com.namo.spring.application.external.api.individual.service.ImageService;
+import com.namo.spring.db.mysql.domains.individual.domain.Image;
+import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
+import com.namo.spring.application.external.api.individual.dto.DiaryResponse;
 
 import com.namo.spring.application.external.api.user.service.UserService;
 import com.namo.spring.db.mysql.domains.user.domain.User;

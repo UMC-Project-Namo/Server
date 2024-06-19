@@ -1,9 +1,9 @@
-package com.namo.spring.application.external.domain.individual.application.converter;
+package com.namo.spring.application.external.api.individual.converter;
 
-import com.namo.spring.application.external.domain.individual.domain.Category;
-import com.namo.spring.application.external.domain.individual.domain.Palette;
-import com.namo.spring.application.external.domain.individual.domain.constant.CategoryKind;
-import com.namo.spring.application.external.domain.individual.ui.dto.CategoryRequest;
+import com.namo.spring.db.mysql.domains.individual.domain.Category;
+import com.namo.spring.db.mysql.domains.individual.domain.Palette;
+import com.namo.spring.db.mysql.domains.individual.type.CategoryKind;
+import com.namo.spring.application.external.api.individual.dto.CategoryRequest;
 
 import com.namo.spring.db.mysql.domains.user.domain.User;
 

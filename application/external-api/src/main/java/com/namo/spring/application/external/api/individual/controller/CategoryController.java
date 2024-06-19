@@ -1,4 +1,4 @@
-package com.namo.spring.application.external.domain.individual.ui;
+package com.namo.spring.application.external.api.individual.controller;
 
 import java.util.List;
 
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.namo.spring.application.external.domain.individual.application.CategoryFacade;
-import com.namo.spring.application.external.domain.individual.ui.dto.CategoryRequest;
-import com.namo.spring.application.external.domain.individual.ui.dto.CategoryResponse;
+import com.namo.spring.application.external.api.individual.facade.CategoryFacade;
+import com.namo.spring.application.external.api.individual.dto.CategoryRequest;
+import com.namo.spring.application.external.api.individual.dto.CategoryResponse;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.response.ResponseDto;

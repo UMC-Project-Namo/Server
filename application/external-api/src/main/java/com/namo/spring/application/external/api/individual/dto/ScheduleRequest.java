@@ -1,4 +1,4 @@
-package com.namo.spring.application.external.domain.individual.ui.dto;
+package com.namo.spring.application.external.api.individual.dto;
 
 import java.util.Set;
 

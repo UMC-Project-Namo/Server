@@ -1,10 +1,10 @@
-package com.namo.spring.application.external.domain.individual.application.converter;
+package com.namo.spring.application.external.api.individual.converter;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.namo.spring.application.external.domain.individual.domain.Category;
-import com.namo.spring.application.external.domain.individual.ui.dto.CategoryResponse;
+import com.namo.spring.db.mysql.domains.individual.domain.Category;
+import com.namo.spring.application.external.api.individual.dto.CategoryResponse;
 
 public class CategoryResponseConverter {
 

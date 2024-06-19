@@ -1,18 +1,18 @@
-package com.namo.spring.application.external.domain.individual.application;
+package com.namo.spring.application.external.api.individual.facade;
 
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.namo.spring.application.external.domain.individual.application.converter.CategoryConverter;
-import com.namo.spring.application.external.domain.individual.application.converter.CategoryResponseConverter;
-import com.namo.spring.application.external.domain.individual.application.impl.CategoryService;
-import com.namo.spring.application.external.domain.individual.application.impl.PaletteService;
-import com.namo.spring.application.external.domain.individual.domain.Category;
-import com.namo.spring.application.external.domain.individual.domain.Palette;
-import com.namo.spring.application.external.domain.individual.ui.dto.CategoryRequest;
-import com.namo.spring.application.external.domain.individual.ui.dto.CategoryResponse;
+import com.namo.spring.application.external.api.individual.converter.CategoryConverter;
+import com.namo.spring.application.external.api.individual.converter.CategoryResponseConverter;
+import com.namo.spring.application.external.api.individual.service.CategoryService;
+import com.namo.spring.application.external.api.individual.service.PaletteService;
+import com.namo.spring.db.mysql.domains.individual.domain.Category;
+import com.namo.spring.db.mysql.domains.individual.domain.Palette;
+import com.namo.spring.application.external.api.individual.dto.CategoryRequest;
+import com.namo.spring.application.external.api.individual.dto.CategoryResponse;
 
 import com.namo.spring.application.external.api.user.service.UserService;
 import com.namo.spring.db.mysql.domains.user.domain.User;

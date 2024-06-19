@@ -1,9 +1,9 @@
-package com.namo.spring.application.external.domain.individual.application.impl;
+package com.namo.spring.application.external.api.individual.service;
 
 import org.springframework.stereotype.Service;
 
-import com.namo.spring.application.external.domain.individual.domain.Palette;
-import com.namo.spring.application.external.domain.individual.repository.palette.PaletteRepository;
+import com.namo.spring.db.mysql.domains.individual.domain.Palette;
+import com.namo.spring.db.mysql.domains.individual.repository.palette.PaletteRepository;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.exception.IndividualException;
 

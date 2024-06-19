@@ -1,22 +1,20 @@
-package com.namo.spring.application.external.domain.individual.application.impl;
+package com.namo.spring.application.external.api.individual.service;
+
+import com.namo.spring.application.external.api.individual.dto.CategoryRequest;
+import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.core.common.exception.IndividualException;
+import com.namo.spring.db.mysql.domains.individual.domain.Category;
+import com.namo.spring.db.mysql.domains.individual.domain.Palette;
+import com.namo.spring.db.mysql.domains.individual.repository.category.CategoryRepository;
+import com.namo.spring.db.mysql.domains.individual.type.CategoryKind;
+import com.namo.spring.db.mysql.domains.individual.type.CategoryStatus;
+import com.namo.spring.db.mysql.domains.user.domain.User;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Service;
-
-import com.namo.spring.application.external.domain.individual.domain.Category;
-import com.namo.spring.application.external.domain.individual.domain.Palette;
-import com.namo.spring.application.external.domain.individual.domain.constant.CategoryKind;
-import com.namo.spring.application.external.domain.individual.domain.constant.CategoryStatus;
-import com.namo.spring.application.external.domain.individual.repository.category.CategoryRepository;
-import com.namo.spring.application.external.domain.individual.ui.dto.CategoryRequest;
-import com.namo.spring.db.mysql.domains.user.domain.User;
-import com.namo.spring.core.common.code.status.ErrorStatus;
-import com.namo.spring.core.common.exception.IndividualException;
-
-import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

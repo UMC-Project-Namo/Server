@@ -1,12 +1,12 @@
-package com.namo.spring.application.external.domain.individual.application.impl;
+package com.namo.spring.application.external.api.individual.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.namo.spring.application.external.domain.individual.domain.Alarm;
-import com.namo.spring.application.external.domain.individual.domain.Schedule;
-import com.namo.spring.application.external.domain.individual.repository.alarm.AlarmRepository;
+import com.namo.spring.db.mysql.domains.individual.domain.Alarm;
+import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
+import com.namo.spring.db.mysql.domains.individual.repository.alarm.AlarmRepository;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.exception.IndividualException;
 

@@ -1,4 +1,4 @@
-package com.namo.spring.application.external.domain.individual.ui;
+package com.namo.spring.application.external.api.individual.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.namo.spring.application.external.domain.individual.ui.dto.ScheduleRequest;
-import com.namo.spring.application.external.domain.individual.ui.dto.ScheduleResponse;
+import com.namo.spring.application.external.api.individual.dto.ScheduleRequest;
+import com.namo.spring.application.external.api.individual.dto.ScheduleResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-import com.namo.spring.application.external.domain.individual.application.ScheduleFacade;
+import com.namo.spring.application.external.api.individual.facade.ScheduleFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.utils.Converter;
 import com.namo.spring.core.common.code.status.ErrorStatus;
