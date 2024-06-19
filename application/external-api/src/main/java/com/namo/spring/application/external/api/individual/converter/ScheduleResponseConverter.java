@@ -1,10 +1,12 @@
-package com.namo.spring.application.external.domain.individual.application.converter;
+package com.namo.spring.application.external.api.individual.converter;
 
+import com.namo.spring.application.external.api.individual.dto.ScheduleResponse;
+import com.namo.spring.application.external.domain.group.domain.MoimMemoLocationImg;
 import com.namo.spring.application.external.domain.group.domain.MoimScheduleAlarm;
 import com.namo.spring.application.external.domain.group.domain.MoimScheduleAndUser;
-import com.namo.spring.application.external.domain.individual.domain.Alarm;
-import com.namo.spring.application.external.domain.individual.domain.Schedule;
-import com.namo.spring.application.external.domain.individual.ui.dto.ScheduleResponse;
+import com.namo.spring.db.mysql.domains.individual.domain.Alarm;
+import com.namo.spring.db.mysql.domains.individual.domain.Image;
+import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
 
 import java.time.ZoneId;
 import java.util.List;
@@ -17,28 +19,27 @@ public class ScheduleResponseConverter {
                 .build();
     }
 
-    public static ScheduleResponse.GetScheduleDto toGetScheduleRes(Schedule schedule) {
-        Long startDate = schedule.getPeriod()
-                .getStartDate()
+    public static ScheduleResponse.GetScheduleDto toGetScheduleRes(com.namo.spring.db.mysql.domains.individual.dto.ScheduleResponse.GetScheduleDto getScheduleDto) {
+        Long startDate = getScheduleDto.getStartDate()
                 .atZone(ZoneId.systemDefault())
                 .toInstant()
                 .getEpochSecond();
-        Long endDate = schedule.getPeriod().getEndDate().atZone(ZoneId.systemDefault()).toInstant().getEpochSecond();
-        List<Integer> alarmDates = schedule.getAlarms().stream().map(Alarm::getAlarmDate).toList();
+        Long endDate = getScheduleDto.getEndDate().atZone(ZoneId.systemDefault()).toInstant().getEpochSecond();
+        List<Integer> alarmDates = getScheduleDto.getAlarms().stream().map(Alarm::getAlarmDate).toList();
 
         return ScheduleResponse.GetScheduleDto.builder()
-                .scheduleId(schedule.getId())
-                .name(schedule.getName())
+                .scheduleId(getScheduleDto.getScheduleId())
+                .name(getScheduleDto.getName())
                 .startDate(startDate)
                 .endDate(endDate)
                 .alarmDate(alarmDates)
-                .interval(schedule.getPeriod().getDayInterval())
-                .x(schedule.getLocation().getX())
-                .y(schedule.getLocation().getY())
-                .locationName(schedule.getLocation().getLocationName())
-                .kakaoLocationId(schedule.getLocation().getKakaoLocationId())
-                .categoryId(schedule.getCategory().getId())
-                .hasDiary(schedule.getHasDiary())
+                .interval(getScheduleDto.getInterval())
+                .x(getScheduleDto.getX())
+                .y(getScheduleDto.getY())
+                .locationName(getScheduleDto.getLocationName())
+                .kakaoLocationId(getScheduleDto.getKakaoLocationId())
+                .categoryId(getScheduleDto.getCategoryId())
+                .hasDiary(getScheduleDto.getHasDiary())
                 .isMoimSchedule(false)
                 .build();
     }
@@ -82,21 +83,45 @@ public class ScheduleResponseConverter {
         return null;
     }
 
-    public static ScheduleResponse.DiaryDto toDiaryDto(Schedule schedule) {
+    public static ScheduleResponse.DiaryDto toDiaryDto(com.namo.spring.db.mysql.domains.individual.dto.ScheduleResponse.DiaryDto diaryDto) {
         return ScheduleResponse.DiaryDto.builder()
-                .scheduleId(schedule.getId())
-                .name(schedule.getName())
-                .startDate(schedule.getPeriod().getStartDate()
+                .scheduleId(diaryDto.getScheduleId())
+                .name(diaryDto.getName())
+                .startDate(diaryDto.getStartDate()
                         .atZone(ZoneId.systemDefault())
                         .toInstant()
                         .getEpochSecond())
-                .contents(schedule.getContents())
-                .categoryId(schedule.getCategory().getId())
-                .color(schedule.getCategory().getPalette().getId())
-                .placeName(schedule.getLocation().getLocationName())
-                .urls(schedule.getImages().stream()
-                        .map(image -> image.getImgUrl())
+                .contents(diaryDto.getContents())
+                .categoryId(diaryDto.getCategoryId())
+                .color(diaryDto.getColor())
+                .placeName(diaryDto.getPlaceName())
+                .urls(diaryDto.getImages().stream()
+                        .map(Image::getImgUrl)
                         .collect(Collectors.toList()))
+                .build();
+    }
+
+    public static ScheduleResponse.DiaryDto toDiaryDto(MoimScheduleAndUser moimScheduleAndUser){
+        return ScheduleResponse.DiaryDto.builder()
+                .scheduleId(moimScheduleAndUser.getMoimSchedule().getId())
+                .name(moimScheduleAndUser.getMoimSchedule().getName())
+                .startDate(moimScheduleAndUser.getMoimSchedule()
+                    .getPeriod()
+                    .getStartDate()
+                    .atZone(ZoneId.systemDefault())
+                    .toInstant()
+                    .getEpochSecond())
+                .contents(moimScheduleAndUser.getMemo())
+                .categoryId(moimScheduleAndUser.getCategory().getId())
+                .color(moimScheduleAndUser.getCategory().getPalette().getId())
+                .placeName(moimScheduleAndUser.getMoimSchedule().getLocation().getLocationName())
+                .urls(moimScheduleAndUser.getMoimSchedule().getMoimMemo()
+                    .getMoimMemoLocations()
+                    .stream()
+                    .flatMap(location -> location.getMoimMemoLocationImgs().stream())
+                    .map(MoimMemoLocationImg::getUrl)
+                    .limit(3)
+                    .collect(Collectors.toList()))
                 .build();
     }
 }
