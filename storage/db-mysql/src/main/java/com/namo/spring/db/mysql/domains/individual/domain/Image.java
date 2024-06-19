@@ -1,4 +1,4 @@
-package com.namo.spring.application.external.domain.individual.domain;
+package com.namo.spring.db.mysql.domains.individual.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

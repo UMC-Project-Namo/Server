@@ -1,11 +1,11 @@
-package com.namo.spring.application.external.domain.individual.repository.image;
-
-import static com.namo.spring.application.external.domain.individual.domain.QImage.*;
+package com.namo.spring.db.mysql.domains.individual.repository.image;
 
 import jakarta.persistence.EntityManager;
 
-import com.namo.spring.application.external.domain.individual.domain.Schedule;
+import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+
+import static com.namo.spring.db.mysql.domains.individual.domain.QImage.image;
 
 public class ImageRepositoryImpl implements ImageRepositoryCustom {
 	private final JPAQueryFactory queryFactory;

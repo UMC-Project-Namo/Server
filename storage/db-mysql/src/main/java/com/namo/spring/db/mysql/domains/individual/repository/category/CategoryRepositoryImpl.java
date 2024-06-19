@@ -1,15 +1,14 @@
-package com.namo.spring.application.external.domain.individual.repository.category;
+package com.namo.spring.db.mysql.domains.individual.repository.category;
 
-import static com.namo.spring.application.external.domain.individual.domain.QCategory.*;
+import com.namo.spring.db.mysql.domains.individual.domain.Category;
+import com.namo.spring.db.mysql.domains.individual.type.CategoryKind;
+import com.namo.spring.db.mysql.domains.user.domain.User;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
 
 import java.util.List;
 
-import jakarta.persistence.EntityManager;
-
-import com.namo.spring.application.external.domain.individual.domain.Category;
-import com.namo.spring.application.external.domain.individual.domain.constant.CategoryKind;
-import com.namo.spring.db.mysql.domains.user.domain.User;
-import com.querydsl.jpa.impl.JPAQueryFactory;
+import static com.namo.spring.db.mysql.domains.individual.domain.QCategory.category;
 
 public class CategoryRepositoryImpl implements CategoryRepositoryCustom {
 	private final JPAQueryFactory queryFactory;

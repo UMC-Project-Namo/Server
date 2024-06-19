@@ -18,7 +18,7 @@ import jakarta.persistence.Table;
 
 import com.namo.spring.application.external.domain.group.domain.constant.VisibleStatus;
 
-import com.namo.spring.application.external.domain.individual.domain.Category;
+import com.namo.spring.db.mysql.domains.individual.domain.Category;
 
 import com.namo.spring.db.mysql.domains.user.domain.User;
 

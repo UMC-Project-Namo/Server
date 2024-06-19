@@ -1,4 +1,4 @@
-package com.namo.spring.application.external.domain.individual.repository.schedule;
+package com.namo.spring.db.mysql.domains.individual.repository.schedule;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.namo.spring.application.external.domain.individual.domain.Schedule;
+import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
 
 import com.namo.spring.db.mysql.domains.user.domain.User;
 

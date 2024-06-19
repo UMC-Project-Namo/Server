@@ -1,4 +1,4 @@
-package com.namo.spring.application.external.domain.individual.domain.constant;
+package com.namo.spring.db.mysql.domains.individual.type;
 
 import jakarta.persistence.Embeddable;
 

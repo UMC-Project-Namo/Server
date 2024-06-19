@@ -1,11 +1,11 @@
-package com.namo.spring.application.external.domain.individual.repository.category;
+package com.namo.spring.db.mysql.domains.individual.repository.category;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.namo.spring.application.external.domain.individual.domain.Category;
-import com.namo.spring.application.external.domain.individual.domain.constant.CategoryStatus;
+import com.namo.spring.db.mysql.domains.individual.domain.Category;
+import com.namo.spring.db.mysql.domains.individual.type.CategoryStatus;
 
 import com.namo.spring.db.mysql.domains.user.domain.User;
 
