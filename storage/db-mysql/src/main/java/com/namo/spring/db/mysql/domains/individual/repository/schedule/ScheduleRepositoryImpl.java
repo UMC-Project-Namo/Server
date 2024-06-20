@@ -15,7 +15,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
 import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
-import com.namo.spring.db.mysql.domains.individual.dto.DiaryProjection;
 import com.namo.spring.db.mysql.domains.individual.dto.ScheduleProjection;
 import com.namo.spring.db.mysql.domains.user.domain.User;
 import com.querydsl.core.types.Projections;
@@ -150,9 +149,9 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
 	}
 
 	@Override
-	public List<DiaryProjection.DiaryByUserDto> findAllScheduleDiary(User user) {
+	public List<ScheduleProjection.DiaryByUserDto> findAllScheduleDiary(User user) {
 		return queryFactory
-			.select(Projections.constructor(DiaryProjection.DiaryByUserDto.class,
+			.select(Projections.constructor(ScheduleProjection.DiaryByUserDto.class,
 				schedule.id,
 				schedule.contents,
 				schedule.images

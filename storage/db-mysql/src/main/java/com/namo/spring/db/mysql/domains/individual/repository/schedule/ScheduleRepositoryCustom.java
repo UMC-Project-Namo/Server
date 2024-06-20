@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
 import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
-import com.namo.spring.db.mysql.domains.individual.dto.DiaryProjection;
 import com.namo.spring.db.mysql.domains.individual.dto.ScheduleProjection;
 import com.namo.spring.db.mysql.domains.user.domain.User;
 
@@ -18,7 +17,7 @@ public interface ScheduleRepositoryCustom {
 	Slice<ScheduleProjection.DiaryDto> findScheduleDiaryByMonthDto(User user, LocalDateTime startDate,
 		LocalDateTime endTime, Pageable pageable);
 
-	List<DiaryProjection.DiaryByUserDto> findAllScheduleDiary(User user);
+	List<ScheduleProjection.DiaryByUserDto> findAllScheduleDiary(User user);
 
 	Schedule findOneScheduleAndImages(Long scheduleId);
 

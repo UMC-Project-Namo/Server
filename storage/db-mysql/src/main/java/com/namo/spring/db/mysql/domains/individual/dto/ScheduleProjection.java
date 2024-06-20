@@ -44,4 +44,13 @@ public class ScheduleProjection {
 		private Long color;
 		private String placeName;
 	}
+
+	@AllArgsConstructor
+	@Getter
+	@Builder
+	public static class DiaryByUserDto {
+		private Long scheduleId;
+		private String contents;
+		private List<Image> images;
+	}
 }
