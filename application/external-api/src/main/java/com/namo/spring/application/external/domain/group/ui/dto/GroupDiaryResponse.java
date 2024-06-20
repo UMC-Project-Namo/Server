@@ -11,8 +11,8 @@ import com.namo.spring.application.external.domain.group.domain.MoimMemoLocation
 import com.namo.spring.application.external.domain.group.domain.MoimMemoLocationImg;
 import com.namo.spring.application.external.domain.group.domain.MoimScheduleAndUser;
 
-import com.namo.spring.application.external.domain.individual.domain.Image;
-import com.namo.spring.application.external.domain.individual.domain.Schedule;
+import com.namo.spring.db.mysql.domains.individual.domain.Image;
+import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
 
 import lombok.Builder;
 import lombok.Getter;

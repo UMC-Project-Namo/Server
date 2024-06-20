@@ -5,15 +5,15 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.namo.spring.application.external.domain.group.ui.dto.GroupScheduleRequest;
-import com.namo.spring.application.external.domain.individual.domain.Category;
+import com.namo.spring.db.mysql.domains.individual.domain.Category;
 
 import com.namo.spring.application.external.domain.group.domain.Moim;
 import com.namo.spring.application.external.domain.group.domain.MoimSchedule;
 import com.namo.spring.application.external.domain.group.domain.MoimScheduleAlarm;
 import com.namo.spring.application.external.domain.group.domain.MoimScheduleAndUser;
 
-import com.namo.spring.application.external.domain.individual.domain.constant.Location;
-import com.namo.spring.application.external.domain.individual.domain.constant.Period;
+import com.namo.spring.db.mysql.domains.individual.type.Location;
+import com.namo.spring.db.mysql.domains.individual.type.Period;
 
 import com.namo.spring.db.mysql.domains.user.domain.User;
 

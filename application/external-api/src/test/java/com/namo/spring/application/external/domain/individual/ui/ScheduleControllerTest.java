@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import com.namo.spring.application.external.api.individual.controller.ScheduleController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,9 +22,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.namo.spring.application.external.domain.individual.application.ScheduleFacade;
-import com.namo.spring.application.external.domain.individual.ui.dto.ScheduleRequest;
-import com.namo.spring.application.external.domain.individual.ui.dto.ScheduleResponse;
+import com.namo.spring.application.external.api.individual.facade.ScheduleFacade;
+import com.namo.spring.application.external.api.individual.dto.ScheduleRequest;
+import com.namo.spring.application.external.api.individual.dto.ScheduleResponse;
 import com.namo.spring.application.external.global.config.interceptor.AuthenticationInterceptor;
 import com.namo.spring.application.external.global.utils.Converter;
 

@@ -9,7 +9,7 @@ import com.namo.spring.application.external.domain.group.domain.MoimAndUser;
 import com.namo.spring.application.external.domain.group.domain.MoimSchedule;
 import com.namo.spring.application.external.domain.group.domain.MoimScheduleAndUser;
 
-import com.namo.spring.application.external.domain.individual.domain.Schedule;
+import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
 
 import com.namo.spring.db.mysql.domains.user.domain.User;
 
