@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import com.namo.spring.application.external.global.common.annotation.AccessTokenStrategy;
 import com.namo.spring.application.external.global.common.annotation.RefreshTokenStrategy;
 import com.namo.spring.application.external.global.common.security.jwt.JwtClaimsParserUtil;
-import com.namo.spring.application.external.global.common.security.jwt.Jwts;
+import com.namo.spring.application.external.global.common.security.jwt.CustomJwts;
 import com.namo.spring.application.external.global.common.security.jwt.access.AccessTokenClaim;
 import com.namo.spring.application.external.global.common.security.jwt.refresh.RefreshTokenClaim;
 import com.namo.spring.application.external.global.common.security.jwt.refresh.RefreshTokenClaimKeys;
@@ -49,9 +49,9 @@ public class JwtAuthHelper {
 	 * refreshToken은 redis에 저장한다.
 	 *
 	 * @param user : {@link User}
-	 * @return {@link Jwts}
+	 * @return {@link CustomJwts}
 	 */
-	public Jwts createToken(User user) {
+	public CustomJwts createToken(User user) {
 		String accessToken = accessTokenProvider.createToken(AccessTokenClaim.of(user.getId()));
 		String refreshToken = refreshTokenProvider.createToken(RefreshTokenClaim.of(user.getId()));
 
@@ -62,7 +62,7 @@ public class JwtAuthHelper {
 			)
 		);
 
-		return Jwts.of(accessToken, refreshToken);
+		return CustomJwts.of(accessToken, refreshToken);
 	}
 
 	/**
@@ -80,7 +80,7 @@ public class JwtAuthHelper {
 	 *                       - {@link ErrorStatus#EXPIRATION_TOKEN} : 토큰이 만료되었을 때 <br/>
 	 *                       - {@link ErrorStatus#TAKEN_AWAY_TOKEN} : 토큰이 취소되었을 때
 	 */
-	public Pair<Long, Jwts> refresh(String refreshToken) {
+	public Pair<Long, CustomJwts> refresh(String refreshToken) {
 		JwtClaims claims = refreshTokenProvider.parseJwtClaimsFromToken(refreshToken);
 
 		Long userId = JwtClaimsParserUtil.getClaimValue(claims,
@@ -99,7 +99,7 @@ public class JwtAuthHelper {
 
 		String newAccessToken = accessTokenProvider.createToken(AccessTokenClaim.of(userId));
 
-		return Pair.of(userId, Jwts.of(newAccessToken, newRefreshToken.getToken()));
+		return Pair.of(userId, CustomJwts.of(newAccessToken, newRefreshToken.getToken()));
 	}
 
 	/**
