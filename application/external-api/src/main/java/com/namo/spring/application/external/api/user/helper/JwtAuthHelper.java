@@ -129,6 +129,28 @@ public class JwtAuthHelper {
 		deleteAccessToken(userId, accessToken);
 	}
 
+	/**
+	 * 주어진 accessToken이 만료되었는지 확인합니다.
+	 *
+	 * @param token : 확인할 accessToken
+	 * @return 만료되었으면 true, 그렇지 않으면 false
+	 */
+	// HACK: 2024.06.22. spring security 적용 후 삭제될 임시 메서드입니다. - 루카
+	public boolean validateAccessTokenExpired(String token) {
+		return accessTokenProvider.isTokenExpired(token);
+	}
+
+	/**
+	 * 주어진 refreshToken이 만료되었는지 확인합니다.
+	 *
+	 * @param token : 확인할 refreshToken
+	 * @return 만료되었으면 true, 그렇지 않으면 false
+	 */
+	// HACK: 2024.06.22. spring security 적용 후 삭제될 임시 메서드입니다. - 루카
+	public boolean validateRefreshTokenExpired(String token) {
+		return refreshTokenProvider.isTokenExpired(token);
+	}
+
 	private void deleteRefreshToken(Long userId, JwtClaims jwtClaims, String refreshToken) {
 		Long refreshTokenUserId = Long.parseLong(
 			jwtClaims.getClaims().get(RefreshTokenClaimKeys.USER_ID.getValue()).toString()
