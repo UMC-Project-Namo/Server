@@ -39,3 +39,5 @@
 - 2024.06.18
   - `jpa` 관련 설정 이관 (`db-mysql` 모듈로 이동)
   - `user` 도메인 모듈 분리 (`entity`, `repository` 패키지 `db-mysql` 모듈로 이동)
+- 2024.06.20
+  - `individual` 도메인 모듈 분리 (`entity`, `repository` 패키지 `db-mysql` 모듈로 이동)
