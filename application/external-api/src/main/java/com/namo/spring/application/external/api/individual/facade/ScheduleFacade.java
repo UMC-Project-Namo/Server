@@ -8,29 +8,29 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.namo.spring.application.external.domain.group.application.impl.MoimScheduleAndUserService;
-import com.namo.spring.application.external.domain.group.application.impl.MoimScheduleService;
-import com.namo.spring.application.external.domain.group.domain.MoimSchedule;
-import com.namo.spring.application.external.domain.group.domain.MoimScheduleAndUser;
+import com.namo.spring.application.external.api.group.service.MoimScheduleAndUserService;
+import com.namo.spring.application.external.api.group.service.MoimScheduleService;
 import com.namo.spring.application.external.api.individual.converter.AlarmConverter;
 import com.namo.spring.application.external.api.individual.converter.ScheduleConverter;
 import com.namo.spring.application.external.api.individual.converter.ScheduleResponseConverter;
+import com.namo.spring.application.external.api.individual.dto.ScheduleRequest;
+import com.namo.spring.application.external.api.individual.dto.ScheduleResponse;
 import com.namo.spring.application.external.api.individual.service.AlarmService;
 import com.namo.spring.application.external.api.individual.service.CategoryService;
 import com.namo.spring.application.external.api.individual.service.ImageService;
 import com.namo.spring.application.external.api.individual.service.PeriodService;
 import com.namo.spring.application.external.api.individual.service.ScheduleService;
+import com.namo.spring.application.external.api.user.service.UserService;
+import com.namo.spring.application.external.global.common.constant.FilePath;
+import com.namo.spring.application.external.global.utils.FileUtils;
+import com.namo.spring.db.mysql.domains.group.domain.MoimSchedule;
+import com.namo.spring.db.mysql.domains.group.domain.MoimScheduleAndUser;
 import com.namo.spring.db.mysql.domains.individual.domain.Alarm;
 import com.namo.spring.db.mysql.domains.individual.domain.Category;
 import com.namo.spring.db.mysql.domains.individual.domain.Image;
 import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
 import com.namo.spring.db.mysql.domains.individual.type.Period;
-import com.namo.spring.application.external.api.individual.dto.ScheduleRequest;
-import com.namo.spring.application.external.api.individual.dto.ScheduleResponse;
-import com.namo.spring.application.external.api.user.service.UserService;
 import com.namo.spring.db.mysql.domains.user.domain.User;
-import com.namo.spring.application.external.global.common.constant.FilePath;
-import com.namo.spring.application.external.global.utils.FileUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -69,7 +69,7 @@ public class ScheduleFacade {
 	public List<ScheduleResponse.GetScheduleDto> getSchedulesByUser(Long userId,
 		List<LocalDateTime> localDateTimes) {
 		User user = userService.getUser(userId);
-		return scheduleService.getSchedulesByUserId(user, localDateTimes.get(0), localDateTimes.get(1));
+		return scheduleService.getSchedulesByUser(user, localDateTimes.get(0), localDateTimes.get(1));
 	}
 
 	@Transactional(readOnly = true)
@@ -82,7 +82,7 @@ public class ScheduleFacade {
 	@Transactional(readOnly = true)
 	public List<ScheduleResponse.GetScheduleDto> getAllSchedulesByUser(Long userId) {
 		User user = userService.getUser(userId);
-		return scheduleService.getAllSchedulesByUser(user);
+		return scheduleService.getSchedulesByUser(user, null, null);
 	}
 
 	@Transactional(readOnly = true)

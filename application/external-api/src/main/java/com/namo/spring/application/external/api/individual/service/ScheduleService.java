@@ -14,6 +14,8 @@ import com.namo.spring.application.external.api.individual.dto.ScheduleResponse;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.exception.IndividualException;
 import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
+import com.namo.spring.db.mysql.domains.individual.dto.MoimScheduleProjection;
+import com.namo.spring.db.mysql.domains.individual.dto.ScheduleProjection;
 import com.namo.spring.db.mysql.domains.individual.repository.schedule.ScheduleRepository;
 import com.namo.spring.db.mysql.domains.user.domain.User;
 
@@ -37,15 +39,6 @@ public class ScheduleService {
 		return scheduleRepository.findAllByUser(user);
 	}
 
-	public List<ScheduleResponse.GetScheduleDto> getSchedulesByUserId(User user, LocalDateTime startDate,
-		LocalDateTime endDate
-	) {
-		return scheduleRepository.findSchedulesByUserId(user, startDate, endDate)
-			.stream()
-			.map(ScheduleResponseConverter::toGetScheduleRes)
-			.collect(Collectors.toList());
-	}
-
 	public List<ScheduleResponse.GetScheduleDto> getMoimSchedulesByUser(User user, LocalDateTime startDate,
 		LocalDateTime endDate
 	) {
@@ -55,11 +48,22 @@ public class ScheduleService {
 			.collect(Collectors.toList());
 	}
 
-	public List<ScheduleResponse.GetScheduleDto> getAllSchedulesByUser(User user) {
-		return scheduleRepository.findSchedulesByUserId(user, null, null)
-			.stream()
+	public List<ScheduleResponse.GetScheduleDto> getSchedulesByUser(User user, LocalDateTime startDate,
+		LocalDateTime endDate) {
+		List<ScheduleProjection.ScheduleDto> personalSchedules = scheduleRepository.findPersonalSchedulesByUserId(user,
+			startDate,
+			endDate);
+		List<MoimScheduleProjection.ScheduleDto> moimSchedules = scheduleRepository.findMoimSchedulesByUserId(user,
+			startDate, endDate);
+
+		List<ScheduleResponse.GetScheduleDto> results = personalSchedules.stream()
 			.map(ScheduleResponseConverter::toGetScheduleRes)
 			.collect(Collectors.toList());
+		if (moimSchedules != null) {
+			results.addAll(moimSchedules.stream().map(ScheduleResponseConverter::toGetScheduleRes)
+				.collect(Collectors.toList()));
+		}
+		return results;
 	}
 
 	public List<ScheduleResponse.GetScheduleDto> getAllMoimSchedulesByUser(User user) {

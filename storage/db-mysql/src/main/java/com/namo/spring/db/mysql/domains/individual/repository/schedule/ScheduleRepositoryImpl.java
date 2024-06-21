@@ -1,5 +1,7 @@
 package com.namo.spring.db.mysql.domains.individual.repository.schedule;
 
+import static com.namo.spring.db.mysql.domains.group.domain.QMoimSchedule.*;
+import static com.namo.spring.db.mysql.domains.group.domain.QMoimScheduleAndUser.*;
 import static com.namo.spring.db.mysql.domains.individual.domain.QCategory.*;
 import static com.namo.spring.db.mysql.domains.individual.domain.QImage.*;
 import static com.namo.spring.db.mysql.domains.individual.domain.QPalette.*;
@@ -14,7 +16,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
+import com.namo.spring.db.mysql.domains.group.type.VisibleStatus;
 import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
+import com.namo.spring.db.mysql.domains.individual.dto.MoimScheduleProjection;
 import com.namo.spring.db.mysql.domains.individual.dto.ScheduleProjection;
 import com.namo.spring.db.mysql.domains.user.domain.User;
 import com.querydsl.core.types.Projections;
@@ -34,20 +38,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
 		this.em = em;
 	}
 
-	/**
-	 * 알람을 한 번에 가지고 오는 편이 성능상 더 좋은 퍼포먼스를 발휘할지도?
-	 */
 	@Override
-	public List<ScheduleProjection.ScheduleDto> findSchedulesByUserId(User user, LocalDateTime startDate,
-		LocalDateTime endDate) {
-		List<ScheduleProjection.ScheduleDto> results = findPersonalSchedulesByUserId(user, startDate, endDate);
-		List<ScheduleProjection.ScheduleDto> moimSchedules = findMoimSchedulesByUserId(user, startDate, endDate);
-		if (moimSchedules != null) {
-			results.addAll(moimSchedules);
-		}
-		return results;
-	}
-
 	public List<ScheduleProjection.ScheduleDto> findPersonalSchedulesByUserId(User user, LocalDateTime startDate,
 		LocalDateTime endDate) {
 		return queryFactory
@@ -83,12 +74,28 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
 	}
 
 	@Override
-	public List<ScheduleProjection.ScheduleDto> findMoimSchedulesByUserId(
+	public List<MoimScheduleProjection.ScheduleDto> findMoimSchedulesByUserId(
 		User user,
 		LocalDateTime startDate, LocalDateTime endDate
 	) {
-		List<MoimScheduleAndUser> moimScheduleAndUsers = queryFactory
-			.select(moimScheduleAndUser).distinct()
+		return queryFactory
+			.select(Projections.constructor(MoimScheduleProjection.ScheduleDto.class,
+					moimScheduleAndUser.moimSchedule.id,
+					moimScheduleAndUser.moimSchedule.name,
+					moimScheduleAndUser.moimSchedule.period.startDate,
+					moimScheduleAndUser.moimSchedule.period.endDate,
+					moimScheduleAndUser.moimScheduleAlarms,
+					moimScheduleAndUser.moimSchedule.period.dayInterval,
+					moimScheduleAndUser.moimSchedule.location.x,
+					moimScheduleAndUser.moimSchedule.location.y,
+					moimScheduleAndUser.moimSchedule.location.locationName,
+					moimScheduleAndUser.moimSchedule.location.kakaoLocationId,
+					moimScheduleAndUser.category.id,
+					moimScheduleAndUser.moimSchedule.moimMemo,
+					moimScheduleAndUser.memo
+				)
+			)
+			.distinct()
 			.from(moimScheduleAndUser)
 			.join(moimScheduleAndUser.moimSchedule, moimSchedule).fetchJoin()
 			.leftJoin(moimScheduleAndUser.moimScheduleAlarms).fetchJoin()
@@ -99,11 +106,6 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
 				moimScheduleDateGoe(startDate),
 				moimScheduleAndUser.visibleStatus.ne(VisibleStatus.NOT_SEEN_PERSONAL_SCHEDULE)
 			).fetch();
-
-		return moimScheduleAndUsers.stream()
-			.filter(schedule -> schedule.getVisibleStatus() != VisibleStatus.NOT_SEEN_PERSONAL_SCHEDULE)
-			.map(ScheduleResponseConverter::toGetScheduleRes)
-			.toList();
 	}
 
 	private BooleanExpression moimScheduleDateGoe(LocalDateTime startDate) {

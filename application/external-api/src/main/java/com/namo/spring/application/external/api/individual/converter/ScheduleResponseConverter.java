@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.namo.spring.application.external.api.individual.dto.ScheduleResponse;
-import com.namo.spring.application.external.domain.group.domain.MoimMemoLocationImg;
-import com.namo.spring.application.external.domain.group.domain.MoimScheduleAlarm;
-import com.namo.spring.application.external.domain.group.domain.MoimScheduleAndUser;
+import com.namo.spring.db.mysql.domains.group.domain.MoimMemo;
+import com.namo.spring.db.mysql.domains.group.domain.MoimMemoLocationImg;
+import com.namo.spring.db.mysql.domains.group.domain.MoimScheduleAlarm;
+import com.namo.spring.db.mysql.domains.group.domain.MoimScheduleAndUser;
 import com.namo.spring.db.mysql.domains.individual.domain.Alarm;
 import com.namo.spring.db.mysql.domains.individual.domain.Image;
 import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
+import com.namo.spring.db.mysql.domains.individual.dto.MoimScheduleProjection;
 import com.namo.spring.db.mysql.domains.individual.dto.ScheduleProjection;
 
 public class ScheduleResponseConverter {
@@ -45,40 +47,40 @@ public class ScheduleResponseConverter {
 			.build();
 	}
 
-	public static ScheduleResponse.GetScheduleDto toGetScheduleRes(MoimScheduleAndUser moimScheduleAndUser) {
-		Long startDate = moimScheduleAndUser.getMoimSchedule().getPeriod().getStartDate()
+	public static ScheduleResponse.GetScheduleDto toGetScheduleRes(MoimScheduleProjection.ScheduleDto scheduleDto) {
+		Long startDate = scheduleDto.getStartDate()
 			.atZone(ZoneId.systemDefault())
 			.toInstant()
 			.getEpochSecond();
-		Long endDate = moimScheduleAndUser.getMoimSchedule().getPeriod().getEndDate()
+		Long endDate = scheduleDto.getEndDate()
 			.atZone(ZoneId.systemDefault())
 			.toInstant()
 			.getEpochSecond();
-		List<Integer> alarmDates = moimScheduleAndUser.getMoimScheduleAlarms().stream()
+		List<Integer> alarmDates = scheduleDto.getAlarms().stream()
 			.map(MoimScheduleAlarm::getAlarmDate).toList();
 
 		return ScheduleResponse.GetScheduleDto.builder()
-			.scheduleId(moimScheduleAndUser.getMoimSchedule().getId())
-			.name(moimScheduleAndUser.getMoimSchedule().getName())
+			.scheduleId(scheduleDto.getScheduleId())
+			.name(scheduleDto.getName())
 			.startDate(startDate)
 			.endDate(endDate)
 			.alarmDate(alarmDates)
-			.interval(moimScheduleAndUser.getMoimSchedule().getPeriod().getDayInterval())
-			.x(moimScheduleAndUser.getMoimSchedule().getLocation().getX())
-			.y(moimScheduleAndUser.getMoimSchedule().getLocation().getY())
-			.locationName(moimScheduleAndUser.getMoimSchedule().getLocation().getLocationName())
-			.kakaoLocationId(moimScheduleAndUser.getMoimSchedule().getLocation().getKakaoLocationId())
-			.categoryId(moimScheduleAndUser.getCategory().getId())
-			.hasDiary(decideHasDiary(moimScheduleAndUser))
+			.interval(scheduleDto.getInterval())
+			.x(scheduleDto.getX())
+			.y(scheduleDto.getY())
+			.locationName(scheduleDto.getLocationName())
+			.kakaoLocationId(scheduleDto.getKakaoLocationId())
+			.categoryId(scheduleDto.getCategoryId())
+			.hasDiary(decideHasDiary(scheduleDto.getMoimMemo(), scheduleDto.getUserMemo()))
 			.isMoimSchedule(true)
 			.build();
 	}
 
-	private static Boolean decideHasDiary(MoimScheduleAndUser moimScheduleAndUser) {
-		if (moimScheduleAndUser.getMoimSchedule().getMoimMemo() != null && moimScheduleAndUser.getMemo() != null) {
+	private static Boolean decideHasDiary(MoimMemo moimMemo, String userMemo) {
+		if (moimMemo != null && userMemo != null) {
 			return Boolean.TRUE;
 		}
-		if (moimScheduleAndUser.getMoimSchedule().getMoimMemo() != null && moimScheduleAndUser.getMemo() == null) {
+		if (moimMemo != null && userMemo == null) {
 			return Boolean.FALSE;
 		}
 		return null;
