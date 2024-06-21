@@ -1,5 +1,5 @@
 dependencies {
-    implementation project(':core:namo-common')
+    implementation project(':core:core-common')
 
     // jwt
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
