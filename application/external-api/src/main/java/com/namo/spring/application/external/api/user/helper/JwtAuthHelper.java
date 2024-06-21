@@ -3,6 +3,8 @@ package com.namo.spring.application.external.api.user.helper;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +17,8 @@ import com.namo.spring.application.external.global.common.security.jwt.refresh.R
 import com.namo.spring.application.external.global.common.security.jwt.refresh.RefreshTokenClaimKeys;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.exception.AuthException;
+import com.namo.spring.core.common.exception.UtilsException;
+import com.namo.spring.core.infra.common.jwt.AuthConstants;
 import com.namo.spring.core.infra.common.jwt.JwtClaims;
 import com.namo.spring.core.infra.common.jwt.JwtProvider;
 import com.namo.spring.db.mysql.domains.user.domain.User;
@@ -132,6 +136,25 @@ public class JwtAuthHelper {
 	// HACK: 2024.06.22. logout을 위해 작성된 임시 메서드 - 루카
 	public String getRefreshToken(Long userId) {
 		return refreshTokenService.findOrElseThrow(userId).getToken();
+	}
+
+	/**
+	 * 주어진 request에서 accessToken을 추출합니다.
+	 *
+	 * @param request : 추출할 request
+	 * @return 추출된 accessToken
+	 * @throws UtilsException <br/>
+	 *                       - {@link ErrorStatus#EMPTY_ACCESS_KEY} : accessToken이 없을 때
+	 */
+	// HACK: 2024.06.22. social logout을 위해 작성된 임시 메서드 - 루카
+	public String getAccessToken(HttpServletRequest request) {
+		String accessToken = request.getHeader(AuthConstants.AUTHORIZATION.getValue());
+
+		if (accessToken == null || accessToken.isEmpty()) {
+			throw new UtilsException(ErrorStatus.EMPTY_ACCESS_KEY);
+		}
+
+		return accessToken.replace(AuthConstants.TOKEN_PREFIX.getValue(), "");
 	}
 
 	/**
