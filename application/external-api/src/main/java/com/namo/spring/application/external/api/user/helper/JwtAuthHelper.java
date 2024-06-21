@@ -129,6 +129,11 @@ public class JwtAuthHelper {
 		deleteAccessToken(userId, accessToken);
 	}
 
+	// HACK: 2024.06.22. logout을 위해 작성된 임시 메서드 - 루카
+	public String getRefreshToken(Long userId) {
+		return refreshTokenService.findOrElseThrow(userId).getToken();
+	}
+
 	/**
 	 * 주어진 accessToken이 만료되었는지 확인합니다.
 	 *
