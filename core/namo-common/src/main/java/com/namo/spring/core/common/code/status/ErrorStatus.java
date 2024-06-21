@@ -44,6 +44,9 @@ public enum ErrorStatus implements BaseErrorCode {
 	 */
 	EMPTY_ACCESS_KEY(HttpStatus.FORBIDDEN, "AccessToken 이 비어있습니다."),
 	LOGOUT_ERROR(HttpStatus.FORBIDDEN, "로그 아웃된 사용자입니다."),
+	EXPIRATION_TOKEN(HttpStatus.FORBIDDEN, "Token 이 만료되었습니다."),
+	TAKEN_AWAY_TOKEN(HttpStatus.FORBIDDEN, "탈취당한 토큰입니다. 다시 로그인 해주세요."),
+	WITHOUT_OWNER_REFRESH_TOKEN(HttpStatus.FORBIDDEN, "소유자가 아닌 RefreshToken 입니다."),
 	EXPIRATION_ACCESS_TOKEN(HttpStatus.FORBIDDEN, "Access token 이 만료되었습니다."),
 	EXPIRATION_REFRESH_TOKEN(HttpStatus.FORBIDDEN, "RefreshToken 이 만료되었습니다."),
 	KAKAO_FORBIDDEN(HttpStatus.FORBIDDEN, "카카오 권한 오류"),

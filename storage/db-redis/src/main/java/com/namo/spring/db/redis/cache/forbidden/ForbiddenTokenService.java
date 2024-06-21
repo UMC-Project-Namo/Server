@@ -15,8 +15,8 @@ public class ForbiddenTokenService {
 	private final ForbiddenTokenRepository forbiddenTokenRepository;
 
 	public void createForbiddenToken(
-		String accessToken,
 		Long userId,
+		String accessToken,
 		LocalDateTime expiresAt
 	) {
 		final LocalDateTime now = LocalDateTime.now();

@@ -30,6 +30,14 @@ public class RefreshTokenService {
 		return refreshToken;
 	}
 
+	public void delete(
+		Long userId,
+		String refreshToken
+	) throws IllegalArgumentException {
+		RefreshToken token = findOrElseThrow(userId);
+		refreshTokenRepository.delete(token);
+	}
+
 	// TODO: Custom exception handling 적용하기
 	private RefreshToken findOrElseThrow(Long userId) {
 		return refreshTokenRepository.findById(userId)
