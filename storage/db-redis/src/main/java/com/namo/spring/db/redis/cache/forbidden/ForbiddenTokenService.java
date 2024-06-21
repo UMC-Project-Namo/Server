@@ -3,10 +3,13 @@ package com.namo.spring.db.redis.cache.forbidden;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+import org.springframework.stereotype.Component;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class ForbiddenTokenService {
 	private final ForbiddenTokenRepository forbiddenTokenRepository;
