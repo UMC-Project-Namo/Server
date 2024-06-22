@@ -63,7 +63,7 @@ public class MoimFacade {
 
 		MoimAndUser moimAndUser = MoimAndUserConverter
 			.toMoimAndUser(groupName, MOIM_USERS_COLOR[0], user, moim);
-		moimAndUserService.create(moimAndUser, moim);
+		moimAndUserService.createMoimAndUser(moimAndUser, moim);
 		return GroupResponseConverter.toMoimIdDto(moim);
 	}
 
@@ -96,7 +96,7 @@ public class MoimFacade {
 
 		MoimAndUser moimAndUser = MoimAndUserConverter
 			.toMoimAndUser(moim.getName(), selectColor(moim), user, moim);
-		moimAndUserService.create(moimAndUser, moim);
+		moimAndUserService.createMoimAndUser(moimAndUser, moim);
 		return GroupResponseConverter.toMoimParticipantDto(moim);
 	}
 

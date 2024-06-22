@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class ImageService {
 	private final ImageRepository imageRepository;
 
-	public List<Image> createImgs(List<Image> imgs) {
+	public List<Image> createImages(List<Image> imgs) {
 		return imageRepository.saveAll(imgs);
 	}
 
@@ -26,11 +26,11 @@ public class ImageService {
 		).flatMap(List::stream).collect(Collectors.toList());
 	}
 
-	public void removeImgsBySchedule(Schedule schedule) {
+	public void removeImagesBySchedule(Schedule schedule) {
 		imageRepository.deleteDiaryImages(schedule);
 	}
 
-	public void removeImgsBySchedules(List<Schedule> schedules) {
+	public void removeImagesBySchedules(List<Schedule> schedules) {
 		schedules.forEach(schedule ->
 			imageRepository.deleteAll(schedule.getImages())
 		);

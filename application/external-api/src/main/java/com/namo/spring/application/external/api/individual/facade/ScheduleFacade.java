@@ -130,7 +130,7 @@ public class ScheduleFacade {
 				.map(Image::getImgUrl)
 				.toList();
 			fileUtils.deleteImages(urls, FilePath.INVITATION_ACTIVITY_IMG);
-			imageService.removeImgsBySchedule(schedule);
+			imageService.removeImagesBySchedule(schedule);
 			scheduleService.removeSchedule(schedule);
 			return;
 		}

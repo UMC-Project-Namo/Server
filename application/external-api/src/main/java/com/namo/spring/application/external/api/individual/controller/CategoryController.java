@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.namo.spring.application.external.api.individual.facade.CategoryFacade;
 import com.namo.spring.application.external.api.individual.dto.CategoryRequest;
 import com.namo.spring.application.external.api.individual.dto.CategoryResponse;
+import com.namo.spring.application.external.api.individual.facade.CategoryFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.response.ResponseDto;
@@ -47,7 +47,7 @@ public class CategoryController {
 		HttpServletRequest request
 	) {
 		Long userId = (Long)request.getAttribute("userId");
-		CategoryResponse.CategoryIdDto categoryIdDto = categoryFacade.create(userId, postcategoryDto);
+		CategoryResponse.CategoryIdDto categoryIdDto = categoryFacade.createCategory(userId, postcategoryDto);
 		return ResponseDto.onSuccess(categoryIdDto);
 	}
 

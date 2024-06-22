@@ -260,8 +260,8 @@ public class UserFacade {
 			CategoryKind.MOIM
 		);
 
-		categoryService.create(baseCategory);
-		categoryService.create(groupCategory);
+		categoryService.createCategory(baseCategory);
+		categoryService.createCategory(groupCategory);
 	}
 
 	@Transactional(readOnly = false)
@@ -376,7 +376,7 @@ public class UserFacade {
 				List<Image> images = imageService.getImagesBySchedules(schedules);
 				List<String> urls = images.stream().map(Image::getImgUrl).collect(Collectors.toList());
 				fileUtils.deleteImages(urls, FilePath.INVITATION_ACTIVITY_IMG);
-				imageService.removeImgsBySchedules(schedules);
+				imageService.removeImagesBySchedules(schedules);
 				scheduleService.removeSchedules(schedules);
 
 				moimAndUserService.removeMoimAndUsersByUser(user);

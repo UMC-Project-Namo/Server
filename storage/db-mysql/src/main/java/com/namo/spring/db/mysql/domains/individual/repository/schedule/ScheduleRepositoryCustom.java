@@ -13,7 +13,7 @@ import com.namo.spring.db.mysql.domains.user.domain.User;
 
 public interface ScheduleRepositoryCustom {
 
-	Slice<ScheduleProjection.DiaryDto> findScheduleDiaryByMonthDto(User user, LocalDateTime startDate,
+	Slice<ScheduleProjection.DiaryDto> findScheduleDiaryByMonth(User user, LocalDateTime startDate,
 		LocalDateTime endTime, Pageable pageable);
 
 	List<ScheduleProjection.DiaryByUserDto> findAllScheduleDiary(User user);

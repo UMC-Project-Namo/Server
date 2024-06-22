@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MoimAndUserService {
 	private final MoimAndUserRepository moimAndUserRepository;
 
-	public MoimAndUser create(MoimAndUser moimAndUser, Moim moim) {
+	public MoimAndUser createMoimAndUser(MoimAndUser moimAndUser, Moim moim) {
 		validateExistsMoimAndUser(moim, moimAndUser);
 		validateMoimIsFull(moim);
 		MoimAndUser savedMoimAndUser = moimAndUserRepository.save(moimAndUser);

@@ -80,7 +80,7 @@ public class ScheduleService {
 		Pageable pageable
 	) {
 		return DiaryResponseConverter.toSliceDiaryDto(
-			(scheduleRepository.findScheduleDiaryByMonthDto(user, startDate, endDate, pageable)));
+			(scheduleRepository.findScheduleDiaryByMonth(user, startDate, endDate, pageable)));
 	}
 
 	public List<DiaryResponse.GetDiaryByUserDto> getAllDiariesByUser(User user) {

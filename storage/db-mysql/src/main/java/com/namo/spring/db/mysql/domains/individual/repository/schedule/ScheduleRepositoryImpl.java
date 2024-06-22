@@ -117,7 +117,7 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
 	}
 
 	@Override
-	public Slice<ScheduleProjection.DiaryDto> findScheduleDiaryByMonthDto(User user, LocalDateTime startDate,
+	public Slice<ScheduleProjection.DiaryDto> findScheduleDiaryByMonth(User user, LocalDateTime startDate,
 		LocalDateTime endDate, Pageable pageable) {
 		List<ScheduleProjection.DiaryDto> content = queryFactory
 			.select(Projections.constructor(ScheduleProjection.DiaryDto.class,
