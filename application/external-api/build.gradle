@@ -3,7 +3,8 @@ jar.enabled = false
 
 dependencies {
     // subproject
-    implementation project(':core:namo-common')
+    implementation project(':core:core-common')
+    implementation project(':core:core-infra')
     implementation project(':clients:social-client')
     implementation project(':storage:db-mysql')
     implementation project(':storage:db-redis')
@@ -38,9 +39,6 @@ dependencies {
 
     // documentation
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
-
-    // redis
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
     //json
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'

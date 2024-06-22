@@ -8,7 +8,8 @@ pluginManagement {
 rootProject.name = 'namo-springboot'
 
 include 'application:external-api'
-include 'core:namo-common'
+include 'core:core-common'
+include 'core:core-infra'
 include 'clients:social-client'
 include 'storage:db-mysql'
 include 'storage:db-redis'

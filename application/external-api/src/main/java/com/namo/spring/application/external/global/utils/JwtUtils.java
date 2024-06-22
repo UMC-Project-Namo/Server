@@ -23,9 +23,17 @@ import io.jsonwebtoken.security.Keys;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * JWT 토큰 생성 및 검증을 위한 유틸리티 클래스
+ *
+ * @deprecated <br/>
+ * db-redis 모듈을 분리함에 따라 redis 관련 작업의 역할이 위임됨 <br/>
+ * 따라서 JWT 토큰 생성 및 검증 로직이 수정되었으며 {@link com.namo.spring.application.external.api.user.helper.JwtAuthHelper} 사용 권장
+ */
 @Slf4j
 @NoArgsConstructor
 @Component
+@Deprecated(forRemoval = true)
 public class JwtUtils {
 	private static final String HEADER = "Authorization";
 	private static final Long ACCESS_TOKEN_EXPIRED_TIME = 1000 * 60 * 60 * 12L;
