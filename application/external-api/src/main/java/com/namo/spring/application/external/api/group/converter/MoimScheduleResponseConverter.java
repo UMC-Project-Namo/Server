@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.namo.spring.application.external.api.group.dto.GroupScheduleResponse;
+import com.namo.spring.core.common.utils.DateUtil;
 import com.namo.spring.db.mysql.domains.group.domain.MoimAndUser;
 import com.namo.spring.db.mysql.domains.group.domain.MoimSchedule;
 import com.namo.spring.db.mysql.domains.group.domain.MoimScheduleAndUser;
@@ -104,18 +105,18 @@ public class MoimScheduleResponseConverter {
 	}
 
 	public static GroupScheduleResponse.MoimScheduleDto toMoimScheduleDto(MoimSchedule moimSchedule) {
-		return new GroupScheduleResponse.MoimScheduleDto(
-			moimSchedule.getName(),
-			moimSchedule.getPeriod().getStartDate(),
-			moimSchedule.getPeriod().getEndDate(),
-			moimSchedule.getPeriod().getDayInterval(),
-			moimSchedule.getMoim().getId(),
-			moimSchedule.getId(),
-			moimSchedule.getLocation().getX(),
-			moimSchedule.getLocation().getY(),
-			moimSchedule.getLocation().getLocationName(),
-			moimSchedule.getLocation().getKakaoLocationId()
-		);
+		return GroupScheduleResponse.MoimScheduleDto.builder()
+			.name(moimSchedule.getName())
+			.startDate(DateUtil.toSeconds(moimSchedule.getPeriod().getStartDate()))
+			.endDate(DateUtil.toSeconds(moimSchedule.getPeriod().getEndDate()))
+			.interval(moimSchedule.getPeriod().getDayInterval())
+			.groupId(moimSchedule.getMoim().getId())
+			.moimScheduleId(moimSchedule.getId())
+			.x(moimSchedule.getLocation().getX())
+			.y(moimSchedule.getLocation().getY())
+			.locationName(moimSchedule.getLocation().getLocationName())
+			.kakaoLocationId(moimSchedule.getLocation().getKakaoLocationId())
+			.build();
 	}
 
 }

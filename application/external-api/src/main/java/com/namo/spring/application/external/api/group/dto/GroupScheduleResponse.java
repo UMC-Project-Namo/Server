@@ -17,16 +17,14 @@ public class GroupScheduleResponse {
 		throw new IllegalStateException("Util Class");
 	}
 
-	@NoArgsConstructor
 	@AllArgsConstructor
 	@Getter
+	@Builder
 	public static class MoimScheduleDto {
 		private String name;
-
 		private Long startDate;
 		private Long endDate;
 		private Integer interval;
-
 		private List<MoimScheduleUserDto> users = new ArrayList<>();
 		private Long groupId;
 		private Long moimScheduleId;

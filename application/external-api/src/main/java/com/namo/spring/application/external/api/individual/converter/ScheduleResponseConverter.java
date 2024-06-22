@@ -1,10 +1,10 @@
 package com.namo.spring.application.external.api.individual.converter;
 
-import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.namo.spring.application.external.api.individual.dto.ScheduleResponse;
+import com.namo.spring.core.common.utils.DateUtil;
 import com.namo.spring.db.mysql.domains.group.domain.MoimMemo;
 import com.namo.spring.db.mysql.domains.group.domain.MoimMemoLocationImg;
 import com.namo.spring.db.mysql.domains.group.domain.MoimScheduleAlarm;
@@ -23,18 +23,13 @@ public class ScheduleResponseConverter {
 	}
 
 	public static ScheduleResponse.GetScheduleDto toGetScheduleRes(ScheduleProjection.ScheduleDto scheduleDto) {
-		Long startDate = scheduleDto.getStartDate()
-			.atZone(ZoneId.systemDefault())
-			.toInstant()
-			.getEpochSecond();
-		Long endDate = scheduleDto.getEndDate().atZone(ZoneId.systemDefault()).toInstant().getEpochSecond();
 		List<Integer> alarmDates = scheduleDto.getAlarms().stream().map(Alarm::getAlarmDate).toList();
 
 		return ScheduleResponse.GetScheduleDto.builder()
 			.scheduleId(scheduleDto.getScheduleId())
 			.name(scheduleDto.getName())
-			.startDate(startDate)
-			.endDate(endDate)
+			.startDate(DateUtil.toSeconds(scheduleDto.getStartDate()))
+			.endDate(DateUtil.toSeconds(scheduleDto.getEndDate()))
 			.alarmDate(alarmDates)
 			.interval(scheduleDto.getInterval())
 			.x(scheduleDto.getX())
@@ -48,22 +43,14 @@ public class ScheduleResponseConverter {
 	}
 
 	public static ScheduleResponse.GetScheduleDto toGetScheduleRes(MoimScheduleProjection.ScheduleDto scheduleDto) {
-		Long startDate = scheduleDto.getStartDate()
-			.atZone(ZoneId.systemDefault())
-			.toInstant()
-			.getEpochSecond();
-		Long endDate = scheduleDto.getEndDate()
-			.atZone(ZoneId.systemDefault())
-			.toInstant()
-			.getEpochSecond();
 		List<Integer> alarmDates = scheduleDto.getAlarms().stream()
 			.map(MoimScheduleAlarm::getAlarmDate).toList();
 
 		return ScheduleResponse.GetScheduleDto.builder()
 			.scheduleId(scheduleDto.getScheduleId())
 			.name(scheduleDto.getName())
-			.startDate(startDate)
-			.endDate(endDate)
+			.startDate(DateUtil.toSeconds(scheduleDto.getStartDate()))
+			.endDate(DateUtil.toSeconds(scheduleDto.getEndDate()))
 			.alarmDate(alarmDates)
 			.interval(scheduleDto.getInterval())
 			.x(scheduleDto.getX())
@@ -90,10 +77,7 @@ public class ScheduleResponseConverter {
 		return ScheduleResponse.DiaryDto.builder()
 			.scheduleId(diaryDto.getScheduleId())
 			.name(diaryDto.getName())
-			.startDate(diaryDto.getStartDate()
-				.atZone(ZoneId.systemDefault())
-				.toInstant()
-				.getEpochSecond())
+			.startDate(DateUtil.toSeconds(diaryDto.getStartDate()))
 			.contents(diaryDto.getContents())
 			.categoryId(diaryDto.getCategoryId())
 			.color(diaryDto.getColor())
@@ -108,12 +92,7 @@ public class ScheduleResponseConverter {
 		return ScheduleResponse.DiaryDto.builder()
 			.scheduleId(moimScheduleAndUser.getMoimSchedule().getId())
 			.name(moimScheduleAndUser.getMoimSchedule().getName())
-			.startDate(moimScheduleAndUser.getMoimSchedule()
-				.getPeriod()
-				.getStartDate()
-				.atZone(ZoneId.systemDefault())
-				.toInstant()
-				.getEpochSecond())
+			.startDate(DateUtil.toSeconds((moimScheduleAndUser.getMoimSchedule().getPeriod().getStartDate())))
 			.contents(moimScheduleAndUser.getMemo())
 			.categoryId(moimScheduleAndUser.getCategory().getId())
 			.color(moimScheduleAndUser.getCategory().getPalette().getId())

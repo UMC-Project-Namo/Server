@@ -1,6 +1,5 @@
 package com.namo.spring.application.external.api.group.converter;
 
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -9,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.SliceImpl;
 
 import com.namo.spring.application.external.api.group.dto.GroupDiaryResponse;
+import com.namo.spring.core.common.utils.DateUtil;
 import com.namo.spring.db.mysql.domains.group.domain.MoimMemo;
 import com.namo.spring.db.mysql.domains.group.domain.MoimMemoLocation;
 import com.namo.spring.db.mysql.domains.group.domain.MoimMemoLocationAndUser;
@@ -26,17 +26,13 @@ public class MoimDiaryResponseConverter {
 		MoimMemo moimMemo,
 		List<MoimMemoLocation> moimMemoLocations,
 		List<MoimMemoLocationAndUser> moimMemoLocationAndUsers) {
-		Long startDate = moimMemo.getMoimSchedule().getPeriod().getStartDate()
-			.atZone(ZoneId.systemDefault())
-			.toInstant()
-			.getEpochSecond();
 		List<GroupDiaryResponse.GroupUserDto> users = moimMemo.getMoimSchedule().getMoimScheduleAndUsers().stream()
 			.map(MoimDiaryResponseConverter::toGroupUserDto)
 			.toList();
 		return GroupDiaryResponse.MoimDiaryDto
 			.builder()
 			.name(moimMemo.getMoimSchedule().getName())
-			.startDate(startDate)
+			.startDate(DateUtil.toSeconds(moimMemo.getMoimSchedule().getPeriod().getStartDate()))
 			.locationName(moimMemo.getMoimSchedule().getLocation().getLocationName())
 			.users(users)
 			.moimActivityDtos(toMoimActivityDtos(moimMemoLocations, moimMemoLocationAndUsers))
@@ -103,17 +99,13 @@ public class MoimDiaryResponseConverter {
 	}
 
 	public static GroupDiaryResponse.DiaryDto toDiaryDto(Schedule schedule) {
-		Long startDate = schedule.getPeriod().getStartDate()
-			.atZone(ZoneId.systemDefault())
-			.toInstant()
-			.getEpochSecond();
 		List<String> urls = schedule.getImages().stream()
 			.map(Image::getImgUrl)
 			.toList();
 		return GroupDiaryResponse.DiaryDto.builder()
 			.scheduleId(schedule.getId())
 			.name(schedule.getName())
-			.startDate(startDate)
+			.startDate(DateUtil.toSeconds(schedule.getPeriod().getStartDate()))
 			.contents(schedule.getContents())
 			.urls(urls)
 			.categoryId(schedule.getCategory().getId())
@@ -123,10 +115,6 @@ public class MoimDiaryResponseConverter {
 	}
 
 	public static GroupDiaryResponse.DiaryDto toDiaryDto(MoimScheduleAndUser moimScheduleAndUser) {
-		Long startDate = moimScheduleAndUser.getMoimSchedule().getPeriod().getStartDate()
-			.atZone(ZoneId.systemDefault())
-			.toInstant()
-			.getEpochSecond();
 		List<String> urls = moimScheduleAndUser.getMoimSchedule().getMoimMemo()
 			.getMoimMemoLocations()
 			.stream()
@@ -139,7 +127,7 @@ public class MoimDiaryResponseConverter {
 		return GroupDiaryResponse.DiaryDto.builder()
 			.scheduleId(moimScheduleAndUser.getMoimSchedule().getId())
 			.name(moimScheduleAndUser.getMoimSchedule().getName())
-			.startDate(startDate)
+			.startDate(DateUtil.toSeconds(moimScheduleAndUser.getMoimSchedule().getPeriod().getStartDate()))
 			.contents(moimScheduleAndUser.getMemo())
 			.urls(urls)
 			.categoryId(moimScheduleAndUser.getCategory().getId())

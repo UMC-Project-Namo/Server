@@ -51,4 +51,14 @@ public class DateUtil {
 	public static LocalDateTime toLocalDateTime(Date date) {
 		return Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
 	}
+
+	/**
+	 * LocalDateTime을 Long(초)으로 변환
+	 */
+	public static Long toSeconds(LocalDateTime localDateTime) {
+		return localDateTime
+			.atZone(ZoneId.systemDefault())
+			.toInstant()
+			.getEpochSecond();
+	}
 }
