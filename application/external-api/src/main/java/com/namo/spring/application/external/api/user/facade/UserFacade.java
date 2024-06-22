@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,7 +15,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,10 +33,13 @@ import com.namo.spring.application.external.api.user.converter.UserConverter;
 import com.namo.spring.application.external.api.user.converter.UserResponseConverter;
 import com.namo.spring.application.external.api.user.dto.UserRequest;
 import com.namo.spring.application.external.api.user.dto.UserResponse;
+import com.namo.spring.application.external.api.user.helper.JwtAuthHelper;
 import com.namo.spring.application.external.api.user.service.UserService;
 import com.namo.spring.application.external.global.common.constant.FilePath;
+import com.namo.spring.application.external.global.common.security.jwt.CustomJwts;
+import com.namo.spring.application.external.global.common.security.jwt.JwtClaimsParserUtil;
+import com.namo.spring.application.external.global.common.security.jwt.access.AccessTokenClaimKeys;
 import com.namo.spring.application.external.global.utils.FileUtils;
-import com.namo.spring.application.external.global.utils.JwtUtils;
 import com.namo.spring.application.external.global.utils.SocialUtils;
 import com.namo.spring.client.social.apple.client.AppleAuthClient;
 import com.namo.spring.client.social.apple.dto.AppleResponse;
@@ -48,6 +49,8 @@ import com.namo.spring.client.social.common.utils.AppleUtils;
 import com.namo.spring.client.social.kakao.client.KakaoAuthClient;
 import com.namo.spring.client.social.naver.client.NaverAuthClient;
 import com.namo.spring.db.mysql.domains.group.domain.MoimScheduleAndUser;
+import com.namo.spring.core.infra.common.jwt.JwtClaims;
+import com.namo.spring.core.infra.common.jwt.JwtProvider;
 import com.namo.spring.db.mysql.domains.individual.domain.Category;
 import com.namo.spring.db.mysql.domains.individual.domain.Image;
 import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
@@ -70,9 +73,11 @@ import lombok.extern.slf4j.Slf4j;
 public class UserFacade {
 	private final Logger logger = LoggerFactory.getLogger(UserFacade.class);
 	private final SocialUtils socialUtils;
-	private final JwtUtils jwtUtils;
 	private final FileUtils fileUtils;
-	private final RedisTemplate<String, String> redisTemplate;
+
+	private final JwtAuthHelper jwtAuthHelper;
+	private final JwtProvider accessTokenProvider; // HACK: 2024.06.22. 임시로 추가한 의존성 - 루카
+	private final JwtProvider refreshTokenProvider; // HACK: 2024.06.22. 임시로 추가한 의존성 - 루카
 
 	private final UserService userService;
 	private final PaletteService paletteService;
@@ -90,6 +95,7 @@ public class UserFacade {
 	private final AppleUtils appleUtils;
 	private final AppleProperties appleProperties;
 
+	// TODO: 2024.06.22. 추후에 Social Login을 한번에 처리할 수 있는 Util 클래스로 묶기 - 루카
 	@Transactional
 	public UserResponse.SignUpDto signupKakao(UserRequest.SocialSignUpDto signUpDto, SocialType socialType) {
 		HttpURLConnection con = socialUtils.connectKakaoResourceServer(signUpDto);
@@ -97,29 +103,11 @@ public class UserFacade {
 
 		String result = socialUtils.findSocialLoginUsersInfo(con);
 
-		log.debug("result = " + result);
-
 		Map<String, String> response = socialUtils.findResponseFromKakako(result);
-		User user = UserConverter.toUser(response, signUpDto.getSocialRefreshToken(), socialType);
-
-		Object[] objects = saveOrNot(user, socialType, signUpDto.getSocialRefreshToken()); //기존 유저인지 확인하고 신규 유저이면 저장
-		User savedUser = (User)objects[0];
-		boolean isNewUser = (boolean)objects[1];
-
-		List<UserResponse.TermsDto> terms = TermConverter.toTerms(userService.getTerms(savedUser));
-
-		String[] tokens = jwtUtils.generateTokens(savedUser.getId());
-
-		UserResponse.SignUpDto signUpRes = UserResponseConverter.toSignUpDto(
-			tokens[0],
-			tokens[1],
-			isNewUser,
-			terms
-		); //access, refresh순
-		userService.updateRefreshToken(savedUser.getId(), signUpRes.getRefreshToken());
-		return signUpRes;
+		return getSignUpDto(signUpDto, socialType, response);
 	}
 
+	// TODO: 2024.06.22. 추후에 Social Login을 한번에 처리할 수 있는 Util 클래스로 묶기 - 루카
 	@Transactional
 	public UserResponse.SignUpDto signupNaver(UserRequest.SocialSignUpDto signUpDto, SocialType socialType) {
 		HttpURLConnection con = socialUtils.connectNaverResourceServer(signUpDto);
@@ -128,20 +116,10 @@ public class UserFacade {
 		String result = socialUtils.findSocialLoginUsersInfo(con);
 
 		Map<String, String> response = socialUtils.findResponseFromNaver(result);
-		User user = UserConverter.toUser(response, signUpDto.getSocialRefreshToken(), socialType);
-
-		Object[] objects = saveOrNot(user, socialType, signUpDto.getSocialRefreshToken());
-		User savedUser = (User)objects[0];
-		boolean isNewUser = (boolean)objects[1];
-
-		List<UserResponse.TermsDto> terms = TermConverter.toTerms(userService.getTerms(savedUser));
-
-		String[] tokens = jwtUtils.generateTokens(savedUser.getId());
-		UserResponse.SignUpDto signUpRes = UserResponseConverter.toSignUpDto(tokens[0], tokens[1], isNewUser, terms);
-		userService.updateRefreshToken(savedUser.getId(), signUpRes.getRefreshToken());
-		return signUpRes;
+		return getSignUpDto(signUpDto, socialType, response);
 	}
 
+	// TODO: 2024.06.22. 추후에 Social Login을 한번에 처리할 수 있는 Util 클래스로 묶기 - 루카
 	@Transactional
 	public UserResponse.SignUpDto signupApple(UserRequest.AppleSignUpDto req, SocialType socialType) {
 		AppleResponse.ApplePublicKeyListDto applePublicKeys = appleAuthClient.getApplePublicKeys();//애플 퍼블릭 키 조회
@@ -200,68 +178,62 @@ public class UserFacade {
 			isNewUser = false;
 		}
 
+		return getSignUpDto(savedUser, isNewUser);
+	}
+
+	// HACK: 2024.06.22. getSignUpDto 메서드를 추출하기위한 임시메서드 - 루카
+	private UserResponse.SignUpDto getSignUpDto(
+		UserRequest.SocialSignUpDto signUpDto,
+		SocialType socialType,
+		Map<String, String> response
+	) {
+		User user = UserConverter.toUser(response, signUpDto.getSocialRefreshToken(), socialType);
+
+		Object[] objects = saveOrNot(user, socialType, signUpDto.getSocialRefreshToken());
+		User savedUser = (User)objects[0];
+		boolean isNewUser = (boolean)objects[1];
+
+		return getSignUpDto(savedUser, isNewUser);
+	}
+
+	// HACK: 2024.06.22. getSignUpDto 메서드를 추출하기위한 임시메서드 - 루카
+	private UserResponse.SignUpDto getSignUpDto(User savedUser, boolean isNewUser) {
 		List<UserResponse.TermsDto> terms = TermConverter.toTerms(userService.getTerms(savedUser));
-		String[] tokens = jwtUtils.generateTokens(savedUser.getId());
-		UserResponse.SignUpDto signUpRes = UserResponseConverter.toSignUpDto(tokens[0], tokens[1], isNewUser, terms);
-		userService.updateRefreshToken(savedUser.getId(), signUpRes.getRefreshToken());
+
+		CustomJwts jwts = jwtAuthHelper.createToken(savedUser);
+
+		UserResponse.SignUpDto signUpRes = UserResponseConverter.toSignUpDto(
+			jwts.accessToken(),
+			jwts.refreshToken(),
+			isNewUser,
+			terms
+		);
+
+		jwtAuthHelper.refresh(jwts.refreshToken());
+
 		return signUpRes;
 	}
 
 	@Transactional
 	public UserResponse.ReissueDto reissueAccessToken(UserRequest.SignUpDto signUpDto) {
-		userService.checkRefreshTokenValidation(signUpDto.getRefreshToken());
+		jwtAuthHelper.validateRefreshTokenExpired(signUpDto.getRefreshToken());
 		userService.checkLogoutUser(signUpDto);
 
 		User user = userService.getUserByRefreshToken(signUpDto.getRefreshToken());
-		String[] tokens = jwtUtils.generateTokens(user.getId());
-		UserResponse.ReissueDto reissueRes = UserResponseConverter.toReissueDto(tokens[0], tokens[1]);
+		CustomJwts jwts = jwtAuthHelper.createToken(user);
+		UserResponse.ReissueDto reissueRes = UserResponseConverter.toReissueDto(jwts.accessToken(),
+			jwts.refreshToken());
 		user.updateRefreshToken(reissueRes.getRefreshToken());
 		return reissueRes;
 	}
 
+	// TODO: 2024.06.22. 추후에 api를 수정하거나 Service를 분리하는 등 수정해야할 듯? - 루카
 	@Transactional
 	public void logout(UserRequest.LogoutDto logoutDto) {
-		// AccessToken 만료시 종료
-		userService.checkAccessTokenValidation(logoutDto.getAccessToken());
-
-		Long expiration = jwtUtils.getExpiration(logoutDto.getAccessToken());
-		redisTemplate.opsForValue().set(logoutDto.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
-	}
-
-	private Object[] saveOrNot(User user, SocialType socialType, String socialRefreshToken) {
-		Optional<User> userByEmail = userService.getUserByEmailAndSocialType(user.getEmail(), socialType);
-		if (userByEmail.isEmpty()) {
-			log.debug("userByEmail is empty");
-			User save = userService.createUser(user);
-			makeBaseCategory(save);
-			boolean isNewUser = true;
-			return new Object[] {save, isNewUser};
-		}
-		User exitingUser = userByEmail.get();
-		exitingUser.setStatus(UserStatus.ACTIVE);
-		exitingUser.updateSocialRefreshToken(socialRefreshToken);
-		boolean isNewUser = false;
-		return new Object[] {exitingUser, isNewUser};
-	}
-
-	private void makeBaseCategory(User save) {
-		Category baseCategory = CategoryConverter.toCategory(
-			CategoryKind.SCHEDULE.getCategoryName(),
-			paletteService.getReferenceById(1L),
-			Boolean.TRUE,
-			save,
-			CategoryKind.SCHEDULE
-		);
-		Category groupCategory = CategoryConverter.toCategory(
-			CategoryKind.MOIM.getCategoryName(),
-			paletteService.getReferenceById(4L),
-			Boolean.TRUE,
-			save,
-			CategoryKind.MOIM
-		);
-
-		categoryService.createCategory(baseCategory);
-		categoryService.createCategory(groupCategory);
+		JwtClaims jwtClaims = accessTokenProvider.parseJwtClaimsFromToken(logoutDto.getAccessToken());
+		Long userId = JwtClaimsParserUtil.getClaimValue(jwtClaims, AccessTokenClaimKeys.USER_ID.getValue(), Long.class);
+		String refreshToken = jwtAuthHelper.getRefreshToken(userId);
+		jwtAuthHelper.removeJwtsToken(userId, logoutDto.getAccessToken(), refreshToken);
 	}
 
 	@Transactional(readOnly = false)
@@ -273,14 +245,7 @@ public class UserFacade {
 
 	@Transactional
 	public void removeKakaoUser(HttpServletRequest request) {
-		//유저 토큰 만료시 예외 처리
-		String accessToken = jwtUtils.getAccessToken(request);
-		logger.info("accessToken : {}", accessToken);
-		userService.checkAccessTokenValidation(accessToken);
-
-		//kakao social access token 조회
-		User user = userService.getUser(jwtUtils.resolveRequest(request));
-		logger.info("kakao SocialRefreshToken : {}", user.getSocialRefreshToken());
+		User user = getUserFromRequest(request);
 		String kakaoAccessToken = kakaoAuthClient.getAccessToken(user.getSocialRefreshToken());
 
 		//kakao unlink
@@ -291,13 +256,7 @@ public class UserFacade {
 
 	@Transactional
 	public void removeNaverUser(HttpServletRequest request) {
-		//유저 토큰 만료시 예외 처리
-		String accessToken = jwtUtils.getAccessToken(request);
-		userService.checkAccessTokenValidation(accessToken);
-
-		//naver social access token 조회
-		logger.debug("userId : " + jwtUtils.resolveRequest(request));
-		User user = userService.getUser(jwtUtils.resolveRequest(request));
+		User user = getUserFromRequest(request);
 		String naverAccessToken = naverAuthClient.getAccessToken(user.getSocialRefreshToken());
 
 		//naver unlink
@@ -308,16 +267,10 @@ public class UserFacade {
 
 	@Transactional
 	public void removeAppleUser(HttpServletRequest request) {
-		//유저 토큰 만료시 예외 처리
-		String accessToken = jwtUtils.getAccessToken(request);
-		userService.checkAccessTokenValidation(accessToken);
+		User user = getUserFromRequest(request);
 
 		String clientSecret = createClientSecret();
-
-		//apple social access token 조회
-		User user = userService.getUser(jwtUtils.resolveRequest(request));
 		String appleAccessToken = appleAuthClient.getAppleAccessToken(clientSecret, user.getSocialRefreshToken());
-		logger.debug("appleToken {}", appleAccessToken);
 
 		//apple unlink
 		appleAuthClient.revoke(clientSecret, appleAccessToken);
@@ -339,15 +292,6 @@ public class UserFacade {
 			.setSubject(appleProperties.getClientId())
 			.signWith(SignatureAlgorithm.ES256, appleUtils.getPrivateKey())
 			.compact();
-	}
-
-	private void setUserInactive(HttpServletRequest request, User user) {
-		user.setStatus(UserStatus.INACTIVE);
-
-		//token 만료처리
-		String accessToken = jwtUtils.getAccessToken(request);
-		Long expiration = jwtUtils.getExpiration(accessToken);
-		redisTemplate.opsForValue().set(accessToken, "delete", expiration, TimeUnit.MILLISECONDS);
 	}
 
 	/**
@@ -390,5 +334,60 @@ public class UserFacade {
 			}
 		);
 
+	}
+
+	private Object[] saveOrNot(User user, SocialType socialType, String socialRefreshToken) {
+		Optional<User> userByEmail = userService.getUserByEmailAndSocialType(user.getEmail(), socialType);
+		if (userByEmail.isEmpty()) {
+			log.debug("userByEmail is empty");
+			User save = userService.createUser(user);
+			makeBaseCategory(save);
+			boolean isNewUser = true;
+			return new Object[] {save, isNewUser};
+		}
+		User exitingUser = userByEmail.get();
+		exitingUser.setStatus(UserStatus.ACTIVE);
+		exitingUser.updateSocialRefreshToken(socialRefreshToken);
+		boolean isNewUser = false;
+		return new Object[] {exitingUser, isNewUser};
+	}
+
+	private void makeBaseCategory(User save) {
+		Category baseCategory = CategoryConverter.toCategory(
+			CategoryKind.SCHEDULE.getCategoryName(),
+			paletteService.getReferenceById(1L),
+			Boolean.TRUE,
+			save,
+			CategoryKind.SCHEDULE
+		);
+		Category groupCategory = CategoryConverter.toCategory(
+			CategoryKind.MOIM.getCategoryName(),
+			paletteService.getReferenceById(4L),
+			Boolean.TRUE,
+			save,
+			CategoryKind.MOIM
+		);
+
+		categoryService.create(baseCategory);
+		categoryService.create(groupCategory);
+	}
+
+	// HACK: 2024.06.22. social logout을 위해 작성된 임시 메서드 - 루카
+	private User getUserFromRequest(HttpServletRequest request) {
+		String accessToken = jwtAuthHelper.getAccessToken(request);
+		jwtAuthHelper.validateAccessTokenExpired(accessToken);
+
+		JwtClaims claims = accessTokenProvider.parseJwtClaimsFromToken(accessToken);
+		Long userId = JwtClaimsParserUtil.getClaimValue(claims, AccessTokenClaimKeys.USER_ID.getValue(), Long.class);
+		return userService.getUser(userId);
+	}
+
+	private void setUserInactive(HttpServletRequest request, User user) {
+		user.setStatus(UserStatus.INACTIVE);
+
+		//token 만료처리
+		String accessToken = jwtAuthHelper.getAccessToken(request);
+		String refreshToken = jwtAuthHelper.getRefreshToken(user.getId());
+		jwtAuthHelper.removeJwtsToken(user.getId(), accessToken, refreshToken);
 	}
 }

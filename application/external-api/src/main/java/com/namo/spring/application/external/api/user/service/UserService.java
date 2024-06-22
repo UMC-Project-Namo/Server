@@ -15,22 +15,21 @@ import java.util.Optional;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import com.namo.spring.db.mysql.domains.user.domain.Term;
-import com.namo.spring.db.mysql.domains.user.domain.User;
-import com.namo.spring.db.mysql.domains.user.type.SocialType;
-import com.namo.spring.db.mysql.domains.user.type.UserStatus;
-import com.namo.spring.db.mysql.domains.user.repository.TermRepository;
-import com.namo.spring.db.mysql.domains.user.repository.UserRepository;
 import com.namo.spring.application.external.api.user.dto.UserRequest;
-import com.namo.spring.application.external.global.utils.JwtUtils;
-import com.namo.spring.client.social.common.properties.AppleProperties;
+import com.namo.spring.application.external.api.user.helper.JwtAuthHelper;
 import com.namo.spring.client.social.apple.dto.AppleResponse;
+import com.namo.spring.client.social.common.properties.AppleProperties;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.exception.UserException;
+import com.namo.spring.db.mysql.domains.user.domain.Term;
+import com.namo.spring.db.mysql.domains.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.repository.TermRepository;
+import com.namo.spring.db.mysql.domains.user.repository.UserRepository;
+import com.namo.spring.db.mysql.domains.user.type.SocialType;
+import com.namo.spring.db.mysql.domains.user.type.UserStatus;
+import com.namo.spring.db.redis.cache.forbidden.ForbiddenTokenService;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -38,17 +37,18 @@ import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class UserService {
 
 	private final UserRepository userRepository;
 	private final TermRepository termRepository;
 
+	private final JwtAuthHelper jwtAuthHelper;
+	private final ForbiddenTokenService forbiddenTokenService;
+
 	private final AppleProperties appleProperties;
-	private final JwtUtils jwtUtils;
-	private final RedisTemplate<String, String> redisTemplate;
 
 	public List<Term> getTerms(User user) {
 		return termRepository.findTermsByUser(user);
@@ -80,8 +80,18 @@ public class UserService {
 		return userRepository.findUsersByStatusAndDate(UserStatus.INACTIVE, LocalDateTime.now().minusDays(3));
 	}
 
+	/**
+	 * 사용자의 refreshToken을 업데이트합니다.
+	 *
+	 * @deprecated {@link JwtAuthHelper#refresh(String)} 메서드를 사용합니다.
+	 *
+	 * @param userId       : 사용자 ID
+	 * @param refreshToken : 새로운 refreshToken
+	 */
+	@Deprecated(since = "JwtAuthHelper 클래스의 refresh 메서드를 사용합니다.", forRemoval = true)
 	public void updateRefreshToken(Long userId, String refreshToken) {
-		User user = userRepository.findById(userId).orElseThrow(() -> new UserException(ErrorStatus.NOT_FOUND_USER_FAILURE));
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new UserException(ErrorStatus.NOT_FOUND_USER_FAILURE));
 		user.updateRefreshToken(refreshToken);
 	}
 
@@ -108,21 +118,38 @@ public class UserService {
 		}
 	}
 
+	/**
+	 * 사용자의 accessToken이 만료되었는지 확인합니다.
+	 *
+	 * @param accessToken : 사용자의 accessToken
+	 * @throws UserException <br/>
+	 *                       - {@link ErrorStatus#EXPIRATION_ACCESS_TOKEN} : accessToken이 만료되었을 때
+	 * @deprecated 이후 spring security가 적용되면 사용되지 않을 예정입니다.
+	 */
+	@Deprecated(since = "이후 spring security가 적용되면 사용되지 않을 예정입니다.")
 	public void checkAccessTokenValidation(String accessToken) {
-		if (!jwtUtils.validateToken(accessToken)) {
+		if (!jwtAuthHelper.validateAccessTokenExpired(accessToken)) {
 			throw new UserException(ErrorStatus.EXPIRATION_ACCESS_TOKEN);
 		}
 	}
 
+	/**
+	 * 사용자의 refreshToken이 만료되었는지 확인합니다.
+	 *
+	 * @param refreshToken : 사용자의 refreshToken
+	 * @throws UserException <br/>
+	 *                       - {@link ErrorStatus#EXPIRATION_REFRESH_TOKEN} : refreshToken이 만료되었을 때
+	 * @deprecated 이후 spring security가 적용되면 사용되지 않을 예정입니다.
+	 */
+	@Deprecated(since = "이후 spring security가 적용되면 사용되지 않을 예정입니다.")
 	public void checkRefreshTokenValidation(String refreshToken) {
-		if (!jwtUtils.validateToken(refreshToken)) {
+		if (!jwtAuthHelper.validateRefreshTokenExpired(refreshToken)) {
 			throw new UserException(ErrorStatus.EXPIRATION_REFRESH_TOKEN);
 		}
 	}
 
 	public void checkLogoutUser(UserRequest.SignUpDto signUpDto) {
-		String blackToken = redisTemplate.opsForValue().get(signUpDto.getAccessToken());
-		if (StringUtils.hasText(blackToken)) {
+		if (forbiddenTokenService.isForbidden(signUpDto.getAccessToken())) {
 			throw new UserException(ErrorStatus.LOGOUT_ERROR);
 		}
 	}
@@ -159,6 +186,14 @@ public class UserService {
 
 	}
 
+	/**
+	 * Apple로부터 받은 토큰을 검증합니다.
+	 *
+	 * @param publicKey : Apple로부터 받은 공개키
+	 * @param token     : Apple로부터 받은 토큰
+	 * @return 토큰이 유효하면 true, 그렇지 않으면 false
+	 */
+	// TODO: 2024.06.22. 추후 social-client 모듈료 이동해야합니다. - 루카
 	public boolean validateToken(PublicKey publicKey, String token) {
 		Claims claims = Jwts.parserBuilder().setSigningKey(publicKey).build().parseClaimsJws(token).getBody();
 

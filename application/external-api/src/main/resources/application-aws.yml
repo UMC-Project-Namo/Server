@@ -20,9 +20,6 @@ cloud:
       instanceProfile: true
       access-key: ${S3_ACCESS_KEY}
       secret-key: ${S3_SECRET_KEY}
-    redis:
-      host: ${REDIS_HOST:localhost}
-      port: ${REDIS_PORT:6379}
 
 moim:
   base-url-image: ${BASE_MOIM_IMAGE_URL}

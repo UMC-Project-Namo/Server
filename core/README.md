@@ -28,6 +28,14 @@
 - API Response Template
 - API Response Status(enum type)
 
+## Core-Infra Module
+
+- `:core:core-infra` 모듈은 다수의 모듈에서 사용될 수 있는 인프라 설정 및 기능을 제공한다.
+
+### 제공되는 기능
+
+- JwtProvider, JwtClaims
+
 ## Contributors
 
 | ![루카/최선규](https://avatars.githubusercontent.com/u/98688494?v=4) | ![매실/김현재](https://avatars.githubusercontent.com/u/41482946?v=4) |
@@ -37,3 +45,4 @@
 ## Update History
 
 - 2024.06.11: `core` 모듈 및 `core-common` 모듈 생성
+- 2024.06.21: `core-infra` 모듈 생성
