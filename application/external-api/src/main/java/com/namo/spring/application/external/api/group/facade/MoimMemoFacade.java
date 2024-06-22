@@ -132,7 +132,7 @@ public class MoimMemoFacade {
 		List<MoimMemoLocation> moimMemoLocations = moimMemoLocationService.getMoimMemoLocations(moimSchedule);
 		List<MoimMemoLocationAndUser> moimMemoLocationAndUsers
 			= moimMemoLocationService.getMoimMemoLocationAndUsers(moimMemoLocations);
-		return MoimDiaryResponseConverter.toMoimMemoDto(moimMemo, moimMemoLocations, moimMemoLocationAndUsers);
+		return MoimDiaryResponseConverter.toMoimDiaryDto(moimMemo, moimMemoLocations, moimMemoLocationAndUsers);
 	}
 
 	@Transactional(readOnly = true)
