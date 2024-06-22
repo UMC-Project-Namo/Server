@@ -55,15 +55,7 @@ public class ScheduleService {
 			endDate);
 		List<MoimScheduleProjection.ScheduleDto> moimSchedules = scheduleRepository.findMoimSchedulesByUserId(user,
 			startDate, endDate);
-
-		List<ScheduleResponse.GetScheduleDto> results = personalSchedules.stream()
-			.map(ScheduleResponseConverter::toGetScheduleRes)
-			.collect(Collectors.toList());
-		if (moimSchedules != null) {
-			results.addAll(moimSchedules.stream().map(ScheduleResponseConverter::toGetScheduleRes)
-				.collect(Collectors.toList()));
-		}
-		return results;
+		return ScheduleResponseConverter.toGetScheduleDtos(personalSchedules, moimSchedules);
 	}
 
 	public List<ScheduleResponse.GetScheduleDto> getAllMoimSchedulesByUser(User user) {

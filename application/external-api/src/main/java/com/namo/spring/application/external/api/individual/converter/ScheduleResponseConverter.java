@@ -127,4 +127,18 @@ public class ScheduleResponseConverter {
 				.collect(Collectors.toList()))
 			.build();
 	}
+
+	public static List<ScheduleResponse.GetScheduleDto> toGetScheduleDtos(
+		List<ScheduleProjection.ScheduleDto> personalSchedules,
+		List<MoimScheduleProjection.ScheduleDto> moimSchedules) {
+		List<ScheduleResponse.GetScheduleDto> results = personalSchedules.stream()
+			.map(ScheduleResponseConverter::toGetScheduleRes)
+			.collect(Collectors.toList());
+		if (moimSchedules != null) {
+			results.addAll(moimSchedules.stream().map(ScheduleResponseConverter::toGetScheduleRes)
+				.collect(Collectors.toList()));
+		}
+		return results;
+	}
+
 }
