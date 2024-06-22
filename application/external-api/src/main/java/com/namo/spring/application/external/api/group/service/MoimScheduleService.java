@@ -28,7 +28,7 @@ public class MoimScheduleService {
 	 * 자신이 모임에 소속된 사람이 아닐 시 모임에 대한 스케줄을 생성할 수 없게
 	 * 검증 처리가 있으면 좋을 듯합니다.
 	 */
-	public MoimSchedule create(MoimSchedule moimSchedule) {
+	public MoimSchedule createMoimSchedule(MoimSchedule moimSchedule) {
 		return moimScheduleRepository.save(moimSchedule);
 	}
 
@@ -47,7 +47,7 @@ public class MoimScheduleService {
 			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
 	}
 
-	public void remove(MoimSchedule moimSchedule) {
+	public void removeMoimSchedule(MoimSchedule moimSchedule) {
 		moimScheduleRepository.delete(moimSchedule);
 	}
 

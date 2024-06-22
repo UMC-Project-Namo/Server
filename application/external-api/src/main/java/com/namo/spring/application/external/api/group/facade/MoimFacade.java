@@ -59,7 +59,7 @@ public class MoimFacade {
 		}
 
 		Moim moim = MoimConverter.toMoim(groupName, url);
-		moimService.create(moim);
+		moimService.createMoim(moim);
 
 		MoimAndUser moimAndUser = MoimAndUserConverter
 			.toMoimAndUser(groupName, MOIM_USERS_COLOR[0], user, moim);

@@ -64,7 +64,7 @@ public class MoimScheduleFacade {
 		Location location = MoimScheduleConverter.toLocation(moimScheduleDto);
 		MoimSchedule moimSchedule = MoimScheduleConverter
 			.toMoimSchedule(moim, period, location, moimScheduleDto);
-		MoimSchedule savedMoimSchedule = moimScheduleService.create(moimSchedule);
+		MoimSchedule savedMoimSchedule = moimScheduleService.createMoimSchedule(moimSchedule);
 
 		createMoimScheduleAndUsers(moimScheduleDto.getUsers(), savedMoimSchedule, moim);
 
@@ -111,7 +111,7 @@ public class MoimScheduleFacade {
 
 		moimScheduleAndUserService.removeMoimScheduleAlarm(moimScheduleAndUsers);
 		moimScheduleAndUserService.removeMoimScheduleAndUser(moimSchedule);
-		moimScheduleService.remove(moimSchedule);
+		moimScheduleService.removeMoimSchedule(moimSchedule);
 	}
 
 	private void existMoimAndUser(Long userId, Moim moim) {
