@@ -41,5 +41,5 @@
     - `user` 도메인 모듈 분리 (`entity`, `repository` 패키지 `db-mysql` 모듈로 이동)
 - 2024.06.20
     - `individual` 도메인 모듈 분리 (`entity`, `repository` 패키지 `db-mysql` 모듈로 이동)
-- 2024.06.23
+- 2024.06.24
     - `group` 도메인 모듈 분리 (`entity`, `repository` 패키지 `db-mysql` 모듈로 이동)
