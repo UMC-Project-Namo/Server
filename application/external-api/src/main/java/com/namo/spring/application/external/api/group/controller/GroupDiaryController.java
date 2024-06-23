@@ -59,7 +59,7 @@ public class GroupDiaryController {
 		@Parameter(description = "참여자", example = "멍청이, 똑똑이") @RequestPart String participants
 	) {
 		GroupDiaryRequest.LocationDto locationDto = new GroupDiaryRequest.LocationDto(name, money, participants);
-		moimMemoFacade.create(moimScheduleId, locationDto, imgs);
+		moimMemoFacade.createMoimMemo(moimScheduleId, locationDto, imgs);
 		return ResponseDto.onSuccess(null);
 	}
 

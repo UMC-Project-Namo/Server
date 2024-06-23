@@ -46,7 +46,8 @@ public class MoimMemoFacade {
 	private final FileUtils fileUtils;
 
 	@Transactional(readOnly = false)
-	public void create(Long moimScheduleId, GroupDiaryRequest.LocationDto locationDto, List<MultipartFile> imgs) {
+	public void createMoimMemo(Long moimScheduleId, GroupDiaryRequest.LocationDto locationDto,
+		List<MultipartFile> imgs) {
 		MoimMemo moimMemo = getMoimMemo(moimScheduleId);
 		MoimMemoLocation moimMemoLocation = createMoimMemoLocation(moimMemo, locationDto);
 
@@ -58,7 +59,7 @@ public class MoimMemoFacade {
 		MoimSchedule moimSchedule = moimScheduleService.getMoimSchedule(moimScheduleId);
 		return moimMemoService.getMoimMemoOrNull(moimSchedule)
 			.orElseGet(
-				() -> moimMemoService.create(MoimMemoConverter.toMoimMemo(moimSchedule))
+				() -> moimMemoService.createMoimMemo(MoimMemoConverter.toMoimMemo(moimSchedule))
 			);
 	}
 

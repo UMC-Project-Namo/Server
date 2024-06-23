@@ -36,7 +36,7 @@ public class MoimMemoService {
 		moimMemoRepository.delete(moimMemo);
 	}
 
-	public MoimMemo create(MoimMemo moimMemo) {
+	public MoimMemo createMoimMemo(MoimMemo moimMemo) {
 		return moimMemoRepository.save(moimMemo);
 	}
 
