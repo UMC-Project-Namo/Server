@@ -9,18 +9,16 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.namo.spring.application.external.api.individual.converter.DiaryResponseConverter;
-import com.namo.spring.application.external.api.individual.service.ScheduleService;
 import com.namo.spring.application.external.api.individual.converter.ImageConverter;
-import com.namo.spring.application.external.api.individual.service.ImageService;
-import com.namo.spring.db.mysql.domains.individual.domain.Image;
-import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
 import com.namo.spring.application.external.api.individual.dto.DiaryResponse;
-
+import com.namo.spring.application.external.api.individual.service.ImageService;
+import com.namo.spring.application.external.api.individual.service.ScheduleService;
 import com.namo.spring.application.external.api.user.service.UserService;
-import com.namo.spring.db.mysql.domains.user.domain.User;
-
 import com.namo.spring.application.external.global.common.constant.FilePath;
 import com.namo.spring.application.external.global.utils.FileUtils;
+import com.namo.spring.db.mysql.domains.individual.domain.Image;
+import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
+import com.namo.spring.db.mysql.domains.user.domain.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -44,7 +42,7 @@ public class DiaryFacade {
 		if (imgs != null) {
 			List<String> urls = fileUtils.uploadImages(imgs, FilePath.INVITATION_ACTIVITY_IMG);
 			List<Image> imgList = urls.stream().map(url -> ImageConverter.toImage(url, schedule)).toList();
-			imageService.createImgs(imgList);
+			imageService.createImages(imgList);
 		}
 		return DiaryResponseConverter.toScheduleIdRes(schedule);
 	}
@@ -82,7 +80,7 @@ public class DiaryFacade {
 		List<String> urls = schedule.getImages().stream()
 			.map(Image::getImgUrl)
 			.toList();
-		imageService.removeImgsBySchedule(schedule);
+		imageService.removeImagesBySchedule(schedule);
 		fileUtils.deleteImages(urls, FilePath.INVITATION_ACTIVITY_IMG);
 	}
 }

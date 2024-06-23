@@ -19,6 +19,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.namo.spring.application.external.api.group.service.MoimAndUserService;
+import com.namo.spring.application.external.api.group.service.MoimMemoLocationService;
+import com.namo.spring.application.external.api.group.service.MoimScheduleAndUserService;
 import com.namo.spring.application.external.api.individual.converter.CategoryConverter;
 import com.namo.spring.application.external.api.individual.service.AlarmService;
 import com.namo.spring.application.external.api.individual.service.CategoryService;
@@ -32,10 +35,6 @@ import com.namo.spring.application.external.api.user.dto.UserRequest;
 import com.namo.spring.application.external.api.user.dto.UserResponse;
 import com.namo.spring.application.external.api.user.helper.JwtAuthHelper;
 import com.namo.spring.application.external.api.user.service.UserService;
-import com.namo.spring.application.external.domain.group.application.impl.MoimAndUserService;
-import com.namo.spring.application.external.domain.group.application.impl.MoimMemoLocationService;
-import com.namo.spring.application.external.domain.group.application.impl.MoimScheduleAndUserService;
-import com.namo.spring.application.external.domain.group.domain.MoimScheduleAndUser;
 import com.namo.spring.application.external.global.common.constant.FilePath;
 import com.namo.spring.application.external.global.common.security.jwt.CustomJwts;
 import com.namo.spring.application.external.global.common.security.jwt.JwtClaimsParserUtil;
@@ -51,6 +50,7 @@ import com.namo.spring.client.social.kakao.client.KakaoAuthClient;
 import com.namo.spring.client.social.naver.client.NaverAuthClient;
 import com.namo.spring.core.infra.common.jwt.JwtClaims;
 import com.namo.spring.core.infra.common.jwt.JwtProvider;
+import com.namo.spring.db.mysql.domains.group.domain.MoimScheduleAndUser;
 import com.namo.spring.db.mysql.domains.individual.domain.Category;
 import com.namo.spring.db.mysql.domains.individual.domain.Image;
 import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
@@ -233,7 +233,6 @@ public class UserFacade {
 		JwtClaims jwtClaims = accessTokenProvider.parseJwtClaimsFromToken(logoutDto.getAccessToken());
 		Long userId = JwtClaimsParserUtil.getClaimValue(jwtClaims, AccessTokenClaimKeys.USER_ID.getValue(), Long.class);
 		String refreshToken = jwtAuthHelper.getRefreshToken(userId);
-
 		jwtAuthHelper.removeJwtsToken(userId, logoutDto.getAccessToken(), refreshToken);
 	}
 
@@ -321,7 +320,7 @@ public class UserFacade {
 				List<Image> images = imageService.getImagesBySchedules(schedules);
 				List<String> urls = images.stream().map(Image::getImgUrl).collect(Collectors.toList());
 				fileUtils.deleteImages(urls, FilePath.INVITATION_ACTIVITY_IMG);
-				imageService.removeImgsBySchedules(schedules);
+				imageService.removeImagesBySchedules(schedules);
 				scheduleService.removeSchedules(schedules);
 
 				moimAndUserService.removeMoimAndUsersByUser(user);
@@ -369,8 +368,8 @@ public class UserFacade {
 			CategoryKind.MOIM
 		);
 
-		categoryService.create(baseCategory);
-		categoryService.create(groupCategory);
+		categoryService.createCategory(baseCategory);
+		categoryService.createCategory(groupCategory);
 	}
 
 	// HACK: 2024.06.22. social logout을 위해 작성된 임시 메서드 - 루카

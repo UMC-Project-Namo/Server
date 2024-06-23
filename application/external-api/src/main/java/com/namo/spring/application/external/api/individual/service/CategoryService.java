@@ -1,5 +1,11 @@
 package com.namo.spring.application.external.api.individual.service;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+
 import com.namo.spring.application.external.api.individual.dto.CategoryRequest;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.exception.IndividualException;
@@ -9,19 +15,15 @@ import com.namo.spring.db.mysql.domains.individual.repository.category.CategoryR
 import com.namo.spring.db.mysql.domains.individual.type.CategoryKind;
 import com.namo.spring.db.mysql.domains.individual.type.CategoryStatus;
 import com.namo.spring.db.mysql.domains.user.domain.User;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
 	private final CategoryRepository categoryRepository;
 
-	public Category create(Category category) {
+	public Category createCategory(Category category) {
 		return categoryRepository.save(category);
 	}
 
@@ -29,7 +31,7 @@ public class CategoryService {
 		return categoryRepository.findCategoriesByUserIdAndStatusEquals(userId, CategoryStatus.ACTIVE);
 	}
 
-	public void delete(Long categoryId, Long userId) {
+	public void deleteCategory(Long categoryId, Long userId) {
 		Category category = getCategory(categoryId);
 		validateUsersCategory(userId, category);
 		validateBaseCategory(category);
