@@ -48,9 +48,9 @@ import com.namo.spring.client.social.common.properties.AppleProperties;
 import com.namo.spring.client.social.common.utils.AppleUtils;
 import com.namo.spring.client.social.kakao.client.KakaoAuthClient;
 import com.namo.spring.client.social.naver.client.NaverAuthClient;
-import com.namo.spring.db.mysql.domains.group.domain.MoimScheduleAndUser;
 import com.namo.spring.core.infra.common.jwt.JwtClaims;
 import com.namo.spring.core.infra.common.jwt.JwtProvider;
+import com.namo.spring.db.mysql.domains.group.domain.MoimScheduleAndUser;
 import com.namo.spring.db.mysql.domains.individual.domain.Category;
 import com.namo.spring.db.mysql.domains.individual.domain.Image;
 import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
@@ -368,8 +368,8 @@ public class UserFacade {
 			CategoryKind.MOIM
 		);
 
-		categoryService.create(baseCategory);
-		categoryService.create(groupCategory);
+		categoryService.createCategory(baseCategory);
+		categoryService.createCategory(groupCategory);
 	}
 
 	// HACK: 2024.06.22. social logout을 위해 작성된 임시 메서드 - 루카
