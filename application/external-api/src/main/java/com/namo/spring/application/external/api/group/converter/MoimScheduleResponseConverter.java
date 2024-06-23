@@ -18,11 +18,11 @@ public class MoimScheduleResponseConverter {
 	}
 
 	public static List<GroupScheduleResponse.MoimScheduleDto> toMoimScheduleDtos(
-		List<Schedule> indivisualsSchedules,
+		List<Schedule> individualsSchedules,
 		List<MoimScheduleAndUser> moimScheduleAndUsers,
 		List<MoimAndUser> moimAndUsers
 	) {
-		List<GroupScheduleResponse.MoimScheduleDto> result = getMoimScheduleDtos(indivisualsSchedules, moimAndUsers);
+		List<GroupScheduleResponse.MoimScheduleDto> result = getMoimScheduleDtos(individualsSchedules, moimAndUsers);
 
 		Map<User, GroupScheduleResponse.MoimScheduleUserDto> moimScheduleUserDtoMap = getMoimScheduleUserDtoMap(
 			moimAndUsers);
@@ -33,14 +33,14 @@ public class MoimScheduleResponseConverter {
 	}
 
 	private static List<GroupScheduleResponse.MoimScheduleDto> getMoimScheduleDtos(
-		List<Schedule> indivisualsSchedules,
+		List<Schedule> individualsSchedules,
 		List<MoimAndUser> moimAndUsers
 	) {
 		Map<User, Integer> usersColor = moimAndUsers.stream().collect(
 			Collectors.toMap(
 				MoimAndUser::getUser, MoimAndUser::getColor
 			));
-		return indivisualsSchedules.stream()
+		return individualsSchedules.stream()
 			.map((schedule -> toMoimScheduleDto(schedule, usersColor.get(schedule.getUser()))))
 			.collect(Collectors.toList());
 	}
@@ -82,40 +82,45 @@ public class MoimScheduleResponseConverter {
 		List<GroupScheduleResponse.MoimScheduleDto> result,
 		Map<MoimSchedule, List<GroupScheduleResponse.MoimScheduleUserDto>> moimScheduleMappingUserDtoMap) {
 		for (MoimSchedule moimSchedule : moimScheduleMappingUserDtoMap.keySet()) {
-			GroupScheduleResponse.MoimScheduleDto moimScheduleDto = toMoimScheduleDto(moimSchedule);
-			moimScheduleDto.setUsers(
-				moimScheduleMappingUserDtoMap.get(moimSchedule),
-				moimSchedule.getMoim() == moimAndUsers.get(0).getMoim(),
-				moimSchedule.getMoimMemo() != null
-			);
+			GroupScheduleResponse.MoimScheduleDto moimScheduleDto =
+				GroupScheduleResponse.MoimScheduleDto.builder()
+					.name(moimSchedule.getName())
+					.startDate(DateUtil.toSeconds(moimSchedule.getPeriod().getStartDate()))
+					.endDate(DateUtil.toSeconds(moimSchedule.getPeriod().getEndDate()))
+					.interval(moimSchedule.getPeriod().getDayInterval())
+					.groupId(moimSchedule.getMoim().getId())
+					.moimScheduleId(moimSchedule.getId())
+					.x(moimSchedule.getLocation().getX())
+					.y(moimSchedule.getLocation().getY())
+					.locationName(moimSchedule.getLocation().getLocationName())
+					.kakaoLocationId(moimSchedule.getLocation().getKakaoLocationId())
+					.users(moimScheduleMappingUserDtoMap.get(moimSchedule))
+					.isCurMoimSchedule(moimSchedule.getMoim() == moimAndUsers.get(0).getMoim())
+					.hasDiaryPlace(moimSchedule.getMoimMemo() != null)
+					.build();
 			result.add(moimScheduleDto);
 		}
 	}
 
 	public static GroupScheduleResponse.MoimScheduleDto toMoimScheduleDto(Schedule schedule, Integer color) {
-		return new GroupScheduleResponse.MoimScheduleDto(
-			schedule.getName(),
-			schedule.getPeriod().getStartDate(),
-			schedule.getPeriod().getEndDate(),
-			schedule.getPeriod().getDayInterval(),
-			schedule.getUser().getId(),
-			schedule.getUser().getName(),
-			color
-		);
+		List<GroupScheduleResponse.MoimScheduleUserDto> users = List.of(
+			toMoimScheduleUserDto(schedule.getUser().getId(), schedule.getUser().getName(), color));
+		return GroupScheduleResponse.MoimScheduleDto.builder()
+			.name(schedule.getName())
+			.startDate(DateUtil.toSeconds(schedule.getPeriod().getStartDate()))
+			.endDate(DateUtil.toSeconds(schedule.getPeriod().getEndDate()))
+			.interval(schedule.getPeriod().getDayInterval())
+			.users(users)
+			.hasDiaryPlace(false)
+			.build();
 	}
 
-	public static GroupScheduleResponse.MoimScheduleDto toMoimScheduleDto(MoimSchedule moimSchedule) {
-		return GroupScheduleResponse.MoimScheduleDto.builder()
-			.name(moimSchedule.getName())
-			.startDate(DateUtil.toSeconds(moimSchedule.getPeriod().getStartDate()))
-			.endDate(DateUtil.toSeconds(moimSchedule.getPeriod().getEndDate()))
-			.interval(moimSchedule.getPeriod().getDayInterval())
-			.groupId(moimSchedule.getMoim().getId())
-			.moimScheduleId(moimSchedule.getId())
-			.x(moimSchedule.getLocation().getX())
-			.y(moimSchedule.getLocation().getY())
-			.locationName(moimSchedule.getLocation().getLocationName())
-			.kakaoLocationId(moimSchedule.getLocation().getKakaoLocationId())
+	public static GroupScheduleResponse.MoimScheduleUserDto toMoimScheduleUserDto(Long userId, String userName,
+		Integer color) {
+		return GroupScheduleResponse.MoimScheduleUserDto.builder()
+			.userId(userId)
+			.userName(userName)
+			.color(color)
 			.build();
 	}
 
