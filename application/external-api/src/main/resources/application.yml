@@ -6,19 +6,11 @@ spring:
       - auth.yml
       - swagger.yml
       - social-client.yml
+      - aws.yml
       - redis.yml
       - mysql.yml
       - logging.yml
   web.resources.add-mappings: false
-
-  profiles:
-    group:
-      local:
-        - aws
-      dev:
-        - aws
-      prod:
-        - aws
 
 server:
   port: ${APPLICATION_PORT:9000}

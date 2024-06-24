@@ -34,9 +34,6 @@ dependencies {
     annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
     annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
 
-    // Aws s3
-    implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.4'
-
     // documentation
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 

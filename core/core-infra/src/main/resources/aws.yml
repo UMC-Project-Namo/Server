@@ -1,8 +1,4 @@
 spring:
-  config:
-    activate:
-      on-profile: "aws"
-
   servlet:
     multipart:
       max-file-size: 20MB
@@ -23,3 +19,12 @@ cloud:
 
 moim:
   base-url-image: ${BASE_MOIM_IMAGE_URL}
+
+---
+spring.config.activate.on-profile: local
+
+---
+spring.config.activate.on-profile: dev
+
+---
+spring.config.activate.on-profile: prod
