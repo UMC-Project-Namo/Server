@@ -3,24 +3,21 @@ spring.profiles.active: local
 spring:
   config:
     import:
+      - auth.yml
+      - swagger.yml
       - social-client.yml
-      - logging.yml
       - redis.yml
       - mysql.yml
+      - logging.yml
   web.resources.add-mappings: false
 
   profiles:
     group:
       local:
-        - auth
-        - docs
         - aws
       dev:
-        - auth
-        - docs
         - aws
       prod:
-        - auth
         - aws
 
 server:
