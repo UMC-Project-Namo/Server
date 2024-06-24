@@ -32,8 +32,8 @@ public class RedisConfig {
 	private final int redisPort;
 
 	public RedisConfig(
-		@Value("${cloud.aws.redis.host}") String redisHost,
-		@Value("${cloud.aws.redis.port}") int redisPort
+		@Value("${cloud.redis.host}") String redisHost,
+		@Value("${cloud.redis.port}") int redisPort
 	) {
 		this.redisHost = redisHost;
 		this.redisPort = redisPort;
