@@ -1,6 +1,8 @@
 dependencies {
-    // spring
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // spring
     api group: 'org.springframework', name: 'spring-core', version: '6.1.4'
 
     // Jackson
