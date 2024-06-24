@@ -6,23 +6,21 @@ spring:
       - social-client.yml
       - logging.yml
       - redis.yml
+      - mysql.yml
   web.resources.add-mappings: false
 
   profiles:
     group:
       local:
         - auth
-        - db
         - docs
         - aws
       dev:
         - auth
-        - db
         - docs
         - aws
       prod:
         - auth
-        - db
         - aws
 
 server:
