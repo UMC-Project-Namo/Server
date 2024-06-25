@@ -1,4 +1,4 @@
-package com.namo.spring.application.external.global.common.constant;
+package com.namo.spring.core.infra.common.constant;
 
 import lombok.Getter;
 

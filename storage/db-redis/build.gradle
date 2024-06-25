@@ -1,6 +1,8 @@
 dependencies {
+    implementation project(':core:core-common')
+
     // redis
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    api 'org.springframework.boot:spring-boot-starter-data-redis'
 
     // test
     testImplementation "org.testcontainers:junit-jupiter:1.19.7"

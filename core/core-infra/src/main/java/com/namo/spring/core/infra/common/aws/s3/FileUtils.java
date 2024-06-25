@@ -1,4 +1,4 @@
-package com.namo.spring.application.external.global.utils;
+package com.namo.spring.core.infra.common.aws.s3;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.namo.spring.application.external.global.common.constant.FilePath;
+import com.namo.spring.core.infra.common.constant.FilePath;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.exception.UtilsException;
 
