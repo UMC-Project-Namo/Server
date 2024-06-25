@@ -35,19 +35,28 @@
 
 - Migration 파일 명명 규칙
   > V[Version]__[Description].sql
-    - Version : 버전정보 ( 정수 뿐만 아니라 소수, 날짜도 가능 )
+    - Version : 버전정보
+        - 1: 메이저 버전
+        - 0: 마이너 버전
+        - 0: 패치 버전
     - Separator : 언더바 **2개** __
     - Description : 파일 설명
+        - Create_[테이블명]_table : 테이블 생성
+        - Drop_[테이블명]_table : 테이블 삭제
+        - Add_[컬럼명]_column_to_[테이블명]_table : 테이블 컬럼 추가
+        - Drop_[컬럼명]_column_from_[테이블명]_table : 테이블 컬럼 삭제
+        - Refactor_[테이블명]_table: 테이블 리팩토링
+        - Add_foreign_key_to_[테이블명]_table
 
 - 파일명 예시
-
-    - **`V1__Initial_schema.sql`**: 초기 스키마 설정
-    - **`V2__Add_[테이블명]_table.sql`**:  테이블 추가
-    - **`V3__Add_index_to_[테이블명].sql`**: 인덱스 추가
-    - **`V4__Alter_[테이블명]_table_add_column.sql`**: 테이블에 컬럼 추가
+    - **`V1.0.0__Initial_schema.sql`** : 스키마 초기 설정
+    - **`V1.0.1__Add_age_column_to_user_table.sql`**
+    - **`V1.1.0__Drop_address_column_from_user_table.sql`**
+    - **`V2.0.0__Refactor_user_table.sql`**
 
 - 유의사항
     - migration 파일은 `:storage:db-mysql:src:main:resources:migration`에 위치한다.
+    - mysql.yml의 flyway.baseline-version 속성은 **해당 버전 이후**의 마이그레이션만 적용하는 속성이다.
     - 이미 적용된 migration 파일은 수정하지 않는다.
     - 새로운 변경사항은 항상 새 migration 파일로 작성한다.
 
