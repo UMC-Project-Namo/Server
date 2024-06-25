@@ -3,6 +3,7 @@
 - [Global Rule](#global-rule)
 - [DB-Mysql Module](#db-mysql-module)
     - [제공되는 기능](#제공되는-기능)
+    - [Flyway Migration Guideline](#Flyway Migration Guideline)
 - [Contributors](#contributors)
 - [Update History](#update-history)
 
@@ -29,6 +30,26 @@
     - QueryDSL
     - JPA
 - Entity
+
+### Flyway Migration Guideline
+
+- Migration 파일 명명 규칙
+  > V[Version]__[Description].sql
+    - Version : 버전정보 ( 정수 뿐만 아니라 소수, 날짜도 가능 )
+    - Separator : 언더바 **2개** __
+    - Description : 파일 설명
+
+- 파일명 예시
+
+    - **`V1__Initial_schema.sql`**: 초기 스키마 설정
+    - **`V2__Add_[테이블명]_table.sql`**:  테이블 추가
+    - **`V3__Add_index_to_[테이블명].sql`**: 인덱스 추가
+    - **`V4__Alter_[테이블명]_table_add_column.sql`**: 테이블에 컬럼 추가
+
+- 유의사항
+    - migration 파일은 `:storage:db-mysql:src:main:resources:migration`에 위치한다.
+    - 이미 적용된 migration 파일은 수정하지 않는다.
+    - 새로운 변경사항은 항상 새 migration 파일로 작성한다.
 
 ## DB-Redis Module
 
