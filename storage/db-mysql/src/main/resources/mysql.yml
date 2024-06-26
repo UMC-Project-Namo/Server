@@ -7,7 +7,6 @@ spring:
         default_batch_fetch_size: 100
         format_sql: true
         show_sql: true
-
 database:
   mysql:
     source:
@@ -24,11 +23,16 @@ spring.config.activate.on-profile: local
 spring:
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
       hibernate:
         format_sql: true
         show_sql: true
+  flyway:
+    enabled: true
+    baseline-version: 1.0.0
+    baseline-on-migrate: true
+    locations: classpath:db/migration
 
 storage:
   datasource:
@@ -72,6 +76,12 @@ logging:
 ---
 spring.config.activate.on-profile: dev
 
+spring:
+  flyway:
+    enabled: true
+    baseline-version: 0
+    baseline-on-migrate: true
+    locations: classpath:db/migration
 storage:
   datasource:
     mysql:
@@ -97,6 +107,7 @@ storage:
         cacheServerConfiguration: true
         elideSetAutoCommits: true
         maintainTimeStats: false
+
 
 ---
 spring.config.activate.on-profile: prod
