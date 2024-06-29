@@ -1,4 +1,4 @@
--- V1__initial_schema.sql
+-- V1.0.0__Initial_schema.sql
 
 -- Table structure for table `user`
 CREATE TABLE IF NOT EXISTS `user`
@@ -70,6 +70,17 @@ CREATE TABLE IF NOT EXISTS `moim_and_user`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
+-- Table structure for table `palette`
+CREATE TABLE IF NOT EXISTS `palette`
+(
+    `palette_id` bigint      NOT NULL,
+    `belong`     varchar(10) NOT NULL,
+    `color`      int         NOT NULL,
+    PRIMARY KEY (`palette_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci;
+
 -- Table structure for table `category`
 CREATE TABLE IF NOT EXISTS `category`
 (
@@ -87,6 +98,33 @@ CREATE TABLE IF NOT EXISTS `category`
     KEY `FKpfk8djhv5natgshmxiav6xkpu` (`user_id`),
     CONSTRAINT `FKjfi379el7jfjr9ne4011fr7fb` FOREIGN KEY (`palette_id`) REFERENCES `palette` (`palette_id`),
     CONSTRAINT `FKpfk8djhv5natgshmxiav6xkpu` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci;
+
+-- Table structure for table `schedule`
+CREATE TABLE IF NOT EXISTS `schedule`
+(
+    `schedule_id`        bigint      NOT NULL AUTO_INCREMENT,
+    `created_date`       datetime(6)               DEFAULT NULL,
+    `last_modified_date` datetime(6)               DEFAULT NULL,
+    `content`            varchar(255)              DEFAULT NULL,
+    `day_interval`       int                       DEFAULT NULL,
+    `end_date`           datetime(6) NOT NULL,
+    `kakao_location_id`  varchar(255)              DEFAULT NULL,
+    `location_name`      varchar(255)              DEFAULT NULL,
+    `x`                  double                    DEFAULT NULL,
+    `y`                  double                    DEFAULT NULL,
+    `name`               varchar(255)              DEFAULT NULL,
+    `start_date`         datetime(6) NOT NULL,
+    `status`             enum ('ACTIVE','DELETED') DEFAULT NULL,
+    `category_id`        bigint                    DEFAULT NULL,
+    `user_id`            bigint                    DEFAULT NULL,
+    PRIMARY KEY (`schedule_id`),
+    KEY `FKcxpxcq9isndm1ccspu6ftc3iy` (`category_id`),
+    KEY `FK758td0c8ulcqhjx4x4l9wdj9e` (`user_id`),
+    CONSTRAINT `FK758td0c8ulcqhjx4x4l9wdj9e` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
+    CONSTRAINT `FKcxpxcq9isndm1ccspu6ftc3iy` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
@@ -144,19 +182,6 @@ CREATE TABLE IF NOT EXISTS `moim_schedule`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
--- Table structure for table `moim_schedule_alarm`
-CREATE TABLE IF NOT EXISTS `moim_schedule_alarm`
-(
-    `moim_schedule_alarm_id` bigint NOT NULL AUTO_INCREMENT,
-    `alarm_date`             int    DEFAULT NULL,
-    `moim_schedule_user_id`  bigint DEFAULT NULL,
-    PRIMARY KEY (`moim_schedule_alarm_id`),
-    KEY `FK9s7c1m70rhigtpw6oskf0d5g8` (`moim_schedule_user_id`),
-    CONSTRAINT `FK9s7c1m70rhigtpw6oskf0d5g8` FOREIGN KEY (`moim_schedule_user_id`) REFERENCES `moim_schedule_and_user` (`group_schedule_user_id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci;
-
 -- Table structure for table `moim_schedule_and_user`
 CREATE TABLE IF NOT EXISTS `moim_schedule_and_user`
 (
@@ -179,6 +204,19 @@ CREATE TABLE IF NOT EXISTS `moim_schedule_and_user`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
+-- Table structure for table `moim_schedule_alarm`
+CREATE TABLE IF NOT EXISTS `moim_schedule_alarm`
+(
+    `moim_schedule_alarm_id` bigint NOT NULL AUTO_INCREMENT,
+    `alarm_date`             int    DEFAULT NULL,
+    `moim_schedule_user_id`  bigint DEFAULT NULL,
+    PRIMARY KEY (`moim_schedule_alarm_id`),
+    KEY `FK9s7c1m70rhigtpw6oskf0d5g8` (`moim_schedule_user_id`),
+    CONSTRAINT `FK9s7c1m70rhigtpw6oskf0d5g8` FOREIGN KEY (`moim_schedule_user_id`) REFERENCES `moim_schedule_and_user` (`group_schedule_user_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_0900_ai_ci;
+
 -- Table structure for table `moim_memo`
 CREATE TABLE IF NOT EXISTS `moim_memo`
 (
@@ -189,44 +227,6 @@ CREATE TABLE IF NOT EXISTS `moim_memo`
     PRIMARY KEY (`moim_memo_id`),
     UNIQUE KEY `UK_o1ppin7xcgbf3qhq8l78mh3yp` (`moim_schedule_id`),
     CONSTRAINT `FK75aqqgvqsawsevfqx7pk4j786` FOREIGN KEY (`moim_schedule_id`) REFERENCES `moim_schedule` (`moim_schedule_id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci;
-
--- Table structure for table `palette`
-CREATE TABLE IF NOT EXISTS `palette`
-(
-    `palette_id` bigint      NOT NULL,
-    `belong`     varchar(10) NOT NULL,
-    `color`      int         NOT NULL,
-    PRIMARY KEY (`palette_id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci;
-
--- Table structure for table `schedule`
-CREATE TABLE IF NOT EXISTS `schedule`
-(
-    `schedule_id`        bigint      NOT NULL AUTO_INCREMENT,
-    `created_date`       datetime(6)               DEFAULT NULL,
-    `last_modified_date` datetime(6)               DEFAULT NULL,
-    `content`            varchar(255)              DEFAULT NULL,
-    `day_interval`       int                       DEFAULT NULL,
-    `end_date`           datetime(6) NOT NULL,
-    `kakao_location_id`  varchar(255)              DEFAULT NULL,
-    `location_name`      varchar(255)              DEFAULT NULL,
-    `x`                  double                    DEFAULT NULL,
-    `y`                  double                    DEFAULT NULL,
-    `name`               varchar(255)              DEFAULT NULL,
-    `start_date`         datetime(6) NOT NULL,
-    `status`             enum ('ACTIVE','DELETED') DEFAULT NULL,
-    `category_id`        bigint                    DEFAULT NULL,
-    `user_id`            bigint                    DEFAULT NULL,
-    PRIMARY KEY (`schedule_id`),
-    KEY `FKcxpxcq9isndm1ccspu6ftc3iy` (`category_id`),
-    KEY `FK758td0c8ulcqhjx4x4l9wdj9e` (`user_id`),
-    CONSTRAINT `FK758td0c8ulcqhjx4x4l9wdj9e` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
-    CONSTRAINT `FKcxpxcq9isndm1ccspu6ftc3iy` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
