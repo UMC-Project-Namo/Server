@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,12 +30,14 @@ public class SecurityConfig {
 	private static final String[] ANONYMOUS_ENDPOINTS = {};
 	private static final String[] SWAGGER_ENDPOINTS = {};
 
+	private final CorsConfigurationSource corsConfigurationSource;
+
 	@Bean
 	@Profile({"local", "dev", "test"})
 	@Order(SecurityProperties.BASIC_AUTH_ORDER)
 	public SecurityFilterChain filterChainForDev(HttpSecurity http) throws Exception {
 		return defaultSecurity(http)
-			// .cors
+			.cors(cors -> cors.configurationSource(corsConfigurationSource))
 			.authorizeHttpRequests(
 				auth ->
 					defaultAuthorizeHttpRequest(auth)
@@ -48,7 +51,7 @@ public class SecurityConfig {
 	@Order(SecurityProperties.BASIC_AUTH_ORDER)
 	public SecurityFilterChain filterChainForProd(HttpSecurity http) throws Exception {
 		return defaultSecurity(http)
-			// .cors
+			.cors(cors -> cors.configurationSource(corsConfigurationSource))
 			.authorizeHttpRequests(auth -> defaultAuthorizeHttpRequest(auth).anyRequest().authenticated()
 			).build();
 	}
