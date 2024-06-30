@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.namo.spring.application.external.api.group.service.MoimScheduleAndUserService;
-import com.namo.spring.application.external.api.group.service.MoimScheduleService;
+import com.namo.spring.application.external.api.group.service.GroupScheduleAndUserService;
+import com.namo.spring.application.external.api.group.service.GroupScheduleService;
 import com.namo.spring.application.external.api.individual.converter.AlarmConverter;
 import com.namo.spring.application.external.api.individual.converter.ScheduleConverter;
 import com.namo.spring.application.external.api.individual.converter.ScheduleResponseConverter;
@@ -21,8 +21,8 @@ import com.namo.spring.application.external.api.individual.service.ImageService;
 import com.namo.spring.application.external.api.individual.service.PeriodService;
 import com.namo.spring.application.external.api.individual.service.ScheduleService;
 import com.namo.spring.application.external.api.user.service.UserService;
-import com.namo.spring.core.infra.common.constant.FilePath;
 import com.namo.spring.core.infra.common.aws.s3.FileUtils;
+import com.namo.spring.core.infra.common.constant.FilePath;
 import com.namo.spring.db.mysql.domains.group.domain.MoimSchedule;
 import com.namo.spring.db.mysql.domains.group.domain.MoimScheduleAndUser;
 import com.namo.spring.db.mysql.domains.individual.domain.Alarm;
@@ -43,9 +43,9 @@ public class ScheduleFacade {
 	private final AlarmService alarmService;
 	private final ImageService imageService;
 	private final CategoryService categoryService;
-	private final MoimScheduleService moimScheduleService;
+	private final GroupScheduleService moimScheduleService;
 	private final PeriodService periodService;
-	private final MoimScheduleAndUserService moimScheduleAndUserService;
+	private final GroupScheduleAndUserService moimScheduleAndUserService;
 	private final FileUtils fileUtils;
 
 	@Transactional

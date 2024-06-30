@@ -20,8 +20,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.namo.spring.application.external.api.group.service.GroupAndUserService;
+import com.namo.spring.application.external.api.group.service.GroupScheduleAndUserService;
 import com.namo.spring.application.external.api.group.service.MoimMemoLocationService;
-import com.namo.spring.application.external.api.group.service.MoimScheduleAndUserService;
 import com.namo.spring.application.external.api.individual.converter.CategoryConverter;
 import com.namo.spring.application.external.api.individual.service.AlarmService;
 import com.namo.spring.application.external.api.individual.service.CategoryService;
@@ -86,7 +86,7 @@ public class UserFacade {
 	private final AlarmService alarmService;
 	private final ImageService imageService;
 	private final GroupAndUserService moimAndUserService;
-	private final MoimScheduleAndUserService moimScheduleAndUserService;
+	private final GroupScheduleAndUserService moimScheduleAndUserService;
 	private final MoimMemoLocationService moimMemoLocationService;
 
 	private final KakaoAuthClient kakaoAuthClient;

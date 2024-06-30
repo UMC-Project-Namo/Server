@@ -14,13 +14,13 @@ import com.namo.spring.application.external.api.group.converter.MoimMemoLocation
 import com.namo.spring.application.external.api.group.dto.GroupDiaryRequest;
 import com.namo.spring.application.external.api.group.dto.GroupDiaryResponse;
 import com.namo.spring.application.external.api.group.dto.GroupScheduleRequest;
+import com.namo.spring.application.external.api.group.service.GroupScheduleAndUserService;
+import com.namo.spring.application.external.api.group.service.GroupScheduleService;
 import com.namo.spring.application.external.api.group.service.MoimMemoLocationService;
 import com.namo.spring.application.external.api.group.service.MoimMemoService;
-import com.namo.spring.application.external.api.group.service.MoimScheduleAndUserService;
-import com.namo.spring.application.external.api.group.service.MoimScheduleService;
 import com.namo.spring.application.external.api.user.service.UserService;
-import com.namo.spring.core.infra.common.constant.FilePath;
 import com.namo.spring.core.infra.common.aws.s3.FileUtils;
+import com.namo.spring.core.infra.common.constant.FilePath;
 import com.namo.spring.db.mysql.domains.group.domain.MoimMemo;
 import com.namo.spring.db.mysql.domains.group.domain.MoimMemoLocation;
 import com.namo.spring.db.mysql.domains.group.domain.MoimMemoLocationAndUser;
@@ -36,9 +36,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class MoimMemoFacade {
-	private final MoimScheduleService moimScheduleService;
+	private final GroupScheduleService moimScheduleService;
 
-	private final MoimScheduleAndUserService moimScheduleAndUserService;
+	private final GroupScheduleAndUserService moimScheduleAndUserService;
 	private final MoimMemoService moimMemoService;
 	private final MoimMemoLocationService moimMemoLocationService;
 	private final UserService userService;

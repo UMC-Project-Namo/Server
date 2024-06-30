@@ -12,11 +12,11 @@ import com.namo.spring.application.external.api.group.converter.GroupScheduleRes
 import com.namo.spring.application.external.api.group.dto.GroupScheduleRequest;
 import com.namo.spring.application.external.api.group.dto.GroupScheduleResponse;
 import com.namo.spring.application.external.api.group.service.GroupAndUserService;
+import com.namo.spring.application.external.api.group.service.GroupScheduleAndUserService;
+import com.namo.spring.application.external.api.group.service.GroupScheduleService;
 import com.namo.spring.application.external.api.group.service.GroupService;
 import com.namo.spring.application.external.api.group.service.MoimMemoLocationService;
 import com.namo.spring.application.external.api.group.service.MoimMemoService;
-import com.namo.spring.application.external.api.group.service.MoimScheduleAndUserService;
-import com.namo.spring.application.external.api.group.service.MoimScheduleService;
 import com.namo.spring.application.external.api.individual.service.CategoryService;
 import com.namo.spring.application.external.api.individual.service.ScheduleService;
 import com.namo.spring.application.external.api.user.service.UserService;
@@ -44,8 +44,8 @@ public class GroupScheduleFacade {
 	private final UserService userService;
 	private final GroupService groupService;
 	private final GroupAndUserService groupAndUserService;
-	private final MoimScheduleService groupScheduleService;
-	private final MoimScheduleAndUserService groupScheduleAndUserService;
+	private final GroupScheduleService groupScheduleService;
+	private final GroupScheduleAndUserService groupScheduleAndUserService;
 	private final MoimMemoService groupMemoService;
 	private final MoimMemoLocationService groupActivityService;
 	private final ScheduleService scheduleService;
