@@ -14,10 +14,10 @@ import com.namo.spring.application.external.api.group.converter.MoimMemoLocation
 import com.namo.spring.application.external.api.group.dto.GroupDiaryRequest;
 import com.namo.spring.application.external.api.group.dto.GroupDiaryResponse;
 import com.namo.spring.application.external.api.group.dto.GroupScheduleRequest;
+import com.namo.spring.application.external.api.group.service.GroupActivityService;
+import com.namo.spring.application.external.api.group.service.GroupMemoService;
 import com.namo.spring.application.external.api.group.service.GroupScheduleAndUserService;
 import com.namo.spring.application.external.api.group.service.GroupScheduleService;
-import com.namo.spring.application.external.api.group.service.MoimMemoLocationService;
-import com.namo.spring.application.external.api.group.service.MoimMemoService;
 import com.namo.spring.application.external.api.user.service.UserService;
 import com.namo.spring.core.infra.common.aws.s3.FileUtils;
 import com.namo.spring.core.infra.common.constant.FilePath;
@@ -39,8 +39,8 @@ public class MoimMemoFacade {
 	private final GroupScheduleService moimScheduleService;
 
 	private final GroupScheduleAndUserService moimScheduleAndUserService;
-	private final MoimMemoService moimMemoService;
-	private final MoimMemoLocationService moimMemoLocationService;
+	private final GroupMemoService moimMemoService;
+	private final GroupActivityService moimMemoLocationService;
 	private final UserService userService;
 
 	private final FileUtils fileUtils;

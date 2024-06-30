@@ -11,12 +11,12 @@ import com.namo.spring.application.external.api.group.converter.GroupScheduleCon
 import com.namo.spring.application.external.api.group.converter.GroupScheduleResponseConverter;
 import com.namo.spring.application.external.api.group.dto.GroupScheduleRequest;
 import com.namo.spring.application.external.api.group.dto.GroupScheduleResponse;
+import com.namo.spring.application.external.api.group.service.GroupActivityService;
 import com.namo.spring.application.external.api.group.service.GroupAndUserService;
+import com.namo.spring.application.external.api.group.service.GroupMemoService;
 import com.namo.spring.application.external.api.group.service.GroupScheduleAndUserService;
 import com.namo.spring.application.external.api.group.service.GroupScheduleService;
 import com.namo.spring.application.external.api.group.service.GroupService;
-import com.namo.spring.application.external.api.group.service.MoimMemoLocationService;
-import com.namo.spring.application.external.api.group.service.MoimMemoService;
 import com.namo.spring.application.external.api.individual.service.CategoryService;
 import com.namo.spring.application.external.api.individual.service.ScheduleService;
 import com.namo.spring.application.external.api.user.service.UserService;
@@ -46,8 +46,8 @@ public class GroupScheduleFacade {
 	private final GroupAndUserService groupAndUserService;
 	private final GroupScheduleService groupScheduleService;
 	private final GroupScheduleAndUserService groupScheduleAndUserService;
-	private final MoimMemoService groupMemoService;
-	private final MoimMemoLocationService groupActivityService;
+	private final GroupMemoService groupMemoService;
+	private final GroupActivityService groupActivityService;
 	private final ScheduleService scheduleService;
 	private final CategoryService categoryService;
 
@@ -82,7 +82,7 @@ public class GroupScheduleFacade {
 
 	@Transactional(readOnly = false)
 	public void modifyGroupSchedule(GroupScheduleRequest.PatchGroupScheduleDto groupScheduleDto) {
-		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(groupScheduleDto.getGroupScheduleId());
+		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(groupScheduleDto.getMoimScheduleId());
 		Period period = GroupScheduleConverter.toPeriod(groupScheduleDto);
 		Location location = GroupScheduleConverter.toLocation(groupScheduleDto);
 		groupSchedule.update(groupScheduleDto.getName(), period, location);
@@ -93,7 +93,7 @@ public class GroupScheduleFacade {
 	@Transactional(readOnly = false)
 	public void modifyGroupScheduleCategory(GroupScheduleRequest.PatchGroupScheduleCategoryDto scheduleCategoryDto,
 		Long userId) {
-		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(scheduleCategoryDto.getGroupScheduleId());
+		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(scheduleCategoryDto.getMoimScheduleId());
 		User user = userService.getUser(userId);
 		Category category = categoryService.getCategory(scheduleCategoryDto.getCategoryId());
 		MoimScheduleAndUser groupScheduleAndUser = groupScheduleAndUserService.getGroupScheduleAndUser(groupSchedule,
@@ -124,20 +124,20 @@ public class GroupScheduleFacade {
 		if (groupMemo == null) {
 			return;
 		}
-		List<MoimMemoLocation> groupMemoLocations = groupActivityService.getGroupMemoLocationWithImgs(groupMemo);
-		groupActivityService.removeGroupMemoLocationAndUsers(groupMemoLocations);
-		removeGroupMemoLocationImgs(groupMemoLocations);
+		List<MoimMemoLocation> groupMemoLocations = groupActivityService.getGroupActivityWithImgs(groupMemo);
+		groupActivityService.removeGroupActivityAndUsers(groupMemoLocations);
+		removeGroupActivityImgs(groupMemoLocations);
 		groupMemoService.removeGroupMemo(groupMemo);
 	}
 
-	private void removeGroupMemoLocationImgs(List<MoimMemoLocation> groupMemoLocations) {
+	private void removeGroupActivityImgs(List<MoimMemoLocation> groupMemoLocations) {
 		List<MoimMemoLocationImg> groupMemoLocationImgs
-			= groupActivityService.getGroupMemoLocationImgs(groupMemoLocations);
+			= groupActivityService.getGroupActivityImgs(groupMemoLocations);
 		List<String> urls = groupMemoLocationImgs.stream()
 			.map(MoimMemoLocationImg::getUrl)
 			.toList();
 		fileUtils.deleteImages(urls, FilePath.GROUP_ACTIVITY_IMG);
-		groupActivityService.removeGroupMemoLocationImgs(groupMemoLocations);
+		groupActivityService.removeGroupActivityImgs(groupMemoLocations);
 	}
 
 	@Transactional(readOnly = false)

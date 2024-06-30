@@ -19,9 +19,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.namo.spring.application.external.api.group.service.GroupActivityService;
 import com.namo.spring.application.external.api.group.service.GroupAndUserService;
 import com.namo.spring.application.external.api.group.service.GroupScheduleAndUserService;
-import com.namo.spring.application.external.api.group.service.MoimMemoLocationService;
 import com.namo.spring.application.external.api.individual.converter.CategoryConverter;
 import com.namo.spring.application.external.api.individual.service.AlarmService;
 import com.namo.spring.application.external.api.individual.service.CategoryService;
@@ -87,7 +87,7 @@ public class UserFacade {
 	private final ImageService imageService;
 	private final GroupAndUserService moimAndUserService;
 	private final GroupScheduleAndUserService moimScheduleAndUserService;
-	private final MoimMemoLocationService moimMemoLocationService;
+	private final GroupActivityService moimMemoLocationService;
 
 	private final KakaoAuthClient kakaoAuthClient;
 	private final NaverAuthClient naverAuthClient;

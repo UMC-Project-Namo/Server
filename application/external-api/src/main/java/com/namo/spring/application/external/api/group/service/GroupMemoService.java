@@ -16,31 +16,31 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MoimMemoService {
+public class GroupMemoService {
 	private final MoimMemoRepository moimMemoRepository;
 
-	public Optional<MoimMemo> getMoimMemoOrNull(MoimSchedule moimSchedule) {
+	public Optional<MoimMemo> getGroupMemoOrNull(MoimSchedule moimSchedule) {
 		return moimMemoRepository.findMoimMemoByMoimSchedule(moimSchedule);
 	}
 
-	public MoimMemo getMoimMemo(MoimSchedule moimSchedule) {
+	public MoimMemo getGroupMemo(MoimSchedule moimSchedule) {
 		return moimMemoRepository.findMoimMemoByMoimSchedule(moimSchedule)
 			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_GROUP_FAILURE));
 	}
 
-	public MoimMemo getMoimMemoWithUsers(MoimSchedule moimSchedule) {
+	public MoimMemo getGroupMemoWithUsers(MoimSchedule moimSchedule) {
 		return moimMemoRepository.findMoimMemoAndUsersByMoimSchedule(moimSchedule);
 	}
 
-	public void removeMoimMemo(MoimMemo moimMemo) {
+	public void removeGroupMemo(MoimMemo moimMemo) {
 		moimMemoRepository.delete(moimMemo);
 	}
 
-	public MoimMemo createMoimMemo(MoimMemo moimMemo) {
+	public MoimMemo createGroupMemo(MoimMemo moimMemo) {
 		return moimMemoRepository.save(moimMemo);
 	}
 
-	public MoimMemo getMoimMemoWithLocations(Long moimScheduleId) {
+	public MoimMemo getGroupMemoWithLocations(Long moimScheduleId) {
 		return moimMemoRepository.findMoimMemoAndLocationsByMoimSchedule(moimScheduleId)
 			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_MOIM_MEMO_FAILURE));
 	}
