@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.namo.spring.application.external.api.group.converter.GroupAndUserConverter;
-import com.namo.spring.application.external.api.group.converter.MoimScheduleConverter;
-import com.namo.spring.application.external.api.group.converter.MoimScheduleResponseConverter;
+import com.namo.spring.application.external.api.group.converter.GroupScheduleConverter;
+import com.namo.spring.application.external.api.group.converter.GroupScheduleResponseConverter;
 import com.namo.spring.application.external.api.group.dto.GroupScheduleRequest;
 import com.namo.spring.application.external.api.group.dto.GroupScheduleResponse;
 import com.namo.spring.application.external.api.group.service.GroupAndUserService;
@@ -60,9 +60,9 @@ public class GroupScheduleFacade {
 	@Transactional(readOnly = false)
 	public Long createSchedule(GroupScheduleRequest.PostGroupScheduleDto groupScheduleDto) {
 		Moim group = groupService.getGroupWithGroupAndUsersByGroupId(groupScheduleDto.getGroupId());
-		Period period = MoimScheduleConverter.toPeriod(groupScheduleDto);
-		Location location = MoimScheduleConverter.toLocation(groupScheduleDto);
-		MoimSchedule groupSchedule = MoimScheduleConverter
+		Period period = GroupScheduleConverter.toPeriod(groupScheduleDto);
+		Location location = GroupScheduleConverter.toLocation(groupScheduleDto);
+		MoimSchedule groupSchedule = GroupScheduleConverter
 			.toGroupSchedule(group, period, location, groupScheduleDto);
 		MoimSchedule savedGroupSchedule = groupScheduleService.createGroupSchedule(groupSchedule);
 
@@ -75,7 +75,7 @@ public class GroupScheduleFacade {
 		List<User> users = userService.getUsersInGroupSchedule(usersId);
 		List<Category> categories = categoryService
 			.getGroupUsersCategories(users);
-		List<MoimScheduleAndUser> groupScheduleAndUsers = MoimScheduleConverter
+		List<MoimScheduleAndUser> groupScheduleAndUsers = GroupScheduleConverter
 			.toGroupScheduleAndUsers(categories, savedGroupSchedule, users);
 		groupScheduleAndUserService.createAll(groupScheduleAndUsers, group);
 	}
@@ -83,8 +83,8 @@ public class GroupScheduleFacade {
 	@Transactional(readOnly = false)
 	public void modifyGroupSchedule(GroupScheduleRequest.PatchGroupScheduleDto groupScheduleDto) {
 		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(groupScheduleDto.getGroupScheduleId());
-		Period period = MoimScheduleConverter.toPeriod(groupScheduleDto);
-		Location location = MoimScheduleConverter.toLocation(groupScheduleDto);
+		Period period = GroupScheduleConverter.toPeriod(groupScheduleDto);
+		Location location = GroupScheduleConverter.toLocation(groupScheduleDto);
 		groupSchedule.update(groupScheduleDto.getName(), period, location);
 		groupScheduleAndUserService.removeGroupScheduleAndUser(groupSchedule);
 		createGroupScheduleAndUsers(groupScheduleDto.getUsers(), groupSchedule, groupSchedule.getMoim());
@@ -149,7 +149,7 @@ public class GroupScheduleFacade {
 			user);
 
 		for (Integer alarmDate : groupScheduleAlarmDto.getAlarmDates()) {
-			MoimScheduleAlarm groupScheduleAlarm = MoimScheduleConverter.toGroupScheduleAlarm(groupScheduleAndUser,
+			MoimScheduleAlarm groupScheduleAlarm = GroupScheduleConverter.toGroupScheduleAlarm(groupScheduleAndUser,
 				alarmDate);
 			groupScheduleAndUserService.createGroupScheduleAlarm(groupScheduleAlarm);
 		}
@@ -165,7 +165,7 @@ public class GroupScheduleFacade {
 		groupScheduleAndUserService.removeGroupScheduleAlarm(groupScheduleAndUser);
 
 		for (Integer alarmDate : groupScheduleAlarmDto.getAlarmDates()) {
-			MoimScheduleAlarm groupScheduleAlarm = MoimScheduleConverter.toGroupScheduleAlarm(groupScheduleAndUser,
+			MoimScheduleAlarm groupScheduleAlarm = GroupScheduleConverter.toGroupScheduleAlarm(groupScheduleAndUser,
 				alarmDate);
 			groupScheduleAndUserService.createGroupScheduleAlarm(groupScheduleAlarm);
 		}
@@ -182,7 +182,7 @@ public class GroupScheduleFacade {
 		List<Schedule> individualsSchedules = scheduleService.getSchedules(users);
 		List<MoimScheduleAndUser> groupScheduleAndUsers = groupScheduleService
 			.getMonthGroupSchedules(localDateTimes, users);
-		return MoimScheduleResponseConverter
+		return GroupScheduleResponseConverter
 			.toGroupScheduleDtos(individualsSchedules, groupScheduleAndUsers, groupAndUsersInGroup);
 	}
 
@@ -196,7 +196,7 @@ public class GroupScheduleFacade {
 		List<Schedule> individualsSchedules = scheduleService.getSchedules(users);
 		List<MoimScheduleAndUser> groupScheduleAndUsers = groupScheduleService
 			.getAllGroupSchedules(users);
-		return MoimScheduleResponseConverter
+		return GroupScheduleResponseConverter
 			.toGroupScheduleDtos(individualsSchedules, groupScheduleAndUsers, groupAndUsersInGroup);
 	}
 }
