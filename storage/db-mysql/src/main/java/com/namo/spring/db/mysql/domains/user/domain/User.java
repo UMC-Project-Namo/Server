@@ -10,8 +10,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
-import org.hibernate.annotations.ColumnDefault;
-
 import com.namo.spring.db.mysql.domains.user.type.SocialType;
 import com.namo.spring.db.mysql.domains.user.type.UserRole;
 import com.namo.spring.db.mysql.domains.user.type.UserStatus;
@@ -63,7 +61,7 @@ public class User extends BaseTimeEntity {
 	private String socialRefreshToken;
 
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "USER")
 	private UserRole userRole;
 
 	@Builder
@@ -77,6 +75,7 @@ public class User extends BaseTimeEntity {
 		this.status = status;
 		this.socialType = socialType;
 		this.socialRefreshToken = socialRefreshToken;
+		this.userRole = UserRole.USER;
 	}
 
 	public void updateRefreshToken(String refreshToken) {
