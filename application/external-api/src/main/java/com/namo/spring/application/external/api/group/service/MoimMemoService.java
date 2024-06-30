@@ -25,7 +25,7 @@ public class MoimMemoService {
 
 	public MoimMemo getMoimMemo(MoimSchedule moimSchedule) {
 		return moimMemoRepository.findMoimMemoByMoimSchedule(moimSchedule)
-			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_MOIM_FAILURE));
+			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_GROUP_FAILURE));
 	}
 
 	public MoimMemo getMoimMemoWithUsers(MoimSchedule moimSchedule) {

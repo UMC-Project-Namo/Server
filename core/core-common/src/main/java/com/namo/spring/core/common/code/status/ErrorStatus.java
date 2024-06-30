@@ -61,7 +61,7 @@ public enum ErrorStatus implements BaseErrorCode {
 	NOT_FOUND_PALETTE_FAILURE(HttpStatus.NOT_FOUND, "팔레트를 찾을 수 없습니다."),
 	NOT_FOUND_DIARY_FAILURE(HttpStatus.NOT_FOUND, "다이어리를 찾을 수 없습니다."),
 	NOT_FOUND_MOIM_DIARY_FAILURE(HttpStatus.NOT_FOUND, "모임 메모 장소를 찾을 수 없습니다."),
-	NOT_FOUND_MOIM_FAILURE(HttpStatus.NOT_FOUND, "모임을 찾을 수 없습니다."),
+	NOT_FOUND_GROUP_FAILURE(HttpStatus.NOT_FOUND, "모임을 찾을 수 없습니다."),
 	NOT_FOUND_MOIM_AND_USER_FAILURE(HttpStatus.NOT_FOUND, "그룹 구성원이 아닙니다."),
 	NOT_FOUND_MOIM_SCHEDULE_AND_USER_FAILURE(HttpStatus.NOT_FOUND, "그룹 스케줄 구성원이 아닙니다."),
 	NOT_FOUND_MOIM_MEMO_FAILURE(HttpStatus.NOT_FOUND, "모임 메모를 찾을 수 없습니다."),
@@ -96,7 +96,7 @@ public enum ErrorStatus implements BaseErrorCode {
 	NOT_USERS_IN_MOIM(HttpStatus.NOT_FOUND, "유저가 모임에 포함되어 있지 않습니다."),
 
 	/**
-	 *404 : 인프라 에러
+	 * 404 : 인프라 에러
 	 */
 	FILE_NAME_EXCEPTION(HttpStatus.NOT_FOUND, "파일 확장자가 잘못되었습니다."),
 	S3_FAILURE(HttpStatus.NOT_FOUND, "파일 업로드 과정에서 오류가 발생하였습니다."),
@@ -124,7 +124,7 @@ public enum ErrorStatus implements BaseErrorCode {
 	public int getCode() {
 		return code.value();
 	}
-	
+
 	public HttpStatus getHttpStatus() {
 		return code;
 	}

@@ -41,26 +41,26 @@ public class GroupAndUserService {
 	}
 
 	public List<MoimAndUser> getGroupAndUsers(User user) {
-		return groupAndUserRepository.findGroupAndUserByUser(user);
+		return groupAndUserRepository.findMoimAndUserByUser(user);
 	}
 
 	public List<MoimAndUser> getGroupAndUsers(Moim group) {
-		return groupAndUserRepository.findGroupAndUserByGroup(group);
+		return groupAndUserRepository.findMoimAndUserByMoim(group);
 	}
 
 	public List<MoimAndUser> getGroupAndUsers(List<Moim> groups) {
-		return groupAndUserRepository.findGroupAndUserByGroup(groups);
+		return groupAndUserRepository.findMoimAndUserByMoim(groups);
 	}
 
 	public MoimAndUser getGroupAndUser(Moim group, User user) {
-		return groupAndUserRepository.findGroupAndUserByUserAndGroup(user, group)
+		return groupAndUserRepository.findMoimAndUserByUserAndMoim(user, group)
 			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_MOIM_AND_USER_FAILURE));
 	}
 
 	public void removeGroupAndUser(MoimAndUser groupAndUser, Moim group) {
 		validateNotExistsGroupAndUser(group, groupAndUser);
 		if (group.isLastMember()) {
-			group.removeGroup();
+			group.removeMoim();
 		}
 		group.removeMember();
 		groupAndUserRepository.delete(groupAndUser);

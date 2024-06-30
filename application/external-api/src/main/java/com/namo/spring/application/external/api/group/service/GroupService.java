@@ -21,22 +21,22 @@ public class GroupService {
 	}
 
 	public Moim getGroupWithGroupAndUsersByGroupId(Long groupId) {
-		return groupRepository.findGroupWithGroupAndUsersByGroupId(groupId)
-			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_MOIM_FAILURE));
+		return groupRepository.findMoimWithMoimAndUsersByMoimId(groupId)
+			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_GROUP_FAILURE));
 	}
 
 	public Moim getGroupHavingLockById(Long groupId) {
 		Moim group = groupRepository.findHavingLockById(groupId);
 		if (group == null) {
-			throw new GroupException(ErrorStatus.NOT_FOUND_MOIM_FAILURE);
+			throw new GroupException(ErrorStatus.NOT_FOUND_GROUP_FAILURE);
 		}
 		return group;
 	}
 
 	public Moim getGroupWithGroupAndUsersByCode(String code) {
-		Moim group = groupRepository.findGroupHavingLockWithGroupAndUsersByCode(code);
+		Moim group = groupRepository.findMoimHavingLockWithMoimAndUsersByCode(code);
 		if (group == null) {
-			throw new GroupException(ErrorStatus.NOT_FOUND_MOIM_FAILURE);
+			throw new GroupException(ErrorStatus.NOT_FOUND_GROUP_FAILURE);
 		}
 		return group;
 	}
