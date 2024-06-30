@@ -35,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class GroupMemoFacade {
+public class GroupDiaryFacade {
 	private final GroupScheduleService groupScheduleService;
 
 	private final GroupScheduleAndUserService groupScheduleAndUserService;
@@ -46,7 +46,7 @@ public class GroupMemoFacade {
 	private final FileUtils fileUtils;
 
 	@Transactional(readOnly = false)
-	public void createGroupMemo(Long groupScheduleId, GroupDiaryRequest.LocationDto locationDto,
+	public void createGroupDiary(Long groupScheduleId, GroupDiaryRequest.LocationDto locationDto,
 		List<MultipartFile> imgs) {
 		MoimMemo groupMemo = getGroupMemo(groupScheduleId);
 		MoimMemoLocation groupActivity = createGroupActivity(groupMemo, locationDto);
@@ -96,9 +96,9 @@ public class GroupMemoFacade {
 	}
 
 	@Transactional(readOnly = false)
-	public void modifyGroupActivity(Long memoLocationId, GroupDiaryRequest.LocationDto locationDto,
+	public void modifyGroupActivity(Long activityId, GroupDiaryRequest.LocationDto locationDto,
 		List<MultipartFile> imgs) {
-		MoimMemoLocation groupActivity = groupActivityService.getGroupActivityWithImgs(memoLocationId);
+		MoimMemoLocation groupActivity = groupActivityService.getGroupActivityWithImgs(activityId);
 		groupActivity.update(locationDto.getName(), locationDto.getMoney());
 
 		groupActivityService.removeGroupActivityAndUsers(groupActivity);
@@ -118,8 +118,8 @@ public class GroupMemoFacade {
 	}
 
 	@Transactional(readOnly = false)
-	public void removeGroupActivity(Long memoLocationId) {
-		MoimMemoLocation groupActivity = groupActivityService.getGroupActivityWithImgs(memoLocationId);
+	public void removeGroupActivity(Long activityId) {
+		MoimMemoLocation groupActivity = groupActivityService.getGroupActivityWithImgs(activityId);
 
 		groupActivityService.removeGroupActivityAndUsers(groupActivity);
 		removeGroupActivityImgs(groupActivity);
@@ -127,7 +127,7 @@ public class GroupMemoFacade {
 	}
 
 	@Transactional(readOnly = false)
-	public GroupDiaryResponse.GroupDiaryDto getGroupMemoWithLocations(Long groupScheduleId) {
+	public GroupDiaryResponse.GroupDiaryDto getGroupDiaryWithLocations(Long groupScheduleId) {
 		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(groupScheduleId);
 		MoimMemo groupMemo = groupMemoService.getGroupMemoWithUsers(groupSchedule);
 		List<MoimMemoLocation> groupActivities = groupActivityService.getGroupActivities(groupSchedule);
@@ -137,7 +137,7 @@ public class GroupMemoFacade {
 	}
 
 	@Transactional(readOnly = true)
-	public GroupDiaryResponse.SliceDiaryDto<GroupDiaryResponse.DiaryDto> getMonthMonthGroupMemo(Long userId,
+	public GroupDiaryResponse.SliceDiaryDto<GroupDiaryResponse.DiaryDto> getMonthMonthGroupDiary(Long userId,
 		List<LocalDateTime> dates, Pageable page) {
 		User user = userService.getUser(userId);
 		List<MoimScheduleAndUser> groupScheduleAndUsersForMonthGroupMemo
@@ -146,7 +146,7 @@ public class GroupMemoFacade {
 	}
 
 	@Transactional(readOnly = false)
-	public void createGroupScheduleText(Long groupScheduleId, Long userId,
+	public void createGroupMemo(Long groupScheduleId, Long userId,
 		GroupScheduleRequest.PostGroupScheduleTextDto groupScheduleText) {
 		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(groupScheduleId);
 		User user = userService.getUser(userId);
@@ -156,7 +156,7 @@ public class GroupMemoFacade {
 	}
 
 	@Transactional(readOnly = false)
-	public void removeGroupMemo(Long groupScheduleId) {
+	public void removeGroupDiary(Long groupScheduleId) {
 		MoimMemo groupMemoWithLocations = groupMemoService.getGroupMemoWithLocations(groupScheduleId);
 		for (MoimMemoLocation groupActivity : groupMemoWithLocations.getMoimMemoLocations()) {
 			removeGroupActivity(groupActivity.getId());
@@ -165,12 +165,12 @@ public class GroupMemoFacade {
 	}
 
 	@Transactional(readOnly = false)
-	public void removePersonGroupMemo(Long scheduleId, Long userId) {
+	public void removePersonGroupDiary(Long scheduleId, Long userId) {
 		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(scheduleId);
 		User user = userService.getUser(userId);
 		MoimScheduleAndUser groupScheduleAndUser
 			= groupScheduleAndUserService.getGroupScheduleAndUser(groupSchedule, user);
-		groupScheduleAndUserService.removeGroupScheduleMemoInPersonalSpace(groupScheduleAndUser);
+		groupScheduleAndUserService.removeGroupScheduleDiaryInPersonalSpace(groupScheduleAndUser);
 	}
 
 	@Transactional(readOnly = true)

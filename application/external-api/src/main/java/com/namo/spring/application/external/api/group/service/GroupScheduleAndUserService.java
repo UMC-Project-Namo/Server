@@ -106,7 +106,7 @@ public class GroupScheduleAndUserService {
 		moimScheduleAndUser.updateText(moimScheduleText);
 	}
 
-	public void removeGroupScheduleMemoInPersonalSpace(MoimScheduleAndUser moimScheduleAndUser) {
+	public void removeGroupScheduleDiaryInPersonalSpace(MoimScheduleAndUser moimScheduleAndUser) {
 		moimScheduleAndUser.handleDeletedPersonalMoimMemo();
 	}
 

@@ -68,7 +68,7 @@ public class GroupAndUserService {
 
 	private void validateNotExistsGroupAndUser(Moim group, MoimAndUser groupAndUser) {
 		if (!group.containUser(groupAndUser.getUser())) {
-			throw new GroupException(ErrorStatus.NOT_INCLUDE_MOIM_USER);
+			throw new GroupException(ErrorStatus.NOT_INCLUDE_GROUP_USER);
 		}
 	}
 
