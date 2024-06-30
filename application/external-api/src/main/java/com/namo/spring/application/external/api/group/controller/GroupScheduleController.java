@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.namo.spring.application.external.api.group.dto.GroupScheduleRequest;
 import com.namo.spring.application.external.api.group.dto.GroupScheduleResponse;
-import com.namo.spring.application.external.api.group.facade.MoimScheduleFacade;
+import com.namo.spring.application.external.api.group.facade.GroupScheduleFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.utils.Converter;
 import com.namo.spring.core.common.code.status.ErrorStatus;
@@ -36,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/api/v1/group/schedules")
 public class GroupScheduleController {
-	private final MoimScheduleFacade moimScheduleFacade;
+	private final GroupScheduleFacade moimScheduleFacade;
 	private final Converter converter;
 
 	@Operation(summary = "모임 일정 생성", description = "모임 일정 생성 API")
