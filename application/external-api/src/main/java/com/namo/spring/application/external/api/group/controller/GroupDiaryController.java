@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.namo.spring.application.external.api.group.dto.GroupDiaryRequest;
 import com.namo.spring.application.external.api.group.dto.GroupDiaryResponse;
 import com.namo.spring.application.external.api.group.dto.GroupScheduleRequest;
+import com.namo.spring.application.external.api.group.facade.GroupMemoFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.utils.Converter;
 import com.namo.spring.core.common.code.status.ErrorStatus;
