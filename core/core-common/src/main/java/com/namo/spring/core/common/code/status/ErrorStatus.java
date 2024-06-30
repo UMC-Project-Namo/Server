@@ -78,7 +78,7 @@ public enum ErrorStatus implements BaseErrorCode {
 	MOIM_MEMO_IS_FULL_ERROR(HttpStatus.NOT_FOUND, "모임 메모가 가득 차 있습니다."),
 	NOT_INCLUDE_MOIM_USER(HttpStatus.NOT_FOUND, "모임 안에 포함되어 있지 않은 유저입니다."),
 	EMPTY_USERS_FAILURE(HttpStatus.NOT_FOUND, "스케줄 참여 유저가 없습니다."),
-	NOT_HAS_MOIM_CATEGORIES_USERS(HttpStatus.NOT_FOUND, "유저들에 대한 모임의 카테고리가 없습니다."),
+	NOT_HAS_GROUP_CATEGORIES_USERS(HttpStatus.NOT_FOUND, "유저들에 대한 모임의 카테고리가 없습니다."),
 	INVALID_DATE(HttpStatus.NOT_FOUND, "시작 날짜가 종료 날짜 이전 이어야 합니다."),
 	INVALID_ALARM(HttpStatus.NOT_FOUND, "알람 시간이 유효하지 않습니다."),
 
