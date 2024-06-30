@@ -172,7 +172,7 @@ public class GroupScheduleFacade {
 	}
 
 	@Transactional(readOnly = true)
-	public List<GroupScheduleResponse.MoimScheduleDto> getMonthGroupSchedules(Long groupId,
+	public List<GroupScheduleResponse.GroupScheduleDto> getMonthGroupSchedules(Long groupId,
 		List<LocalDateTime> localDateTimes, Long userId) {
 		Moim group = groupService.getGroupWithGroupAndUsersByGroupId(groupId);
 		existGroupAndUser(userId, group);
@@ -187,7 +187,7 @@ public class GroupScheduleFacade {
 	}
 
 	@Transactional(readOnly = true)
-	public List<GroupScheduleResponse.MoimScheduleDto> getAllGroupSchedules(Long groupId, Long userId) {
+	public List<GroupScheduleResponse.GroupScheduleDto> getAllGroupSchedules(Long groupId, Long userId) {
 		Moim group = groupService.getGroupWithGroupAndUsersByGroupId(groupId);
 		existGroupAndUser(userId, group);
 		List<MoimAndUser> groupAndUsersInGroup = groupAndUserService.getGroupAndUsers(group);

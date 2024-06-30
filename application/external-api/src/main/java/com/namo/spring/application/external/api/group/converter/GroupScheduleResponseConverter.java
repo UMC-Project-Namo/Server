@@ -16,12 +16,12 @@ public class GroupScheduleResponseConverter {
 		throw new IllegalStateException("Util Classes");
 	}
 
-	public static List<GroupScheduleResponse.MoimScheduleDto> toGroupScheduleDtos(
+	public static List<GroupScheduleResponse.GroupScheduleDto> toGroupScheduleDtos(
 		List<Schedule> individualsSchedules,
 		List<MoimScheduleAndUser> moimScheduleAndUsers,
 		List<MoimAndUser> moimAndUsers
 	) {
-		List<GroupScheduleResponse.MoimScheduleDto> result = getGroupScheduleDtos(individualsSchedules, moimAndUsers);
+		List<GroupScheduleResponse.GroupScheduleDto> result = getGroupScheduleDtos(individualsSchedules, moimAndUsers);
 
 		Map<User, GroupScheduleResponse.MoimScheduleUserDto> moimScheduleUserDtoMap = getGroupScheduleUserDtoMap(
 			moimAndUsers);
@@ -31,7 +31,7 @@ public class GroupScheduleResponseConverter {
 		return result;
 	}
 
-	private static List<GroupScheduleResponse.MoimScheduleDto> getGroupScheduleDtos(
+	private static List<GroupScheduleResponse.GroupScheduleDto> getGroupScheduleDtos(
 		List<Schedule> individualsSchedules,
 		List<MoimAndUser> moimAndUsers
 	) {
@@ -78,22 +78,22 @@ public class GroupScheduleResponseConverter {
 	}
 
 	private static void addGroupSchedulesToResult(List<MoimAndUser> moimAndUsers,
-		List<GroupScheduleResponse.MoimScheduleDto> result,
+		List<GroupScheduleResponse.GroupScheduleDto> result,
 		Map<MoimSchedule, List<GroupScheduleResponse.MoimScheduleUserDto>> moimScheduleMappingUserDtoMap) {
 		for (MoimSchedule moimSchedule : moimScheduleMappingUserDtoMap.keySet()) {
 			boolean isCurGroupSchedule = moimSchedule.getMoim() == moimAndUsers.get(0).getMoim();
-			GroupScheduleResponse.MoimScheduleDto moimScheduleDto =
-				GroupScheduleResponse.MoimScheduleDto.fromMoimSchedule(moimSchedule,
+			GroupScheduleResponse.GroupScheduleDto groupScheduleDto =
+				GroupScheduleResponse.GroupScheduleDto.fromMoimSchedule(moimSchedule,
 					moimScheduleMappingUserDtoMap.get(moimSchedule),
 					isCurGroupSchedule);
-			result.add(moimScheduleDto);
+			result.add(groupScheduleDto);
 		}
 	}
 
-	public static GroupScheduleResponse.MoimScheduleDto toGroupScheduleDto(Schedule schedule, Integer color) {
+	public static GroupScheduleResponse.GroupScheduleDto toGroupScheduleDto(Schedule schedule, Integer color) {
 		List<GroupScheduleResponse.MoimScheduleUserDto> users = List.of(
 			toGroupScheduleUserDto(schedule.getUser().getId(), schedule.getUser().getName(), color));
-		return GroupScheduleResponse.MoimScheduleDto.fromSchedule(schedule, users);
+		return GroupScheduleResponse.GroupScheduleDto.fromSchedule(schedule, users);
 	}
 
 	public static GroupScheduleResponse.MoimScheduleUserDto toGroupScheduleUserDto(Long userId, String userName,
