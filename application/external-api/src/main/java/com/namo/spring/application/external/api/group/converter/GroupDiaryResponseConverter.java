@@ -23,72 +23,72 @@ public class GroupDiaryResponseConverter {
 	}
 
 	public static GroupDiaryResponse.GroupDiaryDto toGroupDiaryDto(
-		MoimMemo moimMemo,
-		List<MoimMemoLocation> moimMemoLocations,
-		List<MoimMemoLocationAndUser> moimMemoLocationAndUsers) {
-		List<GroupDiaryResponse.GroupUserDto> users = moimMemo.getMoimSchedule().getMoimScheduleAndUsers().stream()
+		MoimMemo groupMemo,
+		List<MoimMemoLocation> groupActivities,
+		List<MoimMemoLocationAndUser> groupActivityAndUsers) {
+		List<GroupDiaryResponse.GroupUserDto> users = groupMemo.getMoimSchedule().getMoimScheduleAndUsers().stream()
 			.map(GroupDiaryResponseConverter::toGroupUserDto)
 			.toList();
-		return GroupDiaryResponse.GroupDiaryDto.fromMoimMemo(moimMemo,
-			toMoimActivityDtos(moimMemoLocations, moimMemoLocationAndUsers));
+		return GroupDiaryResponse.GroupDiaryDto.fromMoimMemo(groupMemo,
+			toGroupActivityDtos(groupActivities, groupActivityAndUsers));
 	}
 
-	public static GroupDiaryResponse.GroupUserDto toGroupUserDto(MoimScheduleAndUser moimScheduleAndUser) {
+	public static GroupDiaryResponse.GroupUserDto toGroupUserDto(MoimScheduleAndUser groupScheduleAndUser) {
 		return GroupDiaryResponse.GroupUserDto
 			.builder()
-			.userId(moimScheduleAndUser.getUser().getId())
-			.userName(moimScheduleAndUser.getUser().getName())
+			.userId(groupScheduleAndUser.getUser().getId())
+			.userName(groupScheduleAndUser.getUser().getName())
 			.build();
 	}
 
-	private static List<GroupDiaryResponse.MoimActivityDto> toMoimActivityDtos(
-		List<MoimMemoLocation> moimMemoLocations,
-		List<MoimMemoLocationAndUser> moimMemoLocationAndUsers) {
-		Map<MoimMemoLocation, List<MoimMemoLocationAndUser>> moimActivityMappingUsers = moimMemoLocationAndUsers
+	private static List<GroupDiaryResponse.MoimActivityDto> toGroupActivityDtos(
+		List<MoimMemoLocation> groupActivities,
+		List<MoimMemoLocationAndUser> groupActivityAndUsers) {
+		Map<MoimMemoLocation, List<MoimMemoLocationAndUser>> groupActivityMappingUsers = groupActivityAndUsers
 			.stream()
 			.collect(Collectors.groupingBy(MoimMemoLocationAndUser::getMoimMemoLocation));
 
-		return moimMemoLocations.stream()
-			.map(moimMemoLocation -> toMoimActivityDto(moimActivityMappingUsers, moimMemoLocation))
+		return groupActivities.stream()
+			.map(groupActivity -> toGroupActivityDto(groupActivityMappingUsers, groupActivity))
 			.collect(Collectors.toList());
 	}
 
-	private static GroupDiaryResponse.MoimActivityDto toMoimActivityDto(
-		Map<MoimMemoLocation, List<MoimMemoLocationAndUser>> moimMemoLocationMappingUsers,
-		MoimMemoLocation moimMemoLocation) {
-		List<String> urls = moimMemoLocation.getMoimMemoLocationImgs().stream()
+	private static GroupDiaryResponse.MoimActivityDto toGroupActivityDto(
+		Map<MoimMemoLocation, List<MoimMemoLocationAndUser>> groupActivityMappingUsers,
+		MoimMemoLocation groupActivity) {
+		List<String> urls = groupActivity.getMoimMemoLocationImgs().stream()
 			.map(MoimMemoLocationImg::getUrl)
 			.toList();
-		List<Long> participants = moimMemoLocationMappingUsers.get(moimMemoLocation).stream()
-			.map(moimMemoLocationAndUser -> moimMemoLocationAndUser.getUser().getId())
+		List<Long> participants = groupActivityMappingUsers.get(groupActivity).stream()
+			.map(groupActivityAndUser -> groupActivityAndUser.getUser().getId())
 			.toList();
 		return GroupDiaryResponse.MoimActivityDto
 			.builder()
-			.moimActivityId(moimMemoLocation.getId())
-			.name(moimMemoLocation.getName())
-			.money(moimMemoLocation.getTotalAmount())
+			.moimActivityId(groupActivity.getId())
+			.name(groupActivity.getName())
+			.money(groupActivity.getTotalAmount())
 			.urls(urls)
 			.participants(participants)
 			.build();
 	}
 
 	public static GroupDiaryResponse.SliceDiaryDto toSliceDiaryDto(
-		List<MoimScheduleAndUser> moimScheduleAndUsers,
+		List<MoimScheduleAndUser> groupScheduleAndUsers,
 		Pageable page
 	) {
 		boolean hasNext = false;
-		if (moimScheduleAndUsers.size() > page.getPageSize()) {
-			moimScheduleAndUsers.remove(page.getPageSize());
+		if (groupScheduleAndUsers.size() > page.getPageSize()) {
+			groupScheduleAndUsers.remove(page.getPageSize());
 			hasNext = true;
 		}
-		SliceImpl<MoimScheduleAndUser> moimSchedulesSlice = new SliceImpl<>(moimScheduleAndUsers, page, hasNext);
+		SliceImpl<MoimScheduleAndUser> groupSchedulesSlice = new SliceImpl<>(groupScheduleAndUsers, page, hasNext);
 		return GroupDiaryResponse.SliceDiaryDto.builder()
 			.content(
-				moimSchedulesSlice.stream().map(GroupDiaryResponseConverter::toDiaryDto).collect(Collectors.toList()))
-			.currentPage(moimSchedulesSlice.getNumber())
-			.size(moimSchedulesSlice.getSize())
-			.first(moimSchedulesSlice.isFirst())
-			.last(moimSchedulesSlice.isLast())
+				groupSchedulesSlice.stream().map(GroupDiaryResponseConverter::toDiaryDto).collect(Collectors.toList()))
+			.currentPage(groupSchedulesSlice.getNumber())
+			.size(groupSchedulesSlice.getSize())
+			.first(groupSchedulesSlice.isFirst())
+			.last(groupSchedulesSlice.isLast())
 			.build();
 	}
 
@@ -108,8 +108,8 @@ public class GroupDiaryResponseConverter {
 			.build();
 	}
 
-	public static GroupDiaryResponse.DiaryDto toDiaryDto(MoimScheduleAndUser moimScheduleAndUser) {
-		List<String> urls = moimScheduleAndUser.getMoimSchedule().getMoimMemo()
+	public static GroupDiaryResponse.DiaryDto toDiaryDto(MoimScheduleAndUser groupScheduleAndUser) {
+		List<String> urls = groupScheduleAndUser.getMoimSchedule().getMoimMemo()
 			.getMoimMemoLocations()
 			.stream()
 			.flatMap(location -> location
@@ -119,14 +119,14 @@ public class GroupDiaryResponseConverter {
 			.limit(3)
 			.collect(Collectors.toList());
 		return GroupDiaryResponse.DiaryDto.builder()
-			.scheduleId(moimScheduleAndUser.getMoimSchedule().getId())
-			.name(moimScheduleAndUser.getMoimSchedule().getName())
-			.startDate(DateUtil.toSeconds(moimScheduleAndUser.getMoimSchedule().getPeriod().getStartDate()))
-			.contents(moimScheduleAndUser.getMemo())
+			.scheduleId(groupScheduleAndUser.getMoimSchedule().getId())
+			.name(groupScheduleAndUser.getMoimSchedule().getName())
+			.startDate(DateUtil.toSeconds(groupScheduleAndUser.getMoimSchedule().getPeriod().getStartDate()))
+			.contents(groupScheduleAndUser.getMemo())
 			.urls(urls)
-			.categoryId(moimScheduleAndUser.getCategory().getId())
-			.color(moimScheduleAndUser.getCategory().getPalette().getId())
-			.placeName(moimScheduleAndUser.getMoimSchedule().getLocation().getLocationName())
+			.categoryId(groupScheduleAndUser.getCategory().getId())
+			.color(groupScheduleAndUser.getCategory().getPalette().getId())
+			.placeName(groupScheduleAndUser.getMoimSchedule().getLocation().getLocationName())
 			.build();
 	}
 }
