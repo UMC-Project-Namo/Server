@@ -21,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.namo.spring.application.external.api.group.dto.GroupDiaryRequest;
 import com.namo.spring.application.external.api.group.dto.GroupDiaryResponse;
 import com.namo.spring.application.external.api.group.dto.GroupScheduleRequest;
-import com.namo.spring.application.external.api.group.facade.MoimMemoFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.utils.Converter;
 import com.namo.spring.core.common.code.status.ErrorStatus;
@@ -40,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/api/v1/group/diaries")
 public class GroupDiaryController {
-	private final MoimMemoFacade moimMemoFacade;
+	private final GroupMemoFacade groupMemoFacade;
 	private final Converter converter;
 
 	@Operation(summary = "모임 기록 생성", description = "모임 기록 생성 API")
@@ -51,7 +50,7 @@ public class GroupDiaryController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<Void> createMoimMemo(
+	public ResponseDto<Void> createGroupMemo(
 		@Parameter(description = "모임 일정 ID") @PathVariable Long moimScheduleId,
 		@Parameter(description = "모임 기록용 이미지") @RequestPart(required = false) List<MultipartFile> imgs,
 		@Parameter(description = "모임 기록명") @RequestPart String name,
@@ -59,7 +58,7 @@ public class GroupDiaryController {
 		@Parameter(description = "참여자", example = "멍청이, 똑똑이") @RequestPart String participants
 	) {
 		GroupDiaryRequest.LocationDto locationDto = new GroupDiaryRequest.LocationDto(name, money, participants);
-		moimMemoFacade.createMoimMemo(moimScheduleId, locationDto, imgs);
+		groupMemoFacade.createGroupMemo(moimScheduleId, locationDto, imgs);
 		return ResponseDto.onSuccess(null);
 	}
 
@@ -71,7 +70,7 @@ public class GroupDiaryController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<Object> updateMoimMemo(
+	public ResponseDto<Object> updateGroupMemo(
 		@Parameter(description = "수정하고자 하는 활동 ID") @PathVariable Long activityId,
 		@Parameter(description = "모임 기록용 이미지") @RequestPart(required = false) List<MultipartFile> imgs,
 		@Parameter(description = "모임 기록명") @RequestPart String name,
@@ -79,7 +78,7 @@ public class GroupDiaryController {
 		@Parameter(description = "참여자", example = "멍청이, 똑똑이") @RequestPart String participants
 	) {
 		GroupDiaryRequest.LocationDto locationDto = new GroupDiaryRequest.LocationDto(name, money, participants);
-		moimMemoFacade.modifyMoimMemoLocation(activityId, locationDto, imgs);
+		groupMemoFacade.modifyGroupActivity(activityId, locationDto, imgs);
 		return ResponseDto.onSuccess(null);
 	}
 
@@ -91,11 +90,11 @@ public class GroupDiaryController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<Object> getMoimMemo(
+	public ResponseDto<Object> getGroupMemo(
 		@Parameter(description = "모임 기록 ID") @PathVariable("moimScheduleId") Long moimScheduleId
 	) {
-		GroupDiaryResponse.MoimDiaryDto moimDiaryDto = moimMemoFacade.getMoimMemoWithLocations(moimScheduleId);
-		return ResponseDto.onSuccess(moimDiaryDto);
+		GroupDiaryResponse.GroupDiaryDto groupDiaryDto = groupMemoFacade.getGroupMemoWithLocations(moimScheduleId);
+		return ResponseDto.onSuccess(groupDiaryDto);
 	}
 
 	@Operation(summary = "월간 모임 기록 조회", description = "월간 모임 기록 조회 API")
@@ -106,14 +105,14 @@ public class GroupDiaryController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<GroupDiaryResponse.SliceDiaryDto<GroupDiaryResponse.DiaryDto>> findMonthMoimMemo(
+	public ResponseDto<GroupDiaryResponse.SliceDiaryDto<GroupDiaryResponse.DiaryDto>> findMonthGroupMemo(
 		@Parameter(description = "조회 일자", example = "{년},{월}") @PathVariable("month") String month,
 		Pageable pageable,
 		HttpServletRequest request
 	) {
 		List<LocalDateTime> localDateTimes = converter.convertLongToLocalDateTime(month);
-		GroupDiaryResponse.SliceDiaryDto<GroupDiaryResponse.DiaryDto> diaryDto = moimMemoFacade
-			.getMonthMonthMoimMemo((Long)request.getAttribute("userId"), localDateTimes, pageable);
+		GroupDiaryResponse.SliceDiaryDto<GroupDiaryResponse.DiaryDto> diaryDto = groupMemoFacade
+			.getMonthMonthGroupMemo((Long)request.getAttribute("userId"), localDateTimes, pageable);
 		return ResponseDto.onSuccess(diaryDto);
 	}
 
@@ -125,12 +124,12 @@ public class GroupDiaryController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<GroupDiaryResponse.DiaryDto> getMoimMemoDetail(
+	public ResponseDto<GroupDiaryResponse.DiaryDto> getGroupMemoDetail(
 		@Parameter(description = "모임 일정 ID") @PathVariable Long moimScheduleId,
 		HttpServletRequest request
 	) {
 		Long userId = (Long)request.getAttribute("userId");
-		GroupDiaryResponse.DiaryDto diaryDto = moimMemoFacade.getMoimDiaryDetail(moimScheduleId, userId);
+		GroupDiaryResponse.DiaryDto diaryDto = groupMemoFacade.getGroupDiaryDetail(moimScheduleId, userId);
 		return ResponseDto.onSuccess(diaryDto);
 	}
 
@@ -142,12 +141,12 @@ public class GroupDiaryController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<Object> removePersonMoimMemo(
+	public ResponseDto<Object> removePersonGroupMemo(
 		@Parameter(description = "일정 ID") @PathVariable Long scheduleId,
 		HttpServletRequest request
 	) {
 		Long userId = (Long)request.getAttribute("userId");
-		moimMemoFacade.removePersonMoimMemo(scheduleId, userId);
+		groupMemoFacade.removePersonGroupMemo(scheduleId, userId);
 		return ResponseDto.onSuccess(null);
 	}
 
@@ -159,10 +158,10 @@ public class GroupDiaryController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<Object> removeMoimMemo(
+	public ResponseDto<Object> removeGroupMemo(
 		@Parameter(description = "모임 일정 ID") @PathVariable Long moimScheduleId
 	) {
-		moimMemoFacade.removeMoimMemo(moimScheduleId);
+		groupMemoFacade.removeGroupMemo(moimScheduleId);
 		return ResponseDto.onSuccess(null);
 	}
 
@@ -174,10 +173,10 @@ public class GroupDiaryController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<Object> removeMoimMemoLocation(
+	public ResponseDto<Object> removeGroupActivity(
 		@Parameter(description = "모임 활동 ID") @PathVariable Long activityId
 	) {
-		moimMemoFacade.removeMoimMemoLocation(activityId);
+		groupMemoFacade.removeGroupActivity(activityId);
 		return ResponseDto.onSuccess(null);
 	}
 
@@ -189,12 +188,12 @@ public class GroupDiaryController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<Object> createMoimScheduleText(
+	public ResponseDto<Object> createGroupScheduleText(
 		@Parameter(description = "모임 일정 ID") @PathVariable Long moimScheduleId,
 		@RequestBody GroupScheduleRequest.PostGroupScheduleTextDto moimScheduleText,
 		HttpServletRequest request
 	) {
-		moimMemoFacade.createMoimScheduleText(moimScheduleId,
+		groupMemoFacade.createGroupScheduleText(moimScheduleId,
 			(Long)request.getAttribute("userId"),
 			moimScheduleText);
 		return ResponseDto.onSuccess(null);

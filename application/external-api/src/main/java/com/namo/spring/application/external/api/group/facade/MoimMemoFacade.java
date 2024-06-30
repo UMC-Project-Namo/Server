@@ -127,13 +127,13 @@ public class MoimMemoFacade {
 	}
 
 	@Transactional(readOnly = false)
-	public GroupDiaryResponse.MoimDiaryDto getMoimMemoWithLocations(Long moimScheduleId) {
+	public GroupDiaryResponse.GroupDiaryDto getMoimMemoWithLocations(Long moimScheduleId) {
 		MoimSchedule moimSchedule = moimScheduleService.getMoimSchedule(moimScheduleId);
 		MoimMemo moimMemo = moimMemoService.getMoimMemoWithUsers(moimSchedule);
 		List<MoimMemoLocation> moimMemoLocations = moimMemoLocationService.getMoimMemoLocations(moimSchedule);
 		List<MoimMemoLocationAndUser> moimMemoLocationAndUsers
 			= moimMemoLocationService.getMoimMemoLocationAndUsers(moimMemoLocations);
-		return MoimDiaryResponseConverter.toMoimDiaryDto(moimMemo, moimMemoLocations, moimMemoLocationAndUsers);
+		return MoimDiaryResponseConverter.toGroupDiaryDto(moimMemo, moimMemoLocations, moimMemoLocationAndUsers);
 	}
 
 	@Transactional(readOnly = true)
