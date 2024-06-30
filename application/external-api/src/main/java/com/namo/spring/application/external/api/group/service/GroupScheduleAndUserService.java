@@ -49,7 +49,7 @@ public class GroupScheduleAndUserService {
 			.collect(Collectors.toSet());
 		for (MoimScheduleAndUser moimScheduleAndUser : moimScheduleAndUsers) {
 			if (!moimUsers.contains(moimScheduleAndUser.getUser())) {
-				throw new GroupException(ErrorStatus.NOT_USERS_IN_MOIM);
+				throw new GroupException(ErrorStatus.NOT_USERS_IN_GROUP);
 			}
 
 		}
@@ -69,7 +69,7 @@ public class GroupScheduleAndUserService {
 
 	public MoimScheduleAndUser getGroupScheduleAndUser(MoimSchedule moimSchedule, User user) {
 		return moimScheduleAndUserRepository.findMoimScheduleAndUserByMoimScheduleAndUser(moimSchedule, user)
-			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_MOIM_SCHEDULE_AND_USER_FAILURE));
+			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_GROUP_SCHEDULE_AND_USER_FAILURE));
 	}
 
 	public List<MoimScheduleAndUser> getAllByUser(User user) {

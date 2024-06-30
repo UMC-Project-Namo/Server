@@ -42,6 +42,6 @@ public class GroupMemoService {
 
 	public MoimMemo getGroupMemoWithLocations(Long moimScheduleId) {
 		return moimMemoRepository.findMoimMemoAndLocationsByMoimSchedule(moimScheduleId)
-			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_MOIM_MEMO_FAILURE));
+			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_GROUP_MEMO_FAILURE));
 	}
 }

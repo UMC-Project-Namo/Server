@@ -27,7 +27,7 @@ public class GroupActivityService {
 
 	public MoimMemoLocation createGroupActivity(MoimMemoLocation groupActivity, MoimMemo moimMemo) {
 		if (moimMemo.isFullLocationSize()) {
-			throw new GroupException(ErrorStatus.MOIM_MEMO_IS_FULL_ERROR);
+			throw new GroupException(ErrorStatus.GROUP_MEMO_IS_FULL_ERROR);
 		}
 		return moimMemoLocationRepository.save(groupActivity);
 	}
@@ -43,7 +43,7 @@ public class GroupActivityService {
 
 	public MoimMemoLocation getGroupActivityWithImgs(Long memoLocationId) {
 		return moimMemoLocationRepository.findMoimMemoLocationWithImgsById(memoLocationId)
-			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_MOIM_MEMO_LOCATION_FAILURE));
+			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_GROUP_MEMO_LOCATION_FAILURE));
 	}
 
 	public void removeGroupActivityAndUsers(MoimMemoLocation groupActivity) {

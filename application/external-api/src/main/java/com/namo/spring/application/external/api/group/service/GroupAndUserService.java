@@ -36,7 +36,7 @@ public class GroupAndUserService {
 
 	private void validateGroupIsFull(Moim group) {
 		if (group.isFull()) {
-			throw new GroupException(ErrorStatus.MOIM_IS_FULL_ERROR);
+			throw new GroupException(ErrorStatus.GROUP_IS_FULL_ERROR);
 		}
 	}
 
@@ -54,7 +54,7 @@ public class GroupAndUserService {
 
 	public MoimAndUser getGroupAndUser(Moim group, User user) {
 		return groupAndUserRepository.findMoimAndUserByUserAndMoim(user, group)
-			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_MOIM_AND_USER_FAILURE));
+			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_GROUP_AND_USER_FAILURE));
 	}
 
 	public void removeGroupAndUser(MoimAndUser groupAndUser, Moim group) {
