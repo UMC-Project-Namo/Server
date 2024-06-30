@@ -2,7 +2,7 @@ package com.namo.spring.application.external.api.group.dto;
 
 import java.util.List;
 
-import com.namo.spring.application.external.api.group.converter.MoimDiaryResponseConverter;
+import com.namo.spring.application.external.api.group.converter.GroupDiaryResponseConverter;
 import com.namo.spring.core.common.utils.DateUtil;
 import com.namo.spring.db.mysql.domains.group.domain.MoimMemo;
 
@@ -28,7 +28,7 @@ public class GroupDiaryResponse {
 
 		public static GroupDiaryDto fromMoimMemo(MoimMemo moimMemo, List<MoimActivityDto> moimActivityDtos) {
 			List<GroupDiaryResponse.GroupUserDto> users = moimMemo.getMoimSchedule().getMoimScheduleAndUsers().stream()
-				.map(MoimDiaryResponseConverter::toGroupUserDto)
+				.map(GroupDiaryResponseConverter::toGroupUserDto)
 				.toList();
 			return GroupDiaryResponse.GroupDiaryDto.builder()
 				.name(moimMemo.getMoimSchedule().getName())

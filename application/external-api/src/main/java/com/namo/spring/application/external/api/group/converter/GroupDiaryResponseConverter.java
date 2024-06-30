@@ -17,8 +17,8 @@ import com.namo.spring.db.mysql.domains.group.domain.MoimScheduleAndUser;
 import com.namo.spring.db.mysql.domains.individual.domain.Image;
 import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
 
-public class MoimDiaryResponseConverter {
-	private MoimDiaryResponseConverter() {
+public class GroupDiaryResponseConverter {
+	private GroupDiaryResponseConverter() {
 		throw new IllegalStateException("Utill Classes");
 	}
 
@@ -27,7 +27,7 @@ public class MoimDiaryResponseConverter {
 		List<MoimMemoLocation> moimMemoLocations,
 		List<MoimMemoLocationAndUser> moimMemoLocationAndUsers) {
 		List<GroupDiaryResponse.GroupUserDto> users = moimMemo.getMoimSchedule().getMoimScheduleAndUsers().stream()
-			.map(MoimDiaryResponseConverter::toGroupUserDto)
+			.map(GroupDiaryResponseConverter::toGroupUserDto)
 			.toList();
 		return GroupDiaryResponse.GroupDiaryDto.fromMoimMemo(moimMemo,
 			toMoimActivityDtos(moimMemoLocations, moimMemoLocationAndUsers));
@@ -84,7 +84,7 @@ public class MoimDiaryResponseConverter {
 		SliceImpl<MoimScheduleAndUser> moimSchedulesSlice = new SliceImpl<>(moimScheduleAndUsers, page, hasNext);
 		return GroupDiaryResponse.SliceDiaryDto.builder()
 			.content(
-				moimSchedulesSlice.stream().map(MoimDiaryResponseConverter::toDiaryDto).collect(Collectors.toList()))
+				moimSchedulesSlice.stream().map(GroupDiaryResponseConverter::toDiaryDto).collect(Collectors.toList()))
 			.currentPage(moimSchedulesSlice.getNumber())
 			.size(moimSchedulesSlice.getSize())
 			.first(moimSchedulesSlice.isFirst())

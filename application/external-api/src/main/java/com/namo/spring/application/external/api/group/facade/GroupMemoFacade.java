@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.namo.spring.application.external.api.group.converter.MoimDiaryResponseConverter;
-import com.namo.spring.application.external.api.group.converter.MoimMemoConverter;
-import com.namo.spring.application.external.api.group.converter.MoimMemoLocationConverter;
+import com.namo.spring.application.external.api.group.converter.GroupActivityConverter;
+import com.namo.spring.application.external.api.group.converter.GroupDiaryResponseConverter;
+import com.namo.spring.application.external.api.group.converter.GroupMemoConverter;
 import com.namo.spring.application.external.api.group.dto.GroupDiaryRequest;
 import com.namo.spring.application.external.api.group.dto.GroupDiaryResponse;
 import com.namo.spring.application.external.api.group.dto.GroupScheduleRequest;
@@ -59,20 +59,20 @@ public class GroupMemoFacade {
 		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(groupScheduleId);
 		return groupMemoService.getGroupMemoOrNull(groupSchedule)
 			.orElseGet(
-				() -> groupMemoService.createGroupMemo(MoimMemoConverter.toGroupMemo(groupSchedule))
+				() -> groupMemoService.createGroupMemo(GroupMemoConverter.toGroupMemo(groupSchedule))
 			);
 	}
 
 	private MoimMemoLocation createGroupActivity(MoimMemo groupMemo, GroupDiaryRequest.LocationDto locationDto) {
-		MoimMemoLocation groupActivity = MoimMemoLocationConverter.toGroupActivity(groupMemo, locationDto);
+		MoimMemoLocation groupActivity = GroupActivityConverter.toGroupActivity(groupMemo, locationDto);
 		return groupActivityService.createGroupActivity(groupActivity, groupMemo);
 	}
 
 	private void createGroupActivityAndUsers(GroupDiaryRequest.LocationDto locationDto,
 		MoimMemoLocation groupActivity) {
 		List<User> users = userService.getUsersInGroupSchedule(locationDto.getParticipants());
-		List<MoimMemoLocationAndUser> groupActivityAndUsers = MoimMemoLocationConverter
-			.toGroupActivityLocationAndUsers(groupActivity, users);
+		List<MoimMemoLocationAndUser> groupActivityAndUsers = GroupActivityConverter
+			.toGroupActivityAndUsers(groupActivity, users);
 		groupActivityService.createGroupActivityAndUsers(groupActivityAndUsers);
 	}
 
@@ -89,8 +89,8 @@ public class GroupMemoFacade {
 		 */
 		List<String> urls = fileUtils.uploadImages(imgs, FilePath.GROUP_ACTIVITY_IMG);
 		for (String url : urls) {
-			MoimMemoLocationImg groupActivityImg = MoimMemoLocationConverter
-				.toGroupActivityLocationImg(groupActivity, url);
+			MoimMemoLocationImg groupActivityImg = GroupActivityConverter
+				.toGroupActivityImg(groupActivity, url);
 			groupActivityService.createGroupActivityImg(groupActivityImg);
 		}
 	}
@@ -133,7 +133,7 @@ public class GroupMemoFacade {
 		List<MoimMemoLocation> groupActivities = groupActivityService.getGroupActivities(groupSchedule);
 		List<MoimMemoLocationAndUser> groupActivityAndUsers
 			= groupActivityService.getGroupActivityAndUsers(groupActivities);
-		return MoimDiaryResponseConverter.toGroupDiaryDto(groupMemo, groupActivities, groupActivityAndUsers);
+		return GroupDiaryResponseConverter.toGroupDiaryDto(groupMemo, groupActivities, groupActivityAndUsers);
 	}
 
 	@Transactional(readOnly = true)
@@ -142,7 +142,7 @@ public class GroupMemoFacade {
 		User user = userService.getUser(userId);
 		List<MoimScheduleAndUser> groupScheduleAndUsersForMonthGroupMemo
 			= groupScheduleAndUserService.getGroupScheduleAndUsersForMonthGroupMemo(user, dates, page);
-		return MoimDiaryResponseConverter.toSliceDiaryDto(groupScheduleAndUsersForMonthGroupMemo, page);
+		return GroupDiaryResponseConverter.toSliceDiaryDto(groupScheduleAndUsersForMonthGroupMemo, page);
 	}
 
 	@Transactional(readOnly = false)
@@ -178,6 +178,6 @@ public class GroupMemoFacade {
 		User user = userService.getUser(userId);
 		MoimScheduleAndUser groupScheduleAndUser = groupScheduleAndUserService.getGroupScheduleAndUser(groupScheduleId,
 			user);
-		return MoimDiaryResponseConverter.toDiaryDto(groupScheduleAndUser);
+		return GroupDiaryResponseConverter.toDiaryDto(groupScheduleAndUser);
 	}
 }
