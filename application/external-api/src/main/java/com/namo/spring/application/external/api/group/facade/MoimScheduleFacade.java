@@ -11,12 +11,12 @@ import com.namo.spring.application.external.api.group.converter.MoimScheduleConv
 import com.namo.spring.application.external.api.group.converter.MoimScheduleResponseConverter;
 import com.namo.spring.application.external.api.group.dto.GroupScheduleRequest;
 import com.namo.spring.application.external.api.group.dto.GroupScheduleResponse;
-import com.namo.spring.application.external.api.group.service.MoimAndUserService;
+import com.namo.spring.application.external.api.group.service.GroupAndUserService;
+import com.namo.spring.application.external.api.group.service.GroupService;
 import com.namo.spring.application.external.api.group.service.MoimMemoLocationService;
 import com.namo.spring.application.external.api.group.service.MoimMemoService;
 import com.namo.spring.application.external.api.group.service.MoimScheduleAndUserService;
 import com.namo.spring.application.external.api.group.service.MoimScheduleService;
-import com.namo.spring.application.external.api.group.service.MoimService;
 import com.namo.spring.application.external.api.individual.service.CategoryService;
 import com.namo.spring.application.external.api.individual.service.ScheduleService;
 import com.namo.spring.application.external.api.user.service.UserService;
@@ -42,8 +42,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MoimScheduleFacade {
 	private final UserService userService;
-	private final MoimService moimService;
-	private final MoimAndUserService moimAndUserService;
+	private final GroupService moimService;
+	private final GroupAndUserService moimAndUserService;
 	private final MoimScheduleService moimScheduleService;
 	private final MoimScheduleAndUserService moimScheduleAndUserService;
 	private final MoimMemoService moimMemoService;

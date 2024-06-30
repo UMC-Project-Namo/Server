@@ -19,7 +19,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.namo.spring.application.external.api.group.service.MoimAndUserService;
+import com.namo.spring.application.external.api.group.service.GroupAndUserService;
 import com.namo.spring.application.external.api.group.service.MoimMemoLocationService;
 import com.namo.spring.application.external.api.group.service.MoimScheduleAndUserService;
 import com.namo.spring.application.external.api.individual.converter.CategoryConverter;
@@ -35,11 +35,9 @@ import com.namo.spring.application.external.api.user.dto.UserRequest;
 import com.namo.spring.application.external.api.user.dto.UserResponse;
 import com.namo.spring.application.external.api.user.helper.JwtAuthHelper;
 import com.namo.spring.application.external.api.user.service.UserService;
-import com.namo.spring.core.infra.common.constant.FilePath;
 import com.namo.spring.application.external.global.common.security.jwt.CustomJwts;
 import com.namo.spring.application.external.global.common.security.jwt.JwtClaimsParserUtil;
 import com.namo.spring.application.external.global.common.security.jwt.access.AccessTokenClaimKeys;
-import com.namo.spring.core.infra.common.aws.s3.FileUtils;
 import com.namo.spring.application.external.global.utils.SocialUtils;
 import com.namo.spring.client.social.apple.client.AppleAuthClient;
 import com.namo.spring.client.social.apple.dto.AppleResponse;
@@ -48,6 +46,8 @@ import com.namo.spring.client.social.common.properties.AppleProperties;
 import com.namo.spring.client.social.common.utils.AppleUtils;
 import com.namo.spring.client.social.kakao.client.KakaoAuthClient;
 import com.namo.spring.client.social.naver.client.NaverAuthClient;
+import com.namo.spring.core.infra.common.aws.s3.FileUtils;
+import com.namo.spring.core.infra.common.constant.FilePath;
 import com.namo.spring.core.infra.common.jwt.JwtClaims;
 import com.namo.spring.core.infra.common.jwt.JwtProvider;
 import com.namo.spring.db.mysql.domains.group.domain.MoimScheduleAndUser;
@@ -85,7 +85,7 @@ public class UserFacade {
 	private final ScheduleService scheduleService;
 	private final AlarmService alarmService;
 	private final ImageService imageService;
-	private final MoimAndUserService moimAndUserService;
+	private final GroupAndUserService moimAndUserService;
 	private final MoimScheduleAndUserService moimScheduleAndUserService;
 	private final MoimMemoLocationService moimMemoLocationService;
 

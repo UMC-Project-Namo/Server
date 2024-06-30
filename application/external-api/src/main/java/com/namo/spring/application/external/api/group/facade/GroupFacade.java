@@ -15,8 +15,8 @@ import com.namo.spring.application.external.api.group.converter.GroupConverter;
 import com.namo.spring.application.external.api.group.converter.GroupResponseConverter;
 import com.namo.spring.application.external.api.group.dto.GroupRequest;
 import com.namo.spring.application.external.api.group.dto.GroupResponse;
-import com.namo.spring.application.external.api.group.service.MoimAndUserService;
-import com.namo.spring.application.external.api.group.service.MoimService;
+import com.namo.spring.application.external.api.group.service.GroupAndUserService;
+import com.namo.spring.application.external.api.group.service.GroupService;
 import com.namo.spring.application.external.api.user.service.UserService;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.exception.GroupException;
@@ -41,9 +41,9 @@ public class GroupFacade {
 	 * BaseURL을 직접 넣어주세요.
 	 */
 	private static final int[] GROUP_USERS_COLOR = new int[] {5, 6, 7, 8, 9, 10, 11, 12, 13, 14};
-	private final MoimService groupService;
+	private final GroupService groupService;
 	private final UserService userService;
-	private final MoimAndUserService groupAndUserService;
+	private final GroupAndUserService groupAndUserService;
 	private final FileUtils fileUtils;
 
 	@Value("${moim.base-url-image}")
