@@ -85,9 +85,9 @@ public class UserFacade {
 	private final ScheduleService scheduleService;
 	private final AlarmService alarmService;
 	private final ImageService imageService;
-	private final GroupAndUserService moimAndUserService;
-	private final GroupScheduleAndUserService moimScheduleAndUserService;
-	private final GroupActivityService moimMemoLocationService;
+	private final GroupAndUserService groupAndUserService;
+	private final GroupScheduleAndUserService groupScheduleAndUserService;
+	private final GroupActivityService groupActivityService;
 
 	private final KakaoAuthClient kakaoAuthClient;
 	private final NaverAuthClient naverAuthClient;
@@ -323,13 +323,13 @@ public class UserFacade {
 				imageService.removeImagesBySchedules(schedules);
 				scheduleService.removeSchedules(schedules);
 
-				moimAndUserService.removeMoimAndUsersByUser(user);
+				groupAndUserService.removeGroupAndUsersByUser(user);
 
-				List<MoimScheduleAndUser> moimScheduleAndUsers = moimScheduleAndUserService.getAllByUser(user);
-				moimScheduleAndUserService.removeMoimScheduleAlarms(moimScheduleAndUsers);
-				moimScheduleAndUserService.removeMoimScheduleAndUsers(moimScheduleAndUsers);
+				List<MoimScheduleAndUser> groupScheduleAndUsers = groupScheduleAndUserService.getAllByUser(user);
+				groupScheduleAndUserService.removeGroupScheduleAlarms(groupScheduleAndUsers);
+				groupScheduleAndUserService.removeGroupScheduleAndUsers(groupScheduleAndUsers);
 
-				moimMemoLocationService.removeMoimMemoLocationAndUsersByUser(user);
+				groupActivityService.removeGroupActivityAndUsersByUser(user);
 				userService.removeUser(user);
 			}
 		);
