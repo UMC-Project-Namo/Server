@@ -43,9 +43,9 @@ public class ScheduleFacade {
 	private final AlarmService alarmService;
 	private final ImageService imageService;
 	private final CategoryService categoryService;
-	private final GroupScheduleService moimScheduleService;
+	private final GroupScheduleService groupScheduleService;
 	private final PeriodService periodService;
-	private final GroupScheduleAndUserService moimScheduleAndUserService;
+	private final GroupScheduleAndUserService groupScheduleAndUserService;
 	private final FileUtils fileUtils;
 
 	@Transactional
@@ -73,10 +73,10 @@ public class ScheduleFacade {
 	}
 
 	@Transactional(readOnly = true)
-	public List<ScheduleResponse.GetScheduleDto> getMoimSchedulesByUser(Long userId,
+	public List<ScheduleResponse.GetScheduleDto> getGroupSchedulesByUser(Long userId,
 		List<LocalDateTime> localDateTimes) {
 		User user = userService.getUser(userId);
-		return scheduleService.getMoimSchedulesByUser(user, localDateTimes.get(0), localDateTimes.get(1));
+		return scheduleService.getGroupSchedulesByUser(user, localDateTimes.get(0), localDateTimes.get(1));
 	}
 
 	@Transactional(readOnly = true)
@@ -86,9 +86,9 @@ public class ScheduleFacade {
 	}
 
 	@Transactional(readOnly = true)
-	public List<ScheduleResponse.GetScheduleDto> getAllMoimSchedulesByUser(Long userId) {
+	public List<ScheduleResponse.GetScheduleDto> getAllGroupSchedulesByUser(Long userId) {
 		User user = userService.getUser(userId);
-		return scheduleService.getAllMoimSchedulesByUser(user);
+		return scheduleService.getAllGroupSchedulesByUser(user);
 	}
 
 	@Transactional
@@ -135,11 +135,12 @@ public class ScheduleFacade {
 			return;
 		}
 		User user = userService.getUser(userId);
-		MoimSchedule moimSchedule = moimScheduleService.getMoimScheduleWithMoimScheduleAndUsers(scheduleId);
-		MoimScheduleAndUser moimScheduleAndUser = moimScheduleAndUserService.getMoimScheduleAndUser(moimSchedule, user);
+		MoimSchedule groupSchedule = groupScheduleService.getGroupScheduleWithGroupScheduleAndUsers(scheduleId);
+		MoimScheduleAndUser groupScheduleAndUser = groupScheduleAndUserService.getGroupScheduleAndUser(groupSchedule,
+			user);
 
-		moimScheduleAndUserService.removeMoimScheduleAlarm(moimScheduleAndUser);
-		moimScheduleAndUserService.removeMoimScheduleAndUserInPersonalSpace(moimScheduleAndUser);
+		groupScheduleAndUserService.removeGroupScheduleAlarm(groupScheduleAndUser);
+		groupScheduleAndUserService.removeGroupScheduleAndUserInPersonalSpace(groupScheduleAndUser);
 	}
 
 }

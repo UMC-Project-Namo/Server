@@ -66,7 +66,7 @@ public class CategoryService {
 		}
 	}
 
-	public List<Category> getMoimUsersCategories(List<User> users) {
+	public List<Category> getGroupUsersCategories(List<User> users) {
 		List<Category> moimCategoriesByUsers = categoryRepository.findMoimCategoriesByUsers(users, CategoryKind.MOIM);
 		validateMoimUsersCategories(users, moimCategoriesByUsers);
 		return moimCategoriesByUsers;
