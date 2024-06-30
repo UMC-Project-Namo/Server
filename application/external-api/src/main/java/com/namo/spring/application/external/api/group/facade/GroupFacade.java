@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.namo.spring.application.external.api.group.converter.GroupAndUserConverter;
+import com.namo.spring.application.external.api.group.converter.GroupConverter;
 import com.namo.spring.application.external.api.group.converter.GroupResponseConverter;
-import com.namo.spring.application.external.api.group.converter.MoimAndUserConverter;
-import com.namo.spring.application.external.api.group.converter.MoimConverter;
 import com.namo.spring.application.external.api.group.dto.GroupRequest;
 import com.namo.spring.application.external.api.group.dto.GroupResponse;
 import com.namo.spring.application.external.api.group.service.MoimAndUserService;
@@ -58,11 +58,11 @@ public class GroupFacade {
 			url = fileUtils.uploadImage(img, FilePath.GROUP_PROFILE_IMG);
 		}
 
-		Moim group = MoimConverter.toGroup(groupName, url);
+		Moim group = GroupConverter.toGroup(groupName, url);
 		groupService.createGroup(group);
 
-		MoimAndUser groupAndUser = MoimAndUserConverter
-			.toGroupAndUser(groupName, MOIM_USERS_COLOR[0], user, group);
+		MoimAndUser groupAndUser = GroupAndUserConverter
+			.toGroupAndUser(groupName, GROUP_USERS_COLOR[0], user, group);
 		groupAndUserService.createGroupAndUser(groupAndUser, group);
 		return GroupResponseConverter.toGroupIdDto(group);
 	}
@@ -94,7 +94,7 @@ public class GroupFacade {
 		User user = userService.getUser(userId);
 		Moim group = groupService.getGroupWithGroupAndUsersByCode(code);
 
-		MoimAndUser groupAndUser = MoimAndUserConverter
+		MoimAndUser groupAndUser = GroupAndUserConverter
 			.toGroupAndUser(group.getName(), selectColor(group), user, group);
 		groupAndUserService.createGroupAndUser(groupAndUser, group);
 		return GroupResponseConverter.toGroupParticipantDto(group);

@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.namo.spring.application.external.api.group.converter.MoimAndUserConverter;
+import com.namo.spring.application.external.api.group.converter.GroupAndUserConverter;
 import com.namo.spring.application.external.api.group.converter.MoimScheduleConverter;
 import com.namo.spring.application.external.api.group.converter.MoimScheduleResponseConverter;
 import com.namo.spring.application.external.api.group.dto.GroupScheduleRequest;
@@ -20,8 +20,8 @@ import com.namo.spring.application.external.api.group.service.MoimService;
 import com.namo.spring.application.external.api.individual.service.CategoryService;
 import com.namo.spring.application.external.api.individual.service.ScheduleService;
 import com.namo.spring.application.external.api.user.service.UserService;
-import com.namo.spring.core.infra.common.constant.FilePath;
 import com.namo.spring.core.infra.common.aws.s3.FileUtils;
+import com.namo.spring.core.infra.common.constant.FilePath;
 import com.namo.spring.db.mysql.domains.group.domain.Moim;
 import com.namo.spring.db.mysql.domains.group.domain.MoimAndUser;
 import com.namo.spring.db.mysql.domains.group.domain.MoimMemo;
@@ -174,7 +174,7 @@ public class MoimScheduleFacade {
 		Moim moim = moimService.getMoimWithMoimAndUsersByMoimId(moimId);
 		existMoimAndUser(userId, moim);
 		List<MoimAndUser> moimAndUsersInMoim = moimAndUserService.getMoimAndUsers(moim);
-		List<User> users = MoimAndUserConverter.toUsers(moimAndUsersInMoim);
+		List<User> users = GroupAndUserConverter.toUsers(moimAndUsersInMoim);
 
 		List<Schedule> individualsSchedules = scheduleService.getSchedules(users);
 		List<MoimScheduleAndUser> moimScheduleAndUsers = moimScheduleService
@@ -188,7 +188,7 @@ public class MoimScheduleFacade {
 		Moim moim = moimService.getMoimWithMoimAndUsersByMoimId(moimId);
 		existMoimAndUser(userId, moim);
 		List<MoimAndUser> moimAndUsersInMoim = moimAndUserService.getMoimAndUsers(moim);
-		List<User> users = MoimAndUserConverter.toUsers(moimAndUsersInMoim);
+		List<User> users = GroupAndUserConverter.toUsers(moimAndUsersInMoim);
 
 		List<Schedule> individualsSchedules = scheduleService.getSchedules(users);
 		List<MoimScheduleAndUser> moimScheduleAndUsers = moimScheduleService
