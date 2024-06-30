@@ -141,7 +141,7 @@ public class GroupDiaryFacade {
 		List<LocalDateTime> dates, Pageable page) {
 		User user = userService.getUser(userId);
 		List<MoimScheduleAndUser> groupScheduleAndUsersForMonthGroupMemo
-			= groupScheduleAndUserService.getGroupScheduleAndUsersForMonthGroupMemo(user, dates, page);
+			= groupScheduleAndUserService.getGroupScheduleAndUsersForMonthGroupDiary(user, dates, page);
 		return GroupDiaryResponseConverter.toSliceDiaryDto(groupScheduleAndUsersForMonthGroupMemo, page);
 	}
 
@@ -152,7 +152,7 @@ public class GroupDiaryFacade {
 		User user = userService.getUser(userId);
 		MoimScheduleAndUser groupScheduleAndUser = groupScheduleAndUserService.getGroupScheduleAndUser(groupSchedule,
 			user);
-		groupScheduleAndUserService.modifyText(groupScheduleAndUser, groupScheduleText.getText());
+		groupScheduleAndUserService.modifyMemo(groupScheduleAndUser, groupScheduleText.getText());
 	}
 
 	@Transactional(readOnly = false)

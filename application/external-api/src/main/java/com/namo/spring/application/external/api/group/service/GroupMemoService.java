@@ -19,29 +19,29 @@ import lombok.extern.slf4j.Slf4j;
 public class GroupMemoService {
 	private final MoimMemoRepository moimMemoRepository;
 
-	public Optional<MoimMemo> getGroupMemoOrNull(MoimSchedule moimSchedule) {
-		return moimMemoRepository.findMoimMemoByMoimSchedule(moimSchedule);
+	public Optional<MoimMemo> getGroupMemoOrNull(MoimSchedule groupSchedule) {
+		return moimMemoRepository.findMoimMemoByMoimSchedule(groupSchedule);
 	}
 
-	public MoimMemo getGroupMemo(MoimSchedule moimSchedule) {
-		return moimMemoRepository.findMoimMemoByMoimSchedule(moimSchedule)
+	public MoimMemo getGroupMemo(MoimSchedule groupSchedule) {
+		return moimMemoRepository.findMoimMemoByMoimSchedule(groupSchedule)
 			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_GROUP_FAILURE));
 	}
 
-	public MoimMemo getGroupMemoWithUsers(MoimSchedule moimSchedule) {
-		return moimMemoRepository.findMoimMemoAndUsersByMoimSchedule(moimSchedule);
+	public MoimMemo getGroupMemoWithUsers(MoimSchedule groupSchedule) {
+		return moimMemoRepository.findMoimMemoAndUsersByMoimSchedule(groupSchedule);
 	}
 
-	public void removeGroupMemo(MoimMemo moimMemo) {
-		moimMemoRepository.delete(moimMemo);
+	public void removeGroupMemo(MoimMemo groupMemo) {
+		moimMemoRepository.delete(groupMemo);
 	}
 
-	public MoimMemo createGroupMemo(MoimMemo moimMemo) {
-		return moimMemoRepository.save(moimMemo);
+	public MoimMemo createGroupMemo(MoimMemo groupMemo) {
+		return moimMemoRepository.save(groupMemo);
 	}
 
-	public MoimMemo getGroupMemoWithLocations(Long moimScheduleId) {
-		return moimMemoRepository.findMoimMemoAndLocationsByMoimSchedule(moimScheduleId)
+	public MoimMemo getGroupMemoWithLocations(Long groupScheduleId) {
+		return moimMemoRepository.findMoimMemoAndLocationsByMoimSchedule(groupScheduleId)
 			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_GROUP_MEMO_FAILURE));
 	}
 }

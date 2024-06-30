@@ -189,7 +189,7 @@ public class GroupDiaryController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<Object> createGroupScheduleText(
+	public ResponseDto<Object> createGroupMemo(
 		@Parameter(description = "모임 일정 ID") @PathVariable Long moimScheduleId,
 		@RequestBody GroupScheduleRequest.PostGroupScheduleTextDto moimScheduleText,
 		HttpServletRequest request

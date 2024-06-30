@@ -103,7 +103,7 @@ public class GroupScheduleFacade {
 
 	@Transactional(readOnly = false)
 	public void removeGroupSchedule(Long groupScheduleId, Long userId) {
-		MoimSchedule groupSchedule = groupScheduleService.getGroupScheduleWithGroupMemo(groupScheduleId);
+		MoimSchedule groupSchedule = groupScheduleService.getGroupScheduleWithGroupDiary(groupScheduleId);
 		List<MoimScheduleAndUser> groupScheduleAndUsers = groupScheduleService.getGroupScheduleAndUsers(groupSchedule);
 
 		existGroupAndUser(userId, groupSchedule.getMoim());

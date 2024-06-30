@@ -37,7 +37,7 @@ public class GroupScheduleService {
 			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
 	}
 
-	public MoimSchedule getGroupScheduleWithGroupMemo(Long id) {
+	public MoimSchedule getGroupScheduleWithGroupDiary(Long id) {
 		return moimScheduleRepository.findMoimScheduleWithMoimMemoById(id)
 			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
 	}

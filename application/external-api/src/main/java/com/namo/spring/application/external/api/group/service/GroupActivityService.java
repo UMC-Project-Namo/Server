@@ -25,8 +25,8 @@ public class GroupActivityService {
 	private final MoimMemoLocationAndUserRepository moimMemoLocationAndUserRepository;
 	private final MoimMemoLocationImgRepository moimMemoLocationImgRepository;
 
-	public MoimMemoLocation createGroupActivity(MoimMemoLocation groupActivity, MoimMemo moimMemo) {
-		if (moimMemo.isFullLocationSize()) {
+	public MoimMemoLocation createGroupActivity(MoimMemoLocation groupActivity, MoimMemo groupMemo) {
+		if (groupMemo.isFullLocationSize()) {
 			throw new GroupException(ErrorStatus.GROUP_MEMO_IS_FULL_ERROR);
 		}
 		return moimMemoLocationRepository.save(groupActivity);
@@ -70,8 +70,8 @@ public class GroupActivityService {
 		moimMemoLocationRepository.delete(groupActivity);
 	}
 
-	public List<MoimMemoLocation> getGroupActivityWithImgs(MoimMemo moimMemo) {
-		return moimMemoLocationRepository.findMoimMemo(moimMemo);
+	public List<MoimMemoLocation> getGroupActivityWithImgs(MoimMemo groupMemo) {
+		return moimMemoLocationRepository.findMoimMemo(groupMemo);
 	}
 
 	public List<MoimMemoLocationImg> getGroupActivityImgs(List<MoimMemoLocation> groupActivities) {
@@ -79,8 +79,8 @@ public class GroupActivityService {
 			.findMoimMemoLocationImgsByMoimMemoLocations(groupActivities);
 	}
 
-	public List<MoimMemoLocation> getGroupActivities(MoimSchedule moimSchedule) {
-		return moimMemoLocationRepository.findMoimMemoLocationsWithImgs(moimSchedule);
+	public List<MoimMemoLocation> getGroupActivities(MoimSchedule groupSchedule) {
+		return moimMemoLocationRepository.findMoimMemoLocationsWithImgs(groupSchedule);
 	}
 
 	public List<MoimMemoLocationAndUser> getGroupActivityAndUsers(List<MoimMemoLocation> groupActivities) {
