@@ -127,7 +127,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private UserDetails getUserDetails(String accessToken) {
 		JwtClaims claims = accessTokenProvider.parseJwtClaimsFromToken(accessToken);
 		String userId = (String)claims.getClaims().get(AccessTokenClaimKeys.USER_ID.getValue());
-		return securityUserDetailsService.loadUserByUserId(Long.parseLong(userId));
+		return securityUserDetailsService.loadUserByUsername(userId);
 	}
 
 	/**

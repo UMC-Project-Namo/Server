@@ -1,6 +1,8 @@
 package com.namo.spring.application.external.global.common.security.authentication;
 
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.namo.spring.application.external.api.user.service.UserService;
@@ -11,11 +13,12 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class SecurityUserDetailsService {
+public class SecurityUserDetailsService implements UserDetailsService {
 	private final UserService userService;
 
-	public UserDetails loadUserByUserId(Long userId) {
-		return userService.readUser(userId)
+	@Override
+	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+		return userService.readUser(Long.parseLong(userId))
 			.map(SecurityUserDetails::from)
 			.orElseThrow(() -> new AuthException(ErrorStatus.NOT_FOUND_USER_FAILURE));
 	}
