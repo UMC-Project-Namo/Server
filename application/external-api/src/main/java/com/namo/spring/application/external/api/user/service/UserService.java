@@ -199,7 +199,7 @@ public class UserService {
 	 */
 	// TODO: 2024.06.22. 추후 social-client 모듈료 이동해야합니다. - 루카
 	public boolean validateToken(PublicKey publicKey, String token) {
-		Claims claims = Jwts.parserBuilder().setSigningKey(publicKey).build().parseClaimsJws(token).getBody();
+		Claims claims = Jwts.parser().setSigningKey(publicKey).build().parseClaimsJws(token).getBody();
 
 		String issuer = (String)claims.get("iss");
 		if (!"https://appleid.apple.com".equals(issuer)) {

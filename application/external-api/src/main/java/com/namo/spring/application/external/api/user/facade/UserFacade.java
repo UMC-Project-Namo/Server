@@ -142,7 +142,7 @@ public class UserFacade {
 		userService.validateToken(publicKey, req.getIdentityToken());
 
 		//identity에서 email뽑기
-		Claims claims = Jwts.parserBuilder()
+		Claims claims = Jwts.parser()
 			.setSigningKey(publicKey)
 			.build()
 			.parseClaimsJws(req.getIdentityToken())

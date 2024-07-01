@@ -92,7 +92,7 @@ public class JwtUtils {
 	}
 
 	private Long resolveToken(String accessToken) {
-		return Optional.ofNullable(Jwts.parserBuilder()
+		return Optional.ofNullable(Jwts.parser()
 				.setSigningKey(getSecretKey())
 				.build()
 				.parseClaimsJws(accessToken)
@@ -111,7 +111,7 @@ public class JwtUtils {
 	}
 
 	public boolean validateToken(String token) {
-		Jws<Claims> claims = Jwts.parserBuilder()
+		Jws<Claims> claims = Jwts.parser()
 			.setSigningKey(getSecretKey())
 			.build()
 			.parseClaimsJws(getJwtToken(token));
@@ -125,7 +125,7 @@ public class JwtUtils {
 
 	public Long getExpiration(String accessToken) {
 		try {
-			Jws<Claims> claims = Jwts.parserBuilder()
+			Jws<Claims> claims = Jwts.parser()
 				.setSigningKey(getSecretKey())
 				.build()
 				.parseClaimsJws(accessToken);
