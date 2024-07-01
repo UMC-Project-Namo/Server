@@ -8,13 +8,16 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.AbstractRequestMatcherRegistry;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import lombok.RequiredArgsConstructor;
@@ -30,7 +33,11 @@ public class SecurityConfig {
 	private static final String[] ANONYMOUS_ENDPOINTS = {};
 	private static final String[] SWAGGER_ENDPOINTS = {};
 
+	private final SecurityAdapterConfig securityAdapterConfig;
 	private final CorsConfigurationSource corsConfigurationSource;
+	private final AccessDeniedHandler accessDeniedHandler;
+	private final AuthenticationEntryPoint authenticationEntryPoint;
+
 
 	@Bean
 	@Profile({"local", "dev", "test"})
@@ -64,7 +71,13 @@ public class SecurityConfig {
 				sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			)
 			.formLogin(AbstractHttpConfigurer::disable)
-			.logout(AbstractHttpConfigurer::disable);
+			.logout(AbstractHttpConfigurer::disable)
+			.with(securityAdapterConfig, Customizer.withDefaults())
+			.exceptionHandling(
+				exception -> exception
+					.accessDeniedHandler(accessDeniedHandler)
+					.authenticationEntryPoint(authenticationEntryPoint)
+			);
 	}
 
 	private AbstractRequestMatcherRegistry<AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizedUrl> defaultAuthorizeHttpRequest(
