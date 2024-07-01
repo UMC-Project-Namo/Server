@@ -1,5 +1,7 @@
 package com.namo.spring.application.external.global.config.security;
 
+import static com.namo.spring.application.external.global.config.security.WebSecurityUrl.*;
+
 import org.springframework.boot.autoconfigure.security.ConditionalOnDefaultWebSecurity;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -27,12 +29,6 @@ import lombok.RequiredArgsConstructor;
 @ConditionalOnDefaultWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-	private static final String[] READ_ONLY_PUBLIC_ENDPOINTS = {};
-	private static final String[] PUBLIC_ENDPOINTS = {};
-	private static final String[] AUTHENTICATED_ENDPOINTS = {};
-	private static final String[] ANONYMOUS_ENDPOINTS = {};
-	private static final String[] SWAGGER_ENDPOINTS = {};
-
 	private final SecurityAdapterConfig securityAdapterConfig;
 	private final CorsConfigurationSource corsConfigurationSource;
 	private final AccessDeniedHandler accessDeniedHandler;
