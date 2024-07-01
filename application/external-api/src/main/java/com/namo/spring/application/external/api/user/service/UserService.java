@@ -58,6 +58,10 @@ public class UserService {
 		return userRepository.save(user);
 	}
 
+	public Optional<User> readUser(Long userId) {
+		return userRepository.findById(userId);
+	}
+
 	public User getUser(Long userId) {
 		return userRepository.findById(userId)
 			.orElseThrow(() -> new UserException(ErrorStatus.NOT_FOUND_USER_FAILURE));
