@@ -38,6 +38,8 @@ public enum ErrorStatus implements BaseErrorCode {
 	KAKAO_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "카카오 accessToken이 잘못되었습니다"),
 	NAVER_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "네이버 accessToken이 잘못되었습니다"),
 	APPLE_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "애플 authorization code가 잘못되었습니다."),
+	FORBIDDEN_ACCESS_TOKEN(HttpStatus.FORBIDDEN, "해당 토큰에는 엑세스 권한이 없습니다."),
+	EXPIRED_TOKEN(HttpStatus.FORBIDDEN, "사용기간이 만료된 토큰입니다."),
 
 	/**
 	 * 403 : local Access Token 오류
