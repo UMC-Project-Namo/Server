@@ -66,11 +66,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	 * HTTP 요청과 응답을 처리하는 메서드입니다.
 	 * 이 메서드는 요청에서 JWT 토큰을 추출하고, 토큰의 유효성을 검사한 후, 사용자를 인증합니다.
 	 *
-	 * @param request HTTP 요청
-	 * @param response HTTP 응답
-	 * @param filterChain 필터 체인
+	 * @param request      : HTTP 요청
+	 * @param response     : HTTP 응답
+	 * @param filterChain: 필터 체인
 	 * @throws ServletException 서블릿 예외
-	 * @throws IOException 입출력 예외
+	 * @throws IOException      입출력 예외
 	 */
 	@Override
 	protected void doFilterInternal(
@@ -78,6 +78,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		@NotNull HttpServletResponse response,
 		@NotNull FilterChain filterChain
 	) throws ServletException, IOException {
+		if (isAnonymousRequest(request)) {
+			filterChain.doFilter(request, response);
+			return;
+		}
+
 		String accessToken = resolveAccessToken(request);
 		UserDetails userDetails = getUserDetails(accessToken);
 		authenticateUser(userDetails, request);
@@ -86,10 +91,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	}
 
 	/**
+	 * 익명 사용자 여부를 확인하는 메서드입니다.
+	 * AccessToken과 RefreshToken이 모두 없는 경우, 익명 사용자로 간주됩니다.
+	 *
+	 * @param request : HTTP 요청
+	 * @return 익명 사용자 여부
+	 */
+	private boolean isAnonymousRequest(HttpServletRequest request) {
+		String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+		return accessToken == null;
+	}
+
+	/**
 	 * HTTP 요청에서 JWT 토큰을 추출하는 메서드입니다.
 	 * 이 메서드는 'Authorization' 헤더에서 JWT 토큰을 추출하고, 토큰의 유효성을 검사합니다.
 	 *
-	 * @param request HTTP 요청
+	 * @param request :HTTP 요청
 	 * @return JWT 토큰
 	 * @throws ServletException 서블릿 예외
 	 */
@@ -121,7 +138,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	 * 주어진 JWT 토큰에서 사용자 정보를 추출하는 메서드입니다. <br/>
 	 * 이 메서드는 JWT 토큰에서 사용자 ID를 추출하고, 이를 사용하여 사용자의 상세 정보를 로드합니다.
 	 *
-	 * @param accessToken JWT 토큰
+	 * @param accessToken :JWT 토큰
 	 * @return 사용자의 상세 정보. 사용자를 찾을 수 없는 경우 null을 반환합니다.
 	 */
 	private UserDetails getUserDetails(String accessToken) {
@@ -135,8 +152,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	 * 이 메서드는 사용자의 상세 정보를 사용하여 인증 토큰을 생성하고, 이를 {@link SecurityContextHolder}에 설정합니다. <br/>
 	 * 이렇게 설정된 인증 정보는 이후 요청 처리 과정에서 사용됩니다.
 	 *
-	 * @param userDetails 사용자의 상세 정보
-	 * @param request HTTP 요청
+	 * @param userDetails :사용자의 상세 정보
+	 * @param request     : HTTP 요청
 	 */
 	private void authenticateUser(UserDetails userDetails, HttpServletRequest request) {
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
