@@ -77,7 +77,6 @@ public class UserFacade {
 
 	private final JwtAuthHelper jwtAuthHelper;
 	private final JwtProvider accessTokenProvider; // HACK: 2024.06.22. 임시로 추가한 의존성 - 루카
-	private final JwtProvider refreshTokenProvider; // HACK: 2024.06.22. 임시로 추가한 의존성 - 루카
 
 	private final UserService userService;
 	private final PaletteService paletteService;
