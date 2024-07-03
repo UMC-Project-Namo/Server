@@ -6,6 +6,9 @@ on:
       - master
       - dev
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: Build
@@ -38,5 +41,4 @@ jobs:
       - name: Build with Gradle
         shell: bash
         run: |
-          ./gradlew --version
-          ./gradlew clean build -x test
+          ./gradlew clean build --parallel --stacktrace --info -x test
