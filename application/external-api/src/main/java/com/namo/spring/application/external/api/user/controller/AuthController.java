@@ -3,6 +3,7 @@ package com.namo.spring.application.external.api.user.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +44,7 @@ public class AuthController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
+	@PreAuthorize("isAnonymous()")
 	public ResponseDto<UserResponse.SignUpDto> kakaoSignup(
 		@Valid @RequestBody UserRequest.SocialSignUpDto signUpDto
 	) {
@@ -62,6 +64,7 @@ public class AuthController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
+	@PreAuthorize("isAnonymous()")
 	public ResponseDto<UserResponse.SignUpDto> naverSignup(
 		@Valid @RequestBody UserRequest.SocialSignUpDto signUpDto
 	) {
@@ -79,6 +82,7 @@ public class AuthController {
 		ErrorStatus.SOCIAL_LOGIN_FAILURE,
 		ErrorStatus.FEIGN_SERVER_ERROR
 	})
+	@PreAuthorize("isAnonymous()")
 	public ResponseDto<UserResponse.SignUpDto> appleSignup(
 		@Valid @RequestBody UserRequest.AppleSignUpDto dto
 	) {
@@ -96,6 +100,7 @@ public class AuthController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
+	@PreAuthorize("isAnonymous()")
 	public ResponseDto<UserResponse.ReissueDto> reissueAccessToken(
 		@Valid @RequestBody UserRequest.SignUpDto signUpDto
 	) {
@@ -113,6 +118,7 @@ public class AuthController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
+	@PreAuthorize("isAuthenticated()")
 	public ResponseDto<Void> logout(
 		@Valid @RequestBody UserRequest.LogoutDto logoutDto
 	) {
@@ -128,6 +134,7 @@ public class AuthController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
+	@PreAuthorize("isAuthenticated()")
 	public ResponseDto<?> removeKakaoUser(
 		HttpServletRequest request) {
 		userFacade.removeKakaoUser(request);
@@ -142,6 +149,7 @@ public class AuthController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
+	@PreAuthorize("isAuthenticated()")
 	public ResponseDto<?> removeNaverUser(
 		HttpServletRequest request
 	) {
@@ -158,6 +166,7 @@ public class AuthController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
+	@PreAuthorize("isAuthenticated()")
 	public ResponseDto<?> removeAppleUser(
 		HttpServletRequest request
 	) {
