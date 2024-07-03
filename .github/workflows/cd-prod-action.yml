@@ -88,7 +88,7 @@ jobs:
           aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
           aws-region: ${{ env.AWS_REGION }}
           aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-          instance-ids: ${{ env.AWS_DEV_INSTANCE_ID }}
+          instance-ids: ${{ env.AWS_INSTANCE_ID }}
           working-directory: /home/ssm-user
           command: |
             docker login -u ${{ env.DOCKER_USERNAME }} -p ${{ env.DOCKER_PASSWORD }}
