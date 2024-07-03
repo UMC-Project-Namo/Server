@@ -66,7 +66,7 @@ public class UserService {
 			.orElseThrow(() -> new UserException(ErrorStatus.NOT_FOUND_USER_FAILURE));
 	}
 
-	public List<User> getUsersInMoimSchedule(List<Long> users) {
+	public List<User> getUsersInGroupSchedule(List<Long> users) {
 		return userRepository.findUsersById(users);
 	}
 
