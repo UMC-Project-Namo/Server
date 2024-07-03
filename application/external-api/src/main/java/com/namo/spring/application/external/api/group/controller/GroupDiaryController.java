@@ -181,7 +181,7 @@ public class GroupDiaryController {
 		return ResponseDto.onSuccess(null);
 	}
 
-	@Operation(summary = "모임 기록 텍스트 추가 (모임 기록 추가)", description = "모임 기록 추가 API")
+	@Operation(summary = "모임 기록 텍스트 추가 (모임 메모 추가)", description = "모임 기록 추가 API")
 	@PatchMapping("/text/{moimScheduleId}")
 	@ApiErrorCodes(value = {
 		ErrorStatus.EMPTY_ACCESS_KEY,
