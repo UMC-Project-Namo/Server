@@ -45,7 +45,6 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final TermRepository termRepository;
 
-	private final JwtAuthHelper jwtAuthHelper;
 	private final ForbiddenTokenService forbiddenTokenService;
 
 	private final AppleProperties appleProperties;
@@ -56,6 +55,10 @@ public class UserService {
 
 	public User createUser(User user) {
 		return userRepository.save(user);
+	}
+
+	public Optional<User> readUser(Long userId) {
+		return userRepository.findById(userId);
 	}
 
 	public User getUser(Long userId) {
@@ -80,20 +83,6 @@ public class UserService {
 		return userRepository.findUsersByStatusAndDate(UserStatus.INACTIVE, LocalDateTime.now().minusDays(3));
 	}
 
-	/**
-	 * 사용자의 refreshToken을 업데이트합니다.
-	 *
-	 * @param userId       : 사용자 ID
-	 * @param refreshToken : 새로운 refreshToken
-	 * @deprecated {@link JwtAuthHelper#refresh(String)} 메서드를 사용합니다.
-	 */
-	@Deprecated(since = "JwtAuthHelper 클래스의 refresh 메서드를 사용합니다.", forRemoval = true)
-	public void updateRefreshToken(Long userId, String refreshToken) {
-		User user = userRepository.findById(userId)
-			.orElseThrow(() -> new UserException(ErrorStatus.NOT_FOUND_USER_FAILURE));
-		user.updateRefreshToken(refreshToken);
-	}
-
 	public void createTerm(List<Term> terms) {
 		for (Term term : terms) {
 			if (!term.getIsCheck()) {
@@ -114,36 +103,6 @@ public class UserService {
 	public void checkEmailAndName(String email, String name) {
 		if (email.isBlank() || name.isBlank()) {
 			throw new UserException(ErrorStatus.USER_POST_ERROR);
-		}
-	}
-
-	/**
-	 * 사용자의 accessToken이 만료되었는지 확인합니다.
-	 *
-	 * @param accessToken : 사용자의 accessToken
-	 * @throws UserException <br/>
-	 *                       - {@link ErrorStatus#EXPIRATION_ACCESS_TOKEN} : accessToken이 만료되었을 때
-	 * @deprecated 이후 spring security가 적용되면 사용되지 않을 예정입니다.
-	 */
-	@Deprecated(since = "이후 spring security가 적용되면 사용되지 않을 예정입니다.")
-	public void checkAccessTokenValidation(String accessToken) {
-		if (!jwtAuthHelper.validateAccessTokenExpired(accessToken)) {
-			throw new UserException(ErrorStatus.EXPIRATION_ACCESS_TOKEN);
-		}
-	}
-
-	/**
-	 * 사용자의 refreshToken이 만료되었는지 확인합니다.
-	 *
-	 * @param refreshToken : 사용자의 refreshToken
-	 * @throws UserException <br/>
-	 *                       - {@link ErrorStatus#EXPIRATION_REFRESH_TOKEN} : refreshToken이 만료되었을 때
-	 * @deprecated 이후 spring security가 적용되면 사용되지 않을 예정입니다.
-	 */
-	@Deprecated(since = "이후 spring security가 적용되면 사용되지 않을 예정입니다.")
-	public void checkRefreshTokenValidation(String refreshToken) {
-		if (!jwtAuthHelper.validateRefreshTokenExpired(refreshToken)) {
-			throw new UserException(ErrorStatus.EXPIRATION_REFRESH_TOKEN);
 		}
 	}
 
@@ -194,7 +153,7 @@ public class UserService {
 	 */
 	// TODO: 2024.06.22. 추후 social-client 모듈료 이동해야합니다. - 루카
 	public boolean validateToken(PublicKey publicKey, String token) {
-		Claims claims = Jwts.parserBuilder().setSigningKey(publicKey).build().parseClaimsJws(token).getBody();
+		Claims claims = Jwts.parser().setSigningKey(publicKey).build().parseClaimsJws(token).getBody();
 
 		String issuer = (String)claims.get("iss");
 		if (!"https://appleid.apple.com".equals(issuer)) {

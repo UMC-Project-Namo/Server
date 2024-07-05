@@ -38,6 +38,8 @@ public enum ErrorStatus implements BaseErrorCode {
 	KAKAO_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "카카오 accessToken이 잘못되었습니다"),
 	NAVER_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "네이버 accessToken이 잘못되었습니다"),
 	APPLE_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "애플 authorization code가 잘못되었습니다."),
+	FORBIDDEN_ACCESS_TOKEN(HttpStatus.FORBIDDEN, "해당 토큰에는 엑세스 권한이 없습니다."),
+	EXPIRED_TOKEN(HttpStatus.FORBIDDEN, "사용기간이 만료된 토큰입니다."),
 
 	/**
 	 * 403 : local Access Token 오류
@@ -51,6 +53,9 @@ public enum ErrorStatus implements BaseErrorCode {
 	EXPIRATION_REFRESH_TOKEN(HttpStatus.FORBIDDEN, "RefreshToken 이 만료되었습니다."),
 	KAKAO_FORBIDDEN(HttpStatus.FORBIDDEN, "카카오 권한 오류"),
 	NAVER_FORBIDDEN(HttpStatus.FORBIDDEN, "네이버 권한 오류"),
+	MALFORMED_TOKEN(HttpStatus.UNAUTHORIZED, "비정상적인 토큰입니다."),
+	TAMPERED_TOKEN(HttpStatus.UNAUTHORIZED, "서명이 조작된 토큰입니다."),
+	UNSUPPORTED_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "지원하지 않는 코튼입니다."),
 
 	/**
 	 * 404 : NOT FOUND 오류

@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -24,6 +25,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import com.namo.spring.application.external.api.individual.facade.DiaryFacade;
 import com.namo.spring.application.external.api.individual.dto.DiaryResponse;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
+import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.application.external.global.utils.Converter;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.response.ResponseDto;
@@ -68,9 +70,9 @@ public class DiaryController {
 	public ResponseDto<DiaryResponse.SliceDiaryDto> findDiaryByMonth(
 		@Parameter(description = "조회 일자", example = "{년},{월}") @PathVariable("month") String month,
 		Pageable pageable,
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		Long userId = (Long)request.getAttribute("userId");
+		Long userId = user.getUserId();
 		List<LocalDateTime> localDateTimes = converter.convertLongToLocalDateTime(month);
 		DiaryResponse.SliceDiaryDto diaries = diaryFacade.getMonthDiary(userId, localDateTimes, pageable);
 		return ResponseDto.onSuccess(diaries);
@@ -85,9 +87,9 @@ public class DiaryController {
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
 	public ResponseDto<List<DiaryResponse.GetDiaryByUserDto>> findAllDiary(
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		Long userId = (Long)request.getAttribute("userId");
+		Long userId = user.getUserId();
 		List<DiaryResponse.GetDiaryByUserDto> diaries = diaryFacade.getAllDiariesByUser(userId);
 		return ResponseDto.onSuccess(diaries);
 	}

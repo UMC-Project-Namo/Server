@@ -77,7 +77,6 @@ public class UserFacade {
 
 	private final JwtAuthHelper jwtAuthHelper;
 	private final JwtProvider accessTokenProvider; // HACK: 2024.06.22. 임시로 추가한 의존성 - 루카
-	private final JwtProvider refreshTokenProvider; // HACK: 2024.06.22. 임시로 추가한 의존성 - 루카
 
 	private final UserService userService;
 	private final PaletteService paletteService;
@@ -142,7 +141,7 @@ public class UserFacade {
 		userService.validateToken(publicKey, req.getIdentityToken());
 
 		//identity에서 email뽑기
-		Claims claims = Jwts.parserBuilder()
+		Claims claims = Jwts.parser()
 			.setSigningKey(publicKey)
 			.build()
 			.parseClaimsJws(req.getIdentityToken())

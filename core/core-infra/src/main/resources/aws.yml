@@ -17,6 +17,11 @@ cloud:
       access-key: ${S3_ACCESS_KEY}
       secret-key: ${S3_SECRET_KEY}
 
+server:
+  domain:
+    local: ${NAMO_LOCAL_DOMAIN:127.0.0.1:8080}
+    service: ${NAMO_SERVICE_DOMAIN:127.0.0.1:8080}
+
 moim:
   base-url-image: ${BASE_MOIM_IMAGE_URL}
 

@@ -77,7 +77,7 @@ public class RefreshTokenProvider implements JwtProvider {
 	@Override
 	public Claims getClaimsFromToken(String token) {
 		try {
-			return Jwts.parserBuilder()
+			return Jwts.parser()
 				.setSigningKey(secretKey)
 				.build()
 				.parseClaimsJws(token)

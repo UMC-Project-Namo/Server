@@ -6,6 +6,7 @@ import java.util.List;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -19,6 +20,7 @@ import com.namo.spring.application.external.api.group.dto.GroupScheduleRequest;
 import com.namo.spring.application.external.api.group.dto.GroupScheduleResponse;
 import com.namo.spring.application.external.api.group.facade.GroupScheduleFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
+import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.application.external.global.utils.Converter;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.response.ResponseDto;
@@ -79,9 +81,9 @@ public class GroupScheduleController {
 	})
 	public ResponseDto<Long> modifyGroupScheduleCategory(
 		@Valid @RequestBody GroupScheduleRequest.PatchGroupScheduleCategoryDto scheduleReq,
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		groupScheduleFacade.modifyGroupScheduleCategory(scheduleReq, (Long)request.getAttribute("userId"));
+		groupScheduleFacade.modifyGroupScheduleCategory(scheduleReq, user.getUserId());
 		return ResponseDto.onSuccess(null);
 	}
 
@@ -95,9 +97,9 @@ public class GroupScheduleController {
 	})
 	public ResponseDto<Long> removeGroupSchedule(
 		@Parameter(description = "모임 일정 ID") @PathVariable Long groupScheduleId,
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		groupScheduleFacade.removeGroupSchedule(groupScheduleId, (Long)request.getAttribute("userId"));
+		groupScheduleFacade.removeGroupSchedule(groupScheduleId, user.getUserId());
 		return ResponseDto.onSuccess(null);
 	}
 
@@ -112,11 +114,11 @@ public class GroupScheduleController {
 	public ResponseDto<GroupScheduleResponse.GroupScheduleDto> getMonthGroupSchedules(
 		@Parameter(description = "그룹 ID") @PathVariable("groupId") Long groupId,
 		@Parameter(description = "조회 일자", example = "{년},{월}") @PathVariable("month") String month,
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
 		List<LocalDateTime> localDateTimes = converter.convertLongToLocalDateTime(month);
 		List<GroupScheduleResponse.GroupScheduleDto> schedules = groupScheduleFacade.getMonthGroupSchedules(groupId,
-			localDateTimes, (Long)request.getAttribute("userId"));
+			localDateTimes, user.getUserId());
 		return ResponseDto.onSuccess(schedules.get(0));
 	}
 
@@ -130,10 +132,10 @@ public class GroupScheduleController {
 	})
 	public ResponseDto<GroupScheduleResponse.GroupScheduleDto> getAllGroupSchedules(
 		@Parameter(description = "그룹 ID") @PathVariable("groupId") Long groupId,
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
 		List<GroupScheduleResponse.GroupScheduleDto> schedules
-			= groupScheduleFacade.getAllGroupSchedules(groupId, (Long)request.getAttribute("userId"));
+			= groupScheduleFacade.getAllGroupSchedules(groupId, user.getUserId());
 		return ResponseDto.onSuccess(schedules.get(0));
 	}
 
@@ -147,9 +149,9 @@ public class GroupScheduleController {
 	})
 	public ResponseDto<Void> createGroupScheduleAlarm(
 		@Valid @RequestBody GroupScheduleRequest.PostGroupScheduleAlarmDto postGroupScheduleAlarmDto,
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		groupScheduleFacade.createGroupScheduleAlarm(postGroupScheduleAlarmDto, (Long)request.getAttribute("userId"));
+		groupScheduleFacade.createGroupScheduleAlarm(postGroupScheduleAlarmDto, user.getUserId());
 		return ResponseDto.onSuccess(null);
 	}
 
@@ -163,9 +165,9 @@ public class GroupScheduleController {
 	})
 	public ResponseDto<Void> modifyGroupScheduleAlarm(
 		@Valid @RequestBody GroupScheduleRequest.PostGroupScheduleAlarmDto postGroupScheduleAlarmDto,
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		groupScheduleFacade.modifyGroupScheduleAlarm(postGroupScheduleAlarmDto, (Long)request.getAttribute("userId"));
+		groupScheduleFacade.modifyGroupScheduleAlarm(postGroupScheduleAlarmDto, user.getUserId());
 		return ResponseDto.onSuccess(null);
 	}
 }

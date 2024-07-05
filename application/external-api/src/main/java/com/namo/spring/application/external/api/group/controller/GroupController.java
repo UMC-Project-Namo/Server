@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -21,6 +22,7 @@ import com.namo.spring.application.external.api.group.dto.GroupRequest;
 import com.namo.spring.application.external.api.group.dto.GroupResponse;
 import com.namo.spring.application.external.api.group.facade.GroupFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
+import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.response.ResponseDto;
 
@@ -53,10 +55,10 @@ public class GroupController {
 	public ResponseDto<GroupResponse.GroupIdDto> createGroup(
 		@Parameter(description = "그룹 프로필 img") @RequestPart(required = false) MultipartFile img,
 		@Parameter(description = "그룹명") @RequestPart(required = true) String groupName,
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
 		GroupResponse.GroupIdDto groupIdDto = groupFacade.createGroup(
-			(Long)request.getAttribute("userId"),
+			user.getUserId(),
 			groupName,
 			img
 		);
@@ -73,9 +75,9 @@ public class GroupController {
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
 	public ResponseDto<List<GroupResponse.GroupDto>> findGroups(
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		List<GroupResponse.GroupDto> groups = groupFacade.getGroups((Long)request.getAttribute("userId"));
+		List<GroupResponse.GroupDto> groups = groupFacade.getGroups(user.getUserId());
 		return ResponseDto.onSuccess(groups);
 	}
 
@@ -89,9 +91,9 @@ public class GroupController {
 	})
 	public ResponseDto<Long> modifyGroupName(
 		@Valid @RequestBody GroupRequest.PatchGroupNameDto patchGroupNameDto,
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		Long groupId = groupFacade.modifyGroupName(patchGroupNameDto, (Long)request.getAttribute("userId"));
+		Long groupId = groupFacade.modifyGroupName(patchGroupNameDto, user.getUserId());
 		return ResponseDto.onSuccess(groupId);
 	}
 
@@ -105,10 +107,10 @@ public class GroupController {
 	})
 	public ResponseDto<GroupResponse.GroupParticipantDto> createGroupAndUser(
 		@Parameter(description = "그룹 참여용 코드") @PathVariable("code") String code,
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
 		GroupResponse.GroupParticipantDto groupParticipantDto = groupFacade.createGroupAndUser(
-			(Long)request.getAttribute("userId"),
+			user.getUserId(),
 			code);
 		return ResponseDto.onSuccess(groupParticipantDto);
 	}
@@ -123,9 +125,9 @@ public class GroupController {
 	})
 	public ResponseDto<Void> removeGroupAndUser(
 		@Parameter(description = "그룹 ID") @PathVariable("groupId") Long groupId,
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		groupFacade.removeGroupAndUser((Long)request.getAttribute("userId"), groupId);
+		groupFacade.removeGroupAndUser(user.getUserId(), groupId);
 		return ResponseDto.onSuccess(null);
 	}
 }
