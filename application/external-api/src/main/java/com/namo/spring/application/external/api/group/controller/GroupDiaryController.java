@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -23,6 +24,7 @@ import com.namo.spring.application.external.api.group.dto.GroupDiaryResponse;
 import com.namo.spring.application.external.api.group.dto.GroupScheduleRequest;
 import com.namo.spring.application.external.api.group.facade.GroupDiaryFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
+import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.application.external.global.utils.Converter;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.response.ResponseDto;
@@ -109,11 +111,11 @@ public class GroupDiaryController {
 	public ResponseDto<GroupDiaryResponse.SliceDiaryDto<GroupDiaryResponse.DiaryDto>> findMonthGroupDiary(
 		@Parameter(description = "조회 일자", example = "{년},{월}") @PathVariable("month") String month,
 		Pageable pageable,
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
 		List<LocalDateTime> localDateTimes = converter.convertLongToLocalDateTime(month);
 		GroupDiaryResponse.SliceDiaryDto<GroupDiaryResponse.DiaryDto> diaryDto = groupDiaryFacade
-			.getMonthMonthGroupDiary((Long)request.getAttribute("userId"), localDateTimes, pageable);
+			.getMonthMonthGroupDiary(user.getUserId(), localDateTimes, pageable);
 		return ResponseDto.onSuccess(diaryDto);
 	}
 
@@ -127,9 +129,9 @@ public class GroupDiaryController {
 	})
 	public ResponseDto<GroupDiaryResponse.DiaryDto> getGroupDiaryDetail(
 		@Parameter(description = "모임 일정 ID") @PathVariable Long moimScheduleId,
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		Long userId = (Long)request.getAttribute("userId");
+		Long userId = user.getUserId();
 		GroupDiaryResponse.DiaryDto diaryDto = groupDiaryFacade.getGroupDiaryDetail(moimScheduleId, userId);
 		return ResponseDto.onSuccess(diaryDto);
 	}
@@ -144,9 +146,9 @@ public class GroupDiaryController {
 	})
 	public ResponseDto<Object> removePersonGroupDiary(
 		@Parameter(description = "일정 ID") @PathVariable Long scheduleId,
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		Long userId = (Long)request.getAttribute("userId");
+		Long userId = user.getUserId();
 		groupDiaryFacade.removePersonGroupDiary(scheduleId, userId);
 		return ResponseDto.onSuccess(null);
 	}
@@ -192,10 +194,10 @@ public class GroupDiaryController {
 	public ResponseDto<Object> createGroupMemo(
 		@Parameter(description = "모임 일정 ID") @PathVariable Long moimScheduleId,
 		@RequestBody GroupScheduleRequest.PostGroupScheduleTextDto moimScheduleText,
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
 		groupDiaryFacade.createGroupMemo(moimScheduleId,
-			(Long)request.getAttribute("userId"),
+			user.getUserId(),
 			moimScheduleText);
 		return ResponseDto.onSuccess(null);
 	}

@@ -6,6 +6,7 @@ import java.util.List;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -19,6 +20,7 @@ import com.namo.spring.application.external.api.individual.dto.ScheduleRequest;
 import com.namo.spring.application.external.api.individual.dto.ScheduleResponse;
 import com.namo.spring.application.external.api.individual.facade.ScheduleFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
+import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.application.external.global.utils.Converter;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.response.ResponseDto;
@@ -49,11 +51,11 @@ public class ScheduleController {
 	})
 	public ResponseDto<ScheduleResponse.ScheduleIdDto> createSchedule(
 		@Valid @RequestBody ScheduleRequest.PostScheduleDto postScheduleDto,
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
 		ScheduleResponse.ScheduleIdDto scheduleIddto = scheduleFacade.createSchedule(
 			postScheduleDto,
-			(Long)request.getAttribute("userId")
+			user.getUserId()
 		);
 		return ResponseDto.onSuccess(scheduleIddto);
 	}
@@ -68,11 +70,11 @@ public class ScheduleController {
 	})
 	public ResponseDto<List<ScheduleResponse.GetScheduleDto>> getSchedulesByUser(
 		@Parameter(description = "조회 일자", example = "{년},{월}") @PathVariable("month") String month,
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
 		List<LocalDateTime> localDateTimes = converter.convertLongToLocalDateTime(month);
 		List<ScheduleResponse.GetScheduleDto> userSchedule = scheduleFacade.getSchedulesByUser(
-			(Long)request.getAttribute("userId"), localDateTimes);
+			user.getUserId(), localDateTimes);
 		return ResponseDto.onSuccess(userSchedule);
 	}
 
@@ -86,11 +88,11 @@ public class ScheduleController {
 	})
 	public ResponseDto<List<ScheduleResponse.GetScheduleDto>> getGroupSchedulesByUser(
 		@Parameter(description = "조회 일자", example = "{년},{월}") @PathVariable("month") String month,
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
 		List<LocalDateTime> localDateTimes = converter.convertLongToLocalDateTime(month);
 		List<ScheduleResponse.GetScheduleDto> userSchedule = scheduleFacade.getGroupSchedulesByUser(
-			(Long)request.getAttribute("userId"),
+			user.getUserId(),
 			localDateTimes
 		);
 		return ResponseDto.onSuccess(userSchedule);
@@ -105,10 +107,10 @@ public class ScheduleController {
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
 	public ResponseDto<List<ScheduleResponse.GetScheduleDto>> getAllSchedulesByUser(
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
 		List<ScheduleResponse.GetScheduleDto> userSchedule = scheduleFacade.getAllSchedulesByUser(
-			(Long)request.getAttribute("userId")
+			user.getUserId()
 		);
 		return ResponseDto.onSuccess(userSchedule);
 	}
@@ -122,10 +124,10 @@ public class ScheduleController {
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
 	public ResponseDto<List<ScheduleResponse.GetScheduleDto>> getAllGroupSchedulesByUser(
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
 		List<ScheduleResponse.GetScheduleDto> groupSchedule = scheduleFacade.getAllGroupSchedulesByUser(
-			(Long)request.getAttribute("userId")
+			user.getUserId()
 		);
 		return ResponseDto.onSuccess(groupSchedule);
 	}
@@ -139,14 +141,14 @@ public class ScheduleController {
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
 	public ResponseDto<ScheduleResponse.ScheduleIdDto> modifyUserSchedule(
-		HttpServletRequest request,
+		@AuthenticationPrincipal SecurityUserDetails user,
 		@Parameter(description = "일정 ID") @PathVariable("scheduleId") Long scheduleId,
 		@RequestBody ScheduleRequest.PostScheduleDto req
 	) {
 		ScheduleResponse.ScheduleIdDto dto = scheduleFacade.modifySchedule(
 			scheduleId,
 			req,
-			(Long)request.getAttribute("userId")
+			user.getUserId()
 		);
 		return ResponseDto.onSuccess(dto);
 	}
@@ -166,9 +168,9 @@ public class ScheduleController {
 	public ResponseDto<String> deleteUserSchedule(
 		@Parameter(description = "일정 ID") @PathVariable("scheduleId") Long scheduleId,
 		@Parameter(description = "일정 타입", example = "0(개인 일정), 1(모임 일정)") @PathVariable("kind") Integer kind,
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		scheduleFacade.removeSchedule(scheduleId, kind, (Long)request.getAttribute("userId"));
+		scheduleFacade.removeSchedule(scheduleId, kind, user.getUserId());
 		return ResponseDto.onSuccess("삭제에 성공하였습니다.");
 	}
 

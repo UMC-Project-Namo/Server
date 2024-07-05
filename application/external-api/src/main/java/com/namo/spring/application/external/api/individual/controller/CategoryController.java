@@ -5,6 +5,7 @@ import java.util.List;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -18,6 +19,7 @@ import com.namo.spring.application.external.api.individual.dto.CategoryRequest;
 import com.namo.spring.application.external.api.individual.dto.CategoryResponse;
 import com.namo.spring.application.external.api.individual.facade.CategoryFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
+import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.response.ResponseDto;
 
@@ -44,9 +46,9 @@ public class CategoryController {
 	})
 	public ResponseDto<CategoryResponse.CategoryIdDto> createCategory(
 		@Valid @RequestBody CategoryRequest.PostCategoryDto postcategoryDto,
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		Long userId = (Long)request.getAttribute("userId");
+		Long userId = user.getUserId();
 		CategoryResponse.CategoryIdDto categoryIdDto = categoryFacade.createCategory(userId, postcategoryDto);
 		return ResponseDto.onSuccess(categoryIdDto);
 	}
@@ -60,9 +62,9 @@ public class CategoryController {
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
 	public ResponseDto<List<CategoryResponse.CategoryDto>> findAllCategory(
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		Long userId = (Long)request.getAttribute("userId");
+		Long userId = user.getUserId();
 		List<CategoryResponse.CategoryDto> categories = categoryFacade.getCategories(userId);
 		return ResponseDto.onSuccess(categories);
 	}
@@ -78,9 +80,9 @@ public class CategoryController {
 	public ResponseDto<CategoryResponse.CategoryIdDto> updateCategory(
 		@Parameter(description = "카테고리 ID") @PathVariable("categoryId") Long categoryId,
 		@Valid @RequestBody CategoryRequest.PostCategoryDto postcategoryDto,
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		Long userId = (Long)request.getAttribute("userId");
+		Long userId = user.getUserId();
 		CategoryResponse.CategoryIdDto categoryIdDto = categoryFacade.modifyCategory(categoryId, postcategoryDto,
 			userId);
 		return ResponseDto.onSuccess(categoryIdDto);
@@ -96,9 +98,9 @@ public class CategoryController {
 	})
 	public ResponseDto<String> deleteCategory(
 		@Parameter(description = "카테고리 ID") @PathVariable("categoryId") Long categoryId,
-		HttpServletRequest request
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		Long userId = (Long)request.getAttribute("userId");
+		Long userId = user.getUserId();
 		categoryFacade.deleteCategory(categoryId, userId);
 		return ResponseDto.onSuccess("삭제에 성공하셨습니다.");
 	}
