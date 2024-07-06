@@ -237,14 +237,12 @@ CREATE TABLE IF NOT EXISTS `moim_memo_location`
     `moim_memo_location_id` bigint NOT NULL AUTO_INCREMENT,
     `created_date`          datetime(6)  DEFAULT NULL,
     `last_modified_date`    datetime(6)  DEFAULT NULL,
-    `kakao_location_id`     varchar(255) DEFAULT NULL,
-    `location_name`         varchar(255) DEFAULT NULL,
-    `x`                     double       DEFAULT NULL,
-    `y`                     double       DEFAULT NULL,
-    `moim_id`               bigint       DEFAULT NULL,
+    `name`                  varchar(255) DEFAULT NULL,
+    `total_amount`          int          DEFAULT NULL,
+    `moim_memo_id`          bigint       DEFAULT NULL,
     PRIMARY KEY (`moim_memo_location_id`),
-    KEY `FKqxqxqxqxqxqxqxqxqxqxqxqxq` (`moim_id`),
-    CONSTRAINT `FKqxqxqxqxqxqxqxqxqxqxqxqxq` FOREIGN KEY (`moim_id`) REFERENCES `moim` (`moim_id`)
+    KEY `FKbn44e9cywgvgf5n3imksoe5cj` (`moim_memo_id`),
+    CONSTRAINT `FKbn44e9cywgvgf5n3imksoe5cj` FOREIGN KEY (`moim_memo_id`) REFERENCES `moim_memo` (`moim_memo_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
@@ -252,13 +250,12 @@ CREATE TABLE IF NOT EXISTS `moim_memo_location`
 -- Table structure for table `moim_memo_location_and_user`
 CREATE TABLE IF NOT EXISTS `moim_memo_location_and_user`
 (
-    `moim_memo_location_and_user_id` bigint NOT NULL AUTO_INCREMENT,
-    `created_date`                   datetime(6)  DEFAULT NULL,
-    `last_modified_date`             datetime(6)  DEFAULT NULL,
-    `memo`                           varchar(255) DEFAULT NULL,
-    `moim_memo_location_id`          bigint       DEFAULT NULL,
-    `user_id`                        bigint       DEFAULT NULL,
-    PRIMARY KEY (`moim_memo_location_and_user_id`),
+    `moim_memo_location_user_id` bigint NOT NULL AUTO_INCREMENT,
+    `created_date`               datetime(6) DEFAULT NULL,
+    `last_modified_date`         datetime(6) DEFAULT NULL,
+    `moim_memo_location_id`      bigint      DEFAULT NULL,
+    `user_id`                    bigint      DEFAULT NULL,
+    PRIMARY KEY (`moim_memo_location_user_id`),
     KEY `FKfxd4ff8np0iwton3jyednn3kt` (`moim_memo_location_id`),
     KEY `FKm6d9qu3ag3fd1gfb680wpbquh` (`user_id`),
     CONSTRAINT `FKfxd4ff8np0iwton3jyednn3kt` FOREIGN KEY (`moim_memo_location_id`) REFERENCES `moim_memo_location` (`moim_memo_location_id`),
