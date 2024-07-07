@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.namo.spring.application.external.api.group.converter.GroupAndUserConverter;
 import com.namo.spring.application.external.api.group.converter.GroupScheduleConverter;
 import com.namo.spring.application.external.api.group.converter.GroupScheduleResponseConverter;
-import com.namo.spring.application.external.api.group.dto.GroupScheduleResponse;
 import com.namo.spring.application.external.api.group.dto.MeetingScheduleRequest;
+import com.namo.spring.application.external.api.group.dto.MeetingScheduleResponse;
 import com.namo.spring.application.external.api.group.service.GroupActivityService;
 import com.namo.spring.application.external.api.group.service.GroupAndUserService;
 import com.namo.spring.application.external.api.group.service.GroupMemoService;
@@ -40,7 +40,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class GroupScheduleFacade {
+public class MeetingScheduleFacade {
 	private final UserService userService;
 	private final GroupService groupService;
 	private final GroupAndUserService groupAndUserService;
@@ -58,7 +58,7 @@ public class GroupScheduleFacade {
 	 * categories 수정시 모임과 기본 카테고리에 대해서는 수정이 불가능하게 해야함
 	 */
 	@Transactional(readOnly = false)
-	public Long createSchedule(MeetingScheduleRequest.PostGroupScheduleDto groupScheduleDto) {
+	public Long createSchedule(MeetingScheduleRequest.PostMeetingScheduleDto groupScheduleDto) {
 		Moim group = groupService.getGroupWithGroupAndUsersByGroupId(groupScheduleDto.getGroupId());
 		Period period = GroupScheduleConverter.toPeriod(groupScheduleDto);
 		Location location = GroupScheduleConverter.toLocation(groupScheduleDto);
@@ -81,8 +81,8 @@ public class GroupScheduleFacade {
 	}
 
 	@Transactional(readOnly = false)
-	public void modifyGroupSchedule(MeetingScheduleRequest.PatchGroupScheduleDto groupScheduleDto) {
-		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(groupScheduleDto.getMoimScheduleId());
+	public void modifyMeetingSchedule(MeetingScheduleRequest.PatchMeetingScheduleDto groupScheduleDto) {
+		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(groupScheduleDto.getMeetingScheduleId());
 		Period period = GroupScheduleConverter.toPeriod(groupScheduleDto);
 		Location location = GroupScheduleConverter.toLocation(groupScheduleDto);
 		groupSchedule.update(groupScheduleDto.getName(), period, location);
@@ -91,9 +91,10 @@ public class GroupScheduleFacade {
 	}
 
 	@Transactional(readOnly = false)
-	public void modifyGroupScheduleCategory(MeetingScheduleRequest.PatchGroupScheduleCategoryDto scheduleCategoryDto,
+	public void modifyMeetingScheduleCategory(
+		MeetingScheduleRequest.PatchMeetingScheduleCategoryDto scheduleCategoryDto,
 		Long userId) {
-		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(scheduleCategoryDto.getMoimScheduleId());
+		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(scheduleCategoryDto.getMeetingScheduleId());
 		User user = userService.getUser(userId);
 		Category category = categoryService.getCategory(scheduleCategoryDto.getCategoryId());
 		MoimScheduleAndUser groupScheduleAndUser = groupScheduleAndUserService.getGroupScheduleAndUser(groupSchedule,
@@ -102,7 +103,7 @@ public class GroupScheduleFacade {
 	}
 
 	@Transactional(readOnly = false)
-	public void removeGroupSchedule(Long groupScheduleId, Long userId) {
+	public void removeMeetingSchedule(Long groupScheduleId, Long userId) {
 		MoimSchedule groupSchedule = groupScheduleService.getGroupScheduleWithGroupDiary(groupScheduleId);
 		List<MoimScheduleAndUser> groupScheduleAndUsers = groupScheduleService.getGroupScheduleAndUsers(groupSchedule);
 
@@ -141,9 +142,10 @@ public class GroupScheduleFacade {
 	}
 
 	@Transactional(readOnly = false)
-	public void createGroupScheduleAlarm(MeetingScheduleRequest.PostGroupScheduleAlarmDto groupScheduleAlarmDto,
+	public void createMeetingScheduleAlarm(MeetingScheduleRequest.PostMeetingScheduleAlarmDto groupScheduleAlarmDto,
 		Long userId) {
-		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(groupScheduleAlarmDto.getMoimScheduleId());
+		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(
+			groupScheduleAlarmDto.getMeetingScheduleId());
 		User user = userService.getUser(userId);
 		MoimScheduleAndUser groupScheduleAndUser = groupScheduleAndUserService.getGroupScheduleAndUser(groupSchedule,
 			user);
@@ -156,9 +158,10 @@ public class GroupScheduleFacade {
 	}
 
 	@Transactional(readOnly = false)
-	public void modifyGroupScheduleAlarm(MeetingScheduleRequest.PostGroupScheduleAlarmDto groupScheduleAlarmDto,
+	public void modifyMeetingScheduleAlarm(MeetingScheduleRequest.PostMeetingScheduleAlarmDto groupScheduleAlarmDto,
 		Long userId) {
-		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(groupScheduleAlarmDto.getMoimScheduleId());
+		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(
+			groupScheduleAlarmDto.getMeetingScheduleId());
 		User user = userService.getUser(userId);
 		MoimScheduleAndUser groupScheduleAndUser = groupScheduleAndUserService.getGroupScheduleAndUser(groupSchedule,
 			user);
@@ -172,7 +175,7 @@ public class GroupScheduleFacade {
 	}
 
 	@Transactional(readOnly = true)
-	public List<GroupScheduleResponse.GroupScheduleDto> getMonthGroupSchedules(Long groupId,
+	public List<MeetingScheduleResponse.MeetingScheduleDto> getMonthMeetingSchedules(Long groupId,
 		List<LocalDateTime> localDateTimes, Long userId) {
 		Moim group = groupService.getGroupWithGroupAndUsersByGroupId(groupId);
 		existGroupAndUser(userId, group);
@@ -187,7 +190,7 @@ public class GroupScheduleFacade {
 	}
 
 	@Transactional(readOnly = true)
-	public List<GroupScheduleResponse.GroupScheduleDto> getAllGroupSchedules(Long groupId, Long userId) {
+	public List<MeetingScheduleResponse.MeetingScheduleDto> getAllMeetingSchedules(Long groupId, Long userId) {
 		Moim group = groupService.getGroupWithGroupAndUsersByGroupId(groupId);
 		existGroupAndUser(userId, group);
 		List<MoimAndUser> groupAndUsersInGroup = groupAndUserService.getGroupAndUsers(group);

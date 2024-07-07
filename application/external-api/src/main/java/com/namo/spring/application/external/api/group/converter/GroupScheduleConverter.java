@@ -19,7 +19,7 @@ public class GroupScheduleConverter {
 		throw new IllegalStateException("Util Classes");
 	}
 
-	public static Period toPeriod(MeetingScheduleRequest.PostGroupScheduleDto groupScheduleDto) {
+	public static Period toPeriod(MeetingScheduleRequest.PostMeetingScheduleDto groupScheduleDto) {
 		return Period.builder()
 			.startDate(groupScheduleDto.getStartDate())
 			.endDate(groupScheduleDto.getEndDate())
@@ -27,7 +27,7 @@ public class GroupScheduleConverter {
 			.build();
 	}
 
-	public static Period toPeriod(MeetingScheduleRequest.PatchGroupScheduleDto groupScheduleDto) {
+	public static Period toPeriod(MeetingScheduleRequest.PatchMeetingScheduleDto groupScheduleDto) {
 		return Period.builder()
 			.startDate(groupScheduleDto.getStartDate())
 			.endDate(groupScheduleDto.getEndDate())
@@ -35,7 +35,7 @@ public class GroupScheduleConverter {
 			.build();
 	}
 
-	public static Location toLocation(MeetingScheduleRequest.PostGroupScheduleDto groupScheduleDto) {
+	public static Location toLocation(MeetingScheduleRequest.PostMeetingScheduleDto groupScheduleDto) {
 		return Location.builder()
 			.x(groupScheduleDto.getX())
 			.y(groupScheduleDto.getY())
@@ -44,7 +44,7 @@ public class GroupScheduleConverter {
 			.build();
 	}
 
-	public static Location toLocation(MeetingScheduleRequest.PatchGroupScheduleDto groupScheduleDto) {
+	public static Location toLocation(MeetingScheduleRequest.PatchMeetingScheduleDto groupScheduleDto) {
 		return Location.builder()
 			.x(groupScheduleDto.getX())
 			.y(groupScheduleDto.getY())
@@ -53,7 +53,7 @@ public class GroupScheduleConverter {
 	}
 
 	public static MoimSchedule toGroupSchedule(Moim group, Period period, Location location,
-		MeetingScheduleRequest.PostGroupScheduleDto groupScheduleDto) {
+		MeetingScheduleRequest.PostMeetingScheduleDto groupScheduleDto) {
 		return MoimSchedule.builder()
 			.name(groupScheduleDto.getName())
 			.period(period)

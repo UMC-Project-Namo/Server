@@ -17,7 +17,7 @@ public class MeetingScheduleRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	@Getter
-	public static class PostGroupScheduleDto {
+	public static class PostMeetingScheduleDto {
 		@NotNull
 		private Long groupId;
 		@NotBlank
@@ -44,9 +44,9 @@ public class MeetingScheduleRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	@Getter
-	public static class PatchGroupScheduleDto {
+	public static class PatchMeetingScheduleDto {
 		@NotNull
-		private Long moimScheduleId;
+		private Long meetingScheduleId;
 		@NotBlank
 		private String name;
 
@@ -69,9 +69,9 @@ public class MeetingScheduleRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	@Getter
-	public static class PatchGroupScheduleCategoryDto {
+	public static class PatchMeetingScheduleCategoryDto {
 		@NotNull
-		private Long moimScheduleId;
+		private Long meetingScheduleId;
 
 		@NotNull
 		private Long categoryId;
@@ -79,8 +79,8 @@ public class MeetingScheduleRequest {
 
 	@NoArgsConstructor
 	@Getter
-	public static class PostGroupScheduleAlarmDto {
-		private Long moimScheduleId;
+	public static class PostMeetingScheduleAlarmDto {
+		private Long meetingScheduleId;
 		private List<Integer> alarmDates;
 	}
 
