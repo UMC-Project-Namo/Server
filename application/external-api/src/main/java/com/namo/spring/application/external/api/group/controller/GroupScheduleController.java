@@ -3,7 +3,6 @@ package com.namo.spring.application.external.api.group.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.namo.spring.application.external.api.group.dto.GroupScheduleRequest;
 import com.namo.spring.application.external.api.group.dto.GroupScheduleResponse;
+import com.namo.spring.application.external.api.group.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.group.facade.GroupScheduleFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
@@ -50,7 +49,7 @@ public class GroupScheduleController {
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
 	public ResponseDto<Long> createGroupSchedule(
-		@Valid @RequestBody GroupScheduleRequest.PostGroupScheduleDto scheduleReq
+		@Valid @RequestBody MeetingScheduleRequest.PostGroupScheduleDto scheduleReq
 	) {
 		Long scheduleId = groupScheduleFacade.createSchedule(scheduleReq);
 		return ResponseDto.onSuccess(scheduleId);
@@ -65,7 +64,7 @@ public class GroupScheduleController {
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
 	public ResponseDto<Long> modifyGroupSchedule(
-		@Valid @RequestBody GroupScheduleRequest.PatchGroupScheduleDto scheduleReq
+		@Valid @RequestBody MeetingScheduleRequest.PatchGroupScheduleDto scheduleReq
 	) {
 		groupScheduleFacade.modifyGroupSchedule(scheduleReq);
 		return ResponseDto.onSuccess(null);
@@ -80,7 +79,7 @@ public class GroupScheduleController {
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
 	public ResponseDto<Long> modifyGroupScheduleCategory(
-		@Valid @RequestBody GroupScheduleRequest.PatchGroupScheduleCategoryDto scheduleReq,
+		@Valid @RequestBody MeetingScheduleRequest.PatchGroupScheduleCategoryDto scheduleReq,
 		@AuthenticationPrincipal SecurityUserDetails user
 	) {
 		groupScheduleFacade.modifyGroupScheduleCategory(scheduleReq, user.getUserId());
@@ -148,7 +147,7 @@ public class GroupScheduleController {
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
 	public ResponseDto<Void> createGroupScheduleAlarm(
-		@Valid @RequestBody GroupScheduleRequest.PostGroupScheduleAlarmDto postGroupScheduleAlarmDto,
+		@Valid @RequestBody MeetingScheduleRequest.PostGroupScheduleAlarmDto postGroupScheduleAlarmDto,
 		@AuthenticationPrincipal SecurityUserDetails user
 	) {
 		groupScheduleFacade.createGroupScheduleAlarm(postGroupScheduleAlarmDto, user.getUserId());
@@ -164,7 +163,7 @@ public class GroupScheduleController {
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
 	public ResponseDto<Void> modifyGroupScheduleAlarm(
-		@Valid @RequestBody GroupScheduleRequest.PostGroupScheduleAlarmDto postGroupScheduleAlarmDto,
+		@Valid @RequestBody MeetingScheduleRequest.PostGroupScheduleAlarmDto postGroupScheduleAlarmDto,
 		@AuthenticationPrincipal SecurityUserDetails user
 	) {
 		groupScheduleFacade.modifyGroupScheduleAlarm(postGroupScheduleAlarmDto, user.getUserId());

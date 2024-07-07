@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.namo.spring.application.external.api.group.converter.GroupAndUserConverter;
 import com.namo.spring.application.external.api.group.converter.GroupScheduleConverter;
 import com.namo.spring.application.external.api.group.converter.GroupScheduleResponseConverter;
-import com.namo.spring.application.external.api.group.dto.GroupScheduleRequest;
 import com.namo.spring.application.external.api.group.dto.GroupScheduleResponse;
+import com.namo.spring.application.external.api.group.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.group.service.GroupActivityService;
 import com.namo.spring.application.external.api.group.service.GroupAndUserService;
 import com.namo.spring.application.external.api.group.service.GroupMemoService;
@@ -58,7 +58,7 @@ public class GroupScheduleFacade {
 	 * categories 수정시 모임과 기본 카테고리에 대해서는 수정이 불가능하게 해야함
 	 */
 	@Transactional(readOnly = false)
-	public Long createSchedule(GroupScheduleRequest.PostGroupScheduleDto groupScheduleDto) {
+	public Long createSchedule(MeetingScheduleRequest.PostGroupScheduleDto groupScheduleDto) {
 		Moim group = groupService.getGroupWithGroupAndUsersByGroupId(groupScheduleDto.getGroupId());
 		Period period = GroupScheduleConverter.toPeriod(groupScheduleDto);
 		Location location = GroupScheduleConverter.toLocation(groupScheduleDto);
@@ -81,7 +81,7 @@ public class GroupScheduleFacade {
 	}
 
 	@Transactional(readOnly = false)
-	public void modifyGroupSchedule(GroupScheduleRequest.PatchGroupScheduleDto groupScheduleDto) {
+	public void modifyGroupSchedule(MeetingScheduleRequest.PatchGroupScheduleDto groupScheduleDto) {
 		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(groupScheduleDto.getMoimScheduleId());
 		Period period = GroupScheduleConverter.toPeriod(groupScheduleDto);
 		Location location = GroupScheduleConverter.toLocation(groupScheduleDto);
@@ -91,7 +91,7 @@ public class GroupScheduleFacade {
 	}
 
 	@Transactional(readOnly = false)
-	public void modifyGroupScheduleCategory(GroupScheduleRequest.PatchGroupScheduleCategoryDto scheduleCategoryDto,
+	public void modifyGroupScheduleCategory(MeetingScheduleRequest.PatchGroupScheduleCategoryDto scheduleCategoryDto,
 		Long userId) {
 		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(scheduleCategoryDto.getMoimScheduleId());
 		User user = userService.getUser(userId);
@@ -141,7 +141,7 @@ public class GroupScheduleFacade {
 	}
 
 	@Transactional(readOnly = false)
-	public void createGroupScheduleAlarm(GroupScheduleRequest.PostGroupScheduleAlarmDto groupScheduleAlarmDto,
+	public void createGroupScheduleAlarm(MeetingScheduleRequest.PostGroupScheduleAlarmDto groupScheduleAlarmDto,
 		Long userId) {
 		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(groupScheduleAlarmDto.getMoimScheduleId());
 		User user = userService.getUser(userId);
@@ -156,7 +156,7 @@ public class GroupScheduleFacade {
 	}
 
 	@Transactional(readOnly = false)
-	public void modifyGroupScheduleAlarm(GroupScheduleRequest.PostGroupScheduleAlarmDto groupScheduleAlarmDto,
+	public void modifyGroupScheduleAlarm(MeetingScheduleRequest.PostGroupScheduleAlarmDto groupScheduleAlarmDto,
 		Long userId) {
 		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(groupScheduleAlarmDto.getMoimScheduleId());
 		User user = userService.getUser(userId);

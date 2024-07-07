@@ -3,7 +3,7 @@ package com.namo.spring.application.external.api.group.converter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.namo.spring.application.external.api.group.dto.GroupDiaryRequest;
+import com.namo.spring.application.external.api.group.dto.MeetingDiaryRequest;
 import com.namo.spring.db.mysql.domains.group.domain.MoimMemo;
 import com.namo.spring.db.mysql.domains.group.domain.MoimMemoLocation;
 import com.namo.spring.db.mysql.domains.group.domain.MoimMemoLocationAndUser;
@@ -15,7 +15,7 @@ public class GroupActivityConverter {
 		throw new IllegalArgumentException("Util Class");
 	}
 
-	public static MoimMemoLocation toGroupActivity(MoimMemo groupMemo, GroupDiaryRequest.LocationDto locationDto) {
+	public static MoimMemoLocation toGroupActivity(MoimMemo groupMemo, MeetingDiaryRequest.LocationDto locationDto) {
 		return MoimMemoLocation.builder()
 			.moimMemo(groupMemo)
 			.name(locationDto.getName())

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.namo.spring.application.external.api.group.dto.GroupScheduleRequest;
+import com.namo.spring.application.external.api.group.dto.MeetingScheduleRequest;
 import com.namo.spring.db.mysql.domains.group.domain.Moim;
 import com.namo.spring.db.mysql.domains.group.domain.MoimSchedule;
 import com.namo.spring.db.mysql.domains.group.domain.MoimScheduleAlarm;
@@ -19,7 +19,7 @@ public class GroupScheduleConverter {
 		throw new IllegalStateException("Util Classes");
 	}
 
-	public static Period toPeriod(GroupScheduleRequest.PostGroupScheduleDto groupScheduleDto) {
+	public static Period toPeriod(MeetingScheduleRequest.PostGroupScheduleDto groupScheduleDto) {
 		return Period.builder()
 			.startDate(groupScheduleDto.getStartDate())
 			.endDate(groupScheduleDto.getEndDate())
@@ -27,7 +27,7 @@ public class GroupScheduleConverter {
 			.build();
 	}
 
-	public static Period toPeriod(GroupScheduleRequest.PatchGroupScheduleDto groupScheduleDto) {
+	public static Period toPeriod(MeetingScheduleRequest.PatchGroupScheduleDto groupScheduleDto) {
 		return Period.builder()
 			.startDate(groupScheduleDto.getStartDate())
 			.endDate(groupScheduleDto.getEndDate())
@@ -35,7 +35,7 @@ public class GroupScheduleConverter {
 			.build();
 	}
 
-	public static Location toLocation(GroupScheduleRequest.PostGroupScheduleDto groupScheduleDto) {
+	public static Location toLocation(MeetingScheduleRequest.PostGroupScheduleDto groupScheduleDto) {
 		return Location.builder()
 			.x(groupScheduleDto.getX())
 			.y(groupScheduleDto.getY())
@@ -44,7 +44,7 @@ public class GroupScheduleConverter {
 			.build();
 	}
 
-	public static Location toLocation(GroupScheduleRequest.PatchGroupScheduleDto groupScheduleDto) {
+	public static Location toLocation(MeetingScheduleRequest.PatchGroupScheduleDto groupScheduleDto) {
 		return Location.builder()
 			.x(groupScheduleDto.getX())
 			.y(groupScheduleDto.getY())
@@ -53,7 +53,7 @@ public class GroupScheduleConverter {
 	}
 
 	public static MoimSchedule toGroupSchedule(Moim group, Period period, Location location,
-		GroupScheduleRequest.PostGroupScheduleDto groupScheduleDto) {
+		MeetingScheduleRequest.PostGroupScheduleDto groupScheduleDto) {
 		return MoimSchedule.builder()
 			.name(groupScheduleDto.getName())
 			.period(period)

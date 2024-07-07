@@ -9,8 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-public class GroupScheduleRequest {
-	private GroupScheduleRequest() {
+public class MeetingScheduleRequest {
+	private MeetingScheduleRequest() {
 		throw new IllegalStateException("Util class");
 	}
 
@@ -87,7 +87,7 @@ public class GroupScheduleRequest {
 	@Getter
 	@AllArgsConstructor
 	@NoArgsConstructor
-	public static class PostGroupScheduleTextDto {
+	public static class PostMeetingScheduleTextDto {
 		private String text;
 	}
 }

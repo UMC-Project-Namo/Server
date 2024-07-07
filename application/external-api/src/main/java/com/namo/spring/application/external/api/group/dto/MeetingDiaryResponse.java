@@ -10,32 +10,35 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-public class GroupDiaryResponse {
+public class MeetingDiaryResponse {
 
-	private GroupDiaryResponse() {
+	private MeetingDiaryResponse() {
 		throw new IllegalStateException("Utill Classes");
 	}
 
 	@AllArgsConstructor
 	@Getter
 	@Builder
-	public static class GroupDiaryDto {
+	public static class MeetingDiaryDto {
 		private String name;
 		private Long startDate;
 		private String locationName;
 		private List<GroupUserDto> users;
-		private List<MoimActivityDto> moimActivityDtos;
+		private List<MeetingActivityDto> meetingActivityDtos;
 
-		public static GroupDiaryDto fromMoimMemo(MoimMemo moimMemo, List<MoimActivityDto> moimActivityDtos) {
-			List<GroupDiaryResponse.GroupUserDto> users = moimMemo.getMoimSchedule().getMoimScheduleAndUsers().stream()
+		public static MeetingDiaryDto fromMeetingMemo(MoimMemo meetingMemo,
+			List<MeetingActivityDto> meetingActivityDtos) {
+			List<MeetingDiaryResponse.GroupUserDto> users = meetingMemo.getMoimSchedule()
+				.getMoimScheduleAndUsers()
+				.stream()
 				.map(GroupDiaryResponseConverter::toGroupUserDto)
 				.toList();
-			return GroupDiaryResponse.GroupDiaryDto.builder()
-				.name(moimMemo.getMoimSchedule().getName())
-				.startDate(DateUtil.toSeconds(moimMemo.getMoimSchedule().getPeriod().getStartDate()))
-				.locationName(moimMemo.getMoimSchedule().getLocation().getLocationName())
+			return MeetingDiaryResponse.MeetingDiaryDto.builder()
+				.name(meetingMemo.getMoimSchedule().getName())
+				.startDate(DateUtil.toSeconds(meetingMemo.getMoimSchedule().getPeriod().getStartDate()))
+				.locationName(meetingMemo.getMoimSchedule().getLocation().getLocationName())
 				.users(users)
-				.moimActivityDtos(moimActivityDtos)
+				.meetingActivityDtos(meetingActivityDtos)
 				.build();
 		}
 	}
@@ -51,8 +54,8 @@ public class GroupDiaryResponse {
 	@AllArgsConstructor
 	@Getter
 	@Builder
-	public static class MoimActivityDto {
-		private Long moimActivityId;
+	public static class MeetingActivityDto {
+		private Long meetingActivityId;
 		private String name;
 		private Integer money;
 		private List<Long> participants;

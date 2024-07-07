@@ -2,7 +2,6 @@ package com.namo.spring.application.external.api.group.controller;
 
 import java.util.List;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import org.springframework.http.MediaType;
@@ -66,7 +65,7 @@ public class GroupController {
 		return ResponseDto.onSuccess(groupIdDto);
 	}
 
-	@Operation(summary = "그룹 조회", description = "유저가 참여중인 그룹 조회 API")
+	@Operation(summary = "그룹 조회", description = "유저가 참여 중인 그룹 조회 API")
 	@GetMapping("")
 	@ApiErrorCodes(value = {
 		ErrorStatus.EMPTY_ACCESS_KEY,
