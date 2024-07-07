@@ -7,6 +7,9 @@ dependencies {
     // Aws s3
     implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.4'
 
+    // 이미지 압축 imgscalr
+    implementation 'org.imgscalr:imgscalr-lib:4.2'
+
     // jwt
     api group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
