@@ -1,20 +1,25 @@
 package com.namo.spring.core.infra.common.aws.s3;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.imageio.ImageIO;
+
+import org.imgscalr.Scalr;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.namo.spring.core.infra.common.constant.FilePath;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.exception.UtilsException;
+import com.namo.spring.core.infra.common.constant.FilePath;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class FileUtils {
 	private final S3Uploader s3Uploader;
+	private static final int TARGET_HEIGHT = 800;
 
 	private String createFileName(String originalFileName, FilePath filePath) {
 		return filePath.getPath() + UUID.randomUUID().toString().concat(getFileExtension(originalFileName));
@@ -49,10 +55,13 @@ public class FileUtils {
 
 	public String uploadImage(MultipartFile file, FilePath filePath) {
 		String fileName = createFileName(file.getOriginalFilename(), filePath);
-		ObjectMetadata objectMetadata = getObjectMetadata(file);
+		ObjectMetadata objectMetadata = new ObjectMetadata();
 
-		try (InputStream inputStream = file.getInputStream()) {
-			s3Uploader.uploadFile(inputStream, objectMetadata, fileName);
+		try {
+			BufferedImage resizedImage = resizeImage(file);
+			ByteArrayInputStream byteArrayInputStream = convertImage(resizedImage, file.getContentType(),
+				getFileExtension(file.getOriginalFilename()), objectMetadata);
+			s3Uploader.uploadFile(byteArrayInputStream, objectMetadata, fileName);
 		} catch (IOException e) {
 			throw new UtilsException(ErrorStatus.S3_FAILURE);
 		}
@@ -60,11 +69,28 @@ public class FileUtils {
 		return s3Uploader.getFileUrl(fileName);
 	}
 
-	private static ObjectMetadata getObjectMetadata(MultipartFile file) {
-		ObjectMetadata objectMetadata = new ObjectMetadata();
-		objectMetadata.setContentLength(file.getSize());
-		objectMetadata.setContentType(file.getContentType());
-		return objectMetadata;
+	private BufferedImage resizeImage(MultipartFile multipartFile) throws IOException {
+		BufferedImage sourceImage = ImageIO.read(multipartFile.getInputStream());
+
+		if (sourceImage.getHeight() <= TARGET_HEIGHT) {
+			return sourceImage;
+		}
+
+		double sourceImageRatio = (double)sourceImage.getWidth() / sourceImage.getHeight();
+		int newWidth = (int)(TARGET_HEIGHT * sourceImageRatio);
+
+		return Scalr.resize(sourceImage, Scalr.Method.QUALITY, Scalr.Mode.FIT_TO_HEIGHT, newWidth, TARGET_HEIGHT);
+	}
+
+	private ByteArrayInputStream convertImage(BufferedImage croppedImage, String contentType, String fileFormat,
+		ObjectMetadata objectMetadata) throws IOException {
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		ImageIO.write(croppedImage, fileFormat.replace(".", ""), byteArrayOutputStream);
+
+		objectMetadata.setContentType(contentType);
+		objectMetadata.setContentLength(byteArrayOutputStream.size());
+
+		return new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
 	}
 
 	public void deleteImages(List<String> urls, FilePath filePath) {
