@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.namo.spring.application.external.api.group.converter.GroupActivityConverter;
 import com.namo.spring.application.external.api.group.converter.GroupDiaryResponseConverter;
 import com.namo.spring.application.external.api.group.converter.GroupMemoConverter;
+import com.namo.spring.application.external.api.group.dto.GroupDiaryResponse;
 import com.namo.spring.application.external.api.group.dto.MeetingDiaryRequest;
 import com.namo.spring.application.external.api.group.dto.MeetingDiaryResponse;
 import com.namo.spring.application.external.api.group.dto.MeetingScheduleRequest;
@@ -128,6 +129,19 @@ public class MeetingDiaryFacade {
 
 	@Transactional(readOnly = false)
 	public MeetingDiaryResponse.MeetingDiaryDto getMeetingDiaryWithLocations(Long groupScheduleId) {
+		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(groupScheduleId);
+		MoimMemo groupMemo = groupMemoService.getGroupMemoWithUsers(groupSchedule);
+		List<MoimMemoLocation> groupActivities = groupActivityService.getGroupActivities(groupSchedule);
+		List<MoimMemoLocationAndUser> groupActivityAndUsers
+			= groupActivityService.getGroupActivityAndUsers(groupActivities);
+		return GroupDiaryResponseConverter.toMeetingDiaryDto(groupMemo, groupActivities, groupActivityAndUsers);
+	}
+
+	/**
+	 * v1
+	 */
+	@Transactional(readOnly = false)
+	public GroupDiaryResponse.GroupDiaryDto getGroupDiaryWithLocations(Long groupScheduleId) {
 		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(groupScheduleId);
 		MoimMemo groupMemo = groupMemoService.getGroupMemoWithUsers(groupSchedule);
 		List<MoimMemoLocation> groupActivities = groupActivityService.getGroupActivities(groupSchedule);

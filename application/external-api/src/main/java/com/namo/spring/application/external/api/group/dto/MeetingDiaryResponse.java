@@ -23,15 +23,15 @@ public class MeetingDiaryResponse {
 		private String name;
 		private Long startDate;
 		private String locationName;
-		private List<GroupUserDto> users;
+		private List<MeetingUserDto> users;
 		private List<MeetingActivityDto> meetingActivityDtos;
 
 		public static MeetingDiaryDto fromMeetingMemo(MoimMemo meetingMemo,
 			List<MeetingActivityDto> meetingActivityDtos) {
-			List<MeetingDiaryResponse.GroupUserDto> users = meetingMemo.getMoimSchedule()
+			List<MeetingDiaryResponse.MeetingUserDto> users = meetingMemo.getMoimSchedule()
 				.getMoimScheduleAndUsers()
 				.stream()
-				.map(GroupDiaryResponseConverter::toGroupUserDto)
+				.map(GroupDiaryResponseConverter::toMeetingUserDto)
 				.toList();
 			return MeetingDiaryResponse.MeetingDiaryDto.builder()
 				.name(meetingMemo.getMoimSchedule().getName())
@@ -46,7 +46,7 @@ public class MeetingDiaryResponse {
 	@AllArgsConstructor
 	@Getter
 	@Builder
-	public static class GroupUserDto {
+	public static class MeetingUserDto {
 		private Long userId;
 		private String userName;
 	}
