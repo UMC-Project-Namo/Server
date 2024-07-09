@@ -23,6 +23,11 @@ public class ImageService {
 			.orElseThrow(() -> new IndividualException(ErrorStatus.NOT_FOUND_IMAGE));
 	}
 
+	public Image getImage(String url) {
+		return imageRepository.findByImgUrl(url)
+			.orElseThrow(() -> new IndividualException(ErrorStatus.NOT_FOUND_IMAGE));
+	}
+
 	public List<Image> createImages(List<Image> imgs) {
 		return imageRepository.saveAll(imgs);
 	}
