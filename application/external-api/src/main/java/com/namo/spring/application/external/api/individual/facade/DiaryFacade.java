@@ -14,8 +14,8 @@ import com.namo.spring.application.external.api.individual.dto.DiaryResponse;
 import com.namo.spring.application.external.api.individual.service.ImageService;
 import com.namo.spring.application.external.api.individual.service.ScheduleService;
 import com.namo.spring.application.external.api.user.service.UserService;
-import com.namo.spring.core.infra.common.constant.FilePath;
 import com.namo.spring.core.infra.common.aws.s3.FileUtils;
+import com.namo.spring.core.infra.common.constant.FilePath;
 import com.namo.spring.db.mysql.domains.individual.domain.Image;
 import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
 import com.namo.spring.db.mysql.domains.user.domain.User;
@@ -82,5 +82,12 @@ public class DiaryFacade {
 			.toList();
 		imageService.removeImagesBySchedule(schedule);
 		fileUtils.deleteImages(urls, FilePath.INVITATION_ACTIVITY_IMG);
+	}
+
+	@Transactional
+	public void removeDiaryImage(Long scheduleId, String imgUrl) {
+		Image img = imageService.getImage(imgUrl);
+		imageService.removeImage(scheduleId, img);
+		fileUtils.delete(imgUrl, FilePath.INVITATION_ACTIVITY_IMG);
 	}
 }
