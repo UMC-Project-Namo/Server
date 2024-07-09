@@ -103,7 +103,7 @@ public class FileUtils {
 		}
 	}
 
-	private void delete(String url, FilePath filePath) {
+	public void delete(String url, FilePath filePath) {
 		try {
 			String key = url.substring(url.lastIndexOf(filePath.getPath()));
 			if (!key.isEmpty()) {
