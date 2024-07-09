@@ -100,6 +100,7 @@ public enum ErrorStatus implements BaseErrorCode {
 	 */
 	NOT_USERS_CATEGORY(HttpStatus.NOT_FOUND, "해당 유저의 카테고리가 아닙니다."),
 	NOT_USERS_IN_GROUP(HttpStatus.NOT_FOUND, "유저가 모임에 포함되어 있지 않습니다."),
+	NOT_IMAGE_IN_DIARY(HttpStatus.NOT_FOUND, "이미지가 다이어리에 포함되어 있지 않습니다."),
 
 	/**
 	 * 404 : 인프라 에러

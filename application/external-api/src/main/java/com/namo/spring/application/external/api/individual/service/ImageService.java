@@ -48,7 +48,10 @@ public class ImageService {
 		);
 	}
 
-	public void removeImage(Image img) {
+	public void removeImage(Long scheduleId, Image img) {
+		if (!img.getSchedule().getId().equals(scheduleId)) {
+			throw new IndividualException(ErrorStatus.NOT_IMAGE_IN_DIARY);
+		}
 		imageRepository.delete(img);
 	}
 }
