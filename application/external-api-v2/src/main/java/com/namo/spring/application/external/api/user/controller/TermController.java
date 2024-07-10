@@ -1,7 +1,6 @@
 package com.namo.spring.application.external.api.user.controller;
 
 import com.namo.spring.application.external.api.user.dto.UserRequest;
-import com.namo.spring.application.external.api.user.facade.UserFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.core.common.code.status.ErrorStatus;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/v2/terms")
 public class TermController {
-    private final UserFacade userFacade;
 
     @Operation(summary = "약관을 동의합니다. ", description = "약관 동의 API")
     @PostMapping("")
@@ -32,8 +30,7 @@ public class TermController {
             ErrorStatus.INTERNET_SERVER_ERROR
     })
     public ResponseDto<Void> createTerm(@Valid @RequestBody UserRequest.TermDto termDto, @AuthenticationPrincipal SecurityUserDetails user) {
-        userFacade.createTerm(termDto, user.getUserId());
-        return ResponseDto.onSuccess(null);
+        return null;
     }
 
 }

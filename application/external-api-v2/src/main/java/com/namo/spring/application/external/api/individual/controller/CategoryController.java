@@ -2,7 +2,6 @@ package com.namo.spring.application.external.api.individual.controller;
 
 import com.namo.spring.application.external.api.individual.dto.CategoryRequest;
 import com.namo.spring.application.external.api.individual.dto.CategoryResponse;
-import com.namo.spring.application.external.api.individual.facade.CategoryFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.core.common.code.status.ErrorStatus;
@@ -22,7 +21,6 @@ import java.util.List;
 @RequestMapping("/api/v2/categories")
 @RequiredArgsConstructor
 public class CategoryController {
-    private final CategoryFacade categoryFacade;
 
     @Operation(summary = "카테고리 생성", description = "카테고리 생성 API")
     @PostMapping("")
@@ -36,9 +34,7 @@ public class CategoryController {
             @Valid @RequestBody CategoryRequest.PostCategoryDto postcategoryDto,
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
-        Long userId = user.getUserId();
-        CategoryResponse.CategoryIdDto categoryIdDto = categoryFacade.createCategory(userId, postcategoryDto);
-        return ResponseDto.onSuccess(categoryIdDto);
+        return null;
     }
 
     @Operation(summary = "카테고리 조회", description = "카테고리 조회 API")
@@ -52,9 +48,7 @@ public class CategoryController {
     public ResponseDto<List<CategoryResponse.CategoryDto>> findAllCategory(
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
-        Long userId = user.getUserId();
-        List<CategoryResponse.CategoryDto> categories = categoryFacade.getCategories(userId);
-        return ResponseDto.onSuccess(categories);
+        return null;
     }
 
     @Operation(summary = "카테고리 수정", description = "카테고리 수정 API")
@@ -70,10 +64,7 @@ public class CategoryController {
             @Valid @RequestBody CategoryRequest.PostCategoryDto postcategoryDto,
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
-        Long userId = user.getUserId();
-        CategoryResponse.CategoryIdDto categoryIdDto = categoryFacade.modifyCategory(categoryId, postcategoryDto,
-                userId);
-        return ResponseDto.onSuccess(categoryIdDto);
+        return null;
     }
 
     @Operation(summary = "카테고리 삭제", description = "카테고리 삭제 API")
@@ -88,9 +79,7 @@ public class CategoryController {
             @Parameter(description = "카테고리 ID") @PathVariable("categoryId") Long categoryId,
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
-        Long userId = user.getUserId();
-        categoryFacade.deleteCategory(categoryId, userId);
-        return ResponseDto.onSuccess("삭제에 성공하셨습니다.");
+        return null;
     }
 
 }

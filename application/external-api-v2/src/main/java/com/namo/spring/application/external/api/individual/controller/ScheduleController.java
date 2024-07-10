@@ -2,7 +2,6 @@ package com.namo.spring.application.external.api.individual.controller;
 
 import com.namo.spring.application.external.api.individual.dto.ScheduleRequest;
 import com.namo.spring.application.external.api.individual.dto.ScheduleResponse;
-import com.namo.spring.application.external.api.individual.facade.ScheduleFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.application.external.global.utils.Converter;
@@ -17,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Tag(name = "3. Schedule (개인)", description = "개인 일정 관련 API")
@@ -26,7 +24,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v2/schedules")
 public class ScheduleController {
-    private final ScheduleFacade scheduleFacade;
     private final Converter converter;
 
     @Operation(summary = "일정 생성", description = "일정 생성 API")
@@ -41,11 +38,7 @@ public class ScheduleController {
             @Valid @RequestBody ScheduleRequest.PostScheduleDto postScheduleDto,
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
-        ScheduleResponse.ScheduleIdDto scheduleIddto = scheduleFacade.createSchedule(
-                postScheduleDto,
-                user.getUserId()
-        );
-        return ResponseDto.onSuccess(scheduleIddto);
+        return null;
     }
 
     @Operation(summary = "일정 월별 조회", description = "개인 일정 & 모임 일정 월별 조회 API")
@@ -60,10 +53,7 @@ public class ScheduleController {
             @Parameter(description = "조회 일자", example = "{년},{월}") @PathVariable("month") String month,
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
-        List<LocalDateTime> localDateTimes = converter.convertLongToLocalDateTime(month);
-        List<ScheduleResponse.GetScheduleDto> userSchedule = scheduleFacade.getSchedulesByUser(
-                user.getUserId(), localDateTimes);
-        return ResponseDto.onSuccess(userSchedule);
+        return null;
     }
 
     @Operation(summary = "모임 일정 월별 조회", description = "모임 일정 월별 조회 API")
@@ -78,12 +68,7 @@ public class ScheduleController {
             @Parameter(description = "조회 일자", example = "{년},{월}") @PathVariable("month") String month,
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
-        List<LocalDateTime> localDateTimes = converter.convertLongToLocalDateTime(month);
-        List<ScheduleResponse.GetScheduleDto> userSchedule = scheduleFacade.getGroupSchedulesByUser(
-                user.getUserId(),
-                localDateTimes
-        );
-        return ResponseDto.onSuccess(userSchedule);
+        return null;
     }
 
     @Operation(summary = "모든 일정 조회", description = "유저의 모든 개인 일정과 모임 일정 조회 API")
@@ -97,10 +82,7 @@ public class ScheduleController {
     public ResponseDto<List<ScheduleResponse.GetScheduleDto>> getAllSchedulesByUser(
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
-        List<ScheduleResponse.GetScheduleDto> userSchedule = scheduleFacade.getAllSchedulesByUser(
-                user.getUserId()
-        );
-        return ResponseDto.onSuccess(userSchedule);
+        return null;
     }
 
     @Operation(summary = "모든 모임 일정 조회", description = "모든 모임 일정 조회 API")
@@ -114,10 +96,7 @@ public class ScheduleController {
     public ResponseDto<List<ScheduleResponse.GetScheduleDto>> getAllGroupSchedulesByUser(
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
-        List<ScheduleResponse.GetScheduleDto> groupSchedule = scheduleFacade.getAllGroupSchedulesByUser(
-                user.getUserId()
-        );
-        return ResponseDto.onSuccess(groupSchedule);
+        return null;
     }
 
     @Operation(summary = "일정 수정", description = "일정 수정 API")
@@ -133,12 +112,7 @@ public class ScheduleController {
             @Parameter(description = "일정 ID") @PathVariable("scheduleId") Long scheduleId,
             @RequestBody ScheduleRequest.PostScheduleDto req
     ) {
-        ScheduleResponse.ScheduleIdDto dto = scheduleFacade.modifySchedule(
-                scheduleId,
-                req,
-                user.getUserId()
-        );
-        return ResponseDto.onSuccess(dto);
+        return null;
     }
 
     /**
@@ -158,8 +132,7 @@ public class ScheduleController {
             @Parameter(description = "일정 타입", example = "0(개인 일정), 1(모임 일정)") @PathVariable("kind") Integer kind,
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
-        scheduleFacade.removeSchedule(scheduleId, kind, user.getUserId());
-        return ResponseDto.onSuccess("삭제에 성공하였습니다.");
+        return null;
     }
 
 }

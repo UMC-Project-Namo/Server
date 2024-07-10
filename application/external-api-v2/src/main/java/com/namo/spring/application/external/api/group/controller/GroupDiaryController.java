@@ -1,9 +1,7 @@
 package com.namo.spring.application.external.api.group.controller;
 
-import com.namo.spring.application.external.api.group.dto.GroupDiaryRequest;
 import com.namo.spring.application.external.api.group.dto.GroupDiaryResponse;
 import com.namo.spring.application.external.api.group.dto.GroupScheduleRequest;
-import com.namo.spring.application.external.api.group.facade.GroupDiaryFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.application.external.global.utils.Converter;
@@ -20,7 +18,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Tag(name = "8. Diary (모임)", description = "모임 기록 관련 API")
@@ -29,7 +26,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v2/group/diaries")
 public class GroupDiaryController {
-    private final GroupDiaryFacade groupDiaryFacade;
     private final Converter converter;
 
     @Operation(summary = "모임 기록 생성", description = "모임 기록 생성 API")
@@ -47,9 +43,7 @@ public class GroupDiaryController {
             @Parameter(description = "모임 회비") @RequestPart String money,
             @Parameter(description = "참여자", example = "멍청이, 똑똑이") @RequestPart String participants
     ) {
-        GroupDiaryRequest.LocationDto locationDto = new GroupDiaryRequest.LocationDto(name, money, participants);
-        groupDiaryFacade.createGroupDiary(moimScheduleId, locationDto, imgs);
-        return ResponseDto.onSuccess(null);
+        return null;
     }
 
     @Operation(summary = "모임 기록 장소 수정", description = "모임 기록 장소 수정 API")
@@ -67,9 +61,7 @@ public class GroupDiaryController {
             @Parameter(description = "모임 회비") @RequestPart String money,
             @Parameter(description = "참여자", example = "멍청이, 똑똑이") @RequestPart String participants
     ) {
-        GroupDiaryRequest.LocationDto locationDto = new GroupDiaryRequest.LocationDto(name, money, participants);
-        groupDiaryFacade.modifyGroupActivity(activityId, locationDto, imgs);
-        return ResponseDto.onSuccess(null);
+        return null;
     }
 
     @Operation(summary = "모임 기록 조회", description = "모임 기록 조회 API")
@@ -83,8 +75,7 @@ public class GroupDiaryController {
     public ResponseDto<Object> getGroupDiary(
             @Parameter(description = "모임 기록 ID") @PathVariable("moimScheduleId") Long moimScheduleId
     ) {
-        GroupDiaryResponse.GroupDiaryDto groupDiaryDto = groupDiaryFacade.getGroupDiaryWithLocations(moimScheduleId);
-        return ResponseDto.onSuccess(groupDiaryDto);
+        return null;
     }
 
     @Operation(summary = "월간 모임 기록 조회", description = "월간 모임 기록 조회 API")
@@ -100,10 +91,7 @@ public class GroupDiaryController {
             Pageable pageable,
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
-        List<LocalDateTime> localDateTimes = converter.convertLongToLocalDateTime(month);
-        GroupDiaryResponse.SliceDiaryDto<GroupDiaryResponse.DiaryDto> diaryDto = groupDiaryFacade
-                .getMonthMonthGroupDiary(user.getUserId(), localDateTimes, pageable);
-        return ResponseDto.onSuccess(diaryDto);
+        return null;
     }
 
     @Operation(summary = "모임 기록 상세 조회", description = "모임 기록 상세 조회 API")
@@ -118,9 +106,7 @@ public class GroupDiaryController {
             @Parameter(description = "모임 일정 ID") @PathVariable Long moimScheduleId,
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
-        Long userId = user.getUserId();
-        GroupDiaryResponse.DiaryDto diaryDto = groupDiaryFacade.getGroupDiaryDetail(moimScheduleId, userId);
-        return ResponseDto.onSuccess(diaryDto);
+        return null;
     }
 
     @Operation(summary = "개인 페이지 모임 기록 삭제", description = "일정에 대한 모임 활동 기록 삭제 API")
@@ -135,9 +121,7 @@ public class GroupDiaryController {
             @Parameter(description = "일정 ID") @PathVariable Long scheduleId,
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
-        Long userId = user.getUserId();
-        groupDiaryFacade.removePersonGroupDiary(scheduleId, userId);
-        return ResponseDto.onSuccess(null);
+        return null;
     }
 
     @Operation(summary = "모임 기록 전체 삭제", description = "일정에 대한 모임 기록 전체 삭제 API")
@@ -151,8 +135,7 @@ public class GroupDiaryController {
     public ResponseDto<Object> removeGroupDiary(
             @Parameter(description = "모임 일정 ID") @PathVariable Long moimScheduleId
     ) {
-        groupDiaryFacade.removeGroupDiary(moimScheduleId);
-        return ResponseDto.onSuccess(null);
+        return null;
     }
 
     @Operation(summary = "모임 활동 삭제", description = "모임 활동 삭제 API")
@@ -166,8 +149,7 @@ public class GroupDiaryController {
     public ResponseDto<Object> removeGroupActivity(
             @Parameter(description = "모임 활동 ID") @PathVariable Long activityId
     ) {
-        groupDiaryFacade.removeGroupActivity(activityId);
-        return ResponseDto.onSuccess(null);
+        return null;
     }
 
     @Operation(summary = "모임 기록 텍스트 추가 (모임 메모 추가)", description = "모임 기록 추가 API")
@@ -183,9 +165,6 @@ public class GroupDiaryController {
             @RequestBody GroupScheduleRequest.PostGroupScheduleTextDto moimScheduleText,
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
-        groupDiaryFacade.createGroupMemo(moimScheduleId,
-                user.getUserId(),
-                moimScheduleText);
-        return ResponseDto.onSuccess(null);
+        return null;
     }
 }

@@ -2,7 +2,6 @@ package com.namo.spring.application.external.api.group.controller;
 
 import com.namo.spring.application.external.api.group.dto.GroupRequest;
 import com.namo.spring.application.external.api.group.dto.GroupResponse;
-import com.namo.spring.application.external.api.group.facade.GroupFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.core.common.code.status.ErrorStatus;
@@ -26,7 +25,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v2/groups")
 public class GroupController {
-    private final GroupFacade groupFacade;
 
     @Operation(summary = "그룹 생성", description = "그룹 생성 API")
     @PostMapping(value = "",
@@ -44,13 +42,7 @@ public class GroupController {
             @Parameter(description = "그룹명") @RequestPart(required = true) String groupName,
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
-        GroupResponse.GroupIdDto groupIdDto = groupFacade.createGroup(
-                user.getUserId(),
-                groupName,
-                img
-        );
-
-        return ResponseDto.onSuccess(groupIdDto);
+        return null;
     }
 
     @Operation(summary = "그룹 조회", description = "유저가 참여중인 그룹 조회 API")
@@ -64,8 +56,7 @@ public class GroupController {
     public ResponseDto<List<GroupResponse.GroupDto>> findGroups(
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
-        List<GroupResponse.GroupDto> groups = groupFacade.getGroups(user.getUserId());
-        return ResponseDto.onSuccess(groups);
+        return null;
     }
 
     @Operation(summary = "그룹 이름 수정", description = "그룹 이름 수정 API, 변경자의 입장에서만 수정되어 적용됨")
@@ -80,8 +71,7 @@ public class GroupController {
             @Valid @RequestBody GroupRequest.PatchGroupNameDto patchGroupNameDto,
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
-        Long groupId = groupFacade.modifyGroupName(patchGroupNameDto, user.getUserId());
-        return ResponseDto.onSuccess(groupId);
+        return null;
     }
 
     @Operation(summary = "그룹 참여", description = "그룹 참여 API")
@@ -96,10 +86,7 @@ public class GroupController {
             @Parameter(description = "그룹 참여용 코드") @PathVariable("code") String code,
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
-        GroupResponse.GroupParticipantDto groupParticipantDto = groupFacade.createGroupAndUser(
-                user.getUserId(),
-                code);
-        return ResponseDto.onSuccess(groupParticipantDto);
+        return null;
     }
 
     @Operation(summary = "그룹 탈퇴", description = "그룹 탈퇴 API")
@@ -114,7 +101,6 @@ public class GroupController {
             @Parameter(description = "그룹 ID") @PathVariable("groupId") Long groupId,
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
-        groupFacade.removeGroupAndUser(user.getUserId(), groupId);
-        return ResponseDto.onSuccess(null);
+        return null;
     }
 }

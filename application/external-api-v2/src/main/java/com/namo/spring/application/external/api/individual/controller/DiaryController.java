@@ -1,7 +1,6 @@
 package com.namo.spring.application.external.api.individual.controller;
 
 import com.namo.spring.application.external.api.individual.dto.DiaryResponse;
-import com.namo.spring.application.external.api.individual.facade.DiaryFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.application.external.global.utils.Converter;
@@ -18,7 +17,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Tag(name = "4. Diary (개인)", description = "개인 기록 관련 API")
@@ -27,7 +25,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v2/diaries")
 public class DiaryController {
-    private final DiaryFacade diaryFacade;
     private final Converter converter;
 
     @Operation(summary = "기록 생성", description = "기록 생성 API")
@@ -43,8 +40,7 @@ public class DiaryController {
             @Parameter(description = "일정 ID") @RequestPart String scheduleId,
             @Parameter(description = "기록 내용") @RequestPart(required = false) String content
     ) {
-        DiaryResponse.ScheduleIdDto dto = diaryFacade.createDiary(Long.valueOf(scheduleId), content, imgs);
-        return ResponseDto.onSuccess(dto);
+        return null;
     }
 
     @Operation(summary = "일정 기록 월간 조회", description = "일정 기록 월간 조회 API")
@@ -60,10 +56,7 @@ public class DiaryController {
             Pageable pageable,
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
-        Long userId = user.getUserId();
-        List<LocalDateTime> localDateTimes = converter.convertLongToLocalDateTime(month);
-        DiaryResponse.SliceDiaryDto diaries = diaryFacade.getMonthDiary(userId, localDateTimes, pageable);
-        return ResponseDto.onSuccess(diaries);
+        return null;
     }
 
     @Operation(summary = "개인 일정 기록 전체 조회", description = "개인 일정 기록 전체 조회 API")
@@ -77,9 +70,7 @@ public class DiaryController {
     public ResponseDto<List<DiaryResponse.GetDiaryByUserDto>> findAllDiary(
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
-        Long userId = user.getUserId();
-        List<DiaryResponse.GetDiaryByUserDto> diaries = diaryFacade.getAllDiariesByUser(userId);
-        return ResponseDto.onSuccess(diaries);
+        return null;
     }
 
     //일정 별 기록 조회 == 1개 조회
@@ -94,8 +85,7 @@ public class DiaryController {
     public ResponseDto<DiaryResponse.GetDiaryByScheduleDto> findDiaryById(
             @Parameter(description = "일정 ID") @PathVariable("scheduleId") Long scheduleId
     ) {
-        DiaryResponse.GetDiaryByScheduleDto diary = diaryFacade.getDiaryBySchedule(scheduleId);
-        return ResponseDto.onSuccess(diary);
+        return null;
     }
 
     @Operation(summary = "일정 기록 수정", description = "일정 기록 수정 API")
@@ -111,9 +101,7 @@ public class DiaryController {
             @Parameter(description = "일정 ID") @RequestPart String scheduleId,
             @Parameter(description = "기록 내용") @RequestPart(required = false) String content
     ) {
-        diaryFacade.removeDiary(Long.valueOf(scheduleId));
-        diaryFacade.createDiary(Long.valueOf(scheduleId), content, imgs);
-        return ResponseDto.onSuccess("수정에 성공하셨습니다.");
+        return null;
     }
 
     @Operation(summary = "일정 기록 삭제", description = "일정 기록 삭제 API")
@@ -127,7 +115,6 @@ public class DiaryController {
     public ResponseDto<String> deleteDiary(
             @Parameter(description = "일정 ID") @PathVariable("scheduleId") Long scheduleId
     ) {
-        diaryFacade.removeDiary(scheduleId);
-        return ResponseDto.onSuccess("삭제에 성공하셨습니다.");
+        return null;
     }
 }

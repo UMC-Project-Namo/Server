@@ -2,11 +2,9 @@ package com.namo.spring.application.external.api.user.controller;
 
 import com.namo.spring.application.external.api.user.dto.UserRequest;
 import com.namo.spring.application.external.api.user.dto.UserResponse;
-import com.namo.spring.application.external.api.user.facade.UserFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.response.ResponseDto;
-import com.namo.spring.db.mysql.domains.user.type.SocialType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/v2/auths")
 public class AuthController {
-    private final UserFacade userFacade;
 
     @Operation(summary = "카카오 회원가입", description = "카카오 소셜 로그인을 통한 회원가입")
     @PostMapping(value = "/kakao/signup")
@@ -44,8 +41,7 @@ public class AuthController {
     public ResponseDto<UserResponse.SignUpDto> kakaoSignup(
             @Valid @RequestBody UserRequest.SocialSignUpDto signUpDto
     ) {
-        UserResponse.SignUpDto signupDto = userFacade.signupKakao(signUpDto, SocialType.KAKAO);
-        return ResponseDto.onSuccess(signupDto);
+        return null;
     }
 
     @Operation(summary = "네이버 회원가입", description = "네이버 소셜 로그인을 통한 회원가입")
@@ -64,8 +60,7 @@ public class AuthController {
     public ResponseDto<UserResponse.SignUpDto> naverSignup(
             @Valid @RequestBody UserRequest.SocialSignUpDto signUpDto
     ) {
-        UserResponse.SignUpDto signupDto = userFacade.signupNaver(signUpDto, SocialType.NAVER);
-        return ResponseDto.onSuccess(signupDto);
+        return null;
     }
 
     @Operation(summary = "애플 회원가입", description = "애플 소셜 로그인을 통한 회원가입.")
@@ -82,8 +77,7 @@ public class AuthController {
     public ResponseDto<UserResponse.SignUpDto> appleSignup(
             @Valid @RequestBody UserRequest.AppleSignUpDto dto
     ) {
-        UserResponse.SignUpDto signupDto = userFacade.signupApple(dto, SocialType.APPLE);
-        return ResponseDto.onSuccess(signupDto);
+        return null;
     }
 
     @Operation(summary = "토큰 재발급", description = "토큰 재발급")
@@ -100,8 +94,7 @@ public class AuthController {
     public ResponseDto<UserResponse.ReissueDto> reissueAccessToken(
             @Valid @RequestBody UserRequest.SignUpDto signUpDto
     ) {
-        UserResponse.ReissueDto reissueDto = userFacade.reissueAccessToken(signUpDto);
-        return ResponseDto.onSuccess(reissueDto);
+        return null;
     }
 
     @Operation(summary = "로그아웃", description = "로그아웃")
@@ -118,8 +111,7 @@ public class AuthController {
     public ResponseDto<Void> logout(
             @Valid @RequestBody UserRequest.LogoutDto logoutDto
     ) {
-        userFacade.logout(logoutDto);
-        return ResponseDto.onSuccess(null);
+        return null;
     }
 
     @Operation(summary = "카카오 회원 탈퇴", description = "카카오 회원 탈퇴")
@@ -133,8 +125,7 @@ public class AuthController {
     @PreAuthorize("isAuthenticated()")
     public ResponseDto<?> removeKakaoUser(
             HttpServletRequest request) {
-        userFacade.removeKakaoUser(request);
-        return ResponseDto.onSuccess(null);
+        return null;
     }
 
     @Operation(summary = "네이버 회원 탈퇴", description = "네이버 회원 탈퇴")
@@ -149,8 +140,7 @@ public class AuthController {
     public ResponseDto<?> removeNaverUser(
             HttpServletRequest request
     ) {
-        userFacade.removeNaverUser(request);
-        return ResponseDto.onSuccess(null);
+        return null;
     }
 
     @SuppressWarnings({"checkstyle:WhitespaceAround", "checkstyle:RegexpMultiline"})
@@ -166,7 +156,6 @@ public class AuthController {
     public ResponseDto<?> removeAppleUser(
             HttpServletRequest request
     ) {
-        userFacade.removeAppleUser(request);
-        return ResponseDto.onSuccess(null);
+        return null;
     }
 }
