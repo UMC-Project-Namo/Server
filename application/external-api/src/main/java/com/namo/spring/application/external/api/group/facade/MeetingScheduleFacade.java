@@ -10,6 +10,7 @@ import com.namo.spring.application.external.api.group.converter.GroupAndUserConv
 import com.namo.spring.application.external.api.group.converter.GroupScheduleConverter;
 import com.namo.spring.application.external.api.group.converter.GroupScheduleResponseConverter;
 import com.namo.spring.application.external.api.group.dto.GroupScheduleRequest;
+import com.namo.spring.application.external.api.group.dto.GroupScheduleResponse;
 import com.namo.spring.application.external.api.group.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.group.dto.MeetingScheduleResponse;
 import com.namo.spring.application.external.api.group.service.GroupActivityService;
@@ -249,6 +250,23 @@ public class MeetingScheduleFacade {
 		List<MoimScheduleAndUser> groupScheduleAndUsers = groupScheduleService
 			.getMonthGroupSchedules(localDateTimes, users);
 		return GroupScheduleResponseConverter
+			.toMeetingScheduleDtos(individualsSchedules, groupScheduleAndUsers, groupAndUsersInGroup);
+	}
+
+	/**
+	 * v1
+	 */
+	@Transactional(readOnly = true)
+	public List<GroupScheduleResponse.GroupScheduleDto> getMonthGroupSchedules(Long groupId,
+		List<LocalDateTime> localDateTimes, Long userId) {
+		Moim group = groupService.getGroupWithGroupAndUsersByGroupId(groupId);
+		existGroupAndUser(userId, group);
+		List<MoimAndUser> groupAndUsersInGroup = groupAndUserService.getGroupAndUsers(group);
+		List<User> users = GroupAndUserConverter.toUsers(groupAndUsersInGroup);
+		List<Schedule> individualsSchedules = scheduleService.getSchedules(users);
+		List<MoimScheduleAndUser> groupScheduleAndUsers = groupScheduleService
+			.getMonthGroupSchedules(localDateTimes, users);
+		return GroupScheduleResponseConverter
 			.toGroupScheduleDtos(individualsSchedules, groupScheduleAndUsers, groupAndUsersInGroup);
 	}
 
@@ -259,6 +277,22 @@ public class MeetingScheduleFacade {
 		List<MoimAndUser> groupAndUsersInGroup = groupAndUserService.getGroupAndUsers(group);
 		List<User> users = GroupAndUserConverter.toUsers(groupAndUsersInGroup);
 
+		List<Schedule> individualsSchedules = scheduleService.getSchedules(users);
+		List<MoimScheduleAndUser> groupScheduleAndUsers = groupScheduleService
+			.getAllGroupSchedules(users);
+		return GroupScheduleResponseConverter
+			.toMeetingScheduleDtos(individualsSchedules, groupScheduleAndUsers, groupAndUsersInGroup);
+	}
+
+	/**
+	 * v1
+	 */
+	@Transactional(readOnly = true)
+	public List<GroupScheduleResponse.GroupScheduleDto> getAllGroupSchedules(Long groupId, Long userId) {
+		Moim group = groupService.getGroupWithGroupAndUsersByGroupId(groupId);
+		existGroupAndUser(userId, group);
+		List<MoimAndUser> groupAndUsersInGroup = groupAndUserService.getGroupAndUsers(group);
+		List<User> users = GroupAndUserConverter.toUsers(groupAndUsersInGroup);
 		List<Schedule> individualsSchedules = scheduleService.getSchedules(users);
 		List<MoimScheduleAndUser> groupScheduleAndUsers = groupScheduleService
 			.getAllGroupSchedules(users);

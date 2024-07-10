@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.namo.spring.application.external.api.group.dto.GroupScheduleRequest;
+import com.namo.spring.application.external.api.group.dto.GroupScheduleResponse;
 import com.namo.spring.application.external.api.group.dto.MeetingScheduleRequest;
-import com.namo.spring.application.external.api.group.dto.MeetingScheduleResponse;
 import com.namo.spring.application.external.api.group.facade.MeetingScheduleFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
@@ -111,14 +111,13 @@ public class MeetingScheduleController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<MeetingScheduleResponse.MeetingScheduleDto> getMonthMeetingSchedules(
+	public ResponseDto<GroupScheduleResponse.GroupScheduleDto> getMonthGroupSchedules(
 		@Parameter(description = "그룹 ID") @PathVariable("groupId") Long groupId,
 		@Parameter(description = "조회 일자", example = "{년},{월}") @PathVariable("month") String month,
 		@AuthenticationPrincipal SecurityUserDetails user
 	) {
 		List<LocalDateTime> localDateTimes = converter.convertLongToLocalDateTime(month);
-		List<MeetingScheduleResponse.MeetingScheduleDto> schedules = meetingScheduleFacade.getMonthMeetingSchedules(
-			groupId,
+		List<GroupScheduleResponse.GroupScheduleDto> schedules = meetingScheduleFacade.getMonthGroupSchedules(groupId,
 			localDateTimes, user.getUserId());
 		return ResponseDto.onSuccess(schedules.get(0));
 	}
@@ -131,12 +130,12 @@ public class MeetingScheduleController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<MeetingScheduleResponse.MeetingScheduleDto> getAllMeetingSchedules(
+	public ResponseDto<GroupScheduleResponse.GroupScheduleDto> getAllGroupSchedules(
 		@Parameter(description = "그룹 ID") @PathVariable("groupId") Long groupId,
 		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		List<MeetingScheduleResponse.MeetingScheduleDto> schedules
-			= meetingScheduleFacade.getAllMeetingSchedules(groupId, user.getUserId());
+		List<GroupScheduleResponse.GroupScheduleDto> schedules
+			= meetingScheduleFacade.getAllGroupSchedules(groupId, user.getUserId());
 		return ResponseDto.onSuccess(schedules.get(0));
 	}
 
