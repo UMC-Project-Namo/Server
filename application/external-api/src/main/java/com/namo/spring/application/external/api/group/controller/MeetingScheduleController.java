@@ -56,6 +56,7 @@ public class MeetingScheduleController {
 		return ResponseDto.onSuccess(scheduleId);
 	}
 
+	// ver1
 	@Operation(summary = "모임 일정 수정", description = "모임 일정 수정 API")
 	@PatchMapping("")
 	@ApiErrorCodes(value = {
@@ -71,6 +72,7 @@ public class MeetingScheduleController {
 		return ResponseDto.onSuccess(null);
 	}
 
+	// ver1
 	@Operation(summary = "모임 일정 카테고리 수정", description = "모임 일정 카테고리 수정 API")
 	@PatchMapping("/category")
 	@ApiErrorCodes(value = {
@@ -87,8 +89,9 @@ public class MeetingScheduleController {
 		return ResponseDto.onSuccess(null);
 	}
 
+	// ver1
 	@Operation(summary = "모임 일정 삭제", description = "모임 일정 삭제 API")
-	@DeleteMapping("/{meetingScheduleId}")
+	@DeleteMapping("/{moimScheduleId}")
 	@ApiErrorCodes(value = {
 		ErrorStatus.EMPTY_ACCESS_KEY,
 		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
@@ -96,13 +99,14 @@ public class MeetingScheduleController {
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
 	public ResponseDto<Long> removeMeetingSchedule(
-		@Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
+		@Parameter(description = "모임 일정 ID") @PathVariable Long moimScheduleId,
 		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		meetingScheduleFacade.removeMeetingSchedule(meetingScheduleId, user.getUserId());
+		meetingScheduleFacade.removeMeetingSchedule(moimScheduleId, user.getUserId());
 		return ResponseDto.onSuccess(null);
 	}
 
+	// ver1
 	@Operation(summary = "월간 모임 일정 조회", description = "월간 모임 일정 조회 API")
 	@GetMapping("/{groupId}/{month}")
 	@ApiErrorCodes(value = {
@@ -122,6 +126,7 @@ public class MeetingScheduleController {
 		return ResponseDto.onSuccess(schedules.get(0));
 	}
 
+	// ver1
 	@Operation(summary = "모든 모임 일정 조회", description = "모든 모임 일정 조회 API")
 	@GetMapping("/{groupId}/all")
 	@ApiErrorCodes(value = {
@@ -139,6 +144,7 @@ public class MeetingScheduleController {
 		return ResponseDto.onSuccess(schedules.get(0));
 	}
 
+	// ver1
 	@Operation(summary = "모임 일정 생성 알람", description = "모임 일정 생성 알람 API")
 	@PostMapping("/alarm")
 	@ApiErrorCodes(value = {
@@ -155,6 +161,7 @@ public class MeetingScheduleController {
 		return ResponseDto.onSuccess(null);
 	}
 
+	// ver1
 	@Operation(summary = "모임 일정 변경 알람", description = "모임 일정 변경 알람 API")
 	@PatchMapping("/alarm")
 	@ApiErrorCodes(value = {

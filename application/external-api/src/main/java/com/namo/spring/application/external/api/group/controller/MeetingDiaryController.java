@@ -44,6 +44,7 @@ public class MeetingDiaryController {
 	private final MeetingDiaryFacade meetingDiaryFacade;
 	private final Converter converter;
 
+	// ver1
 	@Operation(summary = "모임 기록 생성", description = "모임 기록 생성 API")
 	@PostMapping(value = "/{moimScheduleId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiErrorCodes(value = {
@@ -84,6 +85,7 @@ public class MeetingDiaryController {
 		return ResponseDto.onSuccess(null);
 	}
 
+	// ver1
 	@Operation(summary = "모임 기록 조회", description = "모임 기록 조회 API")
 	@GetMapping("/{moimScheduleId}")
 	@ApiErrorCodes(value = {
@@ -118,6 +120,7 @@ public class MeetingDiaryController {
 		return ResponseDto.onSuccess(diaryDto);
 	}
 
+	// ver1
 	@Operation(summary = "모임 기록 상세 조회", description = "모임 기록 상세 조회 API")
 	@GetMapping("/detail/{moimScheduleId}")
 	@ApiErrorCodes(value = {
@@ -135,6 +138,7 @@ public class MeetingDiaryController {
 		return ResponseDto.onSuccess(diaryDto);
 	}
 
+	// ver1
 	@Operation(summary = "개인 페이지 모임 기록 삭제", description = "일정에 대한 모임 활동 기록 삭제 API")
 	@DeleteMapping("/person/{scheduleId}")
 	@ApiErrorCodes(value = {
@@ -152,6 +156,7 @@ public class MeetingDiaryController {
 		return ResponseDto.onSuccess(null);
 	}
 
+	// ver1
 	@Operation(summary = "모임 기록 전체 삭제", description = "일정에 대한 모임 기록 전체 삭제 API")
 	@DeleteMapping("/all/{moimScheduleId}")
 	@ApiErrorCodes(value = {
@@ -182,6 +187,7 @@ public class MeetingDiaryController {
 		return ResponseDto.onSuccess(null);
 	}
 
+	// ver1
 	@Operation(summary = "모임 기록 텍스트 추가 (모임 메모 추가)", description = "모임 메모 추가 API")
 	@PatchMapping("/text/{moimScheduleId}")
 	@ApiErrorCodes(value = {
