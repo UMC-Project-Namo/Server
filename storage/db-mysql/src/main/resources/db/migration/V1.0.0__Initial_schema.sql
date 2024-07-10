@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS `schedule`
     `schedule_id`        bigint      NOT NULL AUTO_INCREMENT,
     `created_date`       datetime(6)               DEFAULT NULL,
     `last_modified_date` datetime(6)               DEFAULT NULL,
-    `content`            varchar(255)              DEFAULT NULL,
+    `contents`           varchar(255)              DEFAULT NULL,
     `day_interval`       int                       DEFAULT NULL,
     `end_date`           datetime(6) NOT NULL,
     `kakao_location_id`  varchar(255)              DEFAULT NULL,
