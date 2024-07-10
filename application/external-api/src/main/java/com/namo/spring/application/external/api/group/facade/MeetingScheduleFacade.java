@@ -185,6 +185,23 @@ public class MeetingScheduleFacade {
 		}
 	}
 
+	/**
+	 * v1
+	 */
+	@Transactional(readOnly = false)
+	public void createGroupScheduleAlarm(GroupScheduleRequest.PostGroupScheduleAlarmDto groupScheduleAlarmDto,
+		Long userId) {
+		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(groupScheduleAlarmDto.getMoimScheduleId());
+		User user = userService.getUser(userId);
+		MoimScheduleAndUser groupScheduleAndUser = groupScheduleAndUserService.getGroupScheduleAndUser(groupSchedule,
+			user);
+		for (Integer alarmDate : groupScheduleAlarmDto.getAlarmDates()) {
+			MoimScheduleAlarm groupScheduleAlarm = GroupScheduleConverter.toGroupScheduleAlarm(groupScheduleAndUser,
+				alarmDate);
+			groupScheduleAndUserService.createGroupScheduleAlarm(groupScheduleAlarm);
+		}
+	}
+
 	@Transactional(readOnly = false)
 	public void modifyMeetingScheduleAlarm(MeetingScheduleRequest.PostMeetingScheduleAlarmDto groupScheduleAlarmDto,
 		Long userId) {
@@ -195,6 +212,24 @@ public class MeetingScheduleFacade {
 			user);
 		groupScheduleAndUserService.removeGroupScheduleAlarm(groupScheduleAndUser);
 
+		for (Integer alarmDate : groupScheduleAlarmDto.getAlarmDates()) {
+			MoimScheduleAlarm groupScheduleAlarm = GroupScheduleConverter.toGroupScheduleAlarm(groupScheduleAndUser,
+				alarmDate);
+			groupScheduleAndUserService.createGroupScheduleAlarm(groupScheduleAlarm);
+		}
+	}
+
+	/**
+	 * v1
+	 */
+	@Transactional(readOnly = false)
+	public void modifyGroupScheduleAlarm(GroupScheduleRequest.PostGroupScheduleAlarmDto groupScheduleAlarmDto,
+		Long userId) {
+		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(groupScheduleAlarmDto.getMoimScheduleId());
+		User user = userService.getUser(userId);
+		MoimScheduleAndUser groupScheduleAndUser = groupScheduleAndUserService.getGroupScheduleAndUser(groupSchedule,
+			user);
+		groupScheduleAndUserService.removeGroupScheduleAlarm(groupScheduleAndUser);
 		for (Integer alarmDate : groupScheduleAlarmDto.getAlarmDates()) {
 			MoimScheduleAlarm groupScheduleAlarm = GroupScheduleConverter.toGroupScheduleAlarm(groupScheduleAndUser,
 				alarmDate);

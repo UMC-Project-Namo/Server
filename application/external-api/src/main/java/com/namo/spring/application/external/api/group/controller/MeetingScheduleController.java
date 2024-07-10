@@ -148,11 +148,11 @@ public class MeetingScheduleController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<Void> createMeetingScheduleAlarm(
-		@Valid @RequestBody MeetingScheduleRequest.PostMeetingScheduleAlarmDto postMeetingScheduleAlarmDto,
+	public ResponseDto<Void> createGroupScheduleAlarm(
+		@Valid @RequestBody GroupScheduleRequest.PostGroupScheduleAlarmDto postGroupScheduleAlarmDto,
 		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		meetingScheduleFacade.createMeetingScheduleAlarm(postMeetingScheduleAlarmDto, user.getUserId());
+		meetingScheduleFacade.createGroupScheduleAlarm(postGroupScheduleAlarmDto, user.getUserId());
 		return ResponseDto.onSuccess(null);
 	}
 
@@ -164,11 +164,11 @@ public class MeetingScheduleController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<Void> modifyMeetingScheduleAlarm(
-		@Valid @RequestBody MeetingScheduleRequest.PostMeetingScheduleAlarmDto postMeetingScheduleAlarmDto,
+	public ResponseDto<Void> modifyGroupScheduleAlarm(
+		@Valid @RequestBody GroupScheduleRequest.PostGroupScheduleAlarmDto postGroupScheduleAlarmDto,
 		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		meetingScheduleFacade.modifyMeetingScheduleAlarm(postMeetingScheduleAlarmDto, user.getUserId());
+		meetingScheduleFacade.modifyGroupScheduleAlarm(postGroupScheduleAlarmDto, user.getUserId());
 		return ResponseDto.onSuccess(null);
 	}
 }
