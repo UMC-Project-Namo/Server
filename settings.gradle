@@ -16,3 +16,4 @@ include 'storage:db-redis'
 include 'support:logging'
 include 'storage:db-mysql-v2'
 
+include 'application:external-api-v2'
