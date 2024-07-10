@@ -85,8 +85,9 @@ public class DiaryFacade {
 	}
 
 	@Transactional
-	public void removeDiaryImage(Long scheduleId, String imgUrl) {
-		Image img = imageService.getImage(imgUrl);
+	public void removeDiaryImage(Long scheduleId, Long imgId) {
+		Image img = imageService.getImage(imgId);
+		String imgUrl = img.getImgUrl();
 		imageService.removeImage(scheduleId, img);
 		fileUtils.delete(imgUrl, FilePath.INVITATION_ACTIVITY_IMG);
 	}

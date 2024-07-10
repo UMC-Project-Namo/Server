@@ -142,7 +142,7 @@ public class DiaryController {
 	}
 
 	@Operation(summary = "일정 기록 이미지 삭제", description = "일정 이미지 개별 삭제 API")
-	@DeleteMapping("/{scheduleId}/image/{imgUrl}")
+	@DeleteMapping("/{scheduleId}/image/{imgId}")
 	@ApiErrorCodes(value = {
 		ErrorStatus.NOT_FOUND_IMAGE,
 		ErrorStatus.NOT_IMAGE_IN_DIARY,
@@ -150,9 +150,9 @@ public class DiaryController {
 	})
 	public ResponseDto<String> deleteDiaryImage(
 		@Parameter(description = "일정 ID") @PathVariable("scheduleId") Long scheduleId,
-		@Parameter(description = "이미지 URL") @PathVariable("imgUrl") String imgUrl
+		@Parameter(description = "이미지 ID") @PathVariable("imgID") String imgId
 	) {
-		diaryFacade.removeDiaryImage(scheduleId, imgUrl);
+		diaryFacade.removeDiaryImage(scheduleId, imgId);
 		return ResponseDto.onSuccess("삭제에 성공하셨습니다.");
 	}
 
