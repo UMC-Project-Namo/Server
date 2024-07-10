@@ -75,7 +75,7 @@ public class ScheduleControllerTest {
 
         //when then
         mockMvc.perform(
-                        post("/api/v1/schedules")
+                        post("/api/v2/schedules")
                                 .header(HttpHeaders.FROM, "localhost")
                                 .content(objectMapper.writeValueAsString(request))//request body을 JSON 형식으로 설정
                                 .contentType(MediaType.APPLICATION_JSON) //Content-Type 헤더를 application/json으로 설정
@@ -111,7 +111,7 @@ public class ScheduleControllerTest {
 
         //when & then
         mockMvc.perform(
-                        get("/api/v1/schedules/month")
+                        get("/api/v2/schedules/month")
                                 .param("month", "2024,02")
                                 .header(HttpHeaders.FROM, "localhost")
                 ).andDo(print())//테스트 실행 결과를 콘솔에 출력
@@ -148,7 +148,7 @@ public class ScheduleControllerTest {
 
         //when & then
         mockMvc.perform(
-                        get("/api/v1/schedules/group/month")
+                        get("/api/v2/schedules/group/month")
                                 .param("month", "2024,02")
                                 .header(HttpHeaders.FROM, "localhost")
                 ).andDo(print())//테스트 실행 결과를 콘솔에 출력
@@ -186,7 +186,7 @@ public class ScheduleControllerTest {
 
         //when & then
         mockMvc.perform(
-                        get("/api/v1/schedules/all")
+                        get("/api/v2/schedules/all")
                                 .header(HttpHeaders.FROM, "localhost")
                 ).andDo(print())//테스트 실행 결과를 콘솔에 출력
                 .andExpect(status().isOk())
@@ -223,7 +223,7 @@ public class ScheduleControllerTest {
 
         //when & then
         mockMvc.perform(
-                        get("/api/v1/schedules/group/all")
+                        get("/api/v2/schedules/group/all")
                                 .header(HttpHeaders.FROM, "localhost")
                 ).andDo(print())//테스트 실행 결과를 콘솔에 출력
                 .andExpect(status().isOk())
@@ -256,7 +256,7 @@ public class ScheduleControllerTest {
         given(scheduleFacade.modifySchedule(anyLong(), any(), any())).willReturn(scheduleIdDto);
 
         mockMvc.perform(
-                        patch("/api/v1/schedules/{scheduleId}", scheduleId)
+                        patch("/api/v2/schedules/{scheduleId}", scheduleId)
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(MediaType.APPLICATION_JSON)
                 ).andDo(print())
@@ -270,7 +270,7 @@ public class ScheduleControllerTest {
         Long kind = 0L;
 
         mockMvc.perform(
-                        delete("/api/v1/schedules/{scheduleId}/{kind}", scheduleId, kind)
+                        delete("/api/v2/schedules/{scheduleId}/{kind}", scheduleId, kind)
                 ).andDo(print())
                 .andExpect(status().isOk());
     }
