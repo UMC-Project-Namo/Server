@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.namo.spring.application.external.api.group.dto.GroupScheduleRequest;
 import com.namo.spring.application.external.api.group.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.group.dto.MeetingScheduleResponse;
 import com.namo.spring.application.external.api.group.facade.MeetingScheduleFacade;
@@ -63,10 +64,10 @@ public class MeetingScheduleController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<Long> modifyMeetingSchedule(
-		@Valid @RequestBody MeetingScheduleRequest.PatchMeetingScheduleDto scheduleReq
+	public ResponseDto<Long> modifyGroupSchedule(
+		@Valid @RequestBody GroupScheduleRequest.PatchGroupScheduleDto scheduleReq
 	) {
-		meetingScheduleFacade.modifyMeetingSchedule(scheduleReq);
+		meetingScheduleFacade.modifyGroupSchedule(scheduleReq);
 		return ResponseDto.onSuccess(null);
 	}
 
@@ -78,11 +79,11 @@ public class MeetingScheduleController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<Long> modifyMeetingScheduleCategory(
-		@Valid @RequestBody MeetingScheduleRequest.PatchMeetingScheduleCategoryDto scheduleReq,
+	public ResponseDto<Long> modifyGroupScheduleCategory(
+		@Valid @RequestBody GroupScheduleRequest.PatchGroupScheduleCategoryDto scheduleReq,
 		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		meetingScheduleFacade.modifyMeetingScheduleCategory(scheduleReq, user.getUserId());
+		meetingScheduleFacade.modifyGroupScheduleCategory(scheduleReq, user.getUserId());
 		return ResponseDto.onSuccess(null);
 	}
 

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.namo.spring.application.external.api.group.converter.GroupAndUserConverter;
 import com.namo.spring.application.external.api.group.converter.GroupScheduleConverter;
 import com.namo.spring.application.external.api.group.converter.GroupScheduleResponseConverter;
+import com.namo.spring.application.external.api.group.dto.GroupScheduleRequest;
 import com.namo.spring.application.external.api.group.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.group.dto.MeetingScheduleResponse;
 import com.namo.spring.application.external.api.group.service.GroupActivityService;
@@ -90,11 +91,38 @@ public class MeetingScheduleFacade {
 		createGroupScheduleAndUsers(groupScheduleDto.getUsers(), groupSchedule, groupSchedule.getMoim());
 	}
 
+	/**
+	 * v1
+	 */
+	@Transactional(readOnly = false)
+	public void modifyGroupSchedule(GroupScheduleRequest.PatchGroupScheduleDto groupScheduleDto) {
+		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(groupScheduleDto.getMoimScheduleId());
+		Period period = GroupScheduleConverter.toPeriod(groupScheduleDto);
+		Location location = GroupScheduleConverter.toLocation(groupScheduleDto);
+		groupSchedule.update(groupScheduleDto.getName(), period, location);
+		groupScheduleAndUserService.removeGroupScheduleAndUser(groupSchedule);
+		createGroupScheduleAndUsers(groupScheduleDto.getUsers(), groupSchedule, groupSchedule.getMoim());
+	}
+
 	@Transactional(readOnly = false)
 	public void modifyMeetingScheduleCategory(
 		MeetingScheduleRequest.PatchMeetingScheduleCategoryDto scheduleCategoryDto,
 		Long userId) {
 		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(scheduleCategoryDto.getMeetingScheduleId());
+		User user = userService.getUser(userId);
+		Category category = categoryService.getCategory(scheduleCategoryDto.getCategoryId());
+		MoimScheduleAndUser groupScheduleAndUser = groupScheduleAndUserService.getGroupScheduleAndUser(groupSchedule,
+			user);
+		groupScheduleAndUser.updateCategory(category);
+	}
+
+	/**
+	 * v1
+	 */
+	@Transactional(readOnly = false)
+	public void modifyGroupScheduleCategory(GroupScheduleRequest.PatchGroupScheduleCategoryDto scheduleCategoryDto,
+		Long userId) {
+		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(scheduleCategoryDto.getMoimScheduleId());
 		User user = userService.getUser(userId);
 		Category category = categoryService.getCategory(scheduleCategoryDto.getCategoryId());
 		MoimScheduleAndUser groupScheduleAndUser = groupScheduleAndUserService.getGroupScheduleAndUser(groupSchedule,

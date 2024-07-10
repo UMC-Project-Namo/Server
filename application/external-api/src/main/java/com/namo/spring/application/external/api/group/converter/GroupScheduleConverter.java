@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.namo.spring.application.external.api.group.dto.GroupScheduleRequest;
 import com.namo.spring.application.external.api.group.dto.MeetingScheduleRequest;
 import com.namo.spring.db.mysql.domains.group.domain.Moim;
 import com.namo.spring.db.mysql.domains.group.domain.MoimSchedule;
@@ -35,6 +36,17 @@ public class GroupScheduleConverter {
 			.build();
 	}
 
+	/**
+	 * v1
+	 */
+	public static Period toPeriod(GroupScheduleRequest.PatchGroupScheduleDto groupScheduleDto) {
+		return Period.builder()
+			.startDate(groupScheduleDto.getStartDate())
+			.endDate(groupScheduleDto.getEndDate())
+			.dayInterval(groupScheduleDto.getInterval())
+			.build();
+	}
+
 	public static Location toLocation(MeetingScheduleRequest.PostMeetingScheduleDto groupScheduleDto) {
 		return Location.builder()
 			.x(groupScheduleDto.getX())
@@ -45,6 +57,17 @@ public class GroupScheduleConverter {
 	}
 
 	public static Location toLocation(MeetingScheduleRequest.PatchMeetingScheduleDto groupScheduleDto) {
+		return Location.builder()
+			.x(groupScheduleDto.getX())
+			.y(groupScheduleDto.getY())
+			.locationName(groupScheduleDto.getLocationName())
+			.build();
+	}
+
+	/**
+	 * v1
+	 */
+	public static Location toLocation(GroupScheduleRequest.PatchGroupScheduleDto groupScheduleDto) {
 		return Location.builder()
 			.x(groupScheduleDto.getX())
 			.y(groupScheduleDto.getY())

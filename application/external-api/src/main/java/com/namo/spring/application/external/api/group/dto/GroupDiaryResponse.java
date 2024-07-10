@@ -10,6 +10,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+/**
+ * v1
+ */
 public class GroupDiaryResponse {
 	private GroupDiaryResponse() {
 		throw new IllegalStateException("Utill Classes");
