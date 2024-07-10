@@ -1,0 +1,34 @@
+bootJar.enabled = true
+jar.enabled = false
+
+dependencies {
+    // Subproject
+    implementation project(':core:core-common')
+    implementation project(':core:core-infra')
+    implementation project(':clients:social-client')
+    implementation project(':storage:db-mysql')
+    implementation project(':storage:db-redis')
+    implementation project(':support:logging')
+
+    // Application
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // Swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+
+    // Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
+
+    // Json
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.1'
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+    implementation 'com.google.code.gson:gson:2.10.1'
+
+    // Mockito
+    testImplementation 'org.mockito:mockito-core:5.8.0'
+
+    // javax
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+}

@@ -1,0 +1,35 @@
+spring.profiles.active: local
+
+spring:
+  config:
+    import:
+      - auth.yml
+      - swagger.yml
+      - social-client.yml
+      - aws.yml
+      - redis.yml
+      - mysql.yml
+      - logging.yml
+  web.resources.add-mappings: false
+
+server:
+  port: ${APPLICATION_PORT:9000}
+  tomcat:
+    max-connections: 20000
+    threads:
+      max: 600
+      min-spare: 100
+
+---
+spring.config.activate.on-profile: local
+
+
+---
+spring.config.activate.on-profile: dev
+
+
+
+---
+spring.config.activate.on-profile: prod
+
+
