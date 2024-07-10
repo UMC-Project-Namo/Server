@@ -1,0 +1,13 @@
+dependencies {
+    // subproject
+    implementation project(':core:core-common')
+
+    // data
+    api group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '3.2.3'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    implementation group: 'org.hibernate', name: 'hibernate-spatial', version: '6.2.0.CR3' // point 저장
+
+    // flyway
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-mysql'
+}
