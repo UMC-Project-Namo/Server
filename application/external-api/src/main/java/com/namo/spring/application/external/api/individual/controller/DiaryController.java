@@ -150,7 +150,7 @@ public class DiaryController {
 	})
 	public ResponseDto<String> deleteDiaryImage(
 		@Parameter(description = "일정 ID") @PathVariable("scheduleId") Long scheduleId,
-		@Parameter(description = "이미지 ID") @PathVariable("imgID") Long imgId
+		@Parameter(description = "이미지 ID") @PathVariable("imgId") Long imgId
 	) {
 		diaryFacade.removeDiaryImage(scheduleId, imgId);
 		return ResponseDto.onSuccess("삭제에 성공하셨습니다.");
