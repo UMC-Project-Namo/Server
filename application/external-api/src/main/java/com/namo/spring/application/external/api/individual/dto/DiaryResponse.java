@@ -47,6 +47,9 @@ public class DiaryResponse {
 		private List<DiaryImageDto> images;
 	}
 
+	@AllArgsConstructor
+	@Getter
+	@Builder
 	public static class DiaryImageDto {
 		private String id;
 		private String url;

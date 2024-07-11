@@ -66,11 +66,7 @@ public class DiaryFacade {
 	public DiaryResponse.GetDiaryByScheduleDto getDiaryBySchedule(Long scheduleId) {
 		Schedule schedule = scheduleService.getScheduleById(scheduleId);
 		schedule.existDairy(); //다이어리 없으면 exception발생
-		List<String> imgUrls = schedule.getImages().stream()
-			.map(Image::getImgUrl)
-			.toList();
-
-		return DiaryResponseConverter.toGetDiaryByScheduleRes(schedule, imgUrls);
+		return DiaryResponseConverter.toGetDiaryByScheduleRes(schedule);
 	}
 
 	@Transactional
