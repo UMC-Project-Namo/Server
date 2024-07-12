@@ -9,34 +9,34 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-/**
- * v1
- */
-public class GroupScheduleRequest {
-	private GroupScheduleRequest() {
+public class MeetingScheduleRequest {
+	private MeetingScheduleRequest() {
 		throw new IllegalStateException("Util class");
 	}
 
 	@NoArgsConstructor
 	@AllArgsConstructor
 	@Getter
-	public static class PostGroupScheduleDto {
+	public static class PostMeetingScheduleDto {
 		@NotNull
 		private Long groupId;
 		@NotBlank
 		private String name;
+
 		@NotNull
 		private Long startDate;
 		@NotNull
 		private Long endDate;
 		@NotNull
 		private Integer interval;
+
 		@SuppressWarnings("checkstyle:MemberName")
 		private Double x;
 		@SuppressWarnings("checkstyle:MemberName")
 		private Double y;
 		private String locationName;
 		private String kakaoLocationId;
+
 		@NotNull
 		private List<Long> users;
 	}
@@ -44,9 +44,9 @@ public class GroupScheduleRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	@Getter
-	public static class PatchGroupScheduleDto {
+	public static class PatchMeetingScheduleDto {
 		@NotNull
-		private Long moimScheduleId;
+		private Long meetingScheduleId;
 		@NotBlank
 		private String name;
 
@@ -56,10 +56,12 @@ public class GroupScheduleRequest {
 		private Long endDate;
 		@NotNull
 		private Integer interval;
+
 		private Double x;
 		private Double y;
 		private String locationName;
 		private String kakaoLocationId;
+
 		@NotNull
 		private List<Long> users;
 	}
@@ -67,9 +69,9 @@ public class GroupScheduleRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	@Getter
-	public static class PatchGroupScheduleCategoryDto {
+	public static class PatchMeetingScheduleCategoryDto {
 		@NotNull
-		private Long moimScheduleId;
+		private Long meetingScheduleId;
 
 		@NotNull
 		private Long categoryId;
@@ -77,15 +79,15 @@ public class GroupScheduleRequest {
 
 	@NoArgsConstructor
 	@Getter
-	public static class PostGroupScheduleAlarmDto {
-		private Long moimScheduleId;
+	public static class PostMeetingScheduleAlarmDto {
+		private Long meetingScheduleId;
 		private List<Integer> alarmDates;
 	}
 
 	@Getter
 	@AllArgsConstructor
 	@NoArgsConstructor
-	public static class PostGroupScheduleTextDto {
+	public static class PostMeetingScheduleTextDto {
 		private String text;
 	}
 }

@@ -11,6 +11,8 @@ import com.namo.spring.application.external.api.group.converter.GroupScheduleCon
 import com.namo.spring.application.external.api.group.converter.GroupScheduleResponseConverter;
 import com.namo.spring.application.external.api.group.dto.GroupScheduleRequest;
 import com.namo.spring.application.external.api.group.dto.GroupScheduleResponse;
+import com.namo.spring.application.external.api.group.dto.MeetingScheduleRequest;
+import com.namo.spring.application.external.api.group.dto.MeetingScheduleResponse;
 import com.namo.spring.application.external.api.group.service.GroupActivityService;
 import com.namo.spring.application.external.api.group.service.GroupAndUserService;
 import com.namo.spring.application.external.api.group.service.GroupMemoService;
@@ -40,7 +42,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class GroupScheduleFacade {
+public class MeetingScheduleFacade {
 	private final UserService userService;
 	private final GroupService groupService;
 	private final GroupAndUserService groupAndUserService;
@@ -58,7 +60,7 @@ public class GroupScheduleFacade {
 	 * categories 수정시 모임과 기본 카테고리에 대해서는 수정이 불가능하게 해야함
 	 */
 	@Transactional(readOnly = false)
-	public Long createSchedule(GroupScheduleRequest.PostGroupScheduleDto groupScheduleDto) {
+	public Long createSchedule(MeetingScheduleRequest.PostMeetingScheduleDto groupScheduleDto) {
 		Moim group = groupService.getGroupWithGroupAndUsersByGroupId(groupScheduleDto.getGroupId());
 		Period period = GroupScheduleConverter.toPeriod(groupScheduleDto);
 		Location location = GroupScheduleConverter.toLocation(groupScheduleDto);
@@ -81,6 +83,19 @@ public class GroupScheduleFacade {
 	}
 
 	@Transactional(readOnly = false)
+	public void modifyMeetingSchedule(MeetingScheduleRequest.PatchMeetingScheduleDto groupScheduleDto) {
+		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(groupScheduleDto.getMeetingScheduleId());
+		Period period = GroupScheduleConverter.toPeriod(groupScheduleDto);
+		Location location = GroupScheduleConverter.toLocation(groupScheduleDto);
+		groupSchedule.update(groupScheduleDto.getName(), period, location);
+		groupScheduleAndUserService.removeGroupScheduleAndUser(groupSchedule);
+		createGroupScheduleAndUsers(groupScheduleDto.getUsers(), groupSchedule, groupSchedule.getMoim());
+	}
+
+	/**
+	 * v1
+	 */
+	@Transactional(readOnly = false)
 	public void modifyGroupSchedule(GroupScheduleRequest.PatchGroupScheduleDto groupScheduleDto) {
 		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(groupScheduleDto.getMoimScheduleId());
 		Period period = GroupScheduleConverter.toPeriod(groupScheduleDto);
@@ -90,6 +105,21 @@ public class GroupScheduleFacade {
 		createGroupScheduleAndUsers(groupScheduleDto.getUsers(), groupSchedule, groupSchedule.getMoim());
 	}
 
+	@Transactional(readOnly = false)
+	public void modifyMeetingScheduleCategory(
+		MeetingScheduleRequest.PatchMeetingScheduleCategoryDto scheduleCategoryDto,
+		Long userId) {
+		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(scheduleCategoryDto.getMeetingScheduleId());
+		User user = userService.getUser(userId);
+		Category category = categoryService.getCategory(scheduleCategoryDto.getCategoryId());
+		MoimScheduleAndUser groupScheduleAndUser = groupScheduleAndUserService.getGroupScheduleAndUser(groupSchedule,
+			user);
+		groupScheduleAndUser.updateCategory(category);
+	}
+
+	/**
+	 * v1
+	 */
 	@Transactional(readOnly = false)
 	public void modifyGroupScheduleCategory(GroupScheduleRequest.PatchGroupScheduleCategoryDto scheduleCategoryDto,
 		Long userId) {
@@ -102,7 +132,7 @@ public class GroupScheduleFacade {
 	}
 
 	@Transactional(readOnly = false)
-	public void removeGroupSchedule(Long groupScheduleId, Long userId) {
+	public void removeMeetingSchedule(Long groupScheduleId, Long userId) {
 		MoimSchedule groupSchedule = groupScheduleService.getGroupScheduleWithGroupDiary(groupScheduleId);
 		List<MoimScheduleAndUser> groupScheduleAndUsers = groupScheduleService.getGroupScheduleAndUsers(groupSchedule);
 
@@ -141,9 +171,10 @@ public class GroupScheduleFacade {
 	}
 
 	@Transactional(readOnly = false)
-	public void createGroupScheduleAlarm(GroupScheduleRequest.PostGroupScheduleAlarmDto groupScheduleAlarmDto,
+	public void createMeetingScheduleAlarm(MeetingScheduleRequest.PostMeetingScheduleAlarmDto groupScheduleAlarmDto,
 		Long userId) {
-		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(groupScheduleAlarmDto.getMoimScheduleId());
+		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(
+			groupScheduleAlarmDto.getMeetingScheduleId());
 		User user = userService.getUser(userId);
 		MoimScheduleAndUser groupScheduleAndUser = groupScheduleAndUserService.getGroupScheduleAndUser(groupSchedule,
 			user);
@@ -155,10 +186,28 @@ public class GroupScheduleFacade {
 		}
 	}
 
+	/**
+	 * v1
+	 */
 	@Transactional(readOnly = false)
-	public void modifyGroupScheduleAlarm(GroupScheduleRequest.PostGroupScheduleAlarmDto groupScheduleAlarmDto,
+	public void createGroupScheduleAlarm(GroupScheduleRequest.PostGroupScheduleAlarmDto groupScheduleAlarmDto,
 		Long userId) {
 		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(groupScheduleAlarmDto.getMoimScheduleId());
+		User user = userService.getUser(userId);
+		MoimScheduleAndUser groupScheduleAndUser = groupScheduleAndUserService.getGroupScheduleAndUser(groupSchedule,
+			user);
+		for (Integer alarmDate : groupScheduleAlarmDto.getAlarmDates()) {
+			MoimScheduleAlarm groupScheduleAlarm = GroupScheduleConverter.toGroupScheduleAlarm(groupScheduleAndUser,
+				alarmDate);
+			groupScheduleAndUserService.createGroupScheduleAlarm(groupScheduleAlarm);
+		}
+	}
+
+	@Transactional(readOnly = false)
+	public void modifyMeetingScheduleAlarm(MeetingScheduleRequest.PostMeetingScheduleAlarmDto groupScheduleAlarmDto,
+		Long userId) {
+		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(
+			groupScheduleAlarmDto.getMeetingScheduleId());
 		User user = userService.getUser(userId);
 		MoimScheduleAndUser groupScheduleAndUser = groupScheduleAndUserService.getGroupScheduleAndUser(groupSchedule,
 			user);
@@ -171,8 +220,26 @@ public class GroupScheduleFacade {
 		}
 	}
 
+	/**
+	 * v1
+	 */
+	@Transactional(readOnly = false)
+	public void modifyGroupScheduleAlarm(GroupScheduleRequest.PostGroupScheduleAlarmDto groupScheduleAlarmDto,
+		Long userId) {
+		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(groupScheduleAlarmDto.getMoimScheduleId());
+		User user = userService.getUser(userId);
+		MoimScheduleAndUser groupScheduleAndUser = groupScheduleAndUserService.getGroupScheduleAndUser(groupSchedule,
+			user);
+		groupScheduleAndUserService.removeGroupScheduleAlarm(groupScheduleAndUser);
+		for (Integer alarmDate : groupScheduleAlarmDto.getAlarmDates()) {
+			MoimScheduleAlarm groupScheduleAlarm = GroupScheduleConverter.toGroupScheduleAlarm(groupScheduleAndUser,
+				alarmDate);
+			groupScheduleAndUserService.createGroupScheduleAlarm(groupScheduleAlarm);
+		}
+	}
+
 	@Transactional(readOnly = true)
-	public List<GroupScheduleResponse.GroupScheduleDto> getMonthGroupSchedules(Long groupId,
+	public List<MeetingScheduleResponse.MeetingScheduleDto> getMonthMeetingSchedules(Long groupId,
 		List<LocalDateTime> localDateTimes, Long userId) {
 		Moim group = groupService.getGroupWithGroupAndUsersByGroupId(groupId);
 		existGroupAndUser(userId, group);
@@ -183,16 +250,49 @@ public class GroupScheduleFacade {
 		List<MoimScheduleAndUser> groupScheduleAndUsers = groupScheduleService
 			.getMonthGroupSchedules(localDateTimes, users);
 		return GroupScheduleResponseConverter
+			.toMeetingScheduleDtos(individualsSchedules, groupScheduleAndUsers, groupAndUsersInGroup);
+	}
+
+	/**
+	 * v1
+	 */
+	@Transactional(readOnly = true)
+	public List<GroupScheduleResponse.GroupScheduleDto> getMonthGroupSchedules(Long groupId,
+		List<LocalDateTime> localDateTimes, Long userId) {
+		Moim group = groupService.getGroupWithGroupAndUsersByGroupId(groupId);
+		existGroupAndUser(userId, group);
+		List<MoimAndUser> groupAndUsersInGroup = groupAndUserService.getGroupAndUsers(group);
+		List<User> users = GroupAndUserConverter.toUsers(groupAndUsersInGroup);
+		List<Schedule> individualsSchedules = scheduleService.getSchedules(users);
+		List<MoimScheduleAndUser> groupScheduleAndUsers = groupScheduleService
+			.getMonthGroupSchedules(localDateTimes, users);
+		return GroupScheduleResponseConverter
 			.toGroupScheduleDtos(individualsSchedules, groupScheduleAndUsers, groupAndUsersInGroup);
 	}
 
+	@Transactional(readOnly = true)
+	public List<MeetingScheduleResponse.MeetingScheduleDto> getAllMeetingSchedules(Long groupId, Long userId) {
+		Moim group = groupService.getGroupWithGroupAndUsersByGroupId(groupId);
+		existGroupAndUser(userId, group);
+		List<MoimAndUser> groupAndUsersInGroup = groupAndUserService.getGroupAndUsers(group);
+		List<User> users = GroupAndUserConverter.toUsers(groupAndUsersInGroup);
+
+		List<Schedule> individualsSchedules = scheduleService.getSchedules(users);
+		List<MoimScheduleAndUser> groupScheduleAndUsers = groupScheduleService
+			.getAllGroupSchedules(users);
+		return GroupScheduleResponseConverter
+			.toMeetingScheduleDtos(individualsSchedules, groupScheduleAndUsers, groupAndUsersInGroup);
+	}
+
+	/**
+	 * v1
+	 */
 	@Transactional(readOnly = true)
 	public List<GroupScheduleResponse.GroupScheduleDto> getAllGroupSchedules(Long groupId, Long userId) {
 		Moim group = groupService.getGroupWithGroupAndUsersByGroupId(groupId);
 		existGroupAndUser(userId, group);
 		List<MoimAndUser> groupAndUsersInGroup = groupAndUserService.getGroupAndUsers(group);
 		List<User> users = GroupAndUserConverter.toUsers(groupAndUsersInGroup);
-
 		List<Schedule> individualsSchedules = scheduleService.getSchedules(users);
 		List<MoimScheduleAndUser> groupScheduleAndUsers = groupScheduleService
 			.getAllGroupSchedules(users);

@@ -10,8 +10,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+/**
+ * v1
+ */
 public class GroupDiaryResponse {
-
 	private GroupDiaryResponse() {
 		throw new IllegalStateException("Utill Classes");
 	}
@@ -57,30 +59,5 @@ public class GroupDiaryResponse {
 		private Integer money;
 		private List<Long> participants;
 		private List<String> urls;
-	}
-
-	@Getter
-	@Builder
-	@AllArgsConstructor
-	public static class SliceDiaryDto<T> {
-		private List<T> content;
-		private int currentPage;
-		private int size;
-		private boolean first;
-		private boolean last;
-	}
-
-	@Getter
-	@Builder
-	@AllArgsConstructor
-	public static class DiaryDto {
-		private Long scheduleId;
-		private String name;
-		private Long startDate;
-		private String contents;
-		private List<String> urls;
-		private Long categoryId;
-		private Long color;
-		private String placeName;
 	}
 }

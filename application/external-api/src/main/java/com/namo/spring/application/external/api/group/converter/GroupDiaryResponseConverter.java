@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.SliceImpl;
 
 import com.namo.spring.application.external.api.group.dto.GroupDiaryResponse;
+import com.namo.spring.application.external.api.group.dto.MeetingDiaryResponse;
 import com.namo.spring.core.common.utils.DateUtil;
 import com.namo.spring.db.mysql.domains.group.domain.MoimMemo;
 import com.namo.spring.db.mysql.domains.group.domain.MoimMemoLocation;
@@ -22,6 +23,17 @@ public class GroupDiaryResponseConverter {
 		throw new IllegalStateException("Utill Classes");
 	}
 
+	public static MeetingDiaryResponse.MeetingDiaryDto toMeetingDiaryDto(
+		MoimMemo groupMemo,
+		List<MoimMemoLocation> groupActivities,
+		List<MoimMemoLocationAndUser> groupActivityAndUsers) {
+		List<MeetingDiaryResponse.MeetingUserDto> users = groupMemo.getMoimSchedule().getMoimScheduleAndUsers().stream()
+			.map(GroupDiaryResponseConverter::toMeetingUserDto)
+			.toList();
+		return MeetingDiaryResponse.MeetingDiaryDto.fromMeetingMemo(groupMemo,
+			toMeetingActivityDtos(groupActivities, groupActivityAndUsers));
+	}
+
 	public static GroupDiaryResponse.GroupDiaryDto toGroupDiaryDto(
 		MoimMemo groupMemo,
 		List<MoimMemoLocation> groupActivities,
@@ -33,6 +45,17 @@ public class GroupDiaryResponseConverter {
 			toGroupActivityDtos(groupActivities, groupActivityAndUsers));
 	}
 
+	public static MeetingDiaryResponse.MeetingUserDto toMeetingUserDto(MoimScheduleAndUser groupScheduleAndUser) {
+		return MeetingDiaryResponse.MeetingUserDto
+			.builder()
+			.userId(groupScheduleAndUser.getUser().getId())
+			.userName(groupScheduleAndUser.getUser().getName())
+			.build();
+	}
+
+	/**
+	 * v1
+	 */
 	public static GroupDiaryResponse.GroupUserDto toGroupUserDto(MoimScheduleAndUser groupScheduleAndUser) {
 		return GroupDiaryResponse.GroupUserDto
 			.builder()
@@ -41,7 +64,7 @@ public class GroupDiaryResponseConverter {
 			.build();
 	}
 
-	private static List<GroupDiaryResponse.MoimActivityDto> toGroupActivityDtos(
+	private static List<MeetingDiaryResponse.MeetingActivityDto> toMeetingActivityDtos(
 		List<MoimMemoLocation> groupActivities,
 		List<MoimMemoLocationAndUser> groupActivityAndUsers) {
 		Map<MoimMemoLocation, List<MoimMemoLocationAndUser>> groupActivityMappingUsers = groupActivityAndUsers
@@ -49,10 +72,46 @@ public class GroupDiaryResponseConverter {
 			.collect(Collectors.groupingBy(MoimMemoLocationAndUser::getMoimMemoLocation));
 
 		return groupActivities.stream()
+			.map(groupActivity -> toMeetingActivityDto(groupActivityMappingUsers, groupActivity))
+			.collect(Collectors.toList());
+	}
+
+	/**
+	 * v1
+	 */
+	private static List<GroupDiaryResponse.MoimActivityDto> toGroupActivityDtos(
+		List<MoimMemoLocation> groupActivities,
+		List<MoimMemoLocationAndUser> groupActivityAndUsers) {
+		Map<MoimMemoLocation, List<MoimMemoLocationAndUser>> groupActivityMappingUsers = groupActivityAndUsers
+			.stream()
+			.collect(Collectors.groupingBy(MoimMemoLocationAndUser::getMoimMemoLocation));
+		return groupActivities.stream()
 			.map(groupActivity -> toGroupActivityDto(groupActivityMappingUsers, groupActivity))
 			.collect(Collectors.toList());
 	}
 
+	private static MeetingDiaryResponse.MeetingActivityDto toMeetingActivityDto(
+		Map<MoimMemoLocation, List<MoimMemoLocationAndUser>> groupActivityMappingUsers,
+		MoimMemoLocation groupActivity) {
+		List<String> urls = groupActivity.getMoimMemoLocationImgs().stream()
+			.map(MoimMemoLocationImg::getUrl)
+			.toList();
+		List<Long> participants = groupActivityMappingUsers.get(groupActivity).stream()
+			.map(groupActivityAndUser -> groupActivityAndUser.getUser().getId())
+			.toList();
+		return MeetingDiaryResponse.MeetingActivityDto
+			.builder()
+			.meetingActivityId(groupActivity.getId())
+			.name(groupActivity.getName())
+			.money(groupActivity.getTotalAmount())
+			.urls(urls)
+			.participants(participants)
+			.build();
+	}
+
+	/**
+	 * v1
+	 */
 	private static GroupDiaryResponse.MoimActivityDto toGroupActivityDto(
 		Map<MoimMemoLocation, List<MoimMemoLocationAndUser>> groupActivityMappingUsers,
 		MoimMemoLocation groupActivity) {
@@ -72,7 +131,7 @@ public class GroupDiaryResponseConverter {
 			.build();
 	}
 
-	public static GroupDiaryResponse.SliceDiaryDto toSliceDiaryDto(
+	public static MeetingDiaryResponse.SliceDiaryDto toSliceDiaryDto(
 		List<MoimScheduleAndUser> groupScheduleAndUsers,
 		Pageable page
 	) {
@@ -82,7 +141,7 @@ public class GroupDiaryResponseConverter {
 			hasNext = true;
 		}
 		SliceImpl<MoimScheduleAndUser> groupSchedulesSlice = new SliceImpl<>(groupScheduleAndUsers, page, hasNext);
-		return GroupDiaryResponse.SliceDiaryDto.builder()
+		return MeetingDiaryResponse.SliceDiaryDto.builder()
 			.content(
 				groupSchedulesSlice.stream().map(GroupDiaryResponseConverter::toDiaryDto).collect(Collectors.toList()))
 			.currentPage(groupSchedulesSlice.getNumber())
@@ -92,11 +151,11 @@ public class GroupDiaryResponseConverter {
 			.build();
 	}
 
-	public static GroupDiaryResponse.DiaryDto toDiaryDto(Schedule schedule) {
+	public static MeetingDiaryResponse.DiaryDto toDiaryDto(Schedule schedule) {
 		List<String> urls = schedule.getImages().stream()
 			.map(Image::getImgUrl)
 			.toList();
-		return GroupDiaryResponse.DiaryDto.builder()
+		return MeetingDiaryResponse.DiaryDto.builder()
 			.scheduleId(schedule.getId())
 			.name(schedule.getName())
 			.startDate(DateUtil.toSeconds(schedule.getPeriod().getStartDate()))
@@ -108,7 +167,7 @@ public class GroupDiaryResponseConverter {
 			.build();
 	}
 
-	public static GroupDiaryResponse.DiaryDto toDiaryDto(MoimScheduleAndUser groupScheduleAndUser) {
+	public static MeetingDiaryResponse.DiaryDto toDiaryDto(MoimScheduleAndUser groupScheduleAndUser) {
 		List<String> urls = groupScheduleAndUser.getMoimSchedule().getMoimMemo()
 			.getMoimMemoLocations()
 			.stream()
@@ -118,7 +177,7 @@ public class GroupDiaryResponseConverter {
 			.map(MoimMemoLocationImg::getUrl)
 			.limit(3)
 			.collect(Collectors.toList());
-		return GroupDiaryResponse.DiaryDto.builder()
+		return MeetingDiaryResponse.DiaryDto.builder()
 			.scheduleId(groupScheduleAndUser.getMoimSchedule().getId())
 			.name(groupScheduleAndUser.getMoimSchedule().getName())
 			.startDate(DateUtil.toSeconds(groupScheduleAndUser.getMoimSchedule().getPeriod().getStartDate()))
