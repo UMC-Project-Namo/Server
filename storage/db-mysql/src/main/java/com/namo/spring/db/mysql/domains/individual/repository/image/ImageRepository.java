@@ -11,4 +11,5 @@ import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
 public interface ImageRepository extends JpaRepository<Image, Long>, ImageRepositoryCustom {
 	Optional<List<Image>> findAllBySchedule(Schedule schedule);
 
+	Optional<Image> findByImgUrl(String url);
 }

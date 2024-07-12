@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.core.common.exception.IndividualException;
 import com.namo.spring.db.mysql.domains.individual.domain.Image;
 import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
 import com.namo.spring.db.mysql.domains.individual.repository.image.ImageRepository;
@@ -15,6 +17,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ImageService {
 	private final ImageRepository imageRepository;
+
+	public Image getImage(Long id) {
+		return imageRepository.findById(id)
+			.orElseThrow(() -> new IndividualException(ErrorStatus.NOT_FOUND_IMAGE));
+	}
+
+	public Image getImage(String url) {
+		return imageRepository.findByImgUrl(url)
+			.orElseThrow(() -> new IndividualException(ErrorStatus.NOT_FOUND_IMAGE));
+	}
 
 	public List<Image> createImages(List<Image> imgs) {
 		return imageRepository.saveAll(imgs);
@@ -34,5 +46,12 @@ public class ImageService {
 		schedules.forEach(schedule ->
 			imageRepository.deleteAll(schedule.getImages())
 		);
+	}
+
+	public void removeImage(Long scheduleId, Image img) {
+		if (!img.getSchedule().getId().equals(scheduleId)) {
+			throw new IndividualException(ErrorStatus.NOT_IMAGE_IN_DIARY);
+		}
+		imageRepository.delete(img);
 	}
 }

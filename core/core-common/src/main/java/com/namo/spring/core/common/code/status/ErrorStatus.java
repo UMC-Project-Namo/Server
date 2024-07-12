@@ -72,6 +72,7 @@ public enum ErrorStatus implements BaseErrorCode {
 	NOT_FOUND_GROUP_MEMO_FAILURE(HttpStatus.NOT_FOUND, "모임 메모를 찾을 수 없습니다."),
 	NOT_FOUND_GROUP_MEMO_LOCATION_FAILURE(HttpStatus.NOT_FOUND, "모임 장소를 찾을 수 없습니다."),
 	NOT_FOUND_COLOR(HttpStatus.NOT_FOUND, "색깔을 찾을 수 없습니다."),
+	NOT_FOUND_IMAGE(HttpStatus.NOT_FOUND, "이미지를 찾을 수 없습니다."),
 
 	/**
 	 * 404 : 예외 상황 에러
@@ -99,6 +100,7 @@ public enum ErrorStatus implements BaseErrorCode {
 	 */
 	NOT_USERS_CATEGORY(HttpStatus.NOT_FOUND, "해당 유저의 카테고리가 아닙니다."),
 	NOT_USERS_IN_GROUP(HttpStatus.NOT_FOUND, "유저가 모임에 포함되어 있지 않습니다."),
+	NOT_IMAGE_IN_DIARY(HttpStatus.NOT_FOUND, "이미지가 다이어리에 포함되어 있지 않습니다."),
 
 	/**
 	 * 404 : 인프라 에러

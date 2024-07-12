@@ -14,8 +14,8 @@ import com.namo.spring.application.external.api.individual.dto.DiaryResponse;
 import com.namo.spring.application.external.api.individual.service.ImageService;
 import com.namo.spring.application.external.api.individual.service.ScheduleService;
 import com.namo.spring.application.external.api.user.service.UserService;
-import com.namo.spring.core.infra.common.constant.FilePath;
 import com.namo.spring.core.infra.common.aws.s3.FileUtils;
+import com.namo.spring.core.infra.common.constant.FilePath;
 import com.namo.spring.db.mysql.domains.individual.domain.Image;
 import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
 import com.namo.spring.db.mysql.domains.user.domain.User;
@@ -66,11 +66,7 @@ public class DiaryFacade {
 	public DiaryResponse.GetDiaryByScheduleDto getDiaryBySchedule(Long scheduleId) {
 		Schedule schedule = scheduleService.getScheduleById(scheduleId);
 		schedule.existDairy(); //다이어리 없으면 exception발생
-		List<String> imgUrls = schedule.getImages().stream()
-			.map(Image::getImgUrl)
-			.toList();
-
-		return DiaryResponseConverter.toGetDiaryByScheduleRes(schedule, imgUrls);
+		return DiaryResponseConverter.toGetDiaryByScheduleRes(schedule);
 	}
 
 	@Transactional
@@ -82,5 +78,13 @@ public class DiaryFacade {
 			.toList();
 		imageService.removeImagesBySchedule(schedule);
 		fileUtils.deleteImages(urls, FilePath.INVITATION_ACTIVITY_IMG);
+	}
+
+	@Transactional
+	public void removeDiaryImage(Long scheduleId, Long imgId) {
+		Image img = imageService.getImage(imgId);
+		String imgUrl = img.getImgUrl();
+		imageService.removeImage(scheduleId, img);
+		fileUtils.delete(imgUrl, FilePath.INVITATION_ACTIVITY_IMG);
 	}
 }

@@ -25,7 +25,7 @@ public class Image extends BaseTimeEntity {
 	@Column(name = "image_id")
 	private Long id;
 
-	@Column(name = "img_url")
+	@Column(name = "img_url", unique = true)
 	private String imgUrl;
 
 	@ManyToOne(fetch = FetchType.LAZY)

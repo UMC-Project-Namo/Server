@@ -1,6 +1,5 @@
 package com.namo.spring.application.external.api.individual.converter;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Slice;
@@ -33,12 +32,20 @@ public class DiaryResponseConverter {
 	}
 
 	public static DiaryResponse.GetDiaryByScheduleDto toGetDiaryByScheduleRes(
-		Schedule schedule,
-		List<String> imgUrls
+		Schedule schedule
 	) {
 		return DiaryResponse.GetDiaryByScheduleDto.builder()
 			.contents(schedule.getContents())
-			.urls(imgUrls)
+			.images(schedule.getImages().stream()
+				.map(DiaryResponseConverter::toDiaryImageDto)
+				.collect(Collectors.toList()))
+			.build();
+	}
+
+	public static DiaryResponse.DiaryImageDto toDiaryImageDto(Image image) {
+		return DiaryResponse.DiaryImageDto.builder()
+			.id(image.getId().toString())
+			.url(image.getImgUrl())
 			.build();
 	}
 

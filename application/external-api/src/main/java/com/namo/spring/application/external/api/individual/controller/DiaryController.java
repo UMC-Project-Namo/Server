@@ -3,8 +3,6 @@ package com.namo.spring.application.external.api.individual.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import jakarta.servlet.http.HttpServletRequest;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,17 +16,17 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
-
-import com.namo.spring.application.external.api.individual.facade.DiaryFacade;
 import com.namo.spring.application.external.api.individual.dto.DiaryResponse;
+import com.namo.spring.application.external.api.individual.facade.DiaryFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.application.external.global.utils.Converter;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.response.ResponseDto;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -142,4 +140,20 @@ public class DiaryController {
 		diaryFacade.removeDiary(scheduleId);
 		return ResponseDto.onSuccess("삭제에 성공하셨습니다.");
 	}
+
+	@Operation(summary = "일정 기록 이미지 삭제", description = "일정 이미지 개별 삭제 API")
+	@DeleteMapping("/{scheduleId}/image/{imgId}")
+	@ApiErrorCodes(value = {
+		ErrorStatus.NOT_FOUND_IMAGE,
+		ErrorStatus.NOT_IMAGE_IN_DIARY,
+		ErrorStatus.INTERNET_SERVER_ERROR
+	})
+	public ResponseDto<String> deleteDiaryImage(
+		@Parameter(description = "일정 ID") @PathVariable("scheduleId") Long scheduleId,
+		@Parameter(description = "이미지 ID") @PathVariable("imgId") Long imgId
+	) {
+		diaryFacade.removeDiaryImage(scheduleId, imgId);
+		return ResponseDto.onSuccess("삭제에 성공하셨습니다.");
+	}
+
 }

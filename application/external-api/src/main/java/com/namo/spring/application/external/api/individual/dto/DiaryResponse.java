@@ -44,7 +44,15 @@ public class DiaryResponse {
 	@Builder
 	public static class GetDiaryByScheduleDto {
 		private String contents;
-		private List<String> urls;
+		private List<DiaryImageDto> images;
+	}
+
+	@AllArgsConstructor
+	@Getter
+	@Builder
+	public static class DiaryImageDto {
+		private String id;
+		private String url;
 	}
 
 }
