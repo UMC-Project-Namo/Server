@@ -21,7 +21,7 @@ public class CategoryService {
 	}
 
 	@Transactional(readOnly = true)
-	public Optional<Category> getCategory(Long categoryId) {
+	public Optional<Category> readCategory(Long categoryId) {
 		return categoryRepository.findById(categoryId);
 	}
 
