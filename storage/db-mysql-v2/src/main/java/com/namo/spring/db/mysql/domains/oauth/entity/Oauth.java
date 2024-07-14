@@ -1,4 +1,4 @@
-package com.namo.spring.db.mysql.domains.user.entity;
+package com.namo.spring.db.mysql.domains.oauth.entity;
 
 import java.util.Objects;
 
@@ -20,7 +20,8 @@ import org.springframework.util.StringUtils;
 
 import com.namo.spring.db.mysql.common.converter.ProviderConverter;
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
-import com.namo.spring.db.mysql.domains.user.type.Provider;
+import com.namo.spring.db.mysql.domains.user.entity.User;
+import com.namo.spring.db.mysql.domains.oauth.type.Provider;
 
 import lombok.AccessLevel;
 import lombok.Builder;

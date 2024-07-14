@@ -1,4 +1,4 @@
-package com.namo.spring.db.mysql.domains.user.type;
+package com.namo.spring.db.mysql.domains.oauth.type;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
