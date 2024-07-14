@@ -117,12 +117,12 @@ public class DiaryController {
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
 	public ResponseDto<String> updateDiary(
-		@Parameter(description = "기록 이미지") @RequestPart(required = false) List<MultipartFile> imgs,
+		@Parameter(description = "추가 할 기록 이미지") @RequestPart(required = false) List<MultipartFile> createImages,
+		@Parameter(description = "삭제할 기록 이미지 ID") @RequestPart(required = false) List<Long> deleteImageIds,
 		@Parameter(description = "일정 ID") @RequestPart String scheduleId,
 		@Parameter(description = "기록 내용") @RequestPart(required = false) String content
 	) {
-		diaryFacade.removeDiary(Long.valueOf(scheduleId));
-		diaryFacade.createDiary(Long.valueOf(scheduleId), content, imgs);
+		diaryFacade.updateDiary(Long.valueOf(scheduleId), content, createImages, deleteImageIds);
 		return ResponseDto.onSuccess("수정에 성공하셨습니다.");
 	}
 
