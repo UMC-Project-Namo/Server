@@ -1,7 +1,6 @@
 package com.namo.spring.db.mysql.domains.user.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +21,7 @@ public class TermService {
 	}
 
 	@Transactional(readOnly = true)
-	public Optional<List<Term>> readTermListByUserId(Long userId) {
+	public List<Term> readTermListByUserId(Long userId) {
 		return termRepository.findByUserId(userId);
 	}
 
