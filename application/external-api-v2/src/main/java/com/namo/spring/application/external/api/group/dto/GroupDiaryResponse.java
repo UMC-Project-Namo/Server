@@ -2,10 +2,6 @@ package com.namo.spring.application.external.api.group.dto;
 
 import java.util.List;
 
-import com.namo.spring.application.external.api.group.converter.GroupDiaryResponseConverter;
-import com.namo.spring.core.common.utils.DateUtil;
-import com.namo.spring.db.mysql.domains.group.domain.MoimMemo;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,19 +21,6 @@ public class GroupDiaryResponse {
 		private String locationName;
 		private List<GroupUserDto> users;
 		private List<MoimActivityDto> moimActivityDtos;
-
-		public static GroupDiaryDto fromMoimMemo(MoimMemo moimMemo, List<MoimActivityDto> moimActivityDtos) {
-			List<GroupDiaryResponse.GroupUserDto> users = moimMemo.getMoimSchedule().getMoimScheduleAndUsers().stream()
-				.map(GroupDiaryResponseConverter::toGroupUserDto)
-				.toList();
-			return GroupDiaryResponse.GroupDiaryDto.builder()
-				.name(moimMemo.getMoimSchedule().getName())
-				.startDate(DateUtil.toSeconds(moimMemo.getMoimSchedule().getPeriod().getStartDate()))
-				.locationName(moimMemo.getMoimSchedule().getLocation().getLocationName())
-				.users(users)
-				.moimActivityDtos(moimActivityDtos)
-				.build();
-		}
 	}
 
 	@AllArgsConstructor
