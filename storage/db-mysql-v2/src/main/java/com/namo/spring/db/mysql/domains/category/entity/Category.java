@@ -58,7 +58,7 @@ public class Category extends BaseTimeEntity {
 	@Column(name = "type", nullable = false, length = 50)
 	private CategoryType type;
 
-	@Column(name = "order", nullable = false)
+	@Column(name = "order_num", nullable = false)
 	private Integer order;
 
 	@Convert(converter = CategoryStatusConverter.class)

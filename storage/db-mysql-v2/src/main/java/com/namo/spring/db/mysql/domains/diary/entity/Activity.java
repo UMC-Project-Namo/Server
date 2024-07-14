@@ -35,7 +35,7 @@ public class Activity extends BaseTimeEntity {
 	@Column(name = "id", nullable = false)
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY,optional = false)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "m_schedule_id", nullable = false)
 	private MeetingSchedule meetingSchedule;
 
@@ -49,7 +49,7 @@ public class Activity extends BaseTimeEntity {
 
 	@Builder
 	public Activity(MeetingSchedule meetingSchedule, String title, Integer amount) {
-		if(!StringUtils.hasText(title))
+		if (!StringUtils.hasText(title))
 			throw new IllegalArgumentException("title은 null이거나 빈 문자열일 수 없습니다.");
 
 		this.meetingSchedule = Objects.requireNonNull(meetingSchedule, "meetingSchedule은 null일 수 없습니다.");

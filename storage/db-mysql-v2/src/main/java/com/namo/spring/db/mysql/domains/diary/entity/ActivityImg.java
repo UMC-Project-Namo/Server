@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "diary_img")
+@Table(name = "activity_img")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ActivityImg extends BaseTimeEntity {
 
@@ -34,7 +34,7 @@ public class ActivityImg extends BaseTimeEntity {
 	@Column(name = "id", nullable = false)
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "diary_id", nullable = true)
 	private Diary diary;
 

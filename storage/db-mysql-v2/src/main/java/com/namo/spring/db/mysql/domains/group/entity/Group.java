@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "group")
+@Table(name = "group_info")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 public class Group extends BaseTimeEntity {

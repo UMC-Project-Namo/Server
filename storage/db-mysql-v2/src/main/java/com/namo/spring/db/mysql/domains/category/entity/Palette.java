@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "term")
+@Table(name = "palette")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 public class Palette {

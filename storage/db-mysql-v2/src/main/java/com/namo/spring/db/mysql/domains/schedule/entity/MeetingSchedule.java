@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "personal_schedule")
+@Table(name = "meeting_schedule")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 public class MeetingSchedule extends BaseTimeEntity {
@@ -55,7 +55,7 @@ public class MeetingSchedule extends BaseTimeEntity {
 	private Group group;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Column(name = "coustom_title", length = 50)
+	@Column(name = "custom_title", length = 50)
 	private String customTitle;
 
 	@Builder

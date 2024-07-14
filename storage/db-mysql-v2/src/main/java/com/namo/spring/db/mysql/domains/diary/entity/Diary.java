@@ -36,11 +36,11 @@ public class Diary extends BaseTimeEntity {
 	@Column(name = "id", nullable = false)
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "m_schedule_id", nullable = true)
 	private MeetingSchedule meetingSchedule;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "p_schedule_id", nullable = true)
 	private PersonalSchedule personalSchedule;
 
