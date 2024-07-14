@@ -40,11 +40,27 @@ public class DiaryFacade {
 		Schedule schedule = scheduleService.getScheduleById(scheduleId);
 		schedule.updateDiaryContents(content);
 		if (imgs != null) {
-			List<String> urls = fileUtils.uploadImages(imgs, FilePath.INVITATION_ACTIVITY_IMG);
-			List<Image> imgList = urls.stream().map(url -> ImageConverter.toImage(url, schedule)).toList();
-			imageService.createImages(imgList);
+			createDiaryImages(imgs, schedule);
 		}
 		return DiaryResponseConverter.toScheduleIdRes(schedule);
+	}
+
+	@Transactional
+	public void updateDiary(
+		Long scheduleId,
+		String content,
+		List<MultipartFile> createImages,
+		List<Long> removeImageIds
+	) {
+		Schedule schedule = scheduleService.getScheduleById(scheduleId);
+		schedule.updateDiaryContents(content);
+		if (createImages != null) {
+			createDiaryImages(createImages, schedule);
+		}
+		if (removeImageIds != null) {
+			removeImageIds.forEach(imgId -> removeDiaryImage(scheduleId, imgId));
+		}
+		DiaryResponseConverter.toScheduleIdRes(schedule);
 	}
 
 	public DiaryResponse.SliceDiaryDto getMonthDiary(
@@ -80,9 +96,15 @@ public class DiaryFacade {
 		fileUtils.deleteImages(urls, FilePath.INVITATION_ACTIVITY_IMG);
 	}
 
+	private void createDiaryImages(List<MultipartFile> images, Schedule schedule) {
+		List<String> urls = fileUtils.uploadImages(images, FilePath.INVITATION_ACTIVITY_IMG);
+		List<Image> imgList = urls.stream().map(url -> ImageConverter.toImage(url, schedule)).toList();
+		imageService.createImages(imgList);
+	}
+
 	@Transactional
-	public void removeDiaryImage(Long scheduleId, Long imgId) {
-		Image img = imageService.getImage(imgId);
+	public void removeDiaryImage(Long scheduleId, Long imageId) {
+		Image img = imageService.getImage(imageId);
 		String imgUrl = img.getImgUrl();
 		imageService.removeImage(scheduleId, img);
 		fileUtils.delete(imgUrl, FilePath.INVITATION_ACTIVITY_IMG);
