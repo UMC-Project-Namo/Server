@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
-
 import com.namo.spring.db.mysql.domains.user.domain.User;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long>, ScheduleRepositoryCustom {
@@ -15,4 +14,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long>, Sched
 	List<Schedule> findSchedulesByUsers(@Param("users") List<User> users);
 
 	List<Schedule> findAllByUser(User user);
+
+	List<Schedule> findAllScheduleByUser(User user);
 }

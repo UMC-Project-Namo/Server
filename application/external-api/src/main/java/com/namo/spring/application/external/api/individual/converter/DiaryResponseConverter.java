@@ -42,21 +42,28 @@ public class DiaryResponseConverter {
 			.build();
 	}
 
-	public static DiaryResponse.DiaryImageDto toDiaryImageDto(Image image) {
-		return DiaryResponse.DiaryImageDto.builder()
-			.id(image.getId().toString())
+	public static DiaryResponse.DiaryImageByScheduleDto toDiaryImageDto(Image image) {
+		return DiaryResponse.DiaryImageByScheduleDto.builder()
+			.id(image.getId())
 			.url(image.getImgUrl())
 			.build();
 	}
 
 	public static DiaryResponse.GetDiaryByUserDto toGetDiaryByUserRes(
-		ScheduleProjection.DiaryByUserDto diaryByUserDto) {
+		Schedule schedule) {
 		return DiaryResponse.GetDiaryByUserDto.builder()
-			.scheduleId(diaryByUserDto.getScheduleId())
-			.contents(diaryByUserDto.getContents())
-			.urls(diaryByUserDto.getImages().stream()
-				.map(Image::getImgUrl)
-				.toList())
+			.scheduleId(schedule.getId())
+			.contents(schedule.getContents())
+			.images(schedule.getImages().stream()
+				.map(DiaryResponseConverter::toDiaryImageByUserDto)
+				.collect(Collectors.toList()))
+			.build();
+	}
+
+	public static DiaryResponse.DiaryImageByUserDto toDiaryImageByUserDto(Image image) {
+		return DiaryResponse.DiaryImageByUserDto.builder()
+			.id(image.getId())
+			.url(image.getImgUrl())
 			.build();
 	}
 
