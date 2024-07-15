@@ -36,7 +36,15 @@ public class DiaryResponse {
 	public static class GetDiaryByUserDto {
 		private Long scheduleId;
 		private String contents;
-		private List<String> urls;
+		private List<DiaryImageByUserDto> images;
+	}
+
+	@AllArgsConstructor
+	@Getter
+	@Builder
+	public static class DiaryImageByUserDto {
+		private Long id;
+		private String url;
 	}
 
 	@AllArgsConstructor
@@ -44,13 +52,13 @@ public class DiaryResponse {
 	@Builder
 	public static class GetDiaryByScheduleDto {
 		private String contents;
-		private List<DiaryImageDto> images;
+		private List<DiaryImageByScheduleDto> images;
 	}
 
 	@AllArgsConstructor
 	@Getter
 	@Builder
-	public static class DiaryImageDto {
+	public static class DiaryImageByScheduleDto {
 		private Long id;
 		private String url;
 	}
