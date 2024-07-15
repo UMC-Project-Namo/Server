@@ -44,7 +44,7 @@ public class DiaryResponseConverter {
 
 	public static DiaryResponse.DiaryImageDto toDiaryImageDto(Image image) {
 		return DiaryResponse.DiaryImageDto.builder()
-			.id(image.getId().toString())
+			.id(image.getId())
 			.url(image.getImgUrl())
 			.build();
 	}

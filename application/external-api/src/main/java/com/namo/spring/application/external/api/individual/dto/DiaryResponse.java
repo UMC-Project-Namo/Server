@@ -51,7 +51,7 @@ public class DiaryResponse {
 	@Getter
 	@Builder
 	public static class DiaryImageDto {
-		private String id;
+		private Long id;
 		private String url;
 	}
 
