@@ -42,8 +42,8 @@ public class DiaryResponseConverter {
 			.build();
 	}
 
-	public static DiaryResponse.DiaryImageDto toDiaryImageDto(Image image) {
-		return DiaryResponse.DiaryImageDto.builder()
+	public static DiaryResponse.DiaryImageByScheduleDto toDiaryImageDto(Image image) {
+		return DiaryResponse.DiaryImageByScheduleDto.builder()
 			.id(image.getId())
 			.url(image.getImgUrl())
 			.build();
@@ -54,9 +54,16 @@ public class DiaryResponseConverter {
 		return DiaryResponse.GetDiaryByUserDto.builder()
 			.scheduleId(diaryByUserDto.getScheduleId())
 			.contents(diaryByUserDto.getContents())
-			.urls(diaryByUserDto.getImages().stream()
-				.map(Image::getImgUrl)
-				.toList())
+			.images(diaryByUserDto.getImages().stream()
+				.map(DiaryResponseConverter::toDiaryImageByUserDto)
+				.collect(Collectors.toList()))
+			.build();
+	}
+
+	public static DiaryResponse.DiaryImageByUserDto toDiaryImageByUserDto(Image image) {
+		return DiaryResponse.DiaryImageByUserDto.builder()
+			.id(image.getId())
+			.url(image.getImgUrl())
 			.build();
 	}
 
