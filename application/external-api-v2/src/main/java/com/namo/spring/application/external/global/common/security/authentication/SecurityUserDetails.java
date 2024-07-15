@@ -8,7 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.namo.spring.db.mysql.domains.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.entity.User;
 import com.namo.spring.db.mysql.domains.user.type.UserStatus;
 
 import lombok.AccessLevel;
@@ -52,7 +52,7 @@ public class SecurityUserDetails implements UserDetails {
 	public static UserDetails from(User user) {
 		return SecurityUserDetails.builder()
 			.userId(user.getId())
-			.username(user.getName())
+			.username(user.getUsername())
 			.authorities(List.of(new CustomGrantedAuthority(user.getUserRole().getType())))
 			.accountNonLocked(user.getStatus().equals(UserStatus.INACTIVE))
 			.build();

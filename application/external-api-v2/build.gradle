@@ -6,7 +6,7 @@ dependencies {
     implementation project(':core:core-common')
     implementation project(':core:core-infra')
     implementation project(':clients:social-client')
-    implementation project(':storage:db-mysql')
+    implementation project(':storage:db-mysql-v2')
     implementation project(':storage:db-redis')
     implementation project(':support:logging')
 

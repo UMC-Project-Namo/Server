@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 
 import com.namo.spring.application.external.global.common.annotation.AccessTokenStrategy;
 import com.namo.spring.application.external.global.common.annotation.RefreshTokenStrategy;
-import com.namo.spring.application.external.global.common.security.jwt.JwtClaimsParserUtil;
 import com.namo.spring.application.external.global.common.security.jwt.CustomJwts;
+import com.namo.spring.application.external.global.common.security.jwt.JwtClaimsParserUtil;
 import com.namo.spring.application.external.global.common.security.jwt.access.AccessTokenClaim;
 import com.namo.spring.application.external.global.common.security.jwt.refresh.RefreshTokenClaim;
 import com.namo.spring.application.external.global.common.security.jwt.refresh.RefreshTokenClaimKeys;
@@ -21,7 +21,7 @@ import com.namo.spring.core.common.exception.UtilsException;
 import com.namo.spring.core.infra.common.jwt.AuthConstants;
 import com.namo.spring.core.infra.common.jwt.JwtClaims;
 import com.namo.spring.core.infra.common.jwt.JwtProvider;
-import com.namo.spring.db.mysql.domains.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.entity.User;
 import com.namo.spring.db.redis.cache.forbidden.ForbiddenTokenService;
 import com.namo.spring.db.redis.cache.refresh.RefreshToken;
 import com.namo.spring.db.redis.cache.refresh.RefreshTokenService;
