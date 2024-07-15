@@ -21,7 +21,7 @@ public class PersonalScheduleService {
 	}
 
 	@Transactional(readOnly = true)
-	public Optional<PersonalSchedule> getPersonalSchedule(Long id) {
+	public Optional<PersonalSchedule> readPersonalSchedule(Long id) {
 		return personalScheduleRepository.findById(id);
 	}
 

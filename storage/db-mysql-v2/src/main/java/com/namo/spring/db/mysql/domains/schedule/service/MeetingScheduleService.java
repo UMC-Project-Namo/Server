@@ -21,7 +21,7 @@ public class MeetingScheduleService {
 	}
 
 	@Transactional(readOnly = true)
-	public Optional<MeetingSchedule> getMeetingSchedule(Long id) {
+	public Optional<MeetingSchedule> readMeetingSchedule(Long id) {
 		return meetingScheduleRepository.findById(id);
 	}
 

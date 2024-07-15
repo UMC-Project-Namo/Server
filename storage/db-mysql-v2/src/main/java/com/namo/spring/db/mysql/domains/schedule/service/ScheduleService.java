@@ -21,7 +21,7 @@ public class ScheduleService {
 	}
 
 	@Transactional(readOnly = true)
-	public Optional<Schedule> getSchedule(Long id) {
+	public Optional<Schedule> readSchedule(Long id) {
 		return scheduleRepository.findById(id);
 	}
 
