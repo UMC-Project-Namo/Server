@@ -76,7 +76,7 @@ public class ScheduleService {
 	}
 
 	public List<DiaryResponse.GetDiaryByUserDto> getAllDiariesByUser(User user) {
-		return scheduleRepository.findAllScheduleDiary(user)
+		return scheduleRepository.findAllScheduleByUser(user)
 			.stream()
 			.map(DiaryResponseConverter::toGetDiaryByUserRes)
 			.collect(Collectors.toList());

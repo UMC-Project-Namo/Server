@@ -50,11 +50,11 @@ public class DiaryResponseConverter {
 	}
 
 	public static DiaryResponse.GetDiaryByUserDto toGetDiaryByUserRes(
-		ScheduleProjection.DiaryByUserDto diaryByUserDto) {
+		Schedule schedule) {
 		return DiaryResponse.GetDiaryByUserDto.builder()
-			.scheduleId(diaryByUserDto.getScheduleId())
-			.contents(diaryByUserDto.getContents())
-			.images(diaryByUserDto.getImages().stream()
+			.scheduleId(schedule.getId())
+			.contents(schedule.getContents())
+			.images(schedule.getImages().stream()
 				.map(DiaryResponseConverter::toDiaryImageByUserDto)
 				.collect(Collectors.toList()))
 			.build();
