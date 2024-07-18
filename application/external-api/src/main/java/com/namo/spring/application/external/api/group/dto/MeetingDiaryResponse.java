@@ -81,9 +81,14 @@ public class MeetingDiaryResponse {
 		private String name;
 		private Long startDate;
 		private String contents;
-		private List<String> urls;
+		private List<MeetingDiaryImageDto> images;
 		private Long categoryId;
 		private Long color;
 		private String placeName;
+	}
+
+	public static class MeetingDiaryImageDto {
+		private Long id;
+		private String url;
 	}
 }

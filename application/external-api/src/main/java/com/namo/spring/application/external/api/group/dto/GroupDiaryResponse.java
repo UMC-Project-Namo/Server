@@ -58,7 +58,7 @@ public class GroupDiaryResponse {
 		private String name;
 		private Integer money;
 		private List<Long> participants;
-		private List<MoimActivityImageDto> moimActivityImages;
+		private List<MoimActivityImageDto> images;
 	}
 
 	@AllArgsConstructor
