@@ -100,7 +100,7 @@ public class MeetingDiaryController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<Object> createGroupMemo(
+	public ResponseDto<Object> createMeetingMemo(
 		@Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
 		@RequestBody MeetingDiaryRequest.PostMeetingMemoDto meetingMemoDto
 	) {
@@ -131,7 +131,7 @@ public class MeetingDiaryController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<MeetingDiaryResponse.SliceDiaryDto> findMonthGroupDiary(
+	public ResponseDto<MeetingDiaryResponse.SliceDiaryDto> getPersonalMeetingDiaryByMonth(
 		@Parameter(description = "조회 일자", example = "{년},{월}") @PathVariable("month") String month,
 		Pageable pageable
 	) {
@@ -149,7 +149,7 @@ public class MeetingDiaryController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<Object> removePersonGroupDiary(
+	public ResponseDto<Object> removePersonalMeetingDiary(
 		@Parameter(description = "일정 ID") @PathVariable Long meetingScheduleId
 	) {
 		meetingDiaryUseCase.deletePersonalMeetingDiary(meetingScheduleId);
