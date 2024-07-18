@@ -36,4 +36,9 @@ public class DiaryService {
 		diaryRepository.deleteById(diaryId);
 	}
 
+	@Transactional
+	public void deleteDiaryByMeetingSchedule(Long meetingScheduleId) {
+		diaryRepository.deleteByMeetingScheduleId(meetingScheduleId);
+	}
+
 }

@@ -10,4 +10,6 @@ import com.namo.spring.db.mysql.domains.schedule.entity.MeetingSchedule;
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
 
 	Optional<Diary> findByMeetingSchedule(MeetingSchedule meetingSchedule);
+
+	void deleteByMeetingScheduleId(Long meetingScheduleId);
 }

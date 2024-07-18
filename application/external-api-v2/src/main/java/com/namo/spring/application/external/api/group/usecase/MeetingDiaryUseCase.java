@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.namo.spring.application.external.api.group.converter.MeetingDiaryResponseConverter;
 import com.namo.spring.application.external.api.group.dto.MeetingDiaryResponse;
 import com.namo.spring.application.external.api.group.service.ActivityImgSearchService;
+import com.namo.spring.application.external.api.group.service.DiaryDeleteService;
 import com.namo.spring.application.external.api.group.service.DiarySearchService;
 import com.namo.spring.application.external.api.group.service.MeetingScheduleSearchService;
 import com.namo.spring.db.mysql.domains.diary.entity.ActivityImg;
@@ -24,7 +25,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class MeetingDiaryUseCase {
 	private final MeetingScheduleSearchService meetingScheduleSearchService;
+
 	private final DiarySearchService diarySearchService;
+	private final DiaryDeleteService diaryDeleteService;
 
 	private final ActivityImgSearchService activityImgSearchService;
 
@@ -56,6 +59,11 @@ public class MeetingDiaryUseCase {
 		).toList();
 
 		return MeetingDiaryResponseConverter.toSliceDiaryDto(diaryDetails, meetingSchedules);
+	}
+
+	@Transactional
+	public void deletePersonalMeetingDiary(Long meetingScheduleId) {
+		diaryDeleteService.deleteByMeetingSchedule(meetingScheduleId);
 	}
 
 }

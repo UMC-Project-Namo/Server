@@ -119,8 +119,7 @@ public class MeetingDiaryController {
 	})
 	public ResponseDto<MeetingDiaryResponse.SliceDiaryDto> findMonthGroupDiary(
 		@Parameter(description = "조회 일자", example = "{년},{월}") @PathVariable("month") String month,
-		Pageable pageable,
-		@AuthenticationPrincipal SecurityUserDetails user
+		Pageable pageable
 	) {
 		List<Integer> yearAndMonth = converter.splitYearMonth(month);
 		MeetingDiaryResponse.SliceDiaryDto sliceDiaryDto = meetingDiaryUseCase.getPersonalMeetingDiaryByMonth(
@@ -128,8 +127,8 @@ public class MeetingDiaryController {
 		return ResponseDto.onSuccess(sliceDiaryDto);
 	}
 
-	@Operation(summary = "개인 페이지 모임 기록 삭제", description = "일정에 대한 모임 활동 기록 삭제 API")
-	@DeleteMapping("/person/{scheduleId}")
+	@Operation(summary = "[개인 페이지] 모임 기록 삭제", description = "일정에 대한 모임 활동 기록 삭제 API")
+	@DeleteMapping("/person/{meetingScheduleId}")
 	@ApiErrorCodes(value = {
 		ErrorStatus.EMPTY_ACCESS_KEY,
 		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
@@ -137,10 +136,11 @@ public class MeetingDiaryController {
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
 	public ResponseDto<Object> removePersonGroupDiary(
-		@Parameter(description = "일정 ID") @PathVariable Long scheduleId,
+		@Parameter(description = "일정 ID") @PathVariable Long meetingScheduleId,
 		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		return null;
+		meetingDiaryUseCase.deletePersonalMeetingDiary(meetingScheduleId);
+		return ResponseDto.onSuccess(null);
 	}
 
 	@Operation(summary = "모임 기록 전체 삭제", description = "일정에 대한 모임 기록 전체 삭제 API")
