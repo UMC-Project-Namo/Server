@@ -15,8 +15,6 @@ import com.namo.spring.db.mysql.domains.group.domain.MoimMemoLocation;
 import com.namo.spring.db.mysql.domains.group.domain.MoimMemoLocationAndUser;
 import com.namo.spring.db.mysql.domains.group.domain.MoimMemoLocationImg;
 import com.namo.spring.db.mysql.domains.group.domain.MoimScheduleAndUser;
-import com.namo.spring.db.mysql.domains.individual.domain.Image;
-import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
 
 public class GroupDiaryResponseConverter {
 	private GroupDiaryResponseConverter() {
@@ -115,9 +113,6 @@ public class GroupDiaryResponseConverter {
 	private static GroupDiaryResponse.MoimActivityDto toGroupActivityDto(
 		Map<MoimMemoLocation, List<MoimMemoLocationAndUser>> groupActivityMappingUsers,
 		MoimMemoLocation groupActivity) {
-		List<String> urls = groupActivity.getMoimMemoLocationImgs().stream()
-			.map(MoimMemoLocationImg::getUrl)
-			.toList();
 		List<Long> participants = groupActivityMappingUsers.get(groupActivity).stream()
 			.map(groupActivityAndUser -> groupActivityAndUser.getUser().getId())
 			.toList();
@@ -126,8 +121,17 @@ public class GroupDiaryResponseConverter {
 			.moimActivityId(groupActivity.getId())
 			.name(groupActivity.getName())
 			.money(groupActivity.getTotalAmount())
-			.urls(urls)
+			.moimActivityImages(groupActivity.getMoimMemoLocationImgs().stream()
+				.map(GroupDiaryResponseConverter::toGroupActivityImageDto)
+				.collect(Collectors.toList()))
 			.participants(participants)
+			.build();
+	}
+
+	private static GroupDiaryResponse.MoimActivityImageDto toGroupActivityImageDto(MoimMemoLocationImg image) {
+		return GroupDiaryResponse.MoimActivityImageDto.builder()
+			.id(image.getId())
+			.url(image.getUrl())
 			.build();
 	}
 
@@ -148,22 +152,6 @@ public class GroupDiaryResponseConverter {
 			.size(groupSchedulesSlice.getSize())
 			.first(groupSchedulesSlice.isFirst())
 			.last(groupSchedulesSlice.isLast())
-			.build();
-	}
-
-	public static MeetingDiaryResponse.DiaryDto toDiaryDto(Schedule schedule) {
-		List<String> urls = schedule.getImages().stream()
-			.map(Image::getImgUrl)
-			.toList();
-		return MeetingDiaryResponse.DiaryDto.builder()
-			.scheduleId(schedule.getId())
-			.name(schedule.getName())
-			.startDate(DateUtil.toSeconds(schedule.getPeriod().getStartDate()))
-			.contents(schedule.getContents())
-			.urls(urls)
-			.categoryId(schedule.getCategory().getId())
-			.color(schedule.getCategory().getPalette().getId())
-			.placeName(schedule.getLocation().getLocationName())
 			.build();
 	}
 

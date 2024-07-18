@@ -61,6 +61,9 @@ public class GroupDiaryResponse {
 		private List<MoimActivityImageDto> moimActivityImages;
 	}
 
+	@AllArgsConstructor
+	@Getter
+	@Builder
 	public static class MoimActivityImageDto {
 		private Long id;
 		private String url;
