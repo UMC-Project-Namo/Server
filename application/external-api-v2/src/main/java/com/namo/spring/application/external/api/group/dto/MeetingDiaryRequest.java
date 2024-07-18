@@ -6,9 +6,9 @@ import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-public class GroupDiaryRequest {
+public class MeetingDiaryRequest {
 
-	private GroupDiaryRequest() {
+	private MeetingDiaryRequest() {
 		throw new IllegalStateException("Utill Classes");
 	}
 
