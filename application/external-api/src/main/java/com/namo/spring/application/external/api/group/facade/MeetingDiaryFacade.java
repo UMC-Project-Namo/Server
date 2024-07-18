@@ -160,8 +160,11 @@ public class MeetingDiaryFacade {
 	}
 
 	@Transactional(readOnly = false)
-	public void createMeetingMemo(Long groupScheduleId, Long userId,
-		MeetingScheduleRequest.PostMeetingScheduleTextDto groupScheduleText) {
+	public void createMeetingMemo(
+		Long groupScheduleId,
+		Long userId,
+		MeetingScheduleRequest.PostMeetingScheduleTextDto groupScheduleText
+	) {
 		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(groupScheduleId);
 		User user = userService.getUser(userId);
 		MoimScheduleAndUser groupScheduleAndUser = groupScheduleAndUserService.getGroupScheduleAndUser(groupSchedule,

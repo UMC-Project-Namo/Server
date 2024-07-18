@@ -3,6 +3,7 @@ package com.namo.spring.application.external.api.group.dto;
 import java.util.Arrays;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -32,5 +33,12 @@ public class MeetingDiaryRequest {
 				.map(Long::valueOf)
 				.toList();
 		}
+	}
+
+	@Getter
+	@AllArgsConstructor
+	@NoArgsConstructor
+	public static class PostMeetingMemoDto {
+		private String text;
 	}
 }

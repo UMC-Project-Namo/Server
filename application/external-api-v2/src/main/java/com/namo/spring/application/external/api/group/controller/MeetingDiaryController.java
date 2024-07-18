@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -16,11 +15,10 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.namo.spring.application.external.api.group.dto.GroupScheduleRequest;
+import com.namo.spring.application.external.api.group.dto.MeetingDiaryRequest;
 import com.namo.spring.application.external.api.group.dto.MeetingDiaryResponse;
 import com.namo.spring.application.external.api.group.usecase.MeetingDiaryUseCase;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
-import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.application.external.global.utils.Converter;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.response.ResponseDto;
@@ -94,6 +92,22 @@ public class MeetingDiaryController {
 	/**
 	 * 개인 페이지 모임 기록
 	 */
+	@Operation(summary = "[개인 페이지] 모임 메모 추가", description = "모임 메모 추가 API")
+	@PostMapping("/text/{meetingScheduleId}")
+	@ApiErrorCodes(value = {
+		ErrorStatus.EMPTY_ACCESS_KEY,
+		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
+		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
+		ErrorStatus.INTERNET_SERVER_ERROR
+	})
+	public ResponseDto<Object> createGroupMemo(
+		@Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
+		@RequestBody MeetingDiaryRequest.PostMeetingMemoDto meetingMemoDto
+	) {
+		meetingDiaryUseCase.createPersonalMeetingDiary(meetingScheduleId, meetingMemoDto);
+		return ResponseDto.onSuccess(null);
+	}
+
 	@Operation(summary = "[개인 페이지] 모임 기록 상세 조회", description = "개인 페이지 모임 기록 상세 조회 API")
 	@GetMapping("/detail/{meetingScheduleId}")
 	@ApiErrorCodes(value = {
@@ -136,8 +150,7 @@ public class MeetingDiaryController {
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
 	public ResponseDto<Object> removePersonGroupDiary(
-		@Parameter(description = "일정 ID") @PathVariable Long meetingScheduleId,
-		@AuthenticationPrincipal SecurityUserDetails user
+		@Parameter(description = "일정 ID") @PathVariable Long meetingScheduleId
 	) {
 		meetingDiaryUseCase.deletePersonalMeetingDiary(meetingScheduleId);
 		return ResponseDto.onSuccess(null);
@@ -171,19 +184,4 @@ public class MeetingDiaryController {
 		return null;
 	}
 
-	@Operation(summary = "모임 기록 텍스트 추가 (모임 메모 추가)", description = "모임 기록 추가 API")
-	@PatchMapping("/text/{moimScheduleId}")
-	@ApiErrorCodes(value = {
-		ErrorStatus.EMPTY_ACCESS_KEY,
-		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-		ErrorStatus.INTERNET_SERVER_ERROR
-	})
-	public ResponseDto<Object> createGroupMemo(
-		@Parameter(description = "모임 일정 ID") @PathVariable Long moimScheduleId,
-		@RequestBody GroupScheduleRequest.PostGroupScheduleTextDto moimScheduleText,
-		@AuthenticationPrincipal SecurityUserDetails user
-	) {
-		return null;
-	}
 }

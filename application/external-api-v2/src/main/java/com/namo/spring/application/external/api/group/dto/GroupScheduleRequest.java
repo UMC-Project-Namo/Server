@@ -84,10 +84,4 @@ public class GroupScheduleRequest {
 		private List<Integer> alarmDates;
 	}
 
-	@Getter
-	@AllArgsConstructor
-	@NoArgsConstructor
-	public static class PostGroupScheduleTextDto {
-		private String text;
-	}
 }

@@ -8,9 +8,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.namo.spring.application.external.api.group.converter.MeetingDiaryResponseConverter;
+import com.namo.spring.application.external.api.group.dto.MeetingDiaryRequest;
 import com.namo.spring.application.external.api.group.dto.MeetingDiaryResponse;
 import com.namo.spring.application.external.api.group.service.ActivityImgSearchService;
 import com.namo.spring.application.external.api.group.service.DiaryDeleteService;
+import com.namo.spring.application.external.api.group.service.DiarySaveService;
 import com.namo.spring.application.external.api.group.service.DiarySearchService;
 import com.namo.spring.application.external.api.group.service.MeetingScheduleSearchService;
 import com.namo.spring.db.mysql.domains.diary.entity.ActivityImg;
@@ -26,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MeetingDiaryUseCase {
 	private final MeetingScheduleSearchService meetingScheduleSearchService;
 
+	private final DiarySaveService diarySaveService;
 	private final DiarySearchService diarySearchService;
 	private final DiaryDeleteService diaryDeleteService;
 
@@ -34,6 +37,14 @@ public class MeetingDiaryUseCase {
 	/**
 	 * 개인 페이지
 	 */
+	@Transactional
+	public void createPersonalMeetingDiary(
+		Long meetingScheduleId,
+		MeetingDiaryRequest.PostMeetingMemoDto meetingMemoDto
+	) {
+		diarySaveService.saveMeetingDiary(meetingScheduleId, meetingMemoDto);
+	}
+
 	@Transactional(readOnly = true)
 	public MeetingDiaryResponse.DiaryDetailDto getPersonalMeetingDiaryDetail(Long meetingScheduleId) {
 		MeetingSchedule meetingSchedule = meetingScheduleSearchService.readMeetingSchedule(meetingScheduleId);
