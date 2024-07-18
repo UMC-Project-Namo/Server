@@ -59,12 +59,12 @@ public class MeetingDiaryResponse {
 	@Builder
 	@AllArgsConstructor
 	@Schema(title = "개인 페이지 모임 기록 상세 조회")
-	public static class DiaryDto {
+	public static class DiaryDetailDto {
 		@Schema(description = "일정 id")
 		private Long scheduleId;
 		@Schema(description = "모임 일정 title")
 		private String name;
-		@Schema(description = "모임 일정 시작 날짜")
+		@Schema(description = "모임 일정 시작 날짜 (유닉스 시간)")
 		private Long startDate;
 		@Schema(description = "모임 일정에 해당하는 기록 메모")
 		private String contents;
