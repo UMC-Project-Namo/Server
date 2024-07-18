@@ -87,6 +87,9 @@ public class MeetingDiaryResponse {
 		private String placeName;
 	}
 
+	@Getter
+	@Builder
+	@AllArgsConstructor
 	public static class MeetingDiaryImageDto {
 		private Long id;
 		private String url;

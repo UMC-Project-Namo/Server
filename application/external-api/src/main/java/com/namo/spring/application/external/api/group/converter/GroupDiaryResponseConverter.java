@@ -121,7 +121,7 @@ public class GroupDiaryResponseConverter {
 			.moimActivityId(groupActivity.getId())
 			.name(groupActivity.getName())
 			.money(groupActivity.getTotalAmount())
-			.moimActivityImages(groupActivity.getMoimMemoLocationImgs().stream()
+			.images(groupActivity.getMoimMemoLocationImgs().stream()
 				.map(GroupDiaryResponseConverter::toGroupActivityImageDto)
 				.collect(Collectors.toList()))
 			.participants(participants)
@@ -156,24 +156,30 @@ public class GroupDiaryResponseConverter {
 	}
 
 	public static MeetingDiaryResponse.DiaryDto toDiaryDto(MoimScheduleAndUser groupScheduleAndUser) {
-		List<String> urls = groupScheduleAndUser.getMoimSchedule().getMoimMemo()
-			.getMoimMemoLocations()
-			.stream()
-			.flatMap(location -> location
-				.getMoimMemoLocationImgs()
-				.stream())
-			.map(MoimMemoLocationImg::getUrl)
-			.limit(3)
-			.collect(Collectors.toList());
 		return MeetingDiaryResponse.DiaryDto.builder()
 			.scheduleId(groupScheduleAndUser.getMoimSchedule().getId())
 			.name(groupScheduleAndUser.getMoimSchedule().getName())
 			.startDate(DateUtil.toSeconds(groupScheduleAndUser.getMoimSchedule().getPeriod().getStartDate()))
 			.contents(groupScheduleAndUser.getMemo())
-			.urls(urls)
+			.images(groupScheduleAndUser.getMoimSchedule().getMoimMemo()
+				.getMoimMemoLocations()
+				.stream()
+				.flatMap(location -> location
+					.getMoimMemoLocationImgs()
+					.stream())
+				.map(GroupDiaryResponseConverter::toMeetingDiaryImageDto)
+				.collect(Collectors.toList()))
 			.categoryId(groupScheduleAndUser.getCategory().getId())
 			.color(groupScheduleAndUser.getCategory().getPalette().getId())
 			.placeName(groupScheduleAndUser.getMoimSchedule().getLocation().getLocationName())
 			.build();
 	}
+
+	public static MeetingDiaryResponse.MeetingDiaryImageDto toMeetingDiaryImageDto(MoimMemoLocationImg image) {
+		return MeetingDiaryResponse.MeetingDiaryImageDto.builder()
+			.id(image.getId())
+			.url(image.getUrl())
+			.build();
+	}
+
 }
