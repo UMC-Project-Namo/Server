@@ -1,5 +1,7 @@
 package com.namo.spring.application.external.api.group.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.namo.spring.core.common.code.status.ErrorStatus;
@@ -20,5 +22,9 @@ public class MeetingScheduleSearchService {
 		return meetingScheduleService.readMeetingSchedule(meetingScheduleId).orElseThrow(
 			() -> new MeetingScheduleException(ErrorStatus.NOT_FOUND_MEETING_SCHEDULE_FAILURE)
 		);
+	}
+
+	public Page<MeetingSchedule> readAllByMonth(Integer year, Integer month, Pageable pageable) {
+		return meetingScheduleService.readAllByMonth(year, month, pageable);
 	}
 }

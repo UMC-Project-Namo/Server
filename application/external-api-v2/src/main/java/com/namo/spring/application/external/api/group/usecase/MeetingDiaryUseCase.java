@@ -2,6 +2,8 @@ package com.namo.spring.application.external.api.group.usecase;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +28,9 @@ public class MeetingDiaryUseCase {
 
 	private final ActivityImgSearchService activityImgSearchService;
 
+	/**
+	 * 개인 페이지
+	 */
 	@Transactional(readOnly = true)
 	public MeetingDiaryResponse.DiaryDetailDto getPersonalMeetingDiaryDetail(Long meetingScheduleId) {
 		MeetingSchedule meetingSchedule = meetingScheduleSearchService.readMeetingSchedule(meetingScheduleId);
@@ -34,4 +39,23 @@ public class MeetingDiaryUseCase {
 
 		return MeetingDiaryResponseConverter.toDiaryDetailDto(meetingSchedule, diary, activityImgs);
 	}
+
+	@Transactional(readOnly = true)
+	public MeetingDiaryResponse.SliceDiaryDto getPersonalMeetingDiaryByMonth(
+		Integer year,
+		Integer month,
+		Pageable page
+	) {
+		Page<MeetingSchedule> meetingSchedules = meetingScheduleSearchService.readAllByMonth(year, month, page);
+		List<MeetingDiaryResponse.DiaryDetailDto> diaryDetails = meetingSchedules.stream().map(meetingSchedule ->
+			{
+				Diary diary = diarySearchService.readDiaryByMeetingSchedule(meetingSchedule);
+				List<ActivityImg> activityImgs = activityImgSearchService.readAllByDiary(diary);
+				return MeetingDiaryResponseConverter.toDiaryDetailDto(meetingSchedule, diary, activityImgs);
+			}
+		).toList();
+
+		return MeetingDiaryResponseConverter.toSliceDiaryDto(diaryDetails, meetingSchedules);
+	}
+
 }

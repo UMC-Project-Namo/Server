@@ -14,6 +14,17 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class Converter {
+	public List<Integer> splitYearMonth(String yearAndMonth) {
+		String[] dateInformation = yearAndMonth.split(",");
+		validateFormat(dateInformation);
+
+		int year = Integer.parseInt(dateInformation[0]);
+		int month = Integer.parseInt(dateInformation[1]);
+		validateMonth(year, month);
+
+		return List.of(year, month);
+	}
+
 	public List<LocalDateTime> convertLongToLocalDateTime(String yearAndMonth) {
 		String[] dateInformation = yearAndMonth.split(",");
 		validateFormat(dateInformation);

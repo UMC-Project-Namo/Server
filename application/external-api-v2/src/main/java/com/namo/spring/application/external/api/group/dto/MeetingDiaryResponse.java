@@ -47,8 +47,8 @@ public class MeetingDiaryResponse {
 	@Getter
 	@Builder
 	@AllArgsConstructor
-	public static class SliceDiaryDto<T> {
-		private List<T> content;
+	public static class SliceDiaryDto {
+		private List<DiaryDetailDto> content;
 		private int currentPage;
 		private int size;
 		private boolean first;

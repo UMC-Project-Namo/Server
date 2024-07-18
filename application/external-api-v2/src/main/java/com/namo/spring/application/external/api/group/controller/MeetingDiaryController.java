@@ -91,22 +91,6 @@ public class MeetingDiaryController {
 		return null;
 	}
 
-	@Operation(summary = "월간 모임 기록 조회", description = "월간 모임 기록 조회 API")
-	@GetMapping("/month/{month}")
-	@ApiErrorCodes(value = {
-		ErrorStatus.EMPTY_ACCESS_KEY,
-		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-		ErrorStatus.INTERNET_SERVER_ERROR
-	})
-	public ResponseDto<MeetingDiaryResponse.SliceDiaryDto<MeetingDiaryResponse.DiaryDetailDto>> findMonthGroupDiary(
-		@Parameter(description = "조회 일자", example = "{년},{월}") @PathVariable("month") String month,
-		Pageable pageable,
-		@AuthenticationPrincipal SecurityUserDetails user
-	) {
-		return null;
-	}
-
 	/**
 	 * 개인 페이지 모임 기록
 	 */
@@ -123,6 +107,25 @@ public class MeetingDiaryController {
 	) {
 		MeetingDiaryResponse.DiaryDetailDto dto = meetingDiaryUseCase.getPersonalMeetingDiaryDetail(meetingScheduleId);
 		return ResponseDto.onSuccess(dto);
+	}
+
+	@Operation(summary = "[개인 페이지] 월간 모임 기록 조회", description = "개인 페이지 월간 모임 기록 조회 API")
+	@GetMapping("/month/{month}")
+	@ApiErrorCodes(value = {
+		ErrorStatus.EMPTY_ACCESS_KEY,
+		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
+		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
+		ErrorStatus.INTERNET_SERVER_ERROR
+	})
+	public ResponseDto<MeetingDiaryResponse.SliceDiaryDto> findMonthGroupDiary(
+		@Parameter(description = "조회 일자", example = "{년},{월}") @PathVariable("month") String month,
+		Pageable pageable,
+		@AuthenticationPrincipal SecurityUserDetails user
+	) {
+		List<Integer> yearAndMonth = converter.splitYearMonth(month);
+		MeetingDiaryResponse.SliceDiaryDto sliceDiaryDto = meetingDiaryUseCase.getPersonalMeetingDiaryByMonth(
+			yearAndMonth.get(0), yearAndMonth.get(1), pageable);
+		return ResponseDto.onSuccess(sliceDiaryDto);
 	}
 
 	@Operation(summary = "개인 페이지 모임 기록 삭제", description = "일정에 대한 모임 활동 기록 삭제 API")

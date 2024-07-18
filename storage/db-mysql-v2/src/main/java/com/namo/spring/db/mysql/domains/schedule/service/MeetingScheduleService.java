@@ -2,6 +2,8 @@ package com.namo.spring.db.mysql.domains.schedule.service;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.namo.spring.core.common.annotation.DomainService;
@@ -23,6 +25,11 @@ public class MeetingScheduleService {
 	@Transactional(readOnly = true)
 	public Optional<MeetingSchedule> readMeetingSchedule(Long id) {
 		return meetingScheduleRepository.findById(id);
+	}
+
+	@Transactional(readOnly = true)
+	public Page<MeetingSchedule> readAllByMonth(Integer year, Integer month, Pageable pageable) {
+		return meetingScheduleRepository.findAllByMonth(year, month, pageable);
 	}
 
 	@Transactional
