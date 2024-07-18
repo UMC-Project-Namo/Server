@@ -58,6 +58,11 @@ public class GroupDiaryResponse {
 		private String name;
 		private Integer money;
 		private List<Long> participants;
-		private List<String> urls;
+		private List<MoimActivityImageDto> moimActivityImages;
+	}
+
+	public static class MoimActivityImageDto {
+		private Long id;
+		private String url;
 	}
 }
