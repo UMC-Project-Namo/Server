@@ -3,6 +3,8 @@ package com.namo.spring.application.external.api.group.dto;
 import java.util.Arrays;
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,7 +40,8 @@ public class MeetingDiaryRequest {
 	@Getter
 	@AllArgsConstructor
 	@NoArgsConstructor
-	public static class PostMeetingMemoDto {
+	public static class MeetingMemoDto {
+		@Schema(description = "모임 메모")
 		private String text;
 	}
 }

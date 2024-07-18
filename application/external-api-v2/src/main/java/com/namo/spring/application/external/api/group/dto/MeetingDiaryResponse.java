@@ -48,10 +48,15 @@ public class MeetingDiaryResponse {
 	@Builder
 	@AllArgsConstructor
 	public static class SliceDiaryDto {
+		@Schema(description = "개인 페이지 모임 기록 상세")
 		private List<DiaryDetailDto> content;
+		@Schema(description = "현재 페이지 번호 (0~)")
 		private int currentPage;
+		@Schema(description = "한 페이지에 표시될 항목 수")
 		private int size;
+		@Schema(description = "현재 페이지가 첫 페이지인지")
 		private boolean first;
+		@Schema(description = "현재 페이지가 마지막 페이지인지")
 		private boolean last;
 	}
 
