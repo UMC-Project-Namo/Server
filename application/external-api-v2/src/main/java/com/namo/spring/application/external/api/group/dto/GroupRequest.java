@@ -15,7 +15,7 @@ public class GroupRequest {
 	@Getter
 	@AllArgsConstructor
 	@NoArgsConstructor
-	public static class PatchGroupNameDto {
+	public static class UpdateGroupNameDto {
 		@NotNull
 		private Long groupId;
 		@NotBlank

@@ -14,7 +14,18 @@ public class CategoryRequest {
 
 	@AllArgsConstructor
 	@Getter
-	public static class PostCategoryDto {
+	public static class CreateCategoryDto {
+		@NotBlank
+		private String name;
+		@NotNull
+		private Long paletteId;
+		@NotNull
+		private boolean isShare;
+	}
+
+	@AllArgsConstructor
+	@Getter
+	public static class UpdateCategoryDto {
 		@NotBlank
 		private String name;
 		@NotNull
