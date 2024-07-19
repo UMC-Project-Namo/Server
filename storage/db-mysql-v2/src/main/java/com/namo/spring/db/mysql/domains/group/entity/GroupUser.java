@@ -37,11 +37,15 @@ public class GroupUser extends BaseTimeEntity {
     @Column(name = "custom_group_name", length = 50)
     private String customGroupName;
 
+    @Column(name = "color")
+    private Integer color;
+
     @Builder
-    public GroupUser(User user, Group group, String customGroupName) {
+    public GroupUser(User user, Group group, String customGroupName, Integer color) {
         this.user = Objects.requireNonNull(user, "user은 null일 수 없습니다.");
         this.group = Objects.requireNonNull(group, "group은 null일 수 없습니다.");
         this.customGroupName = customGroupName;
+        this.color = color;
     }
 
     public void updateCustomGroupName(String customGroupName) {
