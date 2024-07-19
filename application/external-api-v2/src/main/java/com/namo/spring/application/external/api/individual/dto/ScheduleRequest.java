@@ -19,7 +19,7 @@ public class ScheduleRequest {
 	@Builder
 	@AllArgsConstructor
 	@NoArgsConstructor
-	public static class PostScheduleDto {
+	public static class CreateScheduleDto {
 		@NotBlank
 		private String name;
 		@NotNull
@@ -31,6 +31,28 @@ public class ScheduleRequest {
 		private Set<Integer> alarmDate;
 		private Double x;
 		private Double y;
+		private String locationName;
+		private String kakaoLocationId;
+		@NotNull
+		private Long categoryId;
+	}
+
+	@Getter
+	@Builder
+	@AllArgsConstructor
+	@NoArgsConstructor
+	public static class UpdateScheduleDto {
+		@NotBlank
+		private String name;
+		@NotNull
+		private Long startDate;
+		@NotNull
+		private Long endDate;
+		@NotNull
+		private Integer interval;
+		private Set<Integer> alarmDate;
+		private Double longitude; //x
+		private Double latitude;  //y
 		private String locationName;
 		private String kakaoLocationId;
 		@NotNull
