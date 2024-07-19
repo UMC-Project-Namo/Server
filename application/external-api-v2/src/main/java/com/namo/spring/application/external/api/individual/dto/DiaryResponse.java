@@ -13,38 +13,55 @@ public class DiaryResponse {
 	}
 
 	@Getter
-	@AllArgsConstructor
-	@Builder
-	public static class ScheduleIdDto {
-		private Long scheduleId;
-	}
-
-	@Getter
 	@Builder
 	@AllArgsConstructor
-	public static class SliceDiaryDto {
-		private List<ScheduleResponse.DiaryDto> content;
+	public static class MonthlyDiaryDto {
+		private List<MonthlyDiaryContent> content;
 		private int currentPage;
 		private int size;
 		private boolean first;
 		private boolean last;
 	}
 
-	@AllArgsConstructor
 	@Getter
 	@Builder
-	public static class GetDiaryByUserDto {
+	@AllArgsConstructor
+	public static class MonthlyDiaryContent {
 		private Long scheduleId;
+		private String name;
+		private Long startDate;
 		private String contents;
 		private List<String> urls;
+		private Long categoryId;
+		private Long color;
+		private String placeName;
 	}
 
 	@AllArgsConstructor
 	@Getter
 	@Builder
-	public static class GetDiaryByScheduleDto {
+	public static class AllDiaryDto {
+		private Long scheduleId;
 		private String contents;
-		private List<String> urls;
+		private List<AllDiaryImageDto> images;
+	}
+
+	public static class AllDiaryImageDto {
+		private Long id;
+		private String url;
+	}
+
+	@AllArgsConstructor
+	@Getter
+	@Builder
+	public static class DiaryInfoDto {
+		private String contents;
+		private List<DiaryInfoImageDto> images;
+	}
+
+	public static class DiaryInfoImageDto {
+		private Long id;
+		private String url;
 	}
 
 }

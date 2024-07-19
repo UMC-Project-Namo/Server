@@ -1,6 +1,5 @@
 package com.namo.spring.application.external.api.group.dto;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -15,15 +14,15 @@ public class GroupScheduleResponse {
 	@AllArgsConstructor
 	@Getter
 	@Builder
-	public static class GroupScheduleDto {
+	public static class MonthlyGroupScheduleDto {
 		private String name;
 		private Long startDate;
 		private Long endDate;
 		private Integer interval;
-		private List<MoimScheduleUserDto> users = new ArrayList<>();
+		private List<MonthlyMeetingScheduleUserDto> users;
 		private Long groupId;
-		private Long moimScheduleId;
-		private boolean isCurMoimSchedule = false;
+		private Long meetingScheduleId;
+		private boolean isCurMeetingSchedule = false;
 		private Double x;
 		private Double y;
 		private String locationName;
@@ -34,7 +33,35 @@ public class GroupScheduleResponse {
 	@AllArgsConstructor
 	@Getter
 	@Builder
-	public static class MoimScheduleUserDto {
+	public static class MonthlyMeetingScheduleUserDto {
+		private Long userId;
+		private String userName;
+		private Integer color;
+	}
+
+	@AllArgsConstructor
+	@Getter
+	@Builder
+	public static class AllGroupScheduleDto {
+		private String name;
+		private Long startDate;
+		private Long endDate;
+		private Integer interval;
+		private List<MeetingScheduleUserDto> users;
+		private Long groupId;
+		private Long meetingScheduleId;
+		private boolean isCurMeetingSchedule = false;
+		private Double x;
+		private Double y;
+		private String locationName;
+		private String kakaoLocationId;
+		private boolean hasDiaryPlace;
+	}
+
+	@AllArgsConstructor
+	@Getter
+	@Builder
+	public static class MeetingScheduleUserDto {
 		private Long userId;
 		private String userName;
 		private Integer color;

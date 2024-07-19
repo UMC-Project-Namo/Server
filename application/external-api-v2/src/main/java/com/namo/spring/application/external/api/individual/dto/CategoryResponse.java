@@ -11,12 +11,6 @@ public class CategoryResponse {
 
 	@Getter
 	@AllArgsConstructor
-	public static class CategoryIdDto {
-		private Long id;
-	}
-
-	@Getter
-	@AllArgsConstructor
 	public static class CategoryDto {
 		private Long categoryId;
 		private String name;
