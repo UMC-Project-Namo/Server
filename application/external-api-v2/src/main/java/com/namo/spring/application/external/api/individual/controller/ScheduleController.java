@@ -46,7 +46,7 @@ public class ScheduleController {
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
 	public ResponseDto<String> createSchedule(
-		@Valid @RequestBody ScheduleRequest.createScheduleDto request,
+		@Valid @RequestBody ScheduleRequest.CreateScheduleDto request,
 		@AuthenticationPrincipal SecurityUserDetails user
 	) {
 		return ResponseDto.onSuccess("일정 생성 성공");
@@ -121,7 +121,7 @@ public class ScheduleController {
 	public ResponseDto<String> modifyUserSchedule(
 		@AuthenticationPrincipal SecurityUserDetails user,
 		@Parameter(description = "일정 ID") @PathVariable("scheduleId") Long scheduleId,
-		@RequestBody ScheduleRequest.updateScheduleDto request
+		@RequestBody ScheduleRequest.UpdateScheduleDto request
 	) {
 		return ResponseDto.onSuccess("일정 수정 성공");
 	}

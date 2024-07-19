@@ -6,15 +6,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-public class GroupScheduleResponse {
-	private GroupScheduleResponse() {
+public class MeetingScheduleResponse {
+	private MeetingScheduleResponse() {
 		throw new IllegalStateException("Util Class");
 	}
 
 	@AllArgsConstructor
 	@Getter
 	@Builder
-	public static class MonthlyGroupScheduleDto {
+	public static class MonthlyMeetingScheduleDto {
 		private String name;
 		private Long startDate;
 		private Long endDate;
@@ -42,7 +42,7 @@ public class GroupScheduleResponse {
 	@AllArgsConstructor
 	@Getter
 	@Builder
-	public static class AllGroupScheduleDto {
+	public static class AllMeetingScheduleDto {
 		private String name;
 		private Long startDate;
 		private Long endDate;
@@ -66,5 +66,4 @@ public class GroupScheduleResponse {
 		private String userName;
 		private Integer color;
 	}
-
 }

@@ -29,7 +29,7 @@ public class ScheduleResponse {
 		private String kakaoLocationId;
 		private Long categoryId;
 		private Boolean hasDiary;
-		private boolean isMoimSchedule;
+		private boolean isMeetingSchedule;
 	}
 
 	@Getter
@@ -49,7 +49,7 @@ public class ScheduleResponse {
 		private String kakaoLocationId;
 		private Long categoryId;
 		private Boolean hasDiary;
-		private boolean isMoimSchedule;
+		private boolean isMeetingSchedule;
 	}
 
 	@Getter
@@ -69,7 +69,7 @@ public class ScheduleResponse {
 		private String kakaoLocationId;
 		private Long categoryId;
 		private Boolean hasDiary;
-		private boolean isMoimSchedule;
+		private boolean isMeetingSchedule;
 	}
 
 	@Getter
@@ -89,7 +89,7 @@ public class ScheduleResponse {
 		private String kakaoLocationId;
 		private Long categoryId;
 		private Boolean hasDiary;
-		private boolean isMoimSchedule;
+		private boolean isMeetingSchedule;
 	}
 
 	@AllArgsConstructor

@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.namo.spring.application.external.api.group.dto.GroupScheduleRequest;
-import com.namo.spring.application.external.api.group.dto.GroupScheduleResponse;
+import com.namo.spring.application.external.api.group.dto.MeetingScheduleRequest;
+import com.namo.spring.application.external.api.group.dto.MeetingScheduleResponse;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.application.external.global.utils.Converter;
@@ -27,12 +27,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Tag(name = "7. Schedule (모임)", description = "모임 일정 관련 API")
+@Tag(name = "7. Schedule (모임) 일정", description = "모임 일정 관련 API")
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v2/group/schedules")
-public class GroupScheduleController {
+public class MeetingScheduleController {
 	private final Converter converter;
 
 	@Operation(summary = "모임 일정 생성", description = "모임 일정 생성 API")
@@ -43,8 +43,8 @@ public class GroupScheduleController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<String> createGroupSchedule(
-		@Valid @RequestBody GroupScheduleRequest.CreateGroupScheduleDto request
+	public ResponseDto<String> createMeetingSchedule(
+		@Valid @RequestBody MeetingScheduleRequest.CreateMeetingScheduleDto request
 	) {
 		return ResponseDto.onSuccess("모임 일정 생성 성공");
 	}
@@ -57,8 +57,8 @@ public class GroupScheduleController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<String> modifyGroupSchedule(
-		@Valid @RequestBody GroupScheduleRequest.UpdateGroupScheduleDto request
+	public ResponseDto<String> modifyMeetingSchedule(
+		@Valid @RequestBody MeetingScheduleRequest.UpdateMeetingScheduleDto request
 	) {
 		return ResponseDto.onSuccess("모임 일정 수정 성공");
 	}
@@ -71,8 +71,8 @@ public class GroupScheduleController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<String> modifyGroupScheduleCategory(
-		@Valid @RequestBody GroupScheduleRequest.UpdateGroupScheduleCategoryDto request,
+	public ResponseDto<String> modifyMeetingScheduleCategory(
+		@Valid @RequestBody MeetingScheduleRequest.UpdateMeetingScheduleCategoryDto request,
 		@AuthenticationPrincipal SecurityUserDetails user
 	) {
 		return ResponseDto.onSuccess("모임 일정 카테고리 수정 성공");
@@ -86,7 +86,7 @@ public class GroupScheduleController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<String> removeGroupSchedule(
+	public ResponseDto<String> removeMeetingSchedule(
 		@Parameter(description = "모임 일정 ID") @PathVariable Long groupScheduleId,
 		@AuthenticationPrincipal SecurityUserDetails user
 	) {
@@ -101,7 +101,7 @@ public class GroupScheduleController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<GroupScheduleResponse.MonthlyGroupScheduleDto> getMonthGroupSchedules(
+	public ResponseDto<MeetingScheduleResponse.MonthlyMeetingScheduleDto> getMonthMeetingSchedules(
 		@Parameter(description = "그룹 ID") @PathVariable("groupId") Long groupId,
 		@Parameter(description = "조회 일자", example = "{년},{월}") @PathVariable("month") String month,
 		@AuthenticationPrincipal SecurityUserDetails user
@@ -117,7 +117,7 @@ public class GroupScheduleController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<GroupScheduleResponse.AllGroupScheduleDto> getAllGroupSchedules(
+	public ResponseDto<MeetingScheduleResponse.AllMeetingScheduleDto> getAllMeetingSchedules(
 		@Parameter(description = "그룹 ID") @PathVariable("groupId") Long groupId,
 		@AuthenticationPrincipal SecurityUserDetails user
 	) {
@@ -132,8 +132,8 @@ public class GroupScheduleController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<Void> createGroupScheduleAlarm(
-		@Valid @RequestBody GroupScheduleRequest.CreateGroupScheduleAlarmDto request,
+	public ResponseDto<Void> createMeetingScheduleAlarm(
+		@Valid @RequestBody MeetingScheduleRequest.CreateMeetingScheduleAlarmDto request,
 		@AuthenticationPrincipal SecurityUserDetails user
 	) {
 		return null;
@@ -147,8 +147,8 @@ public class GroupScheduleController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<Void> modifyGroupScheduleAlarm(
-		@Valid @RequestBody GroupScheduleRequest.UpdateMeetingScheduleAlarmDto request,
+	public ResponseDto<Void> modifyMeetingScheduleAlarm(
+		@Valid @RequestBody MeetingScheduleRequest.UpdateMeetingScheduleAlarmDto request,
 		@AuthenticationPrincipal SecurityUserDetails user
 	) {
 		return null;

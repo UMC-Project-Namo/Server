@@ -9,15 +9,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-public class GroupScheduleRequest {
-	private GroupScheduleRequest() {
+public class MeetingScheduleRequest {
+	private MeetingScheduleRequest() {
 		throw new IllegalStateException("Util class");
 	}
 
 	@NoArgsConstructor
 	@AllArgsConstructor
 	@Getter
-	public static class CreateGroupScheduleDto {
+	public static class CreateMeetingScheduleDto {
 		@NotNull
 		private Long groupId;
 		@NotBlank
@@ -41,7 +41,7 @@ public class GroupScheduleRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	@Getter
-	public static class UpdateGroupScheduleDto {
+	public static class UpdateMeetingScheduleDto {
 		@NotNull
 		private Long meetingScheduleId;
 		@NotBlank
@@ -66,7 +66,7 @@ public class GroupScheduleRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	@Getter
-	public static class UpdateGroupScheduleCategoryDto {
+	public static class UpdateMeetingScheduleCategoryDto {
 		@NotNull
 		private Long meetingScheduleId;
 		@NotNull
@@ -75,7 +75,7 @@ public class GroupScheduleRequest {
 
 	@NoArgsConstructor
 	@Getter
-	public static class CreateGroupScheduleAlarmDto {
+	public static class CreateMeetingScheduleAlarmDto {
 		private Long meetingScheduleId;
 		private List<Integer> alarmDates;
 	}

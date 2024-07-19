@@ -19,7 +19,7 @@ public class ScheduleRequest {
 	@Builder
 	@AllArgsConstructor
 	@NoArgsConstructor
-	public static class createScheduleDto {
+	public static class CreateScheduleDto {
 		@NotBlank
 		private String name;
 		@NotNull
@@ -41,7 +41,7 @@ public class ScheduleRequest {
 	@Builder
 	@AllArgsConstructor
 	@NoArgsConstructor
-	public static class updateScheduleDto {
+	public static class UpdateScheduleDto {
 		@NotBlank
 		private String name;
 		@NotNull
@@ -51,8 +51,8 @@ public class ScheduleRequest {
 		@NotNull
 		private Integer interval;
 		private Set<Integer> alarmDate;
-		private Double x;
-		private Double y;
+		private Double longitude; //x
+		private Double latitude;  //y
 		private String locationName;
 		private String kakaoLocationId;
 		@NotNull
