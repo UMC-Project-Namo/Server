@@ -60,18 +60,18 @@ public class Diary extends BaseTimeEntity {
 		this.memo = memo;
 	}
 
-	public Diary of(MeetingSchedule meetingSchedule,String memo) {
+	public Diary of(MeetingSchedule meetingSchedule, String memo) {
 		return Diary.builder()
-				.meetingSchedule(meetingSchedule)
-				.memo(memo)
-				.build();
+			.meetingSchedule(meetingSchedule)
+			.memo(memo)
+			.build();
 	}
 
-	public Diary of(PersonalSchedule personalSchedule,String memo) {
+	public Diary of(PersonalSchedule personalSchedule, String memo) {
 		return Diary.builder()
-				.personalSchedule(personalSchedule)
-				.memo(memo)
-				.build();
+			.personalSchedule(personalSchedule)
+			.memo(memo)
+			.build();
 	}
 
 	public boolean isMeetingDairy() {
@@ -85,5 +85,9 @@ public class Diary extends BaseTimeEntity {
 	public void checkHaveOnlyOneSchedule(boolean meetingSchedule, boolean personalSchedule) {
 		if (meetingSchedule && personalSchedule)
 			throw new IllegalArgumentException("meetingSchedule과 personalSchedule 중 하나만 null 이어야합니다.");
+	}
+
+	public void update(String memo) {
+		this.memo = memo;
 	}
 }

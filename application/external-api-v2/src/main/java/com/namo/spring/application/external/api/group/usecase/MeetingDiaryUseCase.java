@@ -40,9 +40,17 @@ public class MeetingDiaryUseCase {
 	@Transactional
 	public void createPersonalMeetingDiary(
 		Long meetingScheduleId,
-		MeetingDiaryRequest.PostMeetingMemoDto meetingMemoDto
+		MeetingDiaryRequest.MeetingMemoDto meetingMemoDto
 	) {
 		diarySaveService.saveMeetingDiary(meetingScheduleId, meetingMemoDto);
+	}
+
+	@Transactional
+	public void updatePersonalMeetingDiary(
+		Long meetingScheduleId,
+		MeetingDiaryRequest.MeetingMemoDto meetingMemoDto
+	) {
+		diarySaveService.updateMeetingDiary(meetingScheduleId, meetingMemoDto);
 	}
 
 	@Transactional(readOnly = true)

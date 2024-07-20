@@ -102,9 +102,25 @@ public class MeetingDiaryController {
 	})
 	public ResponseDto<Object> createMeetingMemo(
 		@Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
-		@RequestBody MeetingDiaryRequest.PostMeetingMemoDto meetingMemoDto
+		@RequestBody MeetingDiaryRequest.MeetingMemoDto meetingMemoDto
 	) {
 		meetingDiaryUseCase.createPersonalMeetingDiary(meetingScheduleId, meetingMemoDto);
+		return ResponseDto.onSuccess(null);
+	}
+
+	@Operation(summary = "[개인 페이지] 모임 메모 수정", description = "모임 메모 수정 API")
+	@PatchMapping("/text/{meetingScheduleId}")
+	@ApiErrorCodes(value = {
+		ErrorStatus.EMPTY_ACCESS_KEY,
+		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
+		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
+		ErrorStatus.INTERNET_SERVER_ERROR
+	})
+	public ResponseDto<Object> updateMeetingMemo(
+		@Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
+		@RequestBody MeetingDiaryRequest.MeetingMemoDto meetingMemoDto
+	) {
+		meetingDiaryUseCase.updatePersonalMeetingDiary(meetingScheduleId, meetingMemoDto);
 		return ResponseDto.onSuccess(null);
 	}
 
