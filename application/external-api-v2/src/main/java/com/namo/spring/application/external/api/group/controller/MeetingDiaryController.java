@@ -132,10 +132,11 @@ public class MeetingDiaryController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<MeetingDiaryResponse.DiaryDetailDto> getPersonalMeetingDiaryDetail(
+	public ResponseDto<MeetingDiaryResponse.MonthlyMeetingActivityInfoDto> getPersonalMeetingDiaryDetail(
 		@Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId
 	) {
-		MeetingDiaryResponse.DiaryDetailDto dto = meetingDiaryUseCase.getPersonalMeetingDiaryDetail(meetingScheduleId);
+		MeetingDiaryResponse.MonthlyMeetingActivityInfoDto dto = meetingDiaryUseCase.getPersonalMeetingDiaryDetail(
+			meetingScheduleId);
 		return ResponseDto.onSuccess(dto);
 	}
 

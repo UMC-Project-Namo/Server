@@ -6,9 +6,7 @@ import java.util.stream.Collectors;
 import com.namo.spring.application.external.api.individual.dto.ScheduleResponse;
 import com.namo.spring.core.common.utils.DateUtil;
 import com.namo.spring.db.mysql.domains.group.domain.MoimMemo;
-import com.namo.spring.db.mysql.domains.group.domain.MoimMemoLocationImg;
 import com.namo.spring.db.mysql.domains.group.domain.MoimScheduleAlarm;
-import com.namo.spring.db.mysql.domains.group.domain.MoimScheduleAndUser;
 import com.namo.spring.db.mysql.domains.individual.domain.Alarm;
 import com.namo.spring.db.mysql.domains.individual.domain.Image;
 import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
@@ -82,28 +80,17 @@ public class ScheduleResponseConverter {
 			.categoryId(diaryDto.getCategoryId())
 			.color(diaryDto.getColor())
 			.placeName(diaryDto.getPlaceName())
-			.urls(diaryDto.getImages().stream()
-				.map(Image::getImgUrl)
+			.images(diaryDto.getImages()
+				.stream()
+				.map(ScheduleResponseConverter::toSliceDiaryImageDto)
 				.collect(Collectors.toList()))
 			.build();
 	}
 
-	public static ScheduleResponse.DiaryDto toDiaryDto(MoimScheduleAndUser groupScheduleAndUser) {
-		return ScheduleResponse.DiaryDto.builder()
-			.scheduleId(groupScheduleAndUser.getMoimSchedule().getId())
-			.name(groupScheduleAndUser.getMoimSchedule().getName())
-			.startDate(DateUtil.toSeconds((groupScheduleAndUser.getMoimSchedule().getPeriod().getStartDate())))
-			.contents(groupScheduleAndUser.getMemo())
-			.categoryId(groupScheduleAndUser.getCategory().getId())
-			.color(groupScheduleAndUser.getCategory().getPalette().getId())
-			.placeName(groupScheduleAndUser.getMoimSchedule().getLocation().getLocationName())
-			.urls(groupScheduleAndUser.getMoimSchedule().getMoimMemo()
-				.getMoimMemoLocations()
-				.stream()
-				.flatMap(location -> location.getMoimMemoLocationImgs().stream())
-				.map(MoimMemoLocationImg::getUrl)
-				.limit(3)
-				.collect(Collectors.toList()))
+	public static ScheduleResponse.SliceDiaryImageDto toSliceDiaryImageDto(Image image) {
+		return ScheduleResponse.SliceDiaryImageDto.builder()
+			.id(image.getId())
+			.url(image.getImgUrl())
 			.build();
 	}
 

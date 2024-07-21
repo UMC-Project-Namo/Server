@@ -9,39 +9,8 @@ import lombok.Builder;
 import lombok.Getter;
 
 public class MeetingDiaryResponse {
-
 	private MeetingDiaryResponse() {
 		throw new IllegalStateException("Utill Classes");
-	}
-
-	@AllArgsConstructor
-	@Getter
-	@Builder
-	public static class GroupDiaryDto {
-		private String name;
-		private Long startDate;
-		private String locationName;
-		private List<GroupUserDto> users;
-		private List<MoimActivityDto> moimActivityDtos;
-	}
-
-	@AllArgsConstructor
-	@Getter
-	@Builder
-	public static class GroupUserDto {
-		private Long userId;
-		private String userName;
-	}
-
-	@AllArgsConstructor
-	@Getter
-	@Builder
-	public static class MoimActivityDto {
-		private Long moimActivityId;
-		private String name;
-		private Integer money;
-		private List<Long> participants;
-		private List<String> urls;
 	}
 
 	@Getter
@@ -49,7 +18,8 @@ public class MeetingDiaryResponse {
 	@AllArgsConstructor
 	public static class SliceDiaryDto {
 		@Schema(description = "개인 페이지 모임 기록 상세")
-		private List<DiaryDetailDto> content;
+
+		private List<MonthlyMeetingActivityInfoDto> content;
 		@Schema(description = "현재 페이지 번호 (0~)")
 		private int currentPage;
 		@Schema(description = "한 페이지에 표시될 항목 수")
@@ -64,7 +34,7 @@ public class MeetingDiaryResponse {
 	@Builder
 	@AllArgsConstructor
 	@Schema(title = "개인 페이지 모임 기록 상세 조회")
-	public static class DiaryDetailDto {
+	public static class MonthlyMeetingActivityInfoDto {
 		@Schema(description = "일정 id")
 		private Long scheduleId;
 		@Schema(description = "모임 일정 title")
@@ -74,12 +44,42 @@ public class MeetingDiaryResponse {
 		@Schema(description = "모임 일정에 해당하는 기록 메모")
 		private String contents;
 		@Schema(description = "모임 활동 이미지 (3개)")
-		private List<String> urls;
+		private List<MonthlyDiaryInfoImageDto> images;
 		@Schema(description = "카테고리 id")
 		private Long categoryId;
 		@Schema(description = "카테고리 color")
 		private Long color;
 		@Schema(description = "장소 이름")
 		private String placeName;
+	}
+
+	@Getter
+	@Builder
+	@AllArgsConstructor
+	public static class MonthlyDiaryInfoImageDto {
+		private Long id;
+		private Long url;
+	}
+
+	@Getter
+	@Builder
+	@AllArgsConstructor
+	public static class MeetingDiaryInfoDto {
+		private Long scheduleId;
+		private String name;
+		private Long startDate;
+		private String contents;
+		private List<MeetingDiaryInfoImageDto> images;
+		private Long categoryId;
+		private Long color;
+		private String placeName;
+	}
+
+	@Getter
+	@Builder
+	@AllArgsConstructor
+	public static class MeetingDiaryInfoImageDto {
+		private Long id;
+		private Long url;
 	}
 }
