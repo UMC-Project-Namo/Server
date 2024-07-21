@@ -8,6 +8,7 @@ import com.namo.spring.db.mysql.domains.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @DomainService
@@ -30,8 +31,29 @@ public class GroupUserService {
         return groupUserRepository.findGroupUserByGroupAndUser(group, user);
     }
 
+    @Transactional(readOnly = true)
+    public List<GroupUser> readGroupUsersWithGroupByUser(User user) {
+        return groupUserRepository.findGroupUsersWithGroupByUser(user);
+    }
+
+    @Transactional(readOnly = true)
+    public List<GroupUser> readGroupUsersByGroups(List<Group> groups) {
+        return groupUserRepository.findGroupUsersByGroups(groups);
+    }
+
+    @Transactional(readOnly = true)
+    public List<GroupUser> readGroupUsersByGroup(Group group) {
+        return groupUserRepository.findGroupUsersByGroup(group);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean existsGroupUserByGroupAndUser(Group group, User user) {
+        return groupUserRepository.existsGroupUserByGroupAndUser(group, user);
+    }
+
     @Transactional
     public void deleteGroupUser(Long groupUserId) {
         groupUserRepository.deleteById(groupUserId);
     }
+
 }
