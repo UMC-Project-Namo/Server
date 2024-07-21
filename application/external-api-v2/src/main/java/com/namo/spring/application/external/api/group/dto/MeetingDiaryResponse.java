@@ -16,10 +16,10 @@ public class MeetingDiaryResponse {
 	@Getter
 	@Builder
 	@AllArgsConstructor
-	public static class SliceDiaryDto {
+	@Schema(title = "개인 페이지 모임 기록 월별 조회")
+	public static class MonthlyMeetingDiaryDto {
 		@Schema(description = "개인 페이지 모임 기록 상세")
-
-		private List<MonthlyMeetingActivityInfoDto> content;
+		private List<MonthlyMeetingDiaryInfoDto> content;
 		@Schema(description = "현재 페이지 번호 (0~)")
 		private int currentPage;
 		@Schema(description = "한 페이지에 표시될 항목 수")
@@ -34,7 +34,7 @@ public class MeetingDiaryResponse {
 	@Builder
 	@AllArgsConstructor
 	@Schema(title = "개인 페이지 모임 기록 상세 조회")
-	public static class MonthlyMeetingActivityInfoDto {
+	public static class MonthlyMeetingDiaryInfoDto {
 		@Schema(description = "일정 id")
 		private Long scheduleId;
 		@Schema(description = "모임 일정 title")
@@ -58,7 +58,7 @@ public class MeetingDiaryResponse {
 	@AllArgsConstructor
 	public static class MonthlyDiaryInfoImageDto {
 		private Long id;
-		private Long url;
+		private String url;
 	}
 
 	@Getter

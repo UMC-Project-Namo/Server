@@ -89,90 +89,6 @@ public class MeetingDiaryController {
 		return null;
 	}
 
-	/**
-	 * 개인 페이지 모임 기록
-	 */
-	@Operation(summary = "[개인 페이지] 모임 메모 추가", description = "모임 메모 추가 API")
-	@PostMapping("/text/{meetingScheduleId}")
-	@ApiErrorCodes(value = {
-		ErrorStatus.EMPTY_ACCESS_KEY,
-		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-		ErrorStatus.INTERNET_SERVER_ERROR
-	})
-	public ResponseDto<Object> createMeetingMemo(
-		@Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
-		@RequestBody MeetingDiaryRequest.MeetingMemoDto meetingMemoDto
-	) {
-		meetingDiaryUseCase.createPersonalMeetingDiary(meetingScheduleId, meetingMemoDto);
-		return ResponseDto.onSuccess(null);
-	}
-
-	@Operation(summary = "[개인 페이지] 모임 메모 수정", description = "모임 메모 수정 API")
-	@PatchMapping("/text/{meetingScheduleId}")
-	@ApiErrorCodes(value = {
-		ErrorStatus.EMPTY_ACCESS_KEY,
-		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-		ErrorStatus.INTERNET_SERVER_ERROR
-	})
-	public ResponseDto<Object> updateMeetingMemo(
-		@Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
-		@RequestBody MeetingDiaryRequest.MeetingMemoDto meetingMemoDto
-	) {
-		meetingDiaryUseCase.updatePersonalMeetingDiary(meetingScheduleId, meetingMemoDto);
-		return ResponseDto.onSuccess(null);
-	}
-
-	@Operation(summary = "[개인 페이지] 모임 기록 상세 조회", description = "개인 페이지 모임 기록 상세 조회 API")
-	@GetMapping("/detail/{meetingScheduleId}")
-	@ApiErrorCodes(value = {
-		ErrorStatus.EMPTY_ACCESS_KEY,
-		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-		ErrorStatus.INTERNET_SERVER_ERROR
-	})
-	public ResponseDto<MeetingDiaryResponse.MonthlyMeetingActivityInfoDto> getPersonalMeetingDiaryDetail(
-		@Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId
-	) {
-		MeetingDiaryResponse.MonthlyMeetingActivityInfoDto dto = meetingDiaryUseCase.getPersonalMeetingDiaryDetail(
-			meetingScheduleId);
-		return ResponseDto.onSuccess(dto);
-	}
-
-	@Operation(summary = "[개인 페이지] 월간 모임 기록 조회", description = "개인 페이지 월간 모임 기록 조회 API")
-	@GetMapping("/month/{month}")
-	@ApiErrorCodes(value = {
-		ErrorStatus.EMPTY_ACCESS_KEY,
-		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-		ErrorStatus.INTERNET_SERVER_ERROR
-	})
-	public ResponseDto<MeetingDiaryResponse.SliceDiaryDto> getPersonalMeetingDiaryByMonth(
-		@Parameter(description = "조회 일자", example = "{년},{월}") @PathVariable("month") String month,
-		Pageable pageable
-	) {
-		List<Integer> yearAndMonth = converter.splitYearMonth(month);
-		MeetingDiaryResponse.SliceDiaryDto sliceDiaryDto = meetingDiaryUseCase.getPersonalMeetingDiaryByMonth(
-			yearAndMonth.get(0), yearAndMonth.get(1), pageable);
-		return ResponseDto.onSuccess(sliceDiaryDto);
-	}
-
-	@Operation(summary = "[개인 페이지] 모임 기록 삭제", description = "일정에 대한 모임 활동 기록 삭제 API")
-	@DeleteMapping("/person/{meetingScheduleId}")
-	@ApiErrorCodes(value = {
-		ErrorStatus.EMPTY_ACCESS_KEY,
-		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-		ErrorStatus.INTERNET_SERVER_ERROR
-	})
-	public ResponseDto<Object> removePersonalMeetingDiary(
-		@Parameter(description = "일정 ID") @PathVariable Long meetingScheduleId
-	) {
-		meetingDiaryUseCase.deletePersonalMeetingDiary(meetingScheduleId);
-		return ResponseDto.onSuccess(null);
-	}
-
 	@Operation(summary = "모임 기록 전체 삭제", description = "일정에 대한 모임 기록 전체 삭제 API")
 	@DeleteMapping("/all/{moimScheduleId}")
 	@ApiErrorCodes(value = {
@@ -199,6 +115,90 @@ public class MeetingDiaryController {
 		@Parameter(description = "모임 활동 ID") @PathVariable Long activityId
 	) {
 		return null;
+	}
+
+	/**
+	 * 개인 페이지 모임 기록
+	 */
+	@Operation(summary = "[개인 페이지] 모임 메모 추가", description = "모임 메모 추가 API")
+	@PostMapping("/text/{meetingScheduleId}")
+	@ApiErrorCodes(value = {
+		ErrorStatus.EMPTY_ACCESS_KEY,
+		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
+		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
+		ErrorStatus.INTERNET_SERVER_ERROR
+	})
+	public ResponseDto<Object> createMeetingMemo(
+		@Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
+		@RequestBody MeetingDiaryRequest.PostMeetingMemoDto postMeetingMemoDto
+	) {
+		meetingDiaryUseCase.createPersonalMeetingDiary(meetingScheduleId, postMeetingMemoDto);
+		return ResponseDto.onSuccess(null);
+	}
+
+	@Operation(summary = "[개인 페이지] 모임 메모 수정", description = "모임 메모 수정 API")
+	@PatchMapping("/text/{meetingScheduleId}")
+	@ApiErrorCodes(value = {
+		ErrorStatus.EMPTY_ACCESS_KEY,
+		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
+		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
+		ErrorStatus.INTERNET_SERVER_ERROR
+	})
+	public ResponseDto<Object> updateMeetingMemo(
+		@Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
+		@RequestBody MeetingDiaryRequest.PatchMeetingMemoDto patchMeetingMemoDto
+	) {
+		meetingDiaryUseCase.updatePersonalMeetingDiary(meetingScheduleId, patchMeetingMemoDto);
+		return ResponseDto.onSuccess(null);
+	}
+
+	@Operation(summary = "[개인 페이지] 모임 기록 상세 조회", description = "개인 페이지 모임 기록 상세 조회 API")
+	@GetMapping("/detail/{meetingScheduleId}")
+	@ApiErrorCodes(value = {
+		ErrorStatus.EMPTY_ACCESS_KEY,
+		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
+		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
+		ErrorStatus.INTERNET_SERVER_ERROR
+	})
+	public ResponseDto<MeetingDiaryResponse.MonthlyMeetingDiaryInfoDto> getPersonalMeetingDiaryDetail(
+		@Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId
+	) {
+		MeetingDiaryResponse.MonthlyMeetingDiaryInfoDto dto = meetingDiaryUseCase.getPersonalMeetingDiaryDetail(
+			meetingScheduleId);
+		return ResponseDto.onSuccess(dto);
+	}
+
+	@Operation(summary = "[개인 페이지] 월간 모임 기록 조회", description = "개인 페이지 월간 모임 기록 조회 API")
+	@GetMapping("/month/{month}")
+	@ApiErrorCodes(value = {
+		ErrorStatus.EMPTY_ACCESS_KEY,
+		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
+		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
+		ErrorStatus.INTERNET_SERVER_ERROR
+	})
+	public ResponseDto<MeetingDiaryResponse.MonthlyMeetingDiaryDto> getPersonalMeetingDiaryByMonth(
+		@Parameter(description = "조회 일자", example = "{년},{월}") @PathVariable("month") String month,
+		Pageable pageable
+	) {
+		List<Integer> yearAndMonth = converter.splitYearMonth(month);
+		MeetingDiaryResponse.MonthlyMeetingDiaryDto monthlyMeetingDiaryDto = meetingDiaryUseCase.getPersonalMeetingDiaryByMonth(
+			yearAndMonth.get(0), yearAndMonth.get(1), pageable);
+		return ResponseDto.onSuccess(monthlyMeetingDiaryDto);
+	}
+
+	@Operation(summary = "[개인 페이지] 모임 기록 삭제", description = "일정에 대한 모임 활동 기록 삭제 API")
+	@DeleteMapping("/person/{meetingScheduleId}")
+	@ApiErrorCodes(value = {
+		ErrorStatus.EMPTY_ACCESS_KEY,
+		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
+		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
+		ErrorStatus.INTERNET_SERVER_ERROR
+	})
+	public ResponseDto<Object> removePersonalMeetingDiary(
+		@Parameter(description = "일정 ID") @PathVariable Long meetingScheduleId
+	) {
+		meetingDiaryUseCase.deletePersonalMeetingDiary(meetingScheduleId);
+		return ResponseDto.onSuccess(null);
 	}
 
 }

@@ -40,44 +40,47 @@ public class MeetingDiaryUseCase {
 	@Transactional
 	public void createPersonalMeetingDiary(
 		Long meetingScheduleId,
-		MeetingDiaryRequest.MeetingMemoDto meetingMemoDto
+		MeetingDiaryRequest.PostMeetingMemoDto postMeetingMemoDto
 	) {
-		diarySaveService.saveMeetingDiary(meetingScheduleId, meetingMemoDto);
+		diarySaveService.saveMeetingDiary(meetingScheduleId, postMeetingMemoDto);
 	}
 
 	@Transactional
 	public void updatePersonalMeetingDiary(
 		Long meetingScheduleId,
-		MeetingDiaryRequest.MeetingMemoDto meetingMemoDto
+		MeetingDiaryRequest.PatchMeetingMemoDto patchMeetingMemoDto
 	) {
-		diarySaveService.updateMeetingDiary(meetingScheduleId, meetingMemoDto);
+		diarySaveService.updateMeetingDiary(meetingScheduleId, patchMeetingMemoDto);
 	}
 
 	@Transactional(readOnly = true)
-	public MeetingDiaryResponse.DiaryDetailDto getPersonalMeetingDiaryDetail(Long meetingScheduleId) {
+	public MeetingDiaryResponse.MonthlyMeetingDiaryInfoDto getPersonalMeetingDiaryDetail(Long meetingScheduleId) {
 		MeetingSchedule meetingSchedule = meetingScheduleSearchService.readMeetingSchedule(meetingScheduleId);
 		Diary diary = diarySearchService.readDiaryByMeetingSchedule(meetingSchedule);
 		List<ActivityImg> activityImgs = activityImgSearchService.readAllByDiary(diary);
 
-		return MeetingDiaryResponseConverter.toDiaryDetailDto(meetingSchedule, diary, activityImgs);
+		return MeetingDiaryResponseConverter.toMonthlyMeetingDiaryInfoDto(meetingSchedule, diary, activityImgs);
 	}
 
 	@Transactional(readOnly = true)
-	public MeetingDiaryResponse.SliceDiaryDto getPersonalMeetingDiaryByMonth(
+	public MeetingDiaryResponse.MonthlyMeetingDiaryDto getPersonalMeetingDiaryByMonth(
 		Integer year,
 		Integer month,
 		Pageable page
 	) {
 		Page<MeetingSchedule> meetingSchedules = meetingScheduleSearchService.readAllByMonth(year, month, page);
-		List<MeetingDiaryResponse.DiaryDetailDto> diaryDetails = meetingSchedules.stream().map(meetingSchedule ->
-			{
-				Diary diary = diarySearchService.readDiaryByMeetingSchedule(meetingSchedule);
-				List<ActivityImg> activityImgs = activityImgSearchService.readAllByDiary(diary);
-				return MeetingDiaryResponseConverter.toDiaryDetailDto(meetingSchedule, diary, activityImgs);
-			}
-		).toList();
+		List<MeetingDiaryResponse.MonthlyMeetingDiaryInfoDto> diaryDetails = meetingSchedules.stream()
+			.map(meetingSchedule ->
+				{
+					Diary diary = diarySearchService.readDiaryByMeetingSchedule(meetingSchedule);
+					List<ActivityImg> activityImgs = activityImgSearchService.readAllByDiary(diary);
+					return MeetingDiaryResponseConverter.toMonthlyMeetingDiaryInfoDto(meetingSchedule, diary,
+						activityImgs);
+				}
+			)
+			.toList();
 
-		return MeetingDiaryResponseConverter.toSliceDiaryDto(diaryDetails, meetingSchedules);
+		return MeetingDiaryResponseConverter.toMonthlyMeetingDiaryDto(diaryDetails, meetingSchedules);
 	}
 
 	@Transactional

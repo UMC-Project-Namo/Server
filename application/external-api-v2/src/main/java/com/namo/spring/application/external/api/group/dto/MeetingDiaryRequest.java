@@ -40,7 +40,15 @@ public class MeetingDiaryRequest {
 	@Getter
 	@AllArgsConstructor
 	@NoArgsConstructor
-	public static class MeetingMemoDto {
+	public static class PostMeetingMemoDto {
+		@Schema(description = "모임 메모")
+		private String text;
+	}
+
+	@Getter
+	@AllArgsConstructor
+	@NoArgsConstructor
+	public static class PatchMeetingMemoDto {
 		@Schema(description = "모임 메모")
 		private String text;
 	}

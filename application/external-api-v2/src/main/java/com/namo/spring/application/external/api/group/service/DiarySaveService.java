@@ -26,18 +26,18 @@ public class DiarySaveService {
 	@Transactional
 	public void saveMeetingDiary(
 		Long meetingScheduleId,
-		MeetingDiaryRequest.MeetingMemoDto meetingMemoDto
+		MeetingDiaryRequest.PostMeetingMemoDto postMeetingMemoDto
 	) {
 		MeetingSchedule meetingSchedule = meetingScheduleService.readMeetingSchedule(meetingScheduleId).orElseThrow(
 			() -> new MeetingScheduleException(ErrorStatus.NOT_FOUND_MEETING_SCHEDULE_FAILURE)
 		);
-		diaryService.createDiary(DiaryConverter.toDiary(meetingSchedule, meetingMemoDto.getText()));
+		diaryService.createDiary(DiaryConverter.toDiary(meetingSchedule, postMeetingMemoDto.getText()));
 	}
 
 	@Transactional
 	public void updateMeetingDiary(
 		Long meetingScheduleId,
-		MeetingDiaryRequest.MeetingMemoDto meetingMemoDto
+		MeetingDiaryRequest.PatchMeetingMemoDto patchMeetingMemoDto
 	) {
 		MeetingSchedule meetingSchedule = meetingScheduleService.readMeetingSchedule(meetingScheduleId).orElseThrow(
 			() -> new MeetingScheduleException(ErrorStatus.NOT_FOUND_MEETING_SCHEDULE_FAILURE)
@@ -46,6 +46,6 @@ public class DiarySaveService {
 			() -> new DiaryException(ErrorStatus.NOT_FOUND_DIARY_FAILURE)
 		);
 
-		diary.update(meetingMemoDto.getText());
+		diary.update(patchMeetingMemoDto.getText());
 	}
 }
