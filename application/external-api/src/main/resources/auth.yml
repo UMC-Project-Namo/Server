@@ -8,9 +8,11 @@ jwt:
 
 ---
 spring.config.activate.on-profile: local
+logging.level.org.springframework.security: DEBUG
 
 ---
 spring.config.activate.on-profile: dev
+logging.level.org.springframework.security: DEBUG
 
 ---
 spring.config.activate.on-profile: prod
