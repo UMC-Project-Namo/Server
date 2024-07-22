@@ -43,9 +43,9 @@ public class GroupUserSaveService {
     }
 
     private int selectColor(Group group) {
-        Set<String> colors = group.getGroupUsers()
+        Set<Integer> colors = group.getGroupUsers()
                 .stream()
-                .map(groupUser -> String.valueOf(groupUser.getColor()))
+                .map(GroupUser::getColor)
                 .collect(Collectors.toSet());
         return Arrays.stream(ColorGroup.getPaletteColors())
                 .map(ColorChip::getCode)
