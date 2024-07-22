@@ -102,11 +102,11 @@ public class GroupController {
             ErrorStatus.EXPIRATION_REFRESH_TOKEN,
             ErrorStatus.INTERNET_SERVER_ERROR
     })
-    public ResponseDto<String> removeGroupAndUser(
+    public ResponseDto<String> withdrawGroup(
             @Parameter(description = "그룹 ID") @PathVariable("groupId") Long groupId,
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
-        groupUseCase.leaveGroup(user.getUserId(), groupId);
+        groupUseCase.withdrawGroup(user.getUserId(), groupId);
         return ResponseDto.onSuccess("그룹 탈퇴 성공");
     }
 }

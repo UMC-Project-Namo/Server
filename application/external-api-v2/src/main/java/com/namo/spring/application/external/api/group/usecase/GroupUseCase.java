@@ -65,7 +65,7 @@ public class GroupUseCase {
         groupUpdateService.modifyCustomGroupName(getGroupUser(getUser(userId), getGroup(groupId)), customGroupName);
     }
 
-    public void leaveGroup(Long userId, Long groupId) {
+    public void withdrawGroup(Long userId, Long groupId) {
         groupUserDeleteService.removeGroupUser(getGroupUser(getUser(userId), getGroup(groupId)));
     }
 }
