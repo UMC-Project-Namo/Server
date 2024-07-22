@@ -15,6 +15,7 @@ import com.namo.spring.db.mysql.domains.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,6 +34,7 @@ public class GroupUseCase {
     private final GroupUserDeleteService groupUserDeleteService;
     private final UserService userService;
     private final GroupService groupService;
+    private final GroupSaveService groupSaveService;
     private final GroupUserService groupUserService;
 
     public User getUser(Long userId) {
@@ -47,6 +49,11 @@ public class GroupUseCase {
     private GroupUser getGroupUser(User user, Group group) {
         return groupUserService.readGroupUserByGroupAndUser(group, user).orElseThrow(() -> new GroupUserException(ErrorStatus.NOT_FOUND_GROUP_USER_FAILURE));
     }
+
+    public Long createGroup(Long userId, String groupName, MultipartFile image) {
+        return groupSaveService.createGroup(getUser(userId), groupName, image);
+    }
+
 
     public GroupResponse.GroupJoinDto joinGroup(Long userId, String code) {
         return toGroupParticipantDto(groupUserSaveService.createGroupUser(getUser(userId), code));

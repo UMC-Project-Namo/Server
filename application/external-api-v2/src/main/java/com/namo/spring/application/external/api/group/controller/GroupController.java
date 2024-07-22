@@ -42,9 +42,10 @@ public class GroupController {
     })
     public ResponseDto<String> createGroup(
             @Parameter(description = "그룹 프로필 이미지") @RequestPart(required = false) MultipartFile image,
-            @Parameter(description = "그룹명") String groupName,
+            @Parameter(description = "그룹명") @RequestPart String groupName,
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
+        groupUseCase.createGroup(user.getUserId(), groupName, image);
         return ResponseDto.onSuccess("그룹 생성 성공");
     }
 
