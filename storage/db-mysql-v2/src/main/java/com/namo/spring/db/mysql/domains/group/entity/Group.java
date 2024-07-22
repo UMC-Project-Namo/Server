@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Getter
 @Entity
@@ -48,15 +49,18 @@ public class Group extends BaseTimeEntity {
     private List<GroupUser> groupUsers = new ArrayList<>();
 
     @Builder
-    public Group(String name, String code, String profileImg, GroupStatus status) {
+    public Group(String name, String profileImg, GroupStatus status) {
         if (!StringUtils.hasText(name))
             throw new IllegalArgumentException("name은 null이거나 빈 문자열일 수 없습니다.");
         else if (!StringUtils.hasText(code))
             throw new IllegalArgumentException("code는 null이거나 빈 문자열일 수 없습니다.");
-
         this.name = name;
-        this.code = code;
+        this.code = createCode();
         this.profileImg = profileImg;
         this.status = Objects.requireNonNull(status, "status은 null일 수 없습니다.");
+    }
+
+    private String createCode() {
+        return UUID.randomUUID().toString();
     }
 }
