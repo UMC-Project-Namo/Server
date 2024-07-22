@@ -8,13 +8,11 @@ public class GroupConverter {
         throw new IllegalStateException("Util Class");
     }
 
-    public static Group toGroup(String name, String code, String profileImg, GroupStatus status) {
+    public static Group toGroup(String name, String profileImg, GroupStatus status) {
         return Group.builder()
                 .name(name)
-                .code(code)
                 .profileImg(profileImg)
                 .status(status)
                 .build();
     }
-
 }
