@@ -41,7 +41,7 @@ public class GroupController {
             ErrorStatus.INTERNET_SERVER_ERROR
     })
     public ResponseDto<String> createGroup(
-            @Parameter(description = "그룹 프로필 img") @RequestPart(required = false) MultipartFile image,
+            @Parameter(description = "그룹 프로필 이미지") @RequestPart(required = false) MultipartFile image,
             @Parameter(description = "그룹명") String groupName,
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
@@ -88,7 +88,7 @@ public class GroupController {
             ErrorStatus.INTERNET_SERVER_ERROR
     })
     public ResponseDto<GroupResponse.GroupJoinDto> joinGroup(
-            @Parameter(description = "그룹 참여용 코드") @RequestPart("code") String code,
+            @Parameter(description = "그룹 참여 코드") @RequestPart("code") String code,
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
         return ResponseDto.onSuccess(groupUseCase.joinGroup(user.getUserId(), code));
