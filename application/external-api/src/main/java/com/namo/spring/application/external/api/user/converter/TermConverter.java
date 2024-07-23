@@ -7,8 +7,8 @@ import java.util.Optional;
 import com.namo.spring.application.external.api.user.dto.UserRequest;
 import com.namo.spring.application.external.api.user.dto.UserResponse;
 import com.namo.spring.db.mysql.domains.user.domain.Term;
-import com.namo.spring.db.mysql.domains.user.type.Content;
 import com.namo.spring.db.mysql.domains.user.domain.User;
+import com.namo.spring.db.mysql.domains.user.type.Content;
 
 public class TermConverter {
 	public static List<Term> toTerms(UserRequest.TermDto termDto, User user) {

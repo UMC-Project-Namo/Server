@@ -98,7 +98,8 @@ public class GroupScheduleConverter {
 			.collect(Collectors.toList());
 	}
 
-	public static MoimScheduleAndUser toGroupScheduleAndUser(User user, MoimSchedule groupSchedule, Category category) {
+	public static MoimScheduleAndUser toGroupScheduleAndUser(User user, MoimSchedule groupSchedule,
+		Category category) {
 		return MoimScheduleAndUser.builder()
 			.user(user)
 			.moimSchedule(groupSchedule)

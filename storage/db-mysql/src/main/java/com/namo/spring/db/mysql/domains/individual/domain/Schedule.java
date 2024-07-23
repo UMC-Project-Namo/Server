@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.namo.spring.db.mysql.domains.individual.type.Location;
-import com.namo.spring.db.mysql.domains.individual.type.Period;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -18,11 +16,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
-import com.namo.spring.core.common.exception.IndividualException;
-import com.namo.spring.db.mysql.domains.user.domain.User;
-
-import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.core.common.exception.IndividualException;
+import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
+import com.namo.spring.db.mysql.domains.individual.type.Location;
+import com.namo.spring.db.mysql.domains.individual.type.Period;
+import com.namo.spring.db.mysql.domains.user.domain.User;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -42,7 +41,7 @@ public class Schedule extends BaseTimeEntity {
 	private String name;
 
 	@Embedded
-    Period period;
+	Period period;
 
 	@Embedded
 	private Location location;
