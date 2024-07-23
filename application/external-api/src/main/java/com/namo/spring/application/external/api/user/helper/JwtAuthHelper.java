@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 
 import com.namo.spring.application.external.global.common.annotation.AccessTokenStrategy;
 import com.namo.spring.application.external.global.common.annotation.RefreshTokenStrategy;
-import com.namo.spring.application.external.global.common.security.jwt.JwtClaimsParserUtil;
 import com.namo.spring.application.external.global.common.security.jwt.CustomJwts;
+import com.namo.spring.application.external.global.common.security.jwt.JwtClaimsParserUtil;
 import com.namo.spring.application.external.global.common.security.jwt.access.AccessTokenClaim;
 import com.namo.spring.application.external.global.common.security.jwt.refresh.RefreshTokenClaim;
 import com.namo.spring.application.external.global.common.security.jwt.refresh.RefreshTokenClaimKeys;
@@ -109,11 +109,11 @@ public class JwtAuthHelper {
 	/**
 	 * userId에 연결된 accessToken, refreshToken을 삭제합니다.
 	 *
-	 * @param userId : 사용자 ID
-	 * @param accessToken : 삭제할 accessToken
+	 * @param userId       : 사용자 ID
+	 * @param accessToken  : 삭제할 accessToken
 	 * @param refreshToken : 삭제할 refreshToken
 	 * @throws AuthException <br/>
-	 * 					 - {@link ErrorStatus#EXPIRATION_TOKEN} : 토큰이 만료되었을 때Q
+	 *                       - {@link ErrorStatus#EXPIRATION_TOKEN} : 토큰이 만료되었을 때Q
 	 */
 	public void removeJwtsToken(Long userId, String accessToken, String refreshToken) {
 		JwtClaims jwtClaims = null;
@@ -144,7 +144,7 @@ public class JwtAuthHelper {
 	 * @param request : 추출할 request
 	 * @return 추출된 accessToken
 	 * @throws UtilsException <br/>
-	 *                       - {@link ErrorStatus#EMPTY_ACCESS_KEY} : accessToken이 없을 때
+	 *                        - {@link ErrorStatus#EMPTY_ACCESS_KEY} : accessToken이 없을 때
 	 */
 	// HACK: 2024.06.22. social logout을 위해 작성된 임시 메서드 - 루카
 	public String getAccessToken(HttpServletRequest request) {

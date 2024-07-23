@@ -61,7 +61,7 @@ public class User extends BaseTimeEntity {
 	private String socialRefreshToken;
 
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false, columnDefinition = "USER")
+	@Column(nullable = false, columnDefinition = "VARCHAR(20) DEFAULT 'USER'")
 	private UserRole userRole;
 
 	@Builder

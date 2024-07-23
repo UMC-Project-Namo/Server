@@ -13,8 +13,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
-import com.namo.spring.db.mysql.domains.user.type.Content;
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
+import com.namo.spring.db.mysql.domains.user.type.Content;
 
 import lombok.AccessLevel;
 import lombok.Builder;
