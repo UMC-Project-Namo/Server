@@ -2,6 +2,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+      globally_quoted_identifiers: true
     properties:
       hibernate:
         default_batch_fetch_size: 100
