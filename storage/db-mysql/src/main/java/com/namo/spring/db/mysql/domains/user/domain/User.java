@@ -10,17 +10,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
+import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import com.namo.spring.db.mysql.domains.user.type.SocialType;
 import com.namo.spring.db.mysql.domains.user.type.UserRole;
 import com.namo.spring.db.mysql.domains.user.type.UserStatus;
-import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
+@Entity(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(
