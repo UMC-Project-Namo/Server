@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.namo.spring.db.mysql.domains.group.domain.QMoimSchedule.moimSchedule;
+import static com.namo.spring.db.mysql.domains.group.domain.QMoimScheduleAlarm.moimScheduleAlarm;
 import static com.namo.spring.db.mysql.domains.group.domain.QMoimScheduleAndUser.moimScheduleAndUser;
 import static com.namo.spring.db.mysql.domains.individual.domain.QCategory.category;
 import static com.namo.spring.db.mysql.domains.individual.domain.QImage.image;
@@ -41,20 +42,11 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
         return queryFactory
                 .select(Projections.constructor(
                         ScheduleProjection.ScheduleDto.class,
-                        schedule.id,
-                        schedule.name,
-                        schedule.period.startDate,
-                        schedule.period.endDate,
-                        schedule.alarms,
-                        schedule.period.dayInterval,
-                        schedule.location.x,
-                        schedule.location.y,
-                        schedule.location.locationName,
-                        schedule.location.kakaoLocationId,
-                        schedule.category.id,
-                        schedule.hasDiary
+                        schedule,
+                        category.id
                 )).distinct()
                 .from(schedule)
+                .leftJoin(schedule.category, category)
                 .leftJoin(schedule.alarms)
                 .where(schedule.user.eq(user),
                         scheduleDateLoe(endDate),
@@ -81,22 +73,21 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
                                 moimScheduleAndUser.moimSchedule.name,
                                 moimScheduleAndUser.moimSchedule.period.startDate,
                                 moimScheduleAndUser.moimSchedule.period.endDate,
-                                moimScheduleAndUser.moimScheduleAlarms,
                                 moimScheduleAndUser.moimSchedule.period.dayInterval,
                                 moimScheduleAndUser.moimSchedule.location.x,
                                 moimScheduleAndUser.moimSchedule.location.y,
                                 moimScheduleAndUser.moimSchedule.location.locationName,
                                 moimScheduleAndUser.moimSchedule.location.kakaoLocationId,
-                                moimScheduleAndUser.category.id,
+                                category.id,
                                 moimScheduleAndUser.moimSchedule.moimMemo,
-                                moimScheduleAndUser.memo
+                                moimScheduleAndUser
                         )
                 )
-                .distinct()
                 .from(moimScheduleAndUser)
-                .join(moimScheduleAndUser.moimSchedule, moimSchedule)
-                .leftJoin(moimScheduleAndUser.moimScheduleAlarms)
+                .leftJoin(moimScheduleAndUser.moimSchedule, moimSchedule)
                 .leftJoin(moimSchedule.moimMemo)
+                .leftJoin(moimScheduleAndUser.category, category)
+                .leftJoin(moimScheduleAndUser.moimScheduleAlarms, moimScheduleAlarm)
                 .where(
                         moimScheduleAndUser.user.eq(user),
                         moimScheduleDateLoe(endDate),
