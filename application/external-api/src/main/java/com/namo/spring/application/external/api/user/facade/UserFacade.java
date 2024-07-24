@@ -1,3 +1,5 @@
+package com.namo.spring.application.external.api.user.facade;
+
 import com.namo.spring.application.external.api.group.service.GroupActivityService;
 import com.namo.spring.application.external.api.group.service.GroupAndUserService;
 import com.namo.spring.application.external.api.group.service.GroupScheduleAndUserService;
