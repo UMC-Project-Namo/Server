@@ -72,15 +72,16 @@ public class ScheduleResponseConverter {
     }
 
     public static ScheduleResponse.DiaryDto toDiaryDto(ScheduleProjection.DiaryDto diaryDto) {
+        Schedule schedule = diaryDto.getSchedule();
         return ScheduleResponse.DiaryDto.builder()
-                .scheduleId(diaryDto.getScheduleId())
-                .name(diaryDto.getName())
-                .startDate(DateUtil.toSeconds(diaryDto.getStartDate()))
-                .contents(diaryDto.getContents())
+                .scheduleId(schedule.getId())
+                .name(schedule.getName())
+                .startDate(DateUtil.toSeconds(schedule.getPeriod().getStartDate()))
+                .contents(schedule.getContents())
                 .categoryId(diaryDto.getCategoryId())
                 .color(diaryDto.getColor())
-                .placeName(diaryDto.getPlaceName())
-                .images(diaryDto.getImages()
+                .placeName(schedule.getLocation().getLocationName())
+                .images(schedule.getImages()
                         .stream()
                         .map(ScheduleResponseConverter::toSliceDiaryImageDto)
                         .collect(Collectors.toList()))

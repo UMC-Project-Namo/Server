@@ -109,15 +109,9 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
                                                                        LocalDateTime endDate, Pageable pageable) {
         List<ScheduleProjection.DiaryDto> content = queryFactory
                 .select(Projections.constructor(ScheduleProjection.DiaryDto.class,
-                        schedule.id,
-                        schedule.name,
-                        schedule.period.startDate,
-                        schedule.contents,
+                        schedule,
                         schedule.category.id,
-                        schedule.images,
-                        schedule.category.palette.id,
-                        schedule.location.locationName,
-                        schedule.images))
+                        palette.id))
                 .from(schedule)
                 .join(schedule.category, category)
                 .join(category.palette, palette)
@@ -138,21 +132,21 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
         return new SliceImpl<>(content, pageable, hasNext);
     }
 
-    @Override
-    public List<ScheduleProjection.DiaryByUserDto> findAllScheduleDiary(User user) {
-        return queryFactory
-                .select(Projections.constructor(ScheduleProjection.DiaryByUserDto.class,
-                        schedule.id,
-                        schedule.contents,
-                        schedule.images
-                )).distinct()
-                .from(schedule)
-                .leftJoin(schedule.images, image)
-                .where(schedule.user.eq(user),
-                        schedule.hasDiary.isTrue()
-                )
-                .fetch();
-    }
+//    @Override
+//    public List<ScheduleProjection.DiaryByUserDto> findAllScheduleDiary(User user) {
+//        return queryFactory
+//                .select(Projections.constructor(ScheduleProjection.DiaryByUserDto.class,
+//                        schedule.id,
+//                        schedule.contents,
+//                        schedule.images
+//                )).distinct()
+//                .from(schedule)
+//                .leftJoin(schedule.images, image)
+//                .where(schedule.user.eq(user),
+//                        schedule.hasDiary.isTrue()
+//                )
+//                .fetch();
+//    }
 
     @Override
     public Schedule findOneScheduleAndImages(Long scheduleId) {

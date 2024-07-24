@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class ScheduleProjection {
@@ -24,14 +23,9 @@ public class ScheduleProjection {
     @Builder
     @AllArgsConstructor
     public static class DiaryDto {
-        private Long scheduleId;
-        private String name;
-        private LocalDateTime startDate;
-        private String contents;
-        private List<Image> images;
+        private Schedule schedule;
         private Long categoryId;
         private Long color;
-        private String placeName;
     }
 
     @AllArgsConstructor
