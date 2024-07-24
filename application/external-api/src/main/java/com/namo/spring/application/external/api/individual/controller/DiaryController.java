@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -118,9 +119,9 @@ public class DiaryController {
 	})
 	public ResponseDto<String> updateDiary(
 		@Parameter(description = "추가 할 기록 이미지") @RequestPart(required = false) List<MultipartFile> createImages,
-		@Parameter(description = "삭제할 기록 이미지 ID") @RequestPart(required = false) List<Long> deleteImageIds,
-		@Parameter(description = "일정 ID") @RequestPart String scheduleId,
-		@Parameter(description = "기록 내용") @RequestPart(required = false) String content
+		@Parameter(description = "삭제할 기록 이미지 ID") @RequestParam(required = false) List<Long> deleteImageIds,
+		@Parameter(description = "일정 ID") @RequestParam String scheduleId,
+		@Parameter(description = "기록 내용") @RequestParam(required = false) String content
 	) {
 		diaryFacade.updateDiary(Long.valueOf(scheduleId), content, createImages, deleteImageIds);
 		return ResponseDto.onSuccess("수정에 성공하셨습니다.");
