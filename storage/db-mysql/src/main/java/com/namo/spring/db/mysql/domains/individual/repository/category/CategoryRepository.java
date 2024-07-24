@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.namo.spring.db.mysql.domains.individual.domain.Category;
 import com.namo.spring.db.mysql.domains.individual.type.CategoryStatus;
-
 import com.namo.spring.db.mysql.domains.user.domain.User;
 
 public interface CategoryRepository extends JpaRepository<Category, Long>, CategoryRepositoryCustom {

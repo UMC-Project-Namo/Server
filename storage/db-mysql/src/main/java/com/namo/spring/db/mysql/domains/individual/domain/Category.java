@@ -1,6 +1,5 @@
 package com.namo.spring.db.mysql.domains.individual.domain;
 
-import com.namo.spring.db.mysql.domains.individual.type.CategoryStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,9 +11,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
-import com.namo.spring.db.mysql.domains.individual.type.CategoryKind;
-import com.namo.spring.db.mysql.domains.user.domain.User;
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
+import com.namo.spring.db.mysql.domains.individual.type.CategoryKind;
+import com.namo.spring.db.mysql.domains.individual.type.CategoryStatus;
+import com.namo.spring.db.mysql.domains.user.domain.User;
 
 import lombok.AccessLevel;
 import lombok.Builder;

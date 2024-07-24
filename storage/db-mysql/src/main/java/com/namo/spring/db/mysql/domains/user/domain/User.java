@@ -10,10 +10,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
+import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import com.namo.spring.db.mysql.domains.user.type.SocialType;
 import com.namo.spring.db.mysql.domains.user.type.UserRole;
 import com.namo.spring.db.mysql.domains.user.type.UserStatus;
-import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -61,7 +61,7 @@ public class User extends BaseTimeEntity {
 	private String socialRefreshToken;
 
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false, columnDefinition = "USER")
+	@Column(nullable = false, columnDefinition = "VARCHAR(20) DEFAULT 'USER'")
 	private UserRole userRole;
 
 	@Builder

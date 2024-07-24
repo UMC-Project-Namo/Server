@@ -18,7 +18,6 @@ import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 
 import com.namo.spring.application.external.api.user.dto.UserRequest;
-import com.namo.spring.application.external.api.user.helper.JwtAuthHelper;
 import com.namo.spring.client.social.apple.dto.AppleResponse;
 import com.namo.spring.client.social.common.properties.AppleProperties;
 import com.namo.spring.core.common.code.status.ErrorStatus;

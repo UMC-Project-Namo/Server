@@ -1,5 +1,21 @@
 package com.namo.spring.db.mysql.domains.individual.repository.schedule;
 
+import static com.namo.spring.db.mysql.domains.group.domain.QMoimSchedule.*;
+import static com.namo.spring.db.mysql.domains.group.domain.QMoimScheduleAndUser.*;
+import static com.namo.spring.db.mysql.domains.individual.domain.QCategory.*;
+import static com.namo.spring.db.mysql.domains.individual.domain.QImage.*;
+import static com.namo.spring.db.mysql.domains.individual.domain.QPalette.*;
+import static com.namo.spring.db.mysql.domains.individual.domain.QSchedule.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import jakarta.persistence.EntityManager;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
+
 import com.namo.spring.db.mysql.domains.group.type.VisibleStatus;
 import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
 import com.namo.spring.db.mysql.domains.individual.dto.MoimScheduleProjection;
@@ -8,12 +24,6 @@ import com.namo.spring.db.mysql.domains.user.domain.User;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,6 +34,7 @@ import static com.namo.spring.db.mysql.domains.individual.domain.QCategory.categ
 import static com.namo.spring.db.mysql.domains.individual.domain.QImage.image;
 import static com.namo.spring.db.mysql.domains.individual.domain.QPalette.palette;
 import static com.namo.spring.db.mysql.domains.individual.domain.QSchedule.schedule;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
@@ -132,22 +143,6 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
         return new SliceImpl<>(content, pageable, hasNext);
     }
 
-//    @Override
-//    public List<ScheduleProjection.DiaryByUserDto> findAllScheduleDiary(User user) {
-//        return queryFactory
-//                .select(Projections.constructor(ScheduleProjection.DiaryByUserDto.class,
-//                        schedule.id,
-//                        schedule.contents,
-//                        schedule.images
-//                )).distinct()
-//                .from(schedule)
-//                .leftJoin(schedule.images, image)
-//                .where(schedule.user.eq(user),
-//                        schedule.hasDiary.isTrue()
-//                )
-//                .fetch();
-//    }
-
     @Override
     public Schedule findOneScheduleAndImages(Long scheduleId) {
         return queryFactory
@@ -158,4 +153,5 @@ public class ScheduleRepositoryImpl implements ScheduleRepositoryCustom {
                 .where(schedule.id.eq(scheduleId))
                 .fetchOne();
     }
+
 }

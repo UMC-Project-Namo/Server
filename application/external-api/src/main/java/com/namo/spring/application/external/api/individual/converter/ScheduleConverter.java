@@ -1,10 +1,9 @@
 package com.namo.spring.application.external.api.individual.converter;
 
-import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
-import com.namo.spring.db.mysql.domains.individual.type.Period;
 import com.namo.spring.application.external.api.individual.dto.ScheduleRequest;
 import com.namo.spring.db.mysql.domains.individual.domain.Category;
-
+import com.namo.spring.db.mysql.domains.individual.domain.Schedule;
+import com.namo.spring.db.mysql.domains.individual.type.Period;
 import com.namo.spring.db.mysql.domains.user.domain.User;
 
 public class ScheduleConverter {
