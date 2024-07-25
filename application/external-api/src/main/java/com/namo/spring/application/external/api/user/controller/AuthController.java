@@ -39,18 +39,7 @@ public class AuthController implements AuthApi {
 		return ResponseDto.onSuccess(signupDto);
 	}
 
-	@Operation(summary = "네이버 회원가입", description = "네이버 소셜 로그인을 통한 회원가입")
 	@PostMapping(value = "/naver/signup")
-	@ApiErrorCodes(value = {
-		ErrorStatus.USER_POST_ERROR,
-		ErrorStatus.NAVER_UNAUTHORIZED,
-		ErrorStatus.NAVER_FORBIDDEN,
-		ErrorStatus.SOCIAL_LOGIN_FAILURE,
-		ErrorStatus.EMPTY_ACCESS_KEY,
-		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-		ErrorStatus.INTERNET_SERVER_ERROR
-	})
 	@PreAuthorize("isAnonymous()")
 	public ResponseDto<UserResponse.SignUpDto> naverSignup(
 		@Valid @RequestBody UserRequest.SocialSignUpDto signUpDto

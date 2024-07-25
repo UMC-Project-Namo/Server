@@ -145,4 +145,109 @@ public interface AuthApi {
 	ResponseDto<UserResponse.SignUpDto> kakaoSignup(
 		@Valid @RequestBody UserRequest.SocialSignUpDto signUpDto
 	);
+
+
+	@Operation(summary = "네이버 회원가입", description = "네이버 소셜 로그인을 통한 회원가입을 진행합니다.")
+	@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "네이버 회원가입 성공 - 신규 유저", value = """
+			{
+				"isSuccess": true,
+				"code": 200,
+				"message": "성공",
+				"result": {
+					"accessToken": "exmapleAccessToken",
+					"refreshToken": "exampleRefreshToken",
+					"newUser": true,
+					"terms": [
+						{
+							"content": "exampleContent",
+							"isCheck": false
+						}
+					]
+				}
+			}
+			"""),
+		@ExampleObject(name = "네이버 회원가입 성공 - 기존 유저", value = """
+			{
+				"isSuccess": true,
+				"code": 200,
+				"message": "성공",
+				"result": {
+					"accessToken": "exmapleAccessToken",
+					"refreshToken": "exampleRefreshToken",
+					"newUser": false,
+					"terms": [
+						{
+							"content": "exampleContent",
+							"isCheck": true
+						}
+					]
+				}
+			}""")
+	}))
+	@ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "요청 실패 - 유저 생성 실패", value = """
+			{
+				"isSuccess": false,
+				"code": 400,
+				"message": "email나 name이 비어있어 유저를 생성할 수 없습니다.",
+				"result": "error discription"
+			}
+			""")
+	}))
+	@ApiResponse(responseCode = "401", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "네이버 실패 - accessToken 오류", value = """
+			{
+				"isSuccess": false,
+				"code": 401,
+				"message": "네이버 accessToken이 잘못되었습니다.",
+				"result": "error discription"
+			}
+			"""),
+		@ExampleObject(name = "요청 실패 - 소셜 로그인 요청 실패", value = """
+			{
+				"isSuccess": false,
+				"code": 401,
+				"message": "소셜 로그인에 실패했습니다.",
+				"result": "error discription"
+			}
+			""")
+	}))
+	@ApiResponse(responseCode = "403", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "네이버 실패 - 네이버 권한 오류", value = """
+			{
+				"isSuccess": false,
+				"code": 403,
+				"message": "네이버 권한 오류",
+				"result": "error discription"
+			}
+			"""),
+		@ExampleObject(name = "요청 실패 - AccessToken 없음", value = """
+			{
+				"isSuccess": false,
+				"code": 403,
+				"message": "AccessToken 이 비어있습니다.",
+				"result": "error discription"
+			}
+			"""),
+		@ExampleObject(name = "요청 실패 - AccessToken 만료", value = """
+			{
+				"isSuccess": false,
+				"code": 403,
+				"message": "Access token 이 만료되었습니다.",
+				"result": "error discription"
+			}
+			"""),
+		@ExampleObject(name = "요청 실패 - RefreshToken 만료", value = """
+			{
+				"isSuccess": false,
+				"code": 403,
+				"message": "RefreshToken 이 만료되었습니다.",
+				"result": "error discription"
+			}
+			"""),
+	}))
+	ResponseDto<UserResponse.SignUpDto> naverSignup(
+		@Valid @RequestBody UserRequest.SocialSignUpDto signUpDto
+	);
 }
