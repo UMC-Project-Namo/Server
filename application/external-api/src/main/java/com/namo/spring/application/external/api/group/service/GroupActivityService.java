@@ -62,6 +62,10 @@ public class GroupActivityService {
 		moimMemoLocationImgRepository.deleteMoimMemoLocationImgByMoimMemoLocation(groupActivity);
 	}
 
+	public void removeGroupActivityImgs(MoimMemoLocationImg img) {
+		moimMemoLocationImgRepository.delete(img);
+	}
+
 	public void removeGroupActivityImgs(List<MoimMemoLocation> groupActivities) {
 		moimMemoLocationImgRepository.deleteMoimMemoLocationImgByMoimMemoLocation(groupActivities);
 	}
@@ -85,6 +89,11 @@ public class GroupActivityService {
 
 	public List<MoimMemoLocationAndUser> getGroupActivityAndUsers(List<MoimMemoLocation> groupActivities) {
 		return moimMemoLocationRepository.findMoimMemoLocationAndUsers(groupActivities);
+	}
+
+	public MoimMemoLocationImg getMoimMemoLocationImg(Long imgId) {
+		return moimMemoLocationImgRepository.findById(imgId)
+			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_GROUP_MEMO_LOCATION_FAILURE));
 	}
 
 }

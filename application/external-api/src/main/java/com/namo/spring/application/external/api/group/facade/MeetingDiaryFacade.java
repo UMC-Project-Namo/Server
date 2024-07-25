@@ -98,15 +98,21 @@ public class MeetingDiaryFacade {
 
 	@Transactional(readOnly = false)
 	public void modifyMeetingActivity(Long activityId, MeetingDiaryRequest.LocationDto locationDto,
-		List<MultipartFile> imgs) {
+		List<MultipartFile> createImages, List<Long> removeImageIds) {
+
+		//
+		// removeGroupActivityImgs(groupActivity);
 		MoimMemoLocation groupActivity = groupActivityService.getGroupActivityWithImgs(activityId);
 		groupActivity.update(locationDto.getName(), locationDto.getMoney());
-
 		groupActivityService.removeGroupActivityAndUsers(groupActivity);
 		createGroupActivityAndUsers(locationDto, groupActivity);
 
-		removeGroupActivityImgs(groupActivity);
-		createGroupActivityImgs(imgs, groupActivity);
+		if (createImages != null) {
+			createGroupActivityImgs(createImages, groupActivity);
+		}
+		if (removeImageIds != null) {
+			removeImageIds.forEach(this::removeGroupActivityImgs);
+		}
 	}
 
 	private void removeGroupActivityImgs(MoimMemoLocation groupActivity) {
@@ -116,6 +122,12 @@ public class MeetingDiaryFacade {
 			.toList();
 		fileUtils.deleteImages(urls, FilePath.GROUP_ACTIVITY_IMG);
 		groupActivityService.removeGroupActivityImgs(groupActivity);
+	}
+
+	private void removeGroupActivityImgs(Long imgIds) {
+		MoimMemoLocationImg removeImg = groupActivityService.getMoimMemoLocationImg(imgIds);
+		fileUtils.delete(removeImg.getUrl(), FilePath.GROUP_ACTIVITY_IMG);
+		groupActivityService.removeGroupActivityImgs(removeImg);
 	}
 
 	@Transactional(readOnly = false)

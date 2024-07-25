@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,13 +50,14 @@ public class TempMeetingDiaryController {
 	})
 	public ResponseDto<Void> createMeetingDiary(
 		@Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
-		@Parameter(description = "모임 기록용 이미지") @RequestPart(required = false) List<MultipartFile> imgs,
-		@Parameter(description = "모임 기록명") @RequestPart String name,
-		@Parameter(description = "모임 회비") @RequestPart String money,
-		@Parameter(description = "참여자", example = "멍청이, 똑똑이") @RequestPart String participants
+		@Parameter(description = "추가할 모임 활동 이미지") @RequestPart(required = false) List<MultipartFile> createImages,
+		@Parameter(description = "모임 기록명") @RequestParam String activityName,
+		@Parameter(description = "모임 회비") @RequestParam String activityMoney,
+		@Parameter(description = "참여자", example = "1, 2") @RequestParam List<Long> participantUserIds
 	) {
-		MeetingDiaryRequest.LocationDto locationDto = new MeetingDiaryRequest.LocationDto(name, money, participants);
-		meetingDiaryFacade.createMeetingDiary(meetingScheduleId, locationDto, imgs);
+		MeetingDiaryRequest.LocationDto locationDto = new MeetingDiaryRequest.LocationDto(activityName, activityMoney,
+			participantUserIds);
+		meetingDiaryFacade.createMeetingDiary(meetingScheduleId, locationDto, createImages);
 		return ResponseDto.onSuccess(null);
 	}
 

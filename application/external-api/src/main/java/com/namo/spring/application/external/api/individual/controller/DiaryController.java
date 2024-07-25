@@ -120,10 +120,10 @@ public class DiaryController {
 	public ResponseDto<String> updateDiary(
 		@Parameter(description = "추가 할 기록 이미지") @RequestPart(required = false) List<MultipartFile> createImages,
 		@Parameter(description = "삭제할 기록 이미지 ID") @RequestParam(required = false) List<Long> deleteImageIds,
-		@Parameter(description = "일정 ID") @RequestParam String scheduleId,
+		@Parameter(description = "일정 ID") @RequestParam Long scheduleId,
 		@Parameter(description = "기록 내용") @RequestParam(required = false) String content
 	) {
-		diaryFacade.updateDiary(Long.valueOf(scheduleId), content, createImages, deleteImageIds);
+		diaryFacade.updateDiary(scheduleId, content, createImages, deleteImageIds);
 		return ResponseDto.onSuccess("수정에 성공하셨습니다.");
 	}
 
