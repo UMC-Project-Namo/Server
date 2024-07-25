@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.namo.spring.application.external.api.user.api.AuthApi;
 import com.namo.spring.application.external.api.user.dto.UserRequest;
 import com.namo.spring.application.external.api.user.dto.UserResponse;
 import com.namo.spring.application.external.api.user.facade.UserFacade;
@@ -26,24 +27,10 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auths")
-public class AuthController {
+public class AuthController implements AuthApi {
 	private final UserFacade userFacade;
 
-	@Operation(summary = "카카오 회원가입", description = "카카오 소셜 로그인을 통한 회원가입")
 	@PostMapping(value = "/kakao/signup")
-	@ApiErrorCodes(value = {
-		ErrorStatus.USER_POST_ERROR,
-		ErrorStatus.KAKAO_UNAUTHORIZED,
-		ErrorStatus.KAKAO_FORBIDDEN,
-		ErrorStatus.KAKAO_BAD_GATEWAY,
-		ErrorStatus.KAKAO_SERVICE_UNAVAILABLE,
-		ErrorStatus.KAKAO_INTERNAL_SERVER_ERROR,
-		ErrorStatus.SOCIAL_LOGIN_FAILURE,
-		ErrorStatus.EMPTY_ACCESS_KEY,
-		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-		ErrorStatus.INTERNET_SERVER_ERROR
-	})
 	@PreAuthorize("isAnonymous()")
 	public ResponseDto<UserResponse.SignUpDto> kakaoSignup(
 		@Valid @RequestBody UserRequest.SocialSignUpDto signUpDto

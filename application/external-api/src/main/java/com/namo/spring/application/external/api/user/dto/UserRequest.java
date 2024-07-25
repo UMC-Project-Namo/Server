@@ -3,6 +3,8 @@ package com.namo.spring.application.external.api.user.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,10 +35,13 @@ public class UserRequest {
 	@Getter
 	@AllArgsConstructor
 	@NoArgsConstructor
+	@Schema(description = "소셜 회원가입 요청 DTO")
 	public static class SocialSignUpDto {
-		@NotBlank
+		@Schema(description = "소셜 로그인을 통해 발급받은 accessToken", example = "exampleAccessToken")
+		@NotBlank(message = "accessToken은 필수값입니다.")
 		private String accessToken;
-		@NotBlank
+		@Schema(description = "소셜 로그인을 통해 발급받은 refreshToken", example = "exampleRefreshToken")
+		@NotBlank(message = "refreshToken은 필수값입니다.")
 		private String socialRefreshToken;
 	}
 
