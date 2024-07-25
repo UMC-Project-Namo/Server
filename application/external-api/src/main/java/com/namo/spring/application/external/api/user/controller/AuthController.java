@@ -59,20 +59,12 @@ public class AuthController implements AuthApi {
 
 	@Operation(summary = "토큰 재발급", description = "토큰 재발급")
 	@PostMapping(value = "/reissuance")
-	@ApiErrorCodes(value = {
-		ErrorStatus.USER_POST_ERROR,
-		ErrorStatus.SOCIAL_LOGIN_FAILURE,
-		ErrorStatus.EMPTY_ACCESS_KEY,
-		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-		ErrorStatus.INTERNET_SERVER_ERROR
-	})
 	@PreAuthorize("isAnonymous()")
 	public ResponseDto<UserResponse.ReissueDto> reissueAccessToken(
-		@Valid @RequestBody UserRequest.SignUpDto signUpDto
+		@Valid @RequestBody UserRequest.ReissueDto reissueDto
 	) {
-		UserResponse.ReissueDto reissueDto = userFacade.reissueAccessToken(signUpDto);
-		return ResponseDto.onSuccess(reissueDto);
+		UserResponse.ReissueDto result = userFacade.reissueAccessToken(reissueDto);
+		return ResponseDto.onSuccess(result);
 	}
 
 	@Operation(summary = "로그아웃", description = "로그아웃")
@@ -102,7 +94,7 @@ public class AuthController implements AuthApi {
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
 	@PreAuthorize("isAuthenticated()")
-	public ResponseDto<?> removeKakaoUser(
+	public ResponseDto<Void> removeKakaoUser(
 		HttpServletRequest request) {
 		userFacade.removeKakaoUser(request);
 		return ResponseDto.onSuccess(null);
@@ -117,14 +109,13 @@ public class AuthController implements AuthApi {
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
 	@PreAuthorize("isAuthenticated()")
-	public ResponseDto<?> removeNaverUser(
+	public ResponseDto<Void> removeNaverUser(
 		HttpServletRequest request
 	) {
 		userFacade.removeNaverUser(request);
 		return ResponseDto.onSuccess(null);
 	}
 
-	@SuppressWarnings({"checkstyle:WhitespaceAround", "checkstyle:RegexpMultiline"})
 	@Operation(summary = "애플 회원 탈퇴", description = "애플 회원 탈퇴")
 	@PostMapping("/apple/delete")
 	@ApiErrorCodes(value = {
@@ -134,7 +125,7 @@ public class AuthController implements AuthApi {
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
 	@PreAuthorize("isAuthenticated()")
-	public ResponseDto<?> removeAppleUser(
+	public ResponseDto<Void> removeAppleUser(
 		HttpServletRequest request
 	) {
 		userFacade.removeAppleUser(request);

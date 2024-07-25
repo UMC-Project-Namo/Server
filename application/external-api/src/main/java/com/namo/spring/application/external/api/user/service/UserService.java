@@ -105,8 +105,8 @@ public class UserService {
 		}
 	}
 
-	public void checkLogoutUser(UserRequest.SignUpDto signUpDto) {
-		if (forbiddenTokenService.isForbidden(signUpDto.getAccessToken())) {
+	public void checkLogoutUser(UserRequest.ReissueDto reissueDto) {
+		if (forbiddenTokenService.isForbidden(reissueDto.getAccessToken())) {
 			throw new UserException(ErrorStatus.LOGOUT_ERROR);
 		}
 	}

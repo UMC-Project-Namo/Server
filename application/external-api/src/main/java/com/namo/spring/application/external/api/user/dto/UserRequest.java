@@ -25,7 +25,7 @@ public class UserRequest {
 	@Getter
 	@AllArgsConstructor
 	@NoArgsConstructor
-	public static class SignUpDto {
+	public static class ReissueDto {
 		@NotBlank
 		private String accessToken;
 		@NotBlank
