@@ -1,6 +1,5 @@
 package com.namo.spring.application.external.api.group.dto;
 
-import java.util.Arrays;
 import java.util.List;
 
 import lombok.Getter;
@@ -25,12 +24,10 @@ public class MeetingDiaryRequest {
 		private Integer money;
 		private List<Long> participants;
 
-		public LocationDto(String name, String money, String participants) {
+		public LocationDto(String name, String money, List<Long> participants) {
 			this.name = name;
 			this.money = Integer.valueOf(money);
-			this.participants = Arrays.stream(participants.replace(" ", "").split(","))
-				.map(Long::valueOf)
-				.toList();
+			this.participants = participants;
 		}
 	}
 }
