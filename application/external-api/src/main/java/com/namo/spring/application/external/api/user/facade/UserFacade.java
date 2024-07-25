@@ -206,11 +206,11 @@ public class UserFacade {
     }
 
     @Transactional
-    public UserResponse.ReissueDto reissueAccessToken(UserRequest.SignUpDto signUpDto) {
-        jwtAuthHelper.validateRefreshTokenExpired(signUpDto.getRefreshToken());
-        userService.checkLogoutUser(signUpDto);
+    public UserResponse.ReissueDto reissueAccessToken(UserRequest.ReissueDto reissueDto) {
+        jwtAuthHelper.validateRefreshTokenExpired(reissueDto.getRefreshToken());
+        userService.checkLogoutUser(reissueDto);
 
-        User user = userService.getUserByRefreshToken(signUpDto.getRefreshToken());
+        User user = userService.getUserByRefreshToken(reissueDto.getRefreshToken());
         CustomJwts jwts = jwtAuthHelper.createToken(user);
         UserResponse.ReissueDto reissueRes = UserResponseConverter.toReissueDto(jwts.accessToken(),
                 jwts.refreshToken());
