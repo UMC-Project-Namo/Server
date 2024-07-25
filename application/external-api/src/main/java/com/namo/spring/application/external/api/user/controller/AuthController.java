@@ -13,12 +13,9 @@ import com.namo.spring.application.external.api.user.api.AuthApi;
 import com.namo.spring.application.external.api.user.dto.UserRequest;
 import com.namo.spring.application.external.api.user.dto.UserResponse;
 import com.namo.spring.application.external.api.user.facade.UserFacade;
-import com.namo.spring.db.mysql.domains.user.type.SocialType;
-import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
-import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.response.ResponseDto;
+import com.namo.spring.db.mysql.domains.user.type.SocialType;
 
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.RequiredArgsConstructor;
@@ -66,16 +63,7 @@ public class AuthController implements AuthApi {
 		return ResponseDto.onSuccess(result);
 	}
 
-	@Operation(summary = "로그아웃", description = "로그아웃")
 	@PostMapping(value = "/logout")
-	@ApiErrorCodes(value = {
-		ErrorStatus.USER_POST_ERROR,
-		ErrorStatus.SOCIAL_LOGIN_FAILURE,
-		ErrorStatus.EMPTY_ACCESS_KEY,
-		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-		ErrorStatus.INTERNET_SERVER_ERROR
-	})
 	@PreAuthorize("isAuthenticated()")
 	public ResponseDto<Void> logout(
 		@Valid @RequestBody UserRequest.LogoutDto logoutDto
@@ -84,49 +72,26 @@ public class AuthController implements AuthApi {
 		return ResponseDto.onSuccess(null);
 	}
 
-	@Operation(summary = "카카오 회원 탈퇴", description = "카카오 회원 탈퇴")
 	@PostMapping("/kakao/delete")
-	@ApiErrorCodes(value = {
-		ErrorStatus.EMPTY_ACCESS_KEY,
-		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-		ErrorStatus.INTERNET_SERVER_ERROR
-	})
 	@PreAuthorize("isAuthenticated()")
-	public ResponseDto<Void> removeKakaoUser(
-		HttpServletRequest request) {
+	// TODO: 2024.07.26. SecurityContext를 이용한 사용자 정보 조회 - 루카
+	public ResponseDto<Void> removeKakaoUser(HttpServletRequest request) {
 		userFacade.removeKakaoUser(request);
 		return ResponseDto.onSuccess(null);
 	}
 
-	@Operation(summary = "네이버 회원 탈퇴", description = "네이버 회원 탈퇴")
 	@PostMapping("/naver/delete")
-	@ApiErrorCodes(value = {
-		ErrorStatus.EMPTY_ACCESS_KEY,
-		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-		ErrorStatus.INTERNET_SERVER_ERROR
-	})
 	@PreAuthorize("isAuthenticated()")
-	public ResponseDto<Void> removeNaverUser(
-		HttpServletRequest request
-	) {
+	// TODO: 2024.07.26. SecurityContext를 이용한 사용자 정보 조회 - 루카
+	public ResponseDto<Void> removeNaverUser(HttpServletRequest request) {
 		userFacade.removeNaverUser(request);
 		return ResponseDto.onSuccess(null);
 	}
 
-	@Operation(summary = "애플 회원 탈퇴", description = "애플 회원 탈퇴")
 	@PostMapping("/apple/delete")
-	@ApiErrorCodes(value = {
-		ErrorStatus.EMPTY_ACCESS_KEY,
-		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-		ErrorStatus.INTERNET_SERVER_ERROR
-	})
 	@PreAuthorize("isAuthenticated()")
-	public ResponseDto<Void> removeAppleUser(
-		HttpServletRequest request
-	) {
+	// TODO: 2024.07.26. SecurityContext를 이용한 사용자 정보 조회 - 루카
+	public ResponseDto<Void> removeAppleUser(HttpServletRequest request) {
 		userFacade.removeAppleUser(request);
 		return ResponseDto.onSuccess(null);
 	}
