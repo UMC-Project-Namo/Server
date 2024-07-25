@@ -146,7 +146,6 @@ public interface AuthApi {
 		@Valid @RequestBody UserRequest.SocialSignUpDto signUpDto
 	);
 
-
 	@Operation(summary = "네이버 회원가입", description = "네이버 소셜 로그인을 통한 회원가입을 진행합니다.")
 	@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {
 		@ExampleObject(name = "네이버 회원가입 성공 - 신규 유저", value = """
@@ -249,5 +248,93 @@ public interface AuthApi {
 	}))
 	ResponseDto<UserResponse.SignUpDto> naverSignup(
 		@Valid @RequestBody UserRequest.SocialSignUpDto signUpDto
+	);
+
+	@Operation(summary = "애플 회원가입", description = "애플 소셜 로그인을 통한 회원가입을 진행합니다.")
+	@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "애플 회원가입 성공 - 신규 유저", value = """
+			{
+				"isSuccess": true,
+				"code": 200,
+				"message": "성공",
+				"result": {
+					"accessToken": "exmapleAccessToken",
+					"refreshToken": "exampleRefreshToken",
+					"newUser": true,
+					"terms": [
+						{
+							"content": "exampleContent",
+							"isCheck": false
+						}
+					]
+				}
+			}
+			"""),
+		@ExampleObject(name = "애플 회원가입 성공 - 기존 유저", value = """
+			{
+				"isSuccess": true,
+				"code": 200,
+				"message": "성공",
+				"result": {
+					"accessToken": "exmapleAccessToken",
+					"refreshToken": "exampleRefreshToken",
+					"newUser": false,
+					"terms": [
+						{
+							"content": "exampleContent",
+							"isCheck": true
+						}
+					]
+				}
+			}""")
+	}))
+	@ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "요청 실패 - 유저 생성 실패", value = """
+			{
+				"isSuccess": false,
+				"code": 400,
+				"message": "email나 name이 비어있어 유저를 생성할 수 없습니다.",
+				"result": "error discription"
+			}
+			"""),
+		@ExampleObject(name = "요청 실패 - identityToken 오류", value = """
+			{
+				"isSuccess": false,
+				"code": 400,
+				"message": "애플 identityToken이 잘못되었습니다.",
+				"result": "error discription"
+			}
+			""")
+	}))
+	@ApiResponse(responseCode = "401", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "애플 실패 - authorizationCode 오류", value = """
+			{
+				"isSuccess": false,
+				"code": 401,
+				"message": "애플 authorization code가 잘못되었습니다.",
+				"result": "error discription"
+			}
+			"""),
+		@ExampleObject(name = "요청 실패 - 소셜 로그인 요청 실패", value = """
+			{
+				"isSuccess": false,
+				"code": 401,
+				"message": "소셜 로그인에 실패했습니다.",
+				"result": "error discription"
+			}
+			""")
+	}))
+	@ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "요청 실패 - feign 서버 에러", value = """
+			{
+				"isSuccess": false,
+				"code": 404,
+				"message": "feign 서버 에러",
+				"result": "error discription"
+			}
+			""")
+	}))
+	ResponseDto<UserResponse.SignUpDto> appleSignup(
+		@Valid @RequestBody UserRequest.AppleSignUpDto dto
 	);
 }

@@ -48,16 +48,7 @@ public class AuthController implements AuthApi {
 		return ResponseDto.onSuccess(signupDto);
 	}
 
-	@Operation(summary = "애플 회원가입", description = "애플 소셜 로그인을 통한 회원가입.")
 	@PostMapping(value = "/apple/signup")
-	@ApiErrorCodes(value = {
-		ErrorStatus.USER_POST_ERROR,
-		ErrorStatus.MAKE_PUBLIC_KEY_FAILURE,
-		ErrorStatus.APPLE_REQUEST_ERROR,
-		ErrorStatus.APPLE_UNAUTHORIZED,
-		ErrorStatus.SOCIAL_LOGIN_FAILURE,
-		ErrorStatus.FEIGN_SERVER_ERROR
-	})
 	@PreAuthorize("isAnonymous()")
 	public ResponseDto<UserResponse.SignUpDto> appleSignup(
 		@Valid @RequestBody UserRequest.AppleSignUpDto dto

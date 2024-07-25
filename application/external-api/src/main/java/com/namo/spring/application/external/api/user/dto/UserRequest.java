@@ -46,12 +46,17 @@ public class UserRequest {
 	}
 
 	@Getter
+	@Schema(description = "애플 회원가입 요청 DTO")
 	public static class AppleSignUpDto {
-		@NotBlank
+		@Schema(description = "애플 로그인을 통해 발급받은 authorizationCode", example = "exampleAuthorizationCode")
+		@NotBlank(message = "authorizationCode은 필수값입니다.")
 		private String authorizationCode;
-		@NotBlank
+		@Schema(description = "애플 로그인을 통해 발급받은 identityToken", example = "exampleIdentityToken")
+		@NotBlank(message = "identityToken은 필수값입니다.")
 		private String identityToken;
+		@Schema(description = "애플 로그인을 통해 발급받은 email", example = "exampleRefreshToken")
 		private String email;
+		@Schema(description = "애플 로그인을 통해 발급받은 username", example = "exampleUsername")
 		private String username;
 	}
 
