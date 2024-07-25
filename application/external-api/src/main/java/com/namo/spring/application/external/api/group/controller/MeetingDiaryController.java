@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,17 +56,18 @@ public class MeetingDiaryController {
 	})
 	public ResponseDto<Void> createMeetingDiary(
 		@Parameter(description = "모임 일정 ID") @PathVariable Long moimScheduleId,
-		@Parameter(description = "모임 기록용 이미지") @RequestPart(required = false) List<MultipartFile> imgs,
-		@Parameter(description = "모임 기록명") @RequestPart String name,
-		@Parameter(description = "모임 회비") @RequestPart String money,
-		@Parameter(description = "참여자", example = "멍청이, 똑똑이") @RequestPart String participants
+		@Parameter(description = "추가할 모임 활동 이미지") @RequestPart(required = false) List<MultipartFile> createImages,
+		@Parameter(description = "모임 기록명") @RequestParam String activityName,
+		@Parameter(description = "모임 회비") @RequestParam String activityMoney,
+		@Parameter(description = "참여자", example = "1, 2") @RequestParam List<Long> participantUserIds
 	) {
-		MeetingDiaryRequest.LocationDto locationDto = new MeetingDiaryRequest.LocationDto(name, money, participants);
-		meetingDiaryFacade.createMeetingDiary(moimScheduleId, locationDto, imgs);
+		MeetingDiaryRequest.LocationDto locationDto = new MeetingDiaryRequest.LocationDto(activityName, activityMoney,
+			participantUserIds);
+		meetingDiaryFacade.createMeetingDiary(moimScheduleId, locationDto, createImages);
 		return ResponseDto.onSuccess(null);
 	}
 
-	@Operation(summary = "모임 기록 장소 수정", description = "모임 기록 장소 수정 API")
+	@Operation(summary = "모임 기록 수정", description = "모임 기록 수정 API")
 	@PatchMapping(value = "/{activityId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ApiErrorCodes(value = {
 		ErrorStatus.EMPTY_ACCESS_KEY,
@@ -75,13 +77,15 @@ public class MeetingDiaryController {
 	})
 	public ResponseDto<Object> updateMeetingDiary(
 		@Parameter(description = "수정하고자 하는 활동 ID") @PathVariable Long activityId,
-		@Parameter(description = "모임 기록용 이미지") @RequestPart(required = false) List<MultipartFile> imgs,
-		@Parameter(description = "모임 기록명") @RequestPart String name,
-		@Parameter(description = "모임 회비") @RequestPart String money,
-		@Parameter(description = "참여자", example = "멍청이, 똑똑이") @RequestPart String participants
+		@Parameter(description = "추가할 모임 활동 이미지") @RequestPart(required = false) List<MultipartFile> createImages,
+		@Parameter(description = "삭제할 기록 이미지 ID") @RequestParam(required = false) List<Long> deleteImageIds,
+		@Parameter(description = "모임 기록명") @RequestParam String activityName,
+		@Parameter(description = "모임 회비") @RequestParam String activityMoney,
+		@Parameter(description = "참여자", example = "1, 2") @RequestParam List<Long> participantUserIds
 	) {
-		MeetingDiaryRequest.LocationDto locationDto = new MeetingDiaryRequest.LocationDto(name, money, participants);
-		meetingDiaryFacade.modifyMeetingActivity(activityId, locationDto, imgs);
+		MeetingDiaryRequest.LocationDto locationDto = new MeetingDiaryRequest.LocationDto(activityName, activityMoney,
+			participantUserIds);
+		meetingDiaryFacade.modifyMeetingActivity(activityId, locationDto, createImages, deleteImageIds);
 		return ResponseDto.onSuccess(null);
 	}
 
