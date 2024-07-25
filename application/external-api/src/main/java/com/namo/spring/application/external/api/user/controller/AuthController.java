@@ -57,7 +57,6 @@ public class AuthController implements AuthApi {
 		return ResponseDto.onSuccess(signupDto);
 	}
 
-	@Operation(summary = "토큰 재발급", description = "토큰 재발급")
 	@PostMapping(value = "/reissuance")
 	@PreAuthorize("isAnonymous()")
 	public ResponseDto<UserResponse.ReissueDto> reissueAccessToken(

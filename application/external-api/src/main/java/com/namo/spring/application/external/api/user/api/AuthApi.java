@@ -337,4 +337,41 @@ public interface AuthApi {
 	ResponseDto<UserResponse.SignUpDto> appleSignup(
 		@Valid @RequestBody UserRequest.AppleSignUpDto dto
 	);
+
+	@Operation(summary = "토큰 재발급", description = "토큰 재발급")
+	@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "토큰 재발급 성공", value = """
+			{
+				"isSuccess": true,
+				"code": 200,
+				"message": "성공",
+				"result": {
+					"accessToken": "exampleAccessToken",
+					"refreshToken": "exampleRefreshToken"
+				}
+			}
+			""")
+	}))
+	@ApiResponse(responseCode = "403", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "요청 실패 - 로그 아웃된 사용자", value = """
+			{
+				"isSuccess": false,
+				"code": 403,
+				"message": "로그 아웃된 사용자입니다.
+			}
+			""")
+	}))
+	@ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "요청 실패 - 유저 없음", value = """
+			{
+				"isSuccess": false,
+				"code": 404,
+				"message": "유저를 찾을 수 없습니다.",
+				"result": "error discription"
+			}
+			""")
+	}))
+	ResponseDto<UserResponse.ReissueDto> reissueAccessToken(
+		@Valid @RequestBody UserRequest.ReissueDto reissueDto
+	);
 }
