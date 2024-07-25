@@ -1,5 +1,6 @@
 package com.namo.spring.application.external.api.user.api;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import com.namo.spring.application.external.api.user.dto.UserRequest;
@@ -7,6 +8,7 @@ import com.namo.spring.application.external.api.user.dto.UserResponse;
 import com.namo.spring.core.common.response.ResponseDto;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -374,4 +376,106 @@ public interface AuthApi {
 	ResponseDto<UserResponse.ReissueDto> reissueAccessToken(
 		@Valid @RequestBody UserRequest.ReissueDto reissueDto
 	);
+
+	@Operation(summary = "로그아웃", description = "로그아웃 API, 로그아웃 처리된 유저의 토큰을 만료시킵니다.")
+	@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "로그아웃 성공", value = """
+			{
+				"isSuccess": true,
+				"code": 200,
+				"message": "성공",
+				"result": null
+			}
+			""")
+	}))
+	ResponseDto<Void> logout(
+		@Valid @RequestBody UserRequest.LogoutDto logoutDto
+	);
+
+	@Operation(summary = "카카오 회원 탈퇴", description = """
+		카카오 회원 탈퇴 API, 카카오 회원 탈퇴 처리를 진행합니다.
+		카카오 회원 탈퇴 시, 카카오 회원 정보를 삭제하고, 회원의 애플리케이션 연결을 해제합니다.
+		
+		이때, 삭제 처리는 바로 진행되는 것이 아니며 탈퇴 신청 후 3일간 유예기간이 있습니다.
+		""")
+	@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "카카오 회원 탈퇴 성공", value = """
+			{
+				"isSuccess": true,
+				"code": 200,
+				"message": "성공",
+				"result": null
+			}
+			""")
+	}))
+	@ApiResponse(responseCode = "401", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "카카오 실패 - AccessToken 오류", value = """
+			{
+				"isSuccess": false,
+				"code": 401,
+				"message": "카카오 AccessToken이 잘못되었습니다."
+			}
+			"""),
+		@ExampleObject(name = "요청 실패 - 소셜 로그인 회원탈퇴 실패", value = """
+			{
+				"isSuccess": false,
+				"code": 401,
+				"message": "소셜 로그인 회원탈퇴에 실패했습니다."
+			}
+			""")
+	}))
+	@ApiResponse(responseCode = "403", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "요청 실패 - 로그 아웃된 사용자", value = """
+			{
+				"isSuccess": false,
+				"code": 403,
+				"message": "로그 아웃된 사용자입니다.
+			}
+			"""),
+		@ExampleObject(name = "카카오 실패 - 카카오 권한 오류", value = """
+			{
+				"isSuccess": false,
+				"code": 403,
+				"message": "카카오 권한 오류"
+			}
+			""")
+	}))
+	@ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "요청 실패 - 유저 없음", value = """
+			{
+				"isSuccess": false,
+				"code": 404,
+				"message": "유저를 찾을 수 없습니다."
+			}
+			"""),
+		@ExampleObject(name = "카카오 실패 - 카카오 시스템 오류", value = """
+			{
+				"isSuccess": false,
+				"code": 404,
+				"message": "카카오 시스템 오류"
+			}
+			"""),
+		@ExampleObject(name = "카카오 실패 - 카카오 서비스 점검중", value = """
+			{
+				"isSuccess": false,
+				"code": 404,
+				"message": "카카오 서비스 점검중"
+			}
+			"""),
+		@ExampleObject(name = "카카오 실패 - 카카오 서버 오류", value = """
+			{
+				"isSuccess": false,
+				"code": 404,
+				"message": "카카오 서버 오류"
+			}
+			"""),
+		@ExampleObject(name = "요청 실패 - feign 서버 에러", value = """
+			{
+				"isSuccess": false,
+				"code": 404,
+				"message": "feign 서버 에러"
+			}
+			""")
+	}))
+	ResponseDto<Void> removeKakaoUser(HttpServletRequest request);
 }
