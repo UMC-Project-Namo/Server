@@ -478,4 +478,77 @@ public interface AuthApi {
 			""")
 	}))
 	ResponseDto<Void> removeKakaoUser(HttpServletRequest request);
+
+	@Operation(summary = "네이버 회원 탈퇴", description = """
+		네이버 회원 탈퇴 API, 네이버 회원 탈퇴 처리를 진행합니다.
+		네이버 회원 탈퇴 시, 네이버 회원 정보를 삭제하고, 회원의 애플리케이션 연결을 해제합니다.
+		
+		이때, 삭제 처리는 바로 진행되는 것이 아니며 탈퇴 신청 후 3일간 유예기간이 있습니다.
+		""")
+	@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "네이버 회원 탈퇴 성공", value = """
+			{
+				"isSuccess": true,
+				"code": 200,
+				"message": "성공",
+				"result": null
+			}
+			""")
+	}))
+	@ApiResponse(responseCode = "401", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "네이버 실패 - AccessToken 오류", value = """
+			{
+				"isSuccess": false,
+				"code": 401,
+				"message": "네이버 AccessToken이 잘못되었습니다."
+			}
+			"""),
+		@ExampleObject(name = "요청 실패 - 소셜 로그인 회원탈퇴 실패", value = """
+			{
+				"isSuccess": false,
+				"code": 401,
+				"message": "소셜 로그인 회원탈퇴에 실패했습니다."
+			}
+			""")
+	}))
+	@ApiResponse(responseCode = "403", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "요청 실패 - 로그 아웃된 사용자", value = """
+			{
+				"isSuccess": false,
+				"code": 403,
+				"message": "로그 아웃된 사용자입니다.
+			}
+			"""),
+		@ExampleObject(name = "네이버 실패 - 네이버 권한 오류", value = """
+			{
+				"isSuccess": false,
+				"code": 403,
+				"message": "네이버 권한 오류"
+			}
+			""")
+	}))
+	@ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "요청 실패 - 유저 없음", value = """
+			{
+				"isSuccess": false,
+				"code": 404,
+				"message": "유저를 찾을 수 없습니다."
+			}
+			"""),
+		@ExampleObject(name = "네이버 실패 - 유저 없음", value = """
+			{
+				"isSuccess": false,
+				"code": 404,
+				"message": "[네이버] 검색 결과가 없습니다."
+			}
+			"""),
+		@ExampleObject(name = "요청 실패 - feign 서버 에러", value = """
+			{
+				"isSuccess": false,
+				"code": 404,
+				"message": "feign 서버 에러"
+			}
+			""")
+	}))
+	ResponseDto<Void> removeNaverUser(HttpServletRequest request);
 }
