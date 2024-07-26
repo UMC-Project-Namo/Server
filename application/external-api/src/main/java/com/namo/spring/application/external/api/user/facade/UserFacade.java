@@ -262,7 +262,7 @@ public class UserFacade {
 		userService.checkLogoutUser(reissueDto);
 
 		JwtClaims claims = refreshTokenProvider.parseJwtClaimsFromToken(reissueDto.getRefreshToken());
-		Long userId = JwtClaimsParserUtil.getClaimValue(claims, AccessTokenClaimKeys.USER_ID.getValue(), Long.class);
+		Long userId = JwtClaimsParserUtil.getClaimValue(claims, AccessTokenClaimKeys.USER_ID.getValue(), Long::parseLong);
 
 		User user = userService.getUser(userId);
 
