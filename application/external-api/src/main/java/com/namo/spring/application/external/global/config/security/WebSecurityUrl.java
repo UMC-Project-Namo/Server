@@ -7,7 +7,13 @@ public class WebSecurityUrl {
 
 	protected static final String[] READ_ONLY_PUBLIC_ENDPOINTS = {"/favicon.ico"};
 	protected static final String[] PUBLIC_ENDPOINTS = {"/test/**", "/error"};
-	protected static final String[] AUTHENTICATED_ENDPOINTS = {};
+	protected static final String[] AUTHENTICATED_ENDPOINTS = {
+		"/api/v1/auths/reissuance", "/api/v1/auths/logout",
+		"/api/v1/auths/kakao/delete", "/api/v1/auths/naver/delete", "/api/v1/auths/apple/delete"
+	};
 	protected static final String[] ANONYMOUS_ENDPOINTS = {"/api/v1/auths/**"};
-	protected static final String[] SWAGGER_ENDPOINTS = {"/api-docs/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger"};
+	protected static final String[] SWAGGER_ENDPOINTS = {
+		"/api-docs/**", "/v3/api-docs/**",
+		"/swagger-ui/**", "/swagger"
+	};
 }
