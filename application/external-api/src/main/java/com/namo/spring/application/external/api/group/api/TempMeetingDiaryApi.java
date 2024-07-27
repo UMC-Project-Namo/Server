@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -124,14 +123,37 @@ public interface TempMeetingDiaryApi {
 		@Parameter(description = "모임 일정 ID") @PathVariable("meetingScheduleId") Long meetingScheduleId
 	);
 
-	@Operation(summary = "모임 기록 상세 조회", description = "모임 기록 상세 조회 API")
-	@GetMapping("/detail/{meetingScheduleId}")
+	@Operation(summary = "[개인 페이지] 모임 기록 상세 조회", description = "모임 기록 상세 조회 API")
 	@ApiErrorCodes(value = {
 		ErrorStatus.EMPTY_ACCESS_KEY,
 		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
+	@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "개인 페이지 모임 기록 상세 조회 성공", value = """
+			{
+				"isSuccess": true,
+				"code": 200,
+				"message": "성공",
+				"result": {
+					"scheduleId": 29,
+					"name": "모임 일정 제목",
+					"startDate": 1676052480,
+					"contents": "모임 일정에 해당하는 메모",
+					"images": [
+						{
+							"id" : 1,
+							"url" : "이미지 url"
+						}
+					],
+					"categoryId": 31,
+					"color": 4,
+					"placeName": "모임 일정 장소"
+				}
+			}
+			""")
+	}))
 	public ResponseDto<MeetingDiaryResponse.DiaryDto> getMeetingDiaryDetail(
 		@Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
 		@AuthenticationPrincipal SecurityUserDetails user
