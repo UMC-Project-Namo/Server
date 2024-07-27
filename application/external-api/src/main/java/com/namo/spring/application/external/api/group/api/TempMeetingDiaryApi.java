@@ -3,7 +3,6 @@ package com.namo.spring.application.external.api.group.api;
 import java.util.List;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -197,14 +196,23 @@ public interface TempMeetingDiaryApi {
 		@AuthenticationPrincipal SecurityUserDetails user
 	);
 
-	@Operation(summary = "모임 기록 전체 삭제", description = "일정에 대한 모임 기록 전체 삭제 API")
-	@DeleteMapping("/all/{meetingScheduleId}")
+	@Operation(summary = "모임 기록 삭제", description = "일정에 대한 모임 기록 전체 삭제 API")
 	@ApiErrorCodes(value = {
 		ErrorStatus.EMPTY_ACCESS_KEY,
 		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
+	@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "모임 기록 삭제 성공", value = """
+			{
+				"isSuccess": true,
+				"code": 200,
+				"message": "성공",
+				"result": null
+			}
+			""")
+	}))
 	public ResponseDto<Object> removeMeetingDiary(
 		@Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId
 	);
