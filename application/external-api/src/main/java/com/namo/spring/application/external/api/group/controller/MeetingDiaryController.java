@@ -81,17 +81,12 @@ public class MeetingDiaryController implements MeetingDiaryApi {
 		return ResponseDto.onSuccess(null);
 	}
 
-	// ver1
-	@Operation(summary = "모임 기록 조회", description = "모임 기록 조회 API")
+	/**
+	 * [이름 규칙 적용 x] 모임 기록 조회
+	 */
 	@GetMapping("/{moimScheduleId}")
-	@ApiErrorCodes(value = {
-		ErrorStatus.EMPTY_ACCESS_KEY,
-		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-		ErrorStatus.INTERNET_SERVER_ERROR
-	})
 	public ResponseDto<GroupDiaryResponse.GroupDiaryDto> getGroupDiary(
-		@Parameter(description = "모임 기록 ID") @PathVariable("moimScheduleId") Long moimScheduleId
+		@PathVariable("moimScheduleId") Long moimScheduleId
 	) {
 		GroupDiaryResponse.GroupDiaryDto groupDiaryDto = meetingDiaryFacade.getGroupDiaryWithLocations(moimScheduleId);
 		return ResponseDto.onSuccess(groupDiaryDto);

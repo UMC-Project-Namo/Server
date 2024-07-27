@@ -58,7 +58,7 @@ public interface MeetingDiaryApi {
 		@Parameter(description = "추가할 모임 활동 이미지") @RequestPart(required = false) List<MultipartFile> createImages,
 		@Parameter(description = "활동명") @RequestParam String activityName,
 		@Parameter(description = "활동 회비") @RequestParam String activityMoney,
-		@Parameter(description = "참여자", example = "1, 2") @RequestParam List<Long> participantUserIds
+		@Parameter(description = "활동 참여자", example = "1, 2") @RequestParam List<Long> participantUserIds
 	);
 
 	@Operation(summary = "모임 활동 수정", description = "모임 활동 수정 API")
@@ -98,11 +98,68 @@ public interface MeetingDiaryApi {
 		@Parameter(description = "수정하고자 하는 활동 ID") @PathVariable Long activityId,
 		@Parameter(description = "추가할 모임 활동 이미지") @RequestPart(required = false) List<MultipartFile> createImages,
 		@Parameter(description = "삭제할 모임 활동 이미지 ID") @RequestParam(required = false) List<Long> deleteImageIds,
-		@Parameter(description = "모임 활동명") @RequestParam String activityName,
-		@Parameter(description = "모임 활동 회비") @RequestParam String activityMoney,
-		@Parameter(description = "참여자", example = "1, 2") @RequestParam List<Long> participantUserIds
+		@Parameter(description = "활동명") @RequestParam String activityName,
+		@Parameter(description = "활동 회비") @RequestParam String activityMoney,
+		@Parameter(description = "활동 참여자", example = "1, 2") @RequestParam List<Long> participantUserIds
 	);
 
+	@Operation(summary = "모임 기록 조회", description = "모임 기록 조회 API")
+	@ApiErrorCodes(value = {
+		ErrorStatus.EMPTY_ACCESS_KEY,
+		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
+		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
+		ErrorStatus.INTERNET_SERVER_ERROR
+	})
+	@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "모임 기록 조회 성공", value = """
+			{
+				"isSuccess": true,
+				"code": 200,
+				"message": "성공",
+				"result": {
+					"name": "모임 기록 제목",
+					"startDate": 1676052480,
+					"locationName": "모임 기록 장소 이름",
+					"users": [
+						{
+							"userId": 3,
+							"userName": "몽몽"
+						},
+						{
+							"userId": 19,
+							"userName": "몽몽2"
+						}
+					],
+					"moimActivityDtos": [
+						{
+							"moimActivityId": 1,
+							"name": "활동",
+							"money": 0,
+							"participants": [
+								3,
+								19
+							],
+							"images": [
+								{
+									"id" : 1,
+									"url" : "이미지 url"
+								}
+							]
+						}
+					]
+				}
+			}
+			""")
+	}))
+	@ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "요청 실패 - 모임 기록(일정) id가 잘못되었습니다", value = """
+			{
+				"isSuccess": false,
+				"code": 404,
+				"message": "스케줄을 찾을 수 없습니다."
+			}
+			""")
+	}))
 	public ResponseDto<GroupDiaryResponse.GroupDiaryDto> getGroupDiary(
 		@Parameter(description = "모임 기록 ID") @PathVariable("moimScheduleId") Long moimScheduleId
 	);
