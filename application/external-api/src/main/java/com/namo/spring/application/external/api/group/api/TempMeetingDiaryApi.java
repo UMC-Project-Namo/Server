@@ -63,8 +63,57 @@ public interface TempMeetingDiaryApi {
 		@Parameter(description = "활동 참여자", example = "1, 2") @RequestParam List<Long> participantUserIds
 	);
 
+	@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "모임 기록 조회 성공", value = """
+			{
+				"isSuccess": true,
+				"code": 200,
+				"message": "성공",
+				"result": {
+					"name": "모임 기록 제목",
+					"startDate": 1676052480,
+					"locationName": "모임 기록 장소 이름",
+					"users": [
+						{
+							"userId": 3,
+							"userName": "몽몽"
+						},
+						{
+							"userId": 19,
+							"userName": "몽몽2"
+						}
+					],
+					"meetingActivityDtos": [
+						{
+							"meetingActivityId": 1,
+							"name": "활동",
+							"money": 0,
+							"participants": [
+								3,
+								19
+							],
+							"images": [
+								{
+									"id" : 1,
+									"url" : "이미지 url"
+								}
+							]
+						}
+					]
+				}
+			}
+			""")
+	}))
+	@ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "요청 실패 - 모임 기록(일정) id가 잘못되었습니다", value = """
+			{
+				"isSuccess": false,
+				"code": 404,
+				"message": "스케줄을 찾을 수 없습니다."
+			}
+			""")
+	}))
 	@Operation(summary = "모임 기록 조회", description = "모임 기록 조회 API")
-	@GetMapping("/{meetingScheduleId}")
 	@ApiErrorCodes(value = {
 		ErrorStatus.EMPTY_ACCESS_KEY,
 		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
