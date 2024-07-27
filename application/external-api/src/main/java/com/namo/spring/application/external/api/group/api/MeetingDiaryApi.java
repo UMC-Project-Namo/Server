@@ -40,7 +40,7 @@ public interface MeetingDiaryApi {
 				"isSuccess": true,
 				"code": 0,
 				"message": "string",
-				"result": {}
+				"result": null
 			}
 			""")
 	}))
@@ -74,7 +74,7 @@ public interface MeetingDiaryApi {
 				"isSuccess": true,
 				"code": 0,
 				"message": "string",
-				"result": {}
+				"result": null
 			}
 			""")
 	}))
@@ -172,7 +172,7 @@ public interface MeetingDiaryApi {
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
 	@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {
-		@ExampleObject(name = "모임 기록 조회 성공", value = """
+		@ExampleObject(name = "개인 페이지 월간 모임 기록 조회 성공", value = """
 			{
 				"isSuccess": true,
 				"code": 200,
@@ -192,7 +192,7 @@ public interface MeetingDiaryApi {
 							],
 							"categoryId": 31,
 							"color": 4,
-							"placeName": "모임 일정 장소 이름"
+							"placeName": "모임 일정 장소"
 						}
 					],
 					"currentPage": 0,
@@ -218,6 +218,37 @@ public interface MeetingDiaryApi {
 		@AuthenticationPrincipal SecurityUserDetails user
 	);
 
+	@Operation(summary = "[개인 페이지] 모임 기록 상세 조회", description = "모임 기록 상세 조회 API")
+	@ApiErrorCodes(value = {
+		ErrorStatus.EMPTY_ACCESS_KEY,
+		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
+		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
+		ErrorStatus.INTERNET_SERVER_ERROR
+	})
+	@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "개인 페이지 모임 기록 상세 조회 성공", value = """
+			{
+				"isSuccess": true,
+				"code": 200,
+				"message": "성공",
+				"result": {
+					"scheduleId": 29,
+					"name": "모임 일정 제목",
+					"startDate": 1676052480,
+					"contents": "모임 일정에 해당하는 메모",
+					"images": [
+						{
+							"id" : 1,
+							"url" : "이미지 url"
+						}
+					],
+					"categoryId": 31,
+					"color": 4,
+					"placeName": "모임 일정 장소"
+				}
+			}
+			""")
+	}))
 	public ResponseDto<MeetingDiaryResponse.DiaryDto> getMeetingDiaryDetail(
 		@Parameter(description = "모임 일정 ID") @PathVariable Long moimScheduleId,
 		@AuthenticationPrincipal SecurityUserDetails user
