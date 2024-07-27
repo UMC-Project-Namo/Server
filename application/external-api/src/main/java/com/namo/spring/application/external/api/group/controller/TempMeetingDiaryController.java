@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.namo.spring.application.external.api.group.dto.MeetingDiaryRequest;
 import com.namo.spring.application.external.api.group.dto.MeetingDiaryResponse;
-import com.namo.spring.application.external.api.group.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.group.facade.MeetingDiaryFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
@@ -136,7 +135,7 @@ public class TempMeetingDiaryController {
 	})
 	public ResponseDto<Object> createMeetingMemo(
 		@Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
-		@RequestBody MeetingScheduleRequest.PostMeetingScheduleTextDto meetingScheduleText,
+		@RequestBody MeetingDiaryRequest.PostMeetingScheduleTextDto meetingScheduleText,
 		@AuthenticationPrincipal SecurityUserDetails user
 	) {
 		meetingDiaryFacade.createMeetingMemo(meetingScheduleId,

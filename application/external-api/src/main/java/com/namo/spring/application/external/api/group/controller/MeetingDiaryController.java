@@ -22,15 +22,11 @@ import com.namo.spring.application.external.api.group.api.MeetingDiaryApi;
 import com.namo.spring.application.external.api.group.dto.GroupDiaryResponse;
 import com.namo.spring.application.external.api.group.dto.MeetingDiaryRequest;
 import com.namo.spring.application.external.api.group.dto.MeetingDiaryResponse;
-import com.namo.spring.application.external.api.group.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.group.facade.MeetingDiaryFacade;
-import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.application.external.global.utils.Converter;
-import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.response.ResponseDto;
 
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -155,18 +151,13 @@ public class MeetingDiaryController implements MeetingDiaryApi {
 		return ResponseDto.onSuccess(null);
 	}
 
-	// ver1
-	@Operation(summary = "모임 기록 텍스트 추가 (모임 메모 추가)", description = "모임 메모 추가 API")
+	/**
+	 * [이름 규칙 적용 x] [개인 페이지] 모임 메모 추가
+	 */
 	@PatchMapping("/text/{moimScheduleId}")
-	@ApiErrorCodes(value = {
-		ErrorStatus.EMPTY_ACCESS_KEY,
-		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-		ErrorStatus.INTERNET_SERVER_ERROR
-	})
 	public ResponseDto<Object> createMeetingMemo(
-		@Parameter(description = "모임 일정 ID") @PathVariable Long moimScheduleId,
-		@RequestBody MeetingScheduleRequest.PostMeetingScheduleTextDto meetingScheduleText,
+		@PathVariable Long moimScheduleId,
+		@RequestBody MeetingDiaryRequest.PostMeetingScheduleTextDto meetingScheduleText,
 		@AuthenticationPrincipal SecurityUserDetails user
 	) {
 		meetingDiaryFacade.createMeetingMemo(moimScheduleId,

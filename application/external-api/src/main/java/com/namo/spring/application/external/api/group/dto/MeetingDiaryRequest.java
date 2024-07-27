@@ -2,6 +2,9 @@ package com.namo.spring.application.external.api.group.dto;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,5 +32,14 @@ public class MeetingDiaryRequest {
 			this.money = Integer.valueOf(money);
 			this.participants = participants;
 		}
+	}
+
+	@Getter
+	@AllArgsConstructor
+	@NoArgsConstructor
+	@Schema(title = "개인 페이지 모임 메모 추가")
+	public static class PostMeetingScheduleTextDto {
+		@Schema(description = "개인 페이지 모임 메모", example = "개인 페이지 모임 메모 예시")
+		private String text;
 	}
 }

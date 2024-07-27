@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.namo.spring.application.external.api.group.dto.GroupDiaryResponse;
+import com.namo.spring.application.external.api.group.dto.MeetingDiaryRequest;
 import com.namo.spring.application.external.api.group.dto.MeetingDiaryResponse;
-import com.namo.spring.application.external.api.group.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.core.common.code.status.ErrorStatus;
@@ -254,7 +254,7 @@ public interface MeetingDiaryApi {
 		@AuthenticationPrincipal SecurityUserDetails user
 	);
 
-	@Operation(summary = "개인 페이지 모임 기록 삭제", description = "일정에 대한 모임 활동 기록 삭제 API")
+	@Operation(summary = "[개인 페이지] 모임 기록 삭제", description = "일정에 대한 모임 활동 기록 삭제 API")
 	@ApiErrorCodes(value = {
 		ErrorStatus.EMPTY_ACCESS_KEY,
 		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
@@ -343,9 +343,42 @@ public interface MeetingDiaryApi {
 		@Parameter(description = "모임 활동 ID") @PathVariable Long activityId
 	);
 
+	@Operation(summary = "[개인 페이지] 모임 메모 추가)", description = "모임 메모 추가 API")
+	@ApiErrorCodes(value = {
+		ErrorStatus.EMPTY_ACCESS_KEY,
+		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
+		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
+		ErrorStatus.INTERNET_SERVER_ERROR
+	})
+	@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "개인 페이지 모임 메모 추가 성공", value = """
+			{
+				"isSuccess": true,
+				"code": 200,
+				"message": "성공",
+				"result": null
+			}
+			""")
+	}))
+	@ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "요청 실패 - 모임 일정 id가 잘못되었습니다.", value = """
+			{
+				"isSuccess": false,
+				"code": 404,
+				"message": "스케줄을 찾을 수 없습니다."
+			}
+			"""),
+		@ExampleObject(name = "요청 실패 - 모임 일정 참여자가 아닙니다.", value = """
+			{
+				"isSuccess": false,
+				"code": 404,
+				"message": "그룹 스케줄 구성원이 아닙니다."
+			}
+			""")
+	}))
 	public ResponseDto<Object> createMeetingMemo(
 		@Parameter(description = "모임 일정 ID") @PathVariable Long moimScheduleId,
-		@RequestBody MeetingScheduleRequest.PostMeetingScheduleTextDto meetingScheduleText,
+		@RequestBody MeetingDiaryRequest.PostMeetingScheduleTextDto meetingScheduleText,
 		@AuthenticationPrincipal SecurityUserDetails user
 	);
 
