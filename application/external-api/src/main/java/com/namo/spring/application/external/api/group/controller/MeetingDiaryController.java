@@ -92,16 +92,12 @@ public class MeetingDiaryController implements MeetingDiaryApi {
 		return ResponseDto.onSuccess(groupDiaryDto);
 	}
 
-	@Operation(summary = "월간 모임 기록 조회", description = "월간 모임 기록 조회 API")
+	/**
+	 * [개인 페이지] 월간 모임 기록 조회
+	 */
 	@GetMapping("/month/{month}")
-	@ApiErrorCodes(value = {
-		ErrorStatus.EMPTY_ACCESS_KEY,
-		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-		ErrorStatus.INTERNET_SERVER_ERROR
-	})
 	public ResponseDto<MeetingDiaryResponse.SliceDiaryDto<MeetingDiaryResponse.DiaryDto>> findMonthMeetingDiary(
-		@Parameter(description = "조회 일자", example = "{년},{월}") @PathVariable("month") String month,
+		@PathVariable("month") String month,
 		Pageable pageable,
 		@AuthenticationPrincipal SecurityUserDetails user
 	) {
