@@ -133,17 +133,12 @@ public class MeetingDiaryController implements MeetingDiaryApi {
 		return ResponseDto.onSuccess(null);
 	}
 
-	// ver1
-	@Operation(summary = "모임 기록 전체 삭제", description = "일정에 대한 모임 기록 전체 삭제 API")
+	/**
+	 * [이름 규칙 적용 x] 모임 기록 삭제
+	 */
 	@DeleteMapping("/all/{moimScheduleId}")
-	@ApiErrorCodes(value = {
-		ErrorStatus.EMPTY_ACCESS_KEY,
-		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-		ErrorStatus.INTERNET_SERVER_ERROR
-	})
 	public ResponseDto<Object> removeMeetingDiary(
-		@Parameter(description = "모임 일정 ID") @PathVariable Long moimScheduleId
+		@PathVariable Long moimScheduleId
 	) {
 		meetingDiaryFacade.removeMeetingDiary(moimScheduleId);
 		return ResponseDto.onSuccess(null);
