@@ -95,16 +95,12 @@ public class TempMeetingDiaryController implements TempMeetingDiaryApi {
 		return ResponseDto.onSuccess(null);
 	}
 
-	@Operation(summary = "모임 기록 전체 삭제", description = "일정에 대한 모임 기록 전체 삭제 API")
+	/**
+	 * 모임 기록 삭제
+	 */
 	@DeleteMapping("/all/{meetingScheduleId}")
-	@ApiErrorCodes(value = {
-		ErrorStatus.EMPTY_ACCESS_KEY,
-		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-		ErrorStatus.INTERNET_SERVER_ERROR
-	})
 	public ResponseDto<Object> removeMeetingDiary(
-		@Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId
+		@PathVariable Long meetingScheduleId
 	) {
 		meetingDiaryFacade.removeMeetingDiary(meetingScheduleId);
 		return ResponseDto.onSuccess(null);
