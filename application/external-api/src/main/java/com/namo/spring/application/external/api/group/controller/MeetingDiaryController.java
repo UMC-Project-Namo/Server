@@ -46,8 +46,9 @@ public class MeetingDiaryController implements MeetingDiaryApi {
 	private final MeetingDiaryFacade meetingDiaryFacade;
 	private final Converter converter;
 
-	// ver1
-	//모임 활동 추가
+	/**
+	 * [이름 규칙 적용 x ] 모임 활동 추가
+	 */
 	@PostMapping(value = "/{moimScheduleId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseDto<Void> createMeetingActivity(
 		@PathVariable Long moimScheduleId,
@@ -62,21 +63,17 @@ public class MeetingDiaryController implements MeetingDiaryApi {
 		return ResponseDto.onSuccess(null);
 	}
 
-	@Operation(summary = "모임 기록 수정", description = "모임 기록 수정 API")
+	/**
+	 * 모임 활동 수정
+	 */
 	@PatchMapping(value = "/{activityId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ApiErrorCodes(value = {
-		ErrorStatus.EMPTY_ACCESS_KEY,
-		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-		ErrorStatus.INTERNET_SERVER_ERROR
-	})
-	public ResponseDto<Object> updateMeetingDiary(
-		@Parameter(description = "수정하고자 하는 활동 ID") @PathVariable Long activityId,
-		@Parameter(description = "추가할 모임 활동 이미지") @RequestPart(required = false) List<MultipartFile> createImages,
-		@Parameter(description = "삭제할 기록 이미지 ID") @RequestParam(required = false) List<Long> deleteImageIds,
-		@Parameter(description = "모임 기록명") @RequestParam String activityName,
-		@Parameter(description = "모임 회비") @RequestParam String activityMoney,
-		@Parameter(description = "참여자", example = "1, 2") @RequestParam List<Long> participantUserIds
+	public ResponseDto<Object> updateMeetingActivity(
+		@PathVariable Long activityId,
+		@RequestPart(required = false) List<MultipartFile> createImages,
+		@RequestParam(required = false) List<Long> deleteImageIds,
+		@RequestParam String activityName,
+		@RequestParam String activityMoney,
+		@RequestParam List<Long> participantUserIds
 	) {
 		MeetingDiaryRequest.LocationDto locationDto = new MeetingDiaryRequest.LocationDto(activityName, activityMoney,
 			participantUserIds);
