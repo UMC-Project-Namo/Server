@@ -107,15 +107,10 @@ public class MeetingDiaryController implements MeetingDiaryApi {
 		return ResponseDto.onSuccess(diaryDto);
 	}
 
-	// ver1
-	@Operation(summary = "모임 기록 상세 조회", description = "모임 기록 상세 조회 API")
+	/**
+	 * [이름 규칙 적용 x] [개인 페이지] 모임 기록 상세 조회
+	 */
 	@GetMapping("/detail/{moimScheduleId}")
-	@ApiErrorCodes(value = {
-		ErrorStatus.EMPTY_ACCESS_KEY,
-		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-		ErrorStatus.INTERNET_SERVER_ERROR
-	})
 	public ResponseDto<MeetingDiaryResponse.DiaryDto> getMeetingDiaryDetail(
 		@Parameter(description = "모임 일정 ID") @PathVariable Long moimScheduleId,
 		@AuthenticationPrincipal SecurityUserDetails user
