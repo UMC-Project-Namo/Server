@@ -83,11 +83,4 @@ public class MeetingScheduleRequest {
 		private Long meetingScheduleId;
 		private List<Integer> alarmDates;
 	}
-
-	@Getter
-	@AllArgsConstructor
-	@NoArgsConstructor
-	public static class PostMeetingScheduleTextDto {
-		private String text;
-	}
 }
