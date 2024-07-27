@@ -3,7 +3,6 @@ package com.namo.spring.application.external.api.group.api;
 import java.util.List;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -217,14 +216,39 @@ public interface TempMeetingDiaryApi {
 		@Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId
 	);
 
-	@Operation(summary = "모임 기록 텍스트 추가 (모임 메모 추가)", description = "모임 메모 추가 API")
-	@PatchMapping("/text/{meetingScheduleId}")
+	@Operation(summary = "[개인 페이지] 모임 메모 추가)", description = "모임 메모 추가 API")
 	@ApiErrorCodes(value = {
 		ErrorStatus.EMPTY_ACCESS_KEY,
 		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
+	@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "개인 페이지 모임 메모 추가 성공", value = """
+			{
+				"isSuccess": true,
+				"code": 200,
+				"message": "성공",
+				"result": null
+			}
+			""")
+	}))
+	@ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "요청 실패 - 모임 일정 id가 잘못되었습니다.", value = """
+			{
+				"isSuccess": false,
+				"code": 404,
+				"message": "스케줄을 찾을 수 없습니다."
+			}
+			"""),
+		@ExampleObject(name = "요청 실패 - 모임 일정 참여자가 아닙니다.", value = """
+			{
+				"isSuccess": false,
+				"code": 404,
+				"message": "그룹 스케줄 구성원이 아닙니다."
+			}
+			""")
+	}))
 	public ResponseDto<Object> createMeetingMemo(
 		@Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
 		@RequestBody MeetingDiaryRequest.PostMeetingScheduleTextDto meetingScheduleText,
