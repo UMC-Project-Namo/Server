@@ -159,14 +159,39 @@ public interface TempMeetingDiaryApi {
 		@AuthenticationPrincipal SecurityUserDetails user
 	);
 
-	@Operation(summary = "개인 페이지 모임 기록 삭제", description = "일정에 대한 모임 활동 기록 삭제 API")
-	@DeleteMapping("/person/{meetingScheduleId}")
+	@Operation(summary = "[개인 페이지] 모임 기록 삭제", description = "일정에 대한 모임 활동 기록 삭제 API")
 	@ApiErrorCodes(value = {
 		ErrorStatus.EMPTY_ACCESS_KEY,
 		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
+	@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "개인 페이지 모임 기록 삭제 성공", value = """
+			{
+				"isSuccess": true,
+				"code": 200,
+				"message": "성공",
+				"result": null
+			}
+			""")
+	}))
+	@ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "요청 실패 - 모임 일정 id가 잘못되었습니다. ", value = """
+			{
+				"isSuccess": false,
+				"code": 404,
+				"message": "스케줄을 찾을 수 없습니다."
+			}
+			"""),
+		@ExampleObject(name = "요청 실패 - 모임 일정 참여자가 아닙니다. ", value = """
+			{
+				"isSuccess": false,
+				"code": 404,
+				"message": "그룹 스케줄 구성원이 아닙니다."
+			}
+			""")
+	}))
 	public ResponseDto<Object> removePersonMeetingDiary(
 		@Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
 		@AuthenticationPrincipal SecurityUserDetails user
