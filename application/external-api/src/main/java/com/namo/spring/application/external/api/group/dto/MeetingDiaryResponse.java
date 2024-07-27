@@ -6,6 +6,8 @@ import com.namo.spring.application.external.api.group.converter.GroupDiaryRespon
 import com.namo.spring.core.common.utils.DateUtil;
 import com.namo.spring.db.mysql.domains.group.domain.MoimMemo;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -65,11 +67,17 @@ public class MeetingDiaryResponse {
 	@Getter
 	@Builder
 	@AllArgsConstructor
+	@Schema(title = "개인 페이지 모임 기록 월별 조회")
 	public static class SliceDiaryDto<T> {
+		@Schema(description = "개인 페이지 모임 기록 상세")
 		private List<T> content;
+		@Schema(description = "현재 페이지 번호 (0~)")
 		private int currentPage;
+		@Schema(description = "한 페이지에 표시될 항목 수")
 		private int size;
+		@Schema(description = "현재 페이지가 첫 페이지인지")
 		private boolean first;
+		@Schema(description = "현재 페이지가 마지막 페이지인지")
 		private boolean last;
 	}
 
@@ -77,13 +85,21 @@ public class MeetingDiaryResponse {
 	@Builder
 	@AllArgsConstructor
 	public static class DiaryDto {
+		@Schema(description = "일정 id")
 		private Long scheduleId;
+		@Schema(description = "모임 일정 title")
 		private String name;
+		@Schema(description = "모임 일정 시작 날짜 (Unix timestamp)")
 		private Long startDate;
+		@Schema(description = "모임 일정에 해당하는 메모")
 		private String contents;
+		@Schema(description = "모임 활동 이미지 (3개)")
 		private List<MeetingDiaryImageDto> images;
+		@Schema(description = "카테고리 id")
 		private Long categoryId;
+		@Schema(description = "카테고리 color")
 		private Long color;
+		@Schema(description = "장소 이름")
 		private String placeName;
 	}
 
@@ -91,7 +107,9 @@ public class MeetingDiaryResponse {
 	@Builder
 	@AllArgsConstructor
 	public static class MeetingDiaryImageDto {
+		@Schema(description = "이미지 id")
 		private Long id;
+		@Schema(description = "이미지 url")
 		private String url;
 	}
 }

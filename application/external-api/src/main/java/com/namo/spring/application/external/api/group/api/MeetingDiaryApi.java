@@ -164,6 +164,54 @@ public interface MeetingDiaryApi {
 		@Parameter(description = "모임 기록 ID") @PathVariable("moimScheduleId") Long moimScheduleId
 	);
 
+	@Operation(summary = "[개인 페이지] 월간 모임 기록 조회", description = "월간 모임 기록 조회 API")
+	@ApiErrorCodes(value = {
+		ErrorStatus.EMPTY_ACCESS_KEY,
+		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
+		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
+		ErrorStatus.INTERNET_SERVER_ERROR
+	})
+	@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "모임 기록 조회 성공", value = """
+			{
+				"isSuccess": true,
+				"code": 200,
+				"message": "성공",
+				"result": {
+					"content": [
+						{
+							"scheduleId": 29,
+							"name": "모임 일정 제목",
+							"startDate": 1676052480,
+							"contents": "모임 일정에 해당하는 메모",
+							"images": [
+								{
+									"id" : 1,
+									"url" : "이미지 url"
+								}
+							],
+							"categoryId": 31,
+							"color": 4,
+							"placeName": "모임 일정 장소 이름"
+						}
+					],
+					"currentPage": 0,
+					"size": 4,
+					"first": true,
+					"last": true
+				}
+			}
+			""")
+	}))
+	@ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "요청 실패 - 유효한 날짜를 조회 일자에 적어주세요", value = """
+			{
+				"isSuccess": false,
+				"code": 404,
+				"message": "유효한 날짜 값을 입력해주세요"
+			}
+			""")
+	}))
 	public ResponseDto<MeetingDiaryResponse.SliceDiaryDto<MeetingDiaryResponse.DiaryDto>> findMonthMeetingDiary(
 		@Parameter(description = "조회 일자", example = "{년},{월}") @PathVariable("month") String month,
 		Pageable pageable,
