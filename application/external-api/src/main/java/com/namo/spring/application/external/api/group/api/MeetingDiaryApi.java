@@ -41,7 +41,7 @@ public interface MeetingDiaryApi {
 				"code": 0,
 				"message": "string",
 				"result": {}
-			}		
+			}
 			""")
 	}))
 	@ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json", examples = {
@@ -61,12 +61,45 @@ public interface MeetingDiaryApi {
 		@Parameter(description = "참여자", example = "1, 2") @RequestParam List<Long> participantUserIds
 	);
 
+	@Operation(summary = "모임 활동 수정", description = "모임 활동 수정 API")
+	@ApiErrorCodes(value = {
+		ErrorStatus.EMPTY_ACCESS_KEY,
+		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
+		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
+		ErrorStatus.INTERNET_SERVER_ERROR
+	})
+	@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "모임 활동 수정 성공", value = """
+			{
+				"isSuccess": true,
+				"code": 0,
+				"message": "string",
+				"result": {}
+			}
+			""")
+	}))
+	@ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json", examples = {
+		@ExampleObject(name = "요청 실패 - 모임 활동 id가 잘못되었습니다", value = """
+			{
+				"isSuccess": false,
+				"code": 404,
+				"message": "모임 활동을 찾을 수 없습니다."
+			}
+			"""),
+		@ExampleObject(name = "요청 실패 - 모임 활동 이미지 id가 잘못되었습니다", value = """
+			{
+				"isSuccess": false,
+				"code": 404,
+				"message": "모임 활동 이미지를 찾을 수 없습니다."
+			}
+			""")
+	}))
 	public ResponseDto<Object> updateMeetingActivity(
 		@Parameter(description = "수정하고자 하는 활동 ID") @PathVariable Long activityId,
 		@Parameter(description = "추가할 모임 활동 이미지") @RequestPart(required = false) List<MultipartFile> createImages,
-		@Parameter(description = "삭제할 기록 이미지 ID") @RequestParam(required = false) List<Long> deleteImageIds,
-		@Parameter(description = "모임 기록명") @RequestParam String activityName,
-		@Parameter(description = "모임 회비") @RequestParam String activityMoney,
+		@Parameter(description = "삭제할 모임 활동 이미지 ID") @RequestParam(required = false) List<Long> deleteImageIds,
+		@Parameter(description = "모임 활동명") @RequestParam String activityName,
+		@Parameter(description = "모임 활동 회비") @RequestParam String activityMoney,
 		@Parameter(description = "참여자", example = "1, 2") @RequestParam List<Long> participantUserIds
 	);
 

@@ -70,7 +70,8 @@ public enum ErrorStatus implements BaseErrorCode {
 	NOT_FOUND_GROUP_AND_USER_FAILURE(HttpStatus.NOT_FOUND, "그룹 구성원이 아닙니다."),
 	NOT_FOUND_GROUP_SCHEDULE_AND_USER_FAILURE(HttpStatus.NOT_FOUND, "그룹 스케줄 구성원이 아닙니다."),
 	NOT_FOUND_GROUP_MEMO_FAILURE(HttpStatus.NOT_FOUND, "모임 메모를 찾을 수 없습니다."),
-	NOT_FOUND_GROUP_MEMO_LOCATION_FAILURE(HttpStatus.NOT_FOUND, "모임 장소를 찾을 수 없습니다."),
+	NOT_FOUND_GROUP_MEMO_LOCATION_FAILURE(HttpStatus.NOT_FOUND, "모임 활동을 찾을 수 없습니다."),
+	NOT_FOUND_ACTIVITY_IMG_FAILURE(HttpStatus.NOT_FOUND, "모임 활동 이미지를 찾을 수 없습니다."),
 	NOT_FOUND_COLOR(HttpStatus.NOT_FOUND, "색깔을 찾을 수 없습니다."),
 	NOT_FOUND_IMAGE(HttpStatus.NOT_FOUND, "이미지를 찾을 수 없습니다."),
 

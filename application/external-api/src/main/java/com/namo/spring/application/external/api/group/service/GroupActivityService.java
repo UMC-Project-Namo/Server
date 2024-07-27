@@ -93,7 +93,7 @@ public class GroupActivityService {
 
 	public MoimMemoLocationImg getMoimMemoLocationImg(Long imgId) {
 		return moimMemoLocationImgRepository.findById(imgId)
-			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_GROUP_MEMO_LOCATION_FAILURE));
+			.orElseThrow(() -> new GroupException(ErrorStatus.NOT_FOUND_ACTIVITY_IMG_FAILURE));
 	}
 
 }
