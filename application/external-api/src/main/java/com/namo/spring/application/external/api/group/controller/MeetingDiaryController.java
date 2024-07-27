@@ -144,16 +144,12 @@ public class MeetingDiaryController implements MeetingDiaryApi {
 		return ResponseDto.onSuccess(null);
 	}
 
-	@Operation(summary = "모임 활동 삭제", description = "모임 활동 삭제 API")
+	/**
+	 * 모임 활동 삭제
+	 */
 	@DeleteMapping("/{activityId}")
-	@ApiErrorCodes(value = {
-		ErrorStatus.EMPTY_ACCESS_KEY,
-		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-		ErrorStatus.INTERNET_SERVER_ERROR
-	})
 	public ResponseDto<Object> removeMeetingActivity(
-		@Parameter(description = "모임 활동 ID") @PathVariable Long activityId
+		@PathVariable Long activityId
 	) {
 		meetingDiaryFacade.removeMeetingActivity(activityId);
 		return ResponseDto.onSuccess(null);
