@@ -21,11 +21,17 @@ public class MeetingDiaryResponse {
 	@AllArgsConstructor
 	@Getter
 	@Builder
+	@Schema(title = "모임 기록 조회")
 	public static class MeetingDiaryDto {
+		@Schema(description = "모임 기록 제목")
 		private String name;
+		@Schema(description = "모임 기록 시작 날짜 (Unix timestamp)")
 		private Long startDate;
+		@Schema(description = "모임 기록 장소")
 		private String locationName;
+		@Schema(description = "모임 참여자 list")
 		private List<MeetingUserDto> users;
+		@Schema(description = "모임 활동 list")
 		private List<MeetingActivityDto> meetingActivityDtos;
 
 		public static MeetingDiaryDto fromMeetingMemo(MoimMemo meetingMemo,
@@ -49,7 +55,9 @@ public class MeetingDiaryResponse {
 	@Getter
 	@Builder
 	public static class MeetingUserDto {
+		@Schema(description = "사용자 id")
 		private Long userId;
+		@Schema(description = "사용자 이름")
 		private String userName;
 	}
 
@@ -57,11 +65,26 @@ public class MeetingDiaryResponse {
 	@Getter
 	@Builder
 	public static class MeetingActivityDto {
+		@Schema(description = "모임 활동 id")
 		private Long meetingActivityId;
+		@Schema(description = "모임 활동 제목")
 		private String name;
+		@Schema(description = "모임 활동 회비")
 		private Integer money;
+		@Schema(description = "모임 활동 참여자 id")
 		private List<Long> participants;
-		private List<String> urls;
+		@Schema(description = "모임 활동 이미지 list")
+		private List<MeetingActivityImageDto> images;
+	}
+
+	@AllArgsConstructor
+	@Getter
+	@Builder
+	public static class MeetingActivityImageDto {
+		@Schema(description = "이미지 id")
+		private Long id;
+		@Schema(description = "이미지 url")
+		private String url;
 	}
 
 	@Getter
