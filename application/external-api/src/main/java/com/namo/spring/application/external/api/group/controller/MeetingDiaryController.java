@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.namo.spring.application.external.api.group.api.MeetingDiaryApi;
 import com.namo.spring.application.external.api.group.dto.GroupDiaryResponse;
 import com.namo.spring.application.external.api.group.dto.MeetingDiaryRequest;
 import com.namo.spring.application.external.api.group.dto.MeetingDiaryResponse;
@@ -41,25 +42,19 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/group/diaries")
-public class MeetingDiaryController {
+public class MeetingDiaryController implements MeetingDiaryApi {
 	private final MeetingDiaryFacade meetingDiaryFacade;
 	private final Converter converter;
 
 	// ver1
-	@Operation(summary = "모임 기록 생성", description = "모임 기록 생성 API")
+	//모임 활동 추가
 	@PostMapping(value = "/{moimScheduleId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ApiErrorCodes(value = {
-		ErrorStatus.EMPTY_ACCESS_KEY,
-		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-		ErrorStatus.INTERNET_SERVER_ERROR
-	})
-	public ResponseDto<Void> createMeetingDiary(
-		@Parameter(description = "모임 일정 ID") @PathVariable Long moimScheduleId,
-		@Parameter(description = "추가할 모임 활동 이미지") @RequestPart(required = false) List<MultipartFile> createImages,
-		@Parameter(description = "모임 기록명") @RequestParam String activityName,
-		@Parameter(description = "모임 회비") @RequestParam String activityMoney,
-		@Parameter(description = "참여자", example = "1, 2") @RequestParam List<Long> participantUserIds
+	public ResponseDto<Void> createMeetingActivity(
+		@PathVariable Long moimScheduleId,
+		@RequestPart(required = false) List<MultipartFile> createImages,
+		@RequestParam String activityName,
+		@RequestParam String activityMoney,
+		@RequestParam List<Long> participantUserIds
 	) {
 		MeetingDiaryRequest.LocationDto locationDto = new MeetingDiaryRequest.LocationDto(activityName, activityMoney,
 			participantUserIds);
