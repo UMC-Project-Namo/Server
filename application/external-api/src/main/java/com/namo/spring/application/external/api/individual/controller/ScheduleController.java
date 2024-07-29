@@ -3,7 +3,6 @@ package com.namo.spring.application.external.api.individual.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -86,12 +85,12 @@ public class ScheduleController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<List<ScheduleResponse.GetScheduleDto>> getGroupSchedulesByUser(
+	public ResponseDto<List<ScheduleResponse.GetMeetingScheduleDto>> getMeetingSchedulesByUser(
 		@Parameter(description = "조회 일자", example = "{년},{월}") @PathVariable("month") String month,
 		@AuthenticationPrincipal SecurityUserDetails user
 	) {
 		List<LocalDateTime> localDateTimes = converter.convertLongToLocalDateTime(month);
-		List<ScheduleResponse.GetScheduleDto> userSchedule = scheduleFacade.getGroupSchedulesByUser(
+		List<ScheduleResponse.GetMeetingScheduleDto> userSchedule = scheduleFacade.getGroupSchedulesByUser(
 			user.getUserId(),
 			localDateTimes
 		);
