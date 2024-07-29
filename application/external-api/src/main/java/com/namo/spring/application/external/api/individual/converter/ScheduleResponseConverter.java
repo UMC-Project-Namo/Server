@@ -124,7 +124,7 @@ public class ScheduleResponseConverter {
 			.map(ScheduleResponseConverter::toGetScheduleRes)
 			.collect(Collectors.toList());
 		if (groupSchedules != null) {
-			results.addAll(groupSchedules.stream().map(ScheduleResponseConverter::toGetScheduleRes)
+			results.addAll(groupSchedules.stream().map(ScheduleResponseConverter::toMeetingScheduleRes)
 				.collect(Collectors.toList()));
 		}
 		return results;

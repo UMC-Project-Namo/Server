@@ -51,23 +51,14 @@ public class ScheduleFacade {
 	@Transactional
 	public ScheduleResponse.ScheduleIdDto createSchedule(ScheduleRequest.PostScheduleDto req, Long userId) {
 		User user = userService.getUser(userId);
-		Category category = categoryService.getCategory(req.getCategoryId());
-		categoryService.validateUsersCategory(userId, category);
-
-		Period period = ScheduleConverter.toPeriod(req);
-		periodService.checkValidDate(period);
-		Schedule schedule = ScheduleConverter.toSchedule(req, period, user, category);
-		List<Alarm> alarms = AlarmConverter.toAlarms(req, schedule);
-		alarmService.checkValidAlarm(alarms);
-		schedule.addAlarms(alarms);
-		Schedule saveSchedule = scheduleService.createSchedule(schedule);
-
-		return ScheduleResponseConverter.toScheduleIdRes(saveSchedule);
+		Category category = getValidatedCategory(req.getCategoryId(), userId);
+		Period period = getValidatedPeriod(req);
+		Schedule schedule = createScheduleWithAlarms(req, period, user, category);
+		return ScheduleResponseConverter.toScheduleIdRes(schedule);
 	}
 
 	@Transactional(readOnly = true)
-	public List<ScheduleResponse.GetScheduleDto> getSchedulesByUser(Long userId,
-		List<LocalDateTime> localDateTimes) {
+	public List<ScheduleResponse.GetScheduleDto> getSchedulesByUser(Long userId, List<LocalDateTime> localDateTimes) {
 		User user = userService.getUser(userId);
 		return scheduleService.getAllSchedulesByUser(user, localDateTimes.get(0), localDateTimes.get(1));
 	}
@@ -92,55 +83,71 @@ public class ScheduleFacade {
 	}
 
 	@Transactional
-	public ScheduleResponse.ScheduleIdDto modifySchedule(
-		Long scheduleId,
-		ScheduleRequest.PostScheduleDto req,
-		Long userId
-	) {
+	public ScheduleResponse.ScheduleIdDto modifySchedule(Long scheduleId, ScheduleRequest.PostScheduleDto req,
+		Long userId) {
 		Schedule schedule = scheduleService.getScheduleById(scheduleId);
-		Category category = categoryService.getCategory(req.getCategoryId());
-		categoryService.validateUsersCategory(userId, category);
-		Period period = ScheduleConverter.toPeriod(req);
-		periodService.checkValidDate(period);
-
-		schedule.clearAlarm();
-		List<Alarm> alarms = AlarmConverter.toAlarms(req, schedule);
-		alarmService.checkValidAlarm(alarms);
-		schedule.addAlarms(alarms);
-
-		schedule.updateSchedule(
-			req.getName(),
-			period,
-			category,
-			req.getX(),
-			req.getY(),
-			req.getLocationName(),
-			req.getKakaoLocationId()
-		);
-
+		Category category = getValidatedCategory(req.getCategoryId(), userId);
+		Period period = getValidatedPeriod(req);
+		updateScheduleWithAlarms(schedule, req, period, category);
 		return ScheduleResponseConverter.toScheduleIdRes(schedule);
 	}
 
 	@Transactional
 	public void removeSchedule(Long scheduleId, Integer kind, Long userId) {
-		if (kind == 0) { // 개인 스케줄 :스케줄 알람, 이미지 함께 삭제
-			Schedule schedule = scheduleService.getScheduleById(scheduleId);
-			alarmService.removeAlarmsBySchedule(schedule);
-			List<String> urls = schedule.getImages().stream()
-				.map(Image::getImgUrl)
-				.toList();
-			fileUtils.deleteImages(urls, FilePath.INVITATION_ACTIVITY_IMG);
-			imageService.removeImagesBySchedule(schedule);
-			scheduleService.removeSchedule(schedule);
-			return;
+		if (kind == 0) {
+			removePersonalSchedule(scheduleId);
+		} else {
+			removeGroupSchedule(scheduleId, userId);
 		}
+	}
+
+	private Category getValidatedCategory(Long categoryId, Long userId) {
+		Category category = categoryService.getCategory(categoryId);
+		categoryService.validateUsersCategory(userId, category);
+		return category;
+	}
+
+	private Period getValidatedPeriod(ScheduleRequest.PostScheduleDto req) {
+		Period period = ScheduleConverter.toPeriod(req);
+		periodService.checkValidDate(period);
+		return period;
+	}
+
+	private Schedule createScheduleWithAlarms(ScheduleRequest.PostScheduleDto req, Period period, User user,
+		Category category) {
+		Schedule schedule = ScheduleConverter.toSchedule(req, period, user, category);
+		List<Alarm> alarms = AlarmConverter.toAlarms(req, schedule);
+		alarmService.checkValidAlarm(alarms);
+		schedule.addAlarms(alarms);
+		return scheduleService.createSchedule(schedule);
+	}
+
+	private void updateScheduleWithAlarms(Schedule schedule, ScheduleRequest.PostScheduleDto req, Period period,
+		Category category) {
+		schedule.clearAlarm();
+		List<Alarm> alarms = AlarmConverter.toAlarms(req, schedule);
+		alarmService.checkValidAlarm(alarms);
+		schedule.addAlarms(alarms);
+		schedule.updateSchedule(req.getName(), period, category, req.getX(), req.getY(), req.getLocationName(),
+			req.getKakaoLocationId());
+	}
+
+	private void removePersonalSchedule(Long scheduleId) {
+		Schedule schedule = scheduleService.getScheduleById(scheduleId);
+		alarmService.removeAlarmsBySchedule(schedule);
+		List<String> urls = schedule.getImages().stream()
+			.map(Image::getImgUrl)
+			.toList();
+		fileUtils.deleteImages(urls, FilePath.INVITATION_ACTIVITY_IMG);
+		scheduleService.removeSchedule(schedule);
+	}
+
+	private void removeGroupSchedule(Long scheduleId, Long userId) {
 		User user = userService.getUser(userId);
 		MoimSchedule groupSchedule = groupScheduleService.getGroupScheduleWithGroupScheduleAndUsers(scheduleId);
 		MoimScheduleAndUser groupScheduleAndUser = groupScheduleAndUserService.getGroupScheduleAndUser(groupSchedule,
 			user);
-
 		groupScheduleAndUserService.removeGroupScheduleAlarm(groupScheduleAndUser);
 		groupScheduleAndUserService.removeGroupScheduleAndUserInPersonalSpace(groupScheduleAndUser);
 	}
-
 }

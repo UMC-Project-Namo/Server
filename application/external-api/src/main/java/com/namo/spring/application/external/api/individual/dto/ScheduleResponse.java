@@ -43,6 +43,26 @@ public class ScheduleResponse {
 	@NoArgsConstructor
 	@Builder
 	@AllArgsConstructor
+	public static class GetMonthlyScheduleDto {
+		private Long scheduleId;
+		private String name;
+		private Long startDate;
+		private Long endDate;
+		private List<Integer> alarmDate;
+		private Integer interval;
+		private Double x;
+		private Double y;
+		private String locationName;
+		private String kakaoLocationId;
+		private Long categoryId;
+		private Boolean hasDiary;
+		private boolean isMoimSchedule;
+	}
+
+	@Getter
+	@NoArgsConstructor
+	@Builder
+	@AllArgsConstructor
 	public static class GetMeetingScheduleDto {
 		private Long scheduleId;
 		private String name;
