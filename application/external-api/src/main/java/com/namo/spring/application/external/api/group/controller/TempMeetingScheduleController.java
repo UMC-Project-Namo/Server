@@ -1,15 +1,12 @@
 package com.namo.spring.application.external.api.group.controller;
 
+import com.namo.spring.application.external.api.group.api.TempMeetingScheduleApi;
 import com.namo.spring.application.external.api.group.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.group.dto.MeetingScheduleResponse;
 import com.namo.spring.application.external.api.group.facade.MeetingScheduleFacade;
-import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.application.external.global.utils.Converter;
-import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.response.ResponseDto;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,18 +22,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/temp/group/schedules")
-public class TempMeetingScheduleController {
+public class TempMeetingScheduleController implements TempMeetingScheduleApi {
     private final MeetingScheduleFacade meetingScheduleFacade;
     private final Converter converter;
 
-    @Operation(summary = "모임 일정 수정", description = "모임 일정 수정 API")
+    /**
+     * 네임 규칙 적용 - 모임 일정 수정
+     */
     @PatchMapping("")
-    @ApiErrorCodes(value = {
-            ErrorStatus.EMPTY_ACCESS_KEY,
-            ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-            ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-            ErrorStatus.INTERNET_SERVER_ERROR
-    })
     public ResponseDto<Long> modifyMeetingSchedule(
             @Valid @RequestBody MeetingScheduleRequest.PatchMeetingScheduleDto scheduleReq
     ) {
@@ -44,14 +37,10 @@ public class TempMeetingScheduleController {
         return ResponseDto.onSuccess(null);
     }
 
-    @Operation(summary = "모임 일정 카테고리 수정", description = "모임 일정 카테고리 수정 API")
+    /**
+     * 네임 규칙 적용 - 모임 일정 카테고리 수정
+     */
     @PatchMapping("/category")
-    @ApiErrorCodes(value = {
-            ErrorStatus.EMPTY_ACCESS_KEY,
-            ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-            ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-            ErrorStatus.INTERNET_SERVER_ERROR
-    })
     public ResponseDto<Long> modifyMeetingScheduleCategory(
             @Valid @RequestBody MeetingScheduleRequest.PatchMeetingScheduleCategoryDto scheduleReq,
             @AuthenticationPrincipal SecurityUserDetails user
@@ -60,67 +49,51 @@ public class TempMeetingScheduleController {
         return ResponseDto.onSuccess(null);
     }
 
-    @Operation(summary = "월간 모임 일정 조회", description = "월간 모임 일정 조회 API")
+    /**
+     * 네임 규칙 적용 - 월간 모임 일정 조회
+     */
     @GetMapping("/{groupId}/{month}")
-    @ApiErrorCodes(value = {
-            ErrorStatus.EMPTY_ACCESS_KEY,
-            ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-            ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-            ErrorStatus.INTERNET_SERVER_ERROR
-    })
-    public ResponseDto<List<MeetingScheduleResponse.MeetingScheduleDto>> getMonthMeetingSchedules(
-            @Parameter(description = "그룹 ID") @PathVariable("groupId") Long groupId,
-            @Parameter(description = "조회 일자", example = "{년},{월}") @PathVariable("month") String month,
+    public ResponseDto<List<MeetingScheduleResponse.GetMonthlyMeetingScheduleDto>> getMonthlyMeetingSchedules(
+            @PathVariable(name = "groupId") Long groupId,
+            @PathVariable(name = "month") String month,
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
         List<LocalDateTime> localDateTimes = converter.convertLongToLocalDateTime(month);
-        List<MeetingScheduleResponse.MeetingScheduleDto> schedules = meetingScheduleFacade.getMonthMeetingSchedules(
+        List<MeetingScheduleResponse.GetMonthlyMeetingScheduleDto> schedules = meetingScheduleFacade.getMonthlyMeetingSchedules(
                 groupId,
                 localDateTimes, user.getUserId());
         return ResponseDto.onSuccess(schedules);
     }
 
-    @Operation(summary = "모든 모임 일정 조회", description = "모든 모임 일정 조회 API")
+    /**
+     * 네임 규칙 적용 - 모든 모임 일정 조회
+     */
     @GetMapping("/{groupId}/all")
-    @ApiErrorCodes(value = {
-            ErrorStatus.EMPTY_ACCESS_KEY,
-            ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-            ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-            ErrorStatus.INTERNET_SERVER_ERROR
-    })
-    public ResponseDto<List<MeetingScheduleResponse.MeetingScheduleDto>> getAllMeetingSchedules(
-            @Parameter(description = "그룹 ID") @PathVariable("groupId") Long groupId,
+    public ResponseDto<List<MeetingScheduleResponse.GetAllMeetingScheduleDto>> getAllMeetingSchedules(
+            @PathVariable(name = "groupId") Long groupId,
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
-        List<MeetingScheduleResponse.MeetingScheduleDto> schedules
+        List<MeetingScheduleResponse.GetAllMeetingScheduleDto> schedules
                 = meetingScheduleFacade.getAllMeetingSchedules(groupId, user.getUserId());
         return ResponseDto.onSuccess(schedules);
     }
 
-    @Operation(summary = "모임 일정 삭제", description = "모임 일정 삭제 API")
+    /**
+     * 네임 규칙 적용 - 모임 일정 삭제
+     */
     @DeleteMapping("/{meetingScheduleId}")
-    @ApiErrorCodes(value = {
-            ErrorStatus.EMPTY_ACCESS_KEY,
-            ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-            ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-            ErrorStatus.INTERNET_SERVER_ERROR
-    })
     public ResponseDto<Long> removeMeetingSchedule(
-            @Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
+            @PathVariable(name = "meetingScheduleId") Long meetingScheduleId,
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
         meetingScheduleFacade.removeMeetingSchedule(meetingScheduleId, user.getUserId());
         return ResponseDto.onSuccess(null);
     }
 
-    @Operation(summary = "모임 일정 생성 알람", description = "모임 일정 생성 알람 API")
+    /**
+     * 네임 규칙 적용 - 모임 일정 알림 생성
+     */
     @PostMapping("/alarm")
-    @ApiErrorCodes(value = {
-            ErrorStatus.EMPTY_ACCESS_KEY,
-            ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-            ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-            ErrorStatus.INTERNET_SERVER_ERROR
-    })
     public ResponseDto<Void> createMeetingScheduleAlarm(
             @Valid @RequestBody MeetingScheduleRequest.PostMeetingScheduleAlarmDto postMeetingScheduleAlarmDto,
             @AuthenticationPrincipal SecurityUserDetails user
@@ -129,19 +102,15 @@ public class TempMeetingScheduleController {
         return ResponseDto.onSuccess(null);
     }
 
-    @Operation(summary = "모임 일정 변경 알람", description = "모임 일정 변경 알람 API")
+    /**
+     * 네임 규칙 적용 - 모임 일정 알림 수정
+     */
     @PatchMapping("/alarm")
-    @ApiErrorCodes(value = {
-            ErrorStatus.EMPTY_ACCESS_KEY,
-            ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-            ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-            ErrorStatus.INTERNET_SERVER_ERROR
-    })
     public ResponseDto<Void> modifyMeetingScheduleAlarm(
-            @Valid @RequestBody MeetingScheduleRequest.PostMeetingScheduleAlarmDto postMeetingScheduleAlarmDto,
+            @Valid @RequestBody MeetingScheduleRequest.PatchMeetingScheduleAlarmDto patchMeetingScheduleAlarmDto,
             @AuthenticationPrincipal SecurityUserDetails user
     ) {
-        meetingScheduleFacade.modifyMeetingScheduleAlarm(postMeetingScheduleAlarmDto, user.getUserId());
+        meetingScheduleFacade.modifyMeetingScheduleAlarm(patchMeetingScheduleAlarmDto, user.getUserId());
         return ResponseDto.onSuccess(null);
     }
 }
