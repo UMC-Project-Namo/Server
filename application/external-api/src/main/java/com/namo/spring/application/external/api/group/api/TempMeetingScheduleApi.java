@@ -177,7 +177,7 @@ public interface TempMeetingScheduleApi {
             	"message": "유저가 그룹에 포함되어 있지 않습니다."
             }
             """),}))
-    ResponseDto<List<MeetingScheduleResponse.MeetingScheduleDto>> getMonthMeetingSchedules(@Parameter(description = "그룹 ID") @PathVariable(name = "groupId") Long groupId, @Parameter(description = "조회할 일정의 연도와 월을 {연도},{월} 형식으로 입력합니다.", example = "2024,7") @PathVariable(name = "month") String month, @AuthenticationPrincipal SecurityUserDetails user);
+    ResponseDto<List<MeetingScheduleResponse.GetMonthlyMeetingScheduleDto>> getMonthlyMeetingSchedules(@Parameter(description = "그룹 ID") @PathVariable(name = "groupId") Long groupId, @Parameter(description = "조회할 일정의 연도와 월을 {연도},{월} 형식으로 입력합니다.", example = "2024,7") @PathVariable(name = "month") String month, @AuthenticationPrincipal SecurityUserDetails user);
 
     @Operation(summary = "모든 모임 일정 조회", description = "모든 모임 일정을 조회합니다.")
     @ApiErrorCodes(value = {ErrorStatus.EMPTY_ACCESS_KEY, ErrorStatus.EXPIRATION_ACCESS_TOKEN, ErrorStatus.EXPIRATION_REFRESH_TOKEN, ErrorStatus.INTERNET_SERVER_ERROR})
@@ -229,7 +229,7 @@ public interface TempMeetingScheduleApi {
             	"message": "유저가 그룹에 포함되어 있지 않습니다."
             }
             """)}))
-    ResponseDto<List<MeetingScheduleResponse.MeetingScheduleDto>> getAllMeetingSchedules(@Parameter(name = "groupId", description = "그룹 ID") @PathVariable(name = "groupId") Long groupId, @AuthenticationPrincipal SecurityUserDetails user);
+    ResponseDto<List<MeetingScheduleResponse.GetAllMeetingScheduleDto>> getAllMeetingSchedules(@Parameter(name = "groupId", description = "그룹 ID") @PathVariable(name = "groupId") Long groupId, @AuthenticationPrincipal SecurityUserDetails user);
 
     @Operation(summary = "모임 일정 알림 생성", description = "모임 일정에 대한 알림을 생성합니다.")
     @ApiErrorCodes(value = {ErrorStatus.EMPTY_ACCESS_KEY, ErrorStatus.EXPIRATION_ACCESS_TOKEN, ErrorStatus.EXPIRATION_REFRESH_TOKEN, ErrorStatus.INTERNET_SERVER_ERROR})
