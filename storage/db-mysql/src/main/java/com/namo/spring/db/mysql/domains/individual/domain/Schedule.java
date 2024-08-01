@@ -59,7 +59,7 @@ public class Schedule extends BaseTimeEntity {
 	@JoinColumn(name = "category_id")
 	private Category category;
 
-	@OneToMany(mappedBy = "schedule", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "schedule", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Image> images = new ArrayList<>();
 
 	@OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)

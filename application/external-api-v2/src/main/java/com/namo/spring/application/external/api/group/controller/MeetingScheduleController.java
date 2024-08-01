@@ -124,7 +124,7 @@ public class MeetingScheduleController {
 		return null;
 	}
 
-	@Operation(summary = "모임 일정 생성 알람", description = "모임 일정 생성 알람 API")
+	@Operation(summary = "모임 일정 생성 알림", description = "모임 일정 생성 알림 API")
 	@PostMapping("/alarm")
 	@ApiErrorCodes(value = {
 		ErrorStatus.EMPTY_ACCESS_KEY,
@@ -139,7 +139,7 @@ public class MeetingScheduleController {
 		return null;
 	}
 
-	@Operation(summary = "모임 일정 변경 알람", description = "모임 일정 변경 알람 API")
+	@Operation(summary = "모임 일정 변경 알림", description = "모임 일정 변경 알림 API")
 	@PatchMapping("/alarm")
 	@ApiErrorCodes(value = {
 		ErrorStatus.EMPTY_ACCESS_KEY,
