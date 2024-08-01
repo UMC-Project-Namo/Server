@@ -102,7 +102,9 @@ public class GroupDiaryResponseConverter {
 			.meetingActivityId(groupActivity.getId())
 			.name(groupActivity.getName())
 			.money(groupActivity.getTotalAmount())
-			.urls(urls)
+			.images(groupActivity.getMoimMemoLocationImgs().stream()
+				.map(GroupDiaryResponseConverter::toMeetingActivityImageDto)
+				.collect(Collectors.toList()))
 			.participants(participants)
 			.build();
 	}
@@ -128,8 +130,18 @@ public class GroupDiaryResponseConverter {
 			.build();
 	}
 
+	/**
+	 * v1
+	 */
 	private static GroupDiaryResponse.MoimActivityImageDto toGroupActivityImageDto(MoimMemoLocationImg image) {
 		return GroupDiaryResponse.MoimActivityImageDto.builder()
+			.id(image.getId())
+			.url(image.getUrl())
+			.build();
+	}
+
+	private static MeetingDiaryResponse.MeetingActivityImageDto toMeetingActivityImageDto(MoimMemoLocationImg image) {
+		return MeetingDiaryResponse.MeetingActivityImageDto.builder()
 			.id(image.getId())
 			.url(image.getUrl())
 			.build();

@@ -14,7 +14,6 @@ import com.namo.spring.application.external.api.group.converter.GroupMemoConvert
 import com.namo.spring.application.external.api.group.dto.GroupDiaryResponse;
 import com.namo.spring.application.external.api.group.dto.MeetingDiaryRequest;
 import com.namo.spring.application.external.api.group.dto.MeetingDiaryResponse;
-import com.namo.spring.application.external.api.group.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.group.service.GroupActivityService;
 import com.namo.spring.application.external.api.group.service.GroupMemoService;
 import com.namo.spring.application.external.api.group.service.GroupScheduleAndUserService;
@@ -173,7 +172,7 @@ public class MeetingDiaryFacade {
 
 	@Transactional(readOnly = false)
 	public void createMeetingMemo(Long groupScheduleId, Long userId,
-		MeetingScheduleRequest.PostMeetingScheduleTextDto groupScheduleText) {
+		MeetingDiaryRequest.PostMeetingScheduleTextDto groupScheduleText) {
 		MoimSchedule groupSchedule = groupScheduleService.getGroupSchedule(groupScheduleId);
 		User user = userService.getUser(userId);
 		MoimScheduleAndUser groupScheduleAndUser = groupScheduleAndUserService.getGroupScheduleAndUser(groupSchedule,
