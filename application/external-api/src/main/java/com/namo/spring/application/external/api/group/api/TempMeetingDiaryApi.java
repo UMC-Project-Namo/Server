@@ -60,6 +60,13 @@ public interface TempMeetingDiaryApi {
 		@Parameter(description = "활동 참여자", example = "1, 2") @RequestParam List<Long> participantUserIds
 	);
 
+	@Operation(summary = "모임 기록 조회", description = "모임 기록 조회 API")
+	@ApiErrorCodes(value = {
+		ErrorStatus.EMPTY_ACCESS_KEY,
+		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
+		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
+		ErrorStatus.INTERNET_SERVER_ERROR
+	})
 	@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {
 		@ExampleObject(name = "모임 기록 조회 성공", value = """
 			{
@@ -110,13 +117,6 @@ public interface TempMeetingDiaryApi {
 			}
 			""")
 	}))
-	@Operation(summary = "모임 기록 조회", description = "모임 기록 조회 API")
-	@ApiErrorCodes(value = {
-		ErrorStatus.EMPTY_ACCESS_KEY,
-		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-		ErrorStatus.INTERNET_SERVER_ERROR
-	})
 	public ResponseDto<MeetingDiaryResponse.MeetingDiaryDto> getMeetingDiary(
 		@Parameter(description = "모임 일정 ID") @PathVariable("meetingScheduleId") Long meetingScheduleId
 	);
