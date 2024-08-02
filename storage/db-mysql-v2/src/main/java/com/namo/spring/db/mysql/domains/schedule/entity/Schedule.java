@@ -48,7 +48,6 @@ public class Schedule extends BaseTimeEntity {
 	public Schedule(String title, Period period, Location location) {
 		if (!StringUtils.hasText(title))
 			throw new IllegalArgumentException("title은 null이거나 빈 문자열일 수 없습니다.");
-
 		this.title = title;
 		this.period = period;
 		this.location = location;
@@ -56,9 +55,9 @@ public class Schedule extends BaseTimeEntity {
 
 	public Schedule of(String title, Period period, Location location) {
 		return Schedule.builder()
-				.title(title)
-				.period(period)
-				.location(location)
-				.build();
+			.title(title)
+			.period(period)
+			.location(location)
+			.build();
 	}
 }

@@ -13,12 +13,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
-import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
-import com.namo.spring.db.mysql.domains.group.entity.Group;
+import com.namo.spring.db.mysql.domains.category.entity.Palette;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 
 import lombok.AccessLevel;
@@ -28,19 +25,21 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "meeting_schedule")
+@Table(name = "participants")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
-public class MeetingSchedule extends BaseTimeEntity {
+public class Participants {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", nullable = false)
 	private Long id;
 
+	@Column(name = "is_owner", nullable = false, columnDefinition = "TINYINT")
+	private int isOwner;
+
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "user_id", nullable = false)
-	private Member user;
+	@JoinColumn(name = "user_id")
+	private Member member;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "schedule_id", nullable = false)
@@ -51,20 +50,25 @@ public class MeetingSchedule extends BaseTimeEntity {
 	private Category category;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "group_id", nullable = false)
-	private Group group;
-
-	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Column(name = "custom_title", length = 50)
-	private String customTitle;
+	@JoinColumn(name = "palette_id", nullable = false)
+	private Palette palette;
 
 	@Builder
-	public MeetingSchedule(Member user, Schedule schedule, Category category, Group group, String customTitle) {
-		this.user = Objects.requireNonNull(user, "user은 null일 수 없습니다.");
+	public Participants(int isOwner, Member member, Schedule schedule, Category category, Palette palette) {
+		this.isOwner = Objects.requireNonNull(isOwner, "isOwner은 null일 수 없습니다.");
+		this.member = Objects.requireNonNull(member, "member은 null일 수 없습니다.");
 		this.schedule = Objects.requireNonNull(schedule, "schedule은 null일 수 없습니다.");
 		this.category = Objects.requireNonNull(category, "category은 null일 수 없습니다.");
-		this.group = Objects.requireNonNull(group, "group은 null일 수 없습니다.");
-		this.customTitle = customTitle;
+		this.palette = Objects.requireNonNull(palette, "palette은 null일 수 없습니다.");
 	}
 
+	public Participants of(int isOwner, Member member, Schedule schedule, Category category, Palette palette) {
+		return Participants.builder()
+			.isOwner(isOwner)
+			.member(member)
+			.schedule(schedule)
+			.category(category)
+			.palette(palette)
+			.build();
+	}
 }
