@@ -27,9 +27,6 @@ public class UserRequest {
 	@NoArgsConstructor
 	@Schema(description = "토큰 재발급 요청 DTO")
 	public static class ReissueDto {
-		@Schema(description = "재발급 요청을 위한 accessToken", example = "exampleAccessToken")
-		@NotBlank
-		private String accessToken;
 		@Schema(description = "재발급 요청을 위한 refreshToken", example = "exampleRefreshToken")
 		@NotBlank
 		private String refreshToken;

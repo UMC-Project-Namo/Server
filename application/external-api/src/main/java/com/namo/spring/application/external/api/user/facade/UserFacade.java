@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.json.simple.JSONObject;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -34,7 +35,6 @@ import com.namo.spring.application.external.api.user.dto.UserResponse;
 import com.namo.spring.application.external.api.user.helper.JwtAuthHelper;
 import com.namo.spring.application.external.api.user.service.UserService;
 import com.namo.spring.application.external.global.common.annotation.AccessTokenStrategy;
-import com.namo.spring.application.external.global.common.annotation.RefreshTokenStrategy;
 import com.namo.spring.application.external.global.common.security.jwt.CustomJwts;
 import com.namo.spring.application.external.global.common.security.jwt.JwtClaimsParserUtil;
 import com.namo.spring.application.external.global.common.security.jwt.access.AccessTokenClaimKeys;
@@ -69,7 +69,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class UserFacade {
-	private final JwtProvider refreshTokenProvider;
 	private final JwtProvider accessTokenProvider;
 	private final JwtAuthHelper jwtAuthHelper;
 
@@ -93,7 +92,6 @@ public class UserFacade {
 	private final AppleProperties appleProperties;
 
 	public UserFacade(
-		@RefreshTokenStrategy JwtProvider refreshTokenProvider,
 		@AccessTokenStrategy JwtProvider accessTokenProvider,
 		JwtAuthHelper jwtAuthHelper,
 
@@ -116,7 +114,6 @@ public class UserFacade {
 		AppleUtils appleUtils,
 		AppleProperties appleProperties
 	) {
-		this.refreshTokenProvider = refreshTokenProvider;
 		this.accessTokenProvider = accessTokenProvider;
 		this.jwtAuthHelper = jwtAuthHelper;
 		this.socialUtils = socialUtils;
@@ -258,19 +255,11 @@ public class UserFacade {
 
 	@Transactional
 	public UserResponse.ReissueDto reissueAccessToken(UserRequest.ReissueDto reissueDto) {
-		jwtAuthHelper.validateRefreshTokenExpired(reissueDto.getRefreshToken());
-		userService.checkLogoutUser(reissueDto);
-
-		JwtClaims claims = refreshTokenProvider.parseJwtClaimsFromToken(reissueDto.getRefreshToken());
-		Long userId = JwtClaimsParserUtil.getClaimValue(claims, AccessTokenClaimKeys.USER_ID.getValue(), Long::parseLong);
-
-		User user = userService.getUser(userId);
-
-		CustomJwts jwts = jwtAuthHelper.createToken(user);
-		UserResponse.ReissueDto reissueRes = UserResponseConverter.toReissueDto(jwts.accessToken(),
-			jwts.refreshToken());
-		user.updateRefreshToken(reissueRes.getRefreshToken());
-		return reissueRes;
+		Pair<Long, CustomJwts> user =  jwtAuthHelper.refresh(reissueDto.getRefreshToken());
+		return UserResponseConverter.toReissueDto(
+			user.getValue().accessToken(),
+			user.getValue().refreshToken()
+		);
 	}
 
 	// TODO: 2024.06.22. 추후에 api를 수정하거나 Service를 분리하는 등 수정해야할 듯? - 루카

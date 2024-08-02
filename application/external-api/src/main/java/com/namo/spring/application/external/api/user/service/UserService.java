@@ -44,8 +44,6 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final TermRepository termRepository;
 
-	private final ForbiddenTokenService forbiddenTokenService;
-
 	private final AppleProperties appleProperties;
 
 	public List<Term> getTerms(User user) {
@@ -102,12 +100,6 @@ public class UserService {
 	public void checkEmailAndName(String email, String name) {
 		if (email.isBlank() || name.isBlank()) {
 			throw new UserException(ErrorStatus.USER_POST_ERROR);
-		}
-	}
-
-	public void checkLogoutUser(UserRequest.ReissueDto reissueDto) {
-		if (forbiddenTokenService.isForbidden(reissueDto.getAccessToken())) {
-			throw new UserException(ErrorStatus.LOGOUT_ERROR);
 		}
 	}
 
