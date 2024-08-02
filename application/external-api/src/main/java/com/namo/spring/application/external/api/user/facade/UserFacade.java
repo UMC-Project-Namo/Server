@@ -168,8 +168,8 @@ public class UserFacade {
 
 		//get apple refresh token
 		String clientSecret = createClientSecret();
-		String appleRefreshToken = appleAuthClient.getAppleRefreshToken(clientSecret, req.getAuthorizationCode());
 
+		String appleRefreshToken = appleAuthClient.getAppleRefreshToken(clientSecret, req.getAuthorizationCode());
 		String email = "";
 
 		JSONObject headerJson = userService.getHeaderJson(req);
@@ -262,7 +262,8 @@ public class UserFacade {
 		userService.checkLogoutUser(reissueDto);
 
 		JwtClaims claims = refreshTokenProvider.parseJwtClaimsFromToken(reissueDto.getRefreshToken());
-		Long userId = JwtClaimsParserUtil.getClaimValue(claims, AccessTokenClaimKeys.USER_ID.getValue(), Long::parseLong);
+		Long userId = JwtClaimsParserUtil.getClaimValue(claims, AccessTokenClaimKeys.USER_ID.getValue(),
+			Long::parseLong);
 
 		User user = userService.getUser(userId);
 
