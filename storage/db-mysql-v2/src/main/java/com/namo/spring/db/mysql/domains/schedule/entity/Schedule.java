@@ -44,20 +44,26 @@ public class Schedule extends BaseTimeEntity {
 	@Embedded
 	private Location location;
 
+	// 0: 개인, 1: 그룹
+	@Column(name = "schedule_type", nullable = false, columnDefinition = "TINYINT")
+	private int scheduleType;
+
 	@Builder
-	public Schedule(String title, Period period, Location location) {
+	public Schedule(String title, Period period, Location location, int scheduleType) {
 		if (!StringUtils.hasText(title))
 			throw new IllegalArgumentException("title은 null이거나 빈 문자열일 수 없습니다.");
 		this.title = title;
 		this.period = period;
 		this.location = location;
+		this.scheduleType = scheduleType;
 	}
 
-	public Schedule of(String title, Period period, Location location) {
+	public Schedule of(String title, Period period, Location location, int scheduleType) {
 		return Schedule.builder()
 			.title(title)
 			.period(period)
 			.location(location)
+			.scheduleType(scheduleType)
 			.build();
 	}
 }

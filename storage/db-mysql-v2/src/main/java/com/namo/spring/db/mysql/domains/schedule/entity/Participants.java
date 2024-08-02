@@ -34,6 +34,7 @@ public class Participants {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	// 0: 참여자, 1: 주최자
 	@Column(name = "is_owner", nullable = false, columnDefinition = "TINYINT")
 	private int isOwner;
 
