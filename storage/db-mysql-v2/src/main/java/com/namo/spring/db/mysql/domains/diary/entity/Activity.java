@@ -1,6 +1,6 @@
 package com.namo.spring.db.mysql.domains.diary.entity;
 
-import java.util.Objects;
+import java.math.BigDecimal;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,12 +12,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-import org.springframework.util.StringUtils;
 
-import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
-import com.namo.spring.db.mysql.domains.schedule.entity.MeetingSchedule;
+import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -28,32 +27,28 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "activity")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Activity extends BaseTimeEntity {
+@DynamicInsert
+public class Activity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", nullable = false)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "m_schedule_id", nullable = false)
-	private MeetingSchedule meetingSchedule;
+	@JoinColumn(name = "schedule_id", nullable = false)
+	private Schedule schedule;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Column(name = "title", nullable = false, length = 50)
 	private String title;
 
-	@JdbcTypeCode(SqlTypes.INTEGER)
-	@Column(name = "amount", nullable = false)
-	private Integer amount;
+	@Column(name = "total_amount", nullable = false)
+	private BigDecimal totalAmount;
 
 	@Builder
-	public Activity(MeetingSchedule meetingSchedule, String title, Integer amount) {
-		if (!StringUtils.hasText(title))
-			throw new IllegalArgumentException("title은 null이거나 빈 문자열일 수 없습니다.");
-
-		this.meetingSchedule = Objects.requireNonNull(meetingSchedule, "meetingSchedule은 null일 수 없습니다.");
+	public Activity(Schedule schedule, String title, BigDecimal totalAmount) {
+		this.schedule = schedule;
 		this.title = title;
-		this.amount = Objects.requireNonNull(amount, "amount는 null일 수 없습니다.");
+		this.totalAmount = totalAmount;
 	}
 }

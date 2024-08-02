@@ -43,8 +43,8 @@ public class Category extends BaseTimeEntity {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "user_id", nullable = false)
-	private Member user;
+	@JoinColumn(name = "member_id", nullable = false)
+	private Member member;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "palette_id", nullable = false)
@@ -71,7 +71,7 @@ public class Category extends BaseTimeEntity {
 		if (!StringUtils.hasText(name))
 			throw new IllegalArgumentException("name는 null이거나 빈 문자열일 수 없습니다.");
 
-		this.user = Objects.requireNonNull(user, "user은 null일 수 없습니다.");
+		this.member = Objects.requireNonNull(user, "user은 null일 수 없습니다.");
 		this.palette = Objects.requireNonNull(palette, "palette은 null일 수 없습니다.");
 		this.name = name;
 		this.status = Objects.requireNonNull(status, "status은 null일 수 없습니다.");
