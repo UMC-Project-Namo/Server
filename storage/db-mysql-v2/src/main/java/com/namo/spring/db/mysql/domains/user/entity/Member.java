@@ -69,13 +69,13 @@ public class Member extends BaseTimeEntity {
 	private LocalDateTime deletedAt;
 
 	@Builder
-	public Member(String username, String email, String birthday, MemberRole userRole, MemberStatus status) {
-		if (!StringUtils.hasText(username))
-			throw new IllegalArgumentException("username은 null이거나 빈 문자열일 수 없습니다.");
+	public Member(String name, String email, String birthday, MemberRole userRole, MemberStatus status) {
+		if (!StringUtils.hasText(name))
+			throw new IllegalArgumentException("name은 null이거나 빈 문자열일 수 없습니다.");
 		else if (!StringUtils.hasText(email))
 			throw new IllegalArgumentException("email은 null이거나 빈 문자열일 수 없습니다.");
 
-		this.name = username;
+		this.name = name;
 		this.email = email;
 		this.birthday = birthday;
 		this.memberRole = Objects.requireNonNull(userRole, "memberRole은 null일 수 없습니다.");

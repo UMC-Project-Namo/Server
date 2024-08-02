@@ -1,6 +1,7 @@
 package com.namo.spring.db.mysql.domains.record.entity;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,9 +45,9 @@ public class ActivityParticipants {
 	private BigDecimal amount;
 
 	@Builder
-	public ActivityParticipants(Participants participants, Activity activity) {
-		this.participants = participants;
-		this.activity = activity;
-		// this.amount
+	public ActivityParticipants(Participants participants, Activity activity, BigDecimal amount) {
+		this.participants = Objects.requireNonNull(participants, "participants은 null일 수 없습니다.");
+		this.activity = Objects.requireNonNull(activity, "activity은 null일 수 없습니다.");
+		this.amount = Objects.requireNonNull(amount, "amount은 null일 수 없습니다.");
 	}
 }

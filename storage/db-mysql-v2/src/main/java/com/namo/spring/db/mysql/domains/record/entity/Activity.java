@@ -1,6 +1,7 @@
 package com.namo.spring.db.mysql.domains.record.entity;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,6 +16,7 @@ import jakarta.persistence.Table;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+import org.springframework.util.StringUtils;
 
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 
@@ -47,7 +49,9 @@ public class Activity {
 
 	@Builder
 	public Activity(Schedule schedule, String title, BigDecimal totalAmount) {
-		this.schedule = schedule;
+		if (!StringUtils.hasText(title))
+			throw new IllegalArgumentException("title은 null이거나 빈 문자열일 수 없습니다.");
+		this.schedule = Objects.requireNonNull(schedule, "schedule은 null일 수 없습니다.");
 		this.title = title;
 		this.totalAmount = totalAmount;
 	}

@@ -48,10 +48,10 @@ public class ActivityImage extends BaseTimeEntity {
 	@Builder
 	public ActivityImage(Activity activity, String imageUrl, Integer imageOrder) {
 		if (!StringUtils.hasText(imageUrl))
-			throw new IllegalArgumentException("imgUrl은 null이거나 빈 문자열일 수 없습니다.");
-		this.activity = Objects.requireNonNull(activity, "activity은 null일 수 없습니다.");
+			throw new IllegalArgumentException("imageUrl은 null이거나 빈 문자열일 수 없습니다.");
 		this.imageUrl = imageUrl;
-		this.imageOrder = Objects.requireNonNull(imageOrder, "imgOrder은 null일 수 없습니다.");
+		this.activity = Objects.requireNonNull(activity, "activity은 null일 수 없습니다.");
+		this.imageOrder = Objects.requireNonNull(imageOrder, "imageOrder은 null일 수 없습니다.");
 	}
 
 	public ActivityImage of(Diary diary, Activity activity, String imageUrl, Integer imageOrder) {
@@ -64,7 +64,7 @@ public class ActivityImage extends BaseTimeEntity {
 
 	public void updateImageUrl(String imageUrl) {
 		if (!StringUtils.hasText(imageUrl))
-			throw new IllegalArgumentException("imgUrl은 null이거나 빈 문자열일 수 없습니다.");
+			throw new IllegalArgumentException("imageUrl은 null이거나 빈 문자열일 수 없습니다.");
 		this.imageUrl = imageUrl;
 	}
 

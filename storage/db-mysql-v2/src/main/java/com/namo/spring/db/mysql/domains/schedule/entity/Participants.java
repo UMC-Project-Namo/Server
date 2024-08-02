@@ -57,7 +57,7 @@ public class Participants {
 	@Builder
 	public Participants(int isOwner, Member member, Schedule schedule, Category category, Palette palette) {
 		this.isOwner = Objects.requireNonNull(isOwner, "isOwner은 null일 수 없습니다.");
-		this.member = Objects.requireNonNull(member, "member은 null일 수 없습니다.");
+		this.member = member;
 		this.schedule = Objects.requireNonNull(schedule, "schedule은 null일 수 없습니다.");
 		this.category = Objects.requireNonNull(category, "category은 null일 수 없습니다.");
 		this.palette = Objects.requireNonNull(palette, "palette은 null일 수 없습니다.");
