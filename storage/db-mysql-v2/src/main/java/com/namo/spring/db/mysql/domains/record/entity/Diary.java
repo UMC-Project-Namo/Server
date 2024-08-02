@@ -34,7 +34,7 @@ public class Diary extends BaseTimeEntity {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "participant_id", nullable = false)
+	@JoinColumn(name = "participants_id", nullable = false)
 	private Participants participants;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)

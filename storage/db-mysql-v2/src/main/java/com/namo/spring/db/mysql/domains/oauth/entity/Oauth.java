@@ -41,7 +41,7 @@ public class Oauth extends BaseTimeEntity {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "user_id", nullable = false)
+	@JoinColumn(name = "member_id", nullable = false)
 	private Member member;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
