@@ -15,6 +15,7 @@ import jakarta.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 
+import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participants;
 
 import lombok.AccessLevel;
@@ -27,7 +28,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "activity_participants")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
-public class ActivityParticipants {
+public class ActivityParticipants extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

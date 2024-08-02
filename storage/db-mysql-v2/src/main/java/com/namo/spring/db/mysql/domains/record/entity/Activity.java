@@ -18,6 +18,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.springframework.util.StringUtils;
 
+import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 
 import lombok.AccessLevel;
@@ -30,7 +31,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "activity")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
-public class Activity {
+public class Activity extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

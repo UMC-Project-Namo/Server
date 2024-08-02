@@ -34,7 +34,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
-@SQLDelete(sql = "UPDATE users SET deleted_at = NOW(), status = 'INACVTIVE' WHERE id = ?")
+@SQLDelete(sql = "UPDATE members SET deleted_at = NOW(), status = 'INACVTIVE' WHERE id = ?")
 public class Member extends BaseTimeEntity {
 
 	@Id
