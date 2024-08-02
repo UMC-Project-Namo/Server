@@ -167,12 +167,9 @@ public class UserFacade {
 		AppleResponse.ApplePublicKeyListDto applePublicKeys = appleAuthClient.getApplePublicKeys();//애플 퍼블릭 키 조회
 
 		//get apple refresh token
-		System.out.println("APPLE client secret 제작 시작");
 		String clientSecret = createClientSecret();
-		System.out.println("APPLE client secret 제작 완료 : " + clientSecret);
 
 		String appleRefreshToken = appleAuthClient.getAppleRefreshToken(clientSecret, req.getAuthorizationCode());
-
 		String email = "";
 
 		JSONObject headerJson = userService.getHeaderJson(req);

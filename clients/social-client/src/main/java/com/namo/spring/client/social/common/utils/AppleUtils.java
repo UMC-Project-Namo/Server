@@ -31,21 +31,6 @@ public class AppleUtils {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		// try {
-		//
-		// 	ClassPathResource resource = new ClassPathResource(appleProperties.getPrivateKeyPath());
-		// 	String privateKey = new String(Files.readAllBytes(Paths.get(resource.getURI())));
-		// 	System.out.println("APPLE privatekey : " + privateKey);
-		// 	Reader pemReader = new StringReader(privateKey);
-		//
-		// 	PEMParser pemParser = new PEMParser(pemReader);
-		// 	JcaPEMKeyConverter converter = new JcaPEMKeyConverter();
-		// 	PrivateKeyInfo object = (PrivateKeyInfo)pemParser.readObject();
-		// 	return converter.getPrivateKey(object);
-		//
-		// } catch (IOException e) {
-		// 	throw new RuntimeException(e);
-		// }
 	}
 
 }
