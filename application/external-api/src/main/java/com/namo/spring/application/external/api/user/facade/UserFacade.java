@@ -156,7 +156,6 @@ public class UserFacade {
 		//get apple refresh token
 		String clientSecret = createClientSecret();
 		String appleRefreshToken = appleAuthClient.getAppleRefreshToken(clientSecret, req.getAuthorizationCode());
-
 		String email = "";
 
 		JSONObject headerJson = userService.getHeaderJson(req);
@@ -245,7 +244,7 @@ public class UserFacade {
 
 	@Transactional
 	public UserResponse.ReissueDto reissueAccessToken(UserRequest.ReissueDto reissueDto) {
-		Pair<Long, CustomJwts> user =  jwtAuthHelper.refresh(reissueDto.getRefreshToken());
+		Pair<Long, CustomJwts> user = jwtAuthHelper.refresh(reissueDto.getRefreshToken());
 		return UserResponseConverter.toReissueDto(
 			user.getValue().accessToken(),
 			user.getValue().refreshToken()
