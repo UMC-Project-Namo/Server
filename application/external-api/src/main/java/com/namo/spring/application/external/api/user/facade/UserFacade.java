@@ -167,7 +167,10 @@ public class UserFacade {
 		AppleResponse.ApplePublicKeyListDto applePublicKeys = appleAuthClient.getApplePublicKeys();//애플 퍼블릭 키 조회
 
 		//get apple refresh token
+		System.out.println("APPLE client secret 제작 시작");
 		String clientSecret = createClientSecret();
+		System.out.println("APPLE client secret 제작 완료 : " + clientSecret);
+
 		String appleRefreshToken = appleAuthClient.getAppleRefreshToken(clientSecret, req.getAuthorizationCode());
 
 		String email = "";
@@ -262,7 +265,8 @@ public class UserFacade {
 		userService.checkLogoutUser(reissueDto);
 
 		JwtClaims claims = refreshTokenProvider.parseJwtClaimsFromToken(reissueDto.getRefreshToken());
-		Long userId = JwtClaimsParserUtil.getClaimValue(claims, AccessTokenClaimKeys.USER_ID.getValue(), Long::parseLong);
+		Long userId = JwtClaimsParserUtil.getClaimValue(claims, AccessTokenClaimKeys.USER_ID.getValue(),
+			Long::parseLong);
 
 		User user = userService.getUser(userId);
 
