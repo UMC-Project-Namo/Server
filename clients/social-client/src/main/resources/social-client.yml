@@ -34,7 +34,6 @@ spring:
           team-id: ${APPLE_TEAM_ID}
           redirect-uri: ${APPLE_REDIRECT_URI}
           key-id: ${APPLE_KEY_ID}
-          private-key-path: ${APPLE_PRIVATE_KEY_PATH}
           private-key: ${APPLE_PRIVATE_KEY}
 
 client-name:
