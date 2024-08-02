@@ -16,4 +16,5 @@ public class AppleProperties {
 	private String redirectUri;
 	private String keyId;
 	private String privateKeyPath;
+	private String privateKey;
 }
