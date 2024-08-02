@@ -20,8 +20,8 @@ import org.springframework.util.StringUtils;
 
 import com.namo.spring.db.mysql.common.converter.ProviderConverter;
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
-import com.namo.spring.db.mysql.domains.user.entity.User;
 import com.namo.spring.db.mysql.domains.oauth.type.Provider;
+import com.namo.spring.db.mysql.domains.user.entity.Member;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -42,7 +42,7 @@ public class Oauth extends BaseTimeEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
-	private User user;
+	private Member member;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Convert(converter = ProviderConverter.class)
@@ -59,7 +59,7 @@ public class Oauth extends BaseTimeEntity {
 	private String socialRefreshToken;
 
 	@Builder
-	public Oauth(Provider provider, String providerId, String loginId, String socialRefreshToken, User user) {
+	public Oauth(Provider provider, String providerId, String loginId, String socialRefreshToken, Member user) {
 		if (!StringUtils.hasText(providerId))
 			throw new IllegalArgumentException("providerId은 null이거나 빈 문자열일 수 없습니다.");
 		else if (!StringUtils.hasText(loginId))
@@ -69,7 +69,7 @@ public class Oauth extends BaseTimeEntity {
 		this.providerId = providerId;
 		this.loginId = loginId;
 		this.socialRefreshToken = socialRefreshToken;
-		this.user = Objects.requireNonNull(user, "user은 null일 수 없습니다.");
+		this.member = Objects.requireNonNull(user, "user은 null일 수 없습니다.");
 	}
 
 	@Override
@@ -80,7 +80,7 @@ public class Oauth extends BaseTimeEntity {
 			+ "providerId='" + providerId + "', "
 			+ "loginId='" + loginId + "', "
 			+ "socialRefreshToken='" + socialRefreshToken + "', "
-			+ "user='" + user + "'"
+			+ "member='" + member + "'"
 			+ "]";
 	}
 }

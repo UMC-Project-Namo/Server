@@ -21,7 +21,7 @@ import com.namo.spring.core.common.exception.UtilsException;
 import com.namo.spring.core.infra.common.jwt.AuthConstants;
 import com.namo.spring.core.infra.common.jwt.JwtClaims;
 import com.namo.spring.core.infra.common.jwt.JwtProvider;
-import com.namo.spring.db.mysql.domains.user.entity.User;
+import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.redis.cache.forbidden.ForbiddenTokenService;
 import com.namo.spring.db.redis.cache.refresh.RefreshToken;
 import com.namo.spring.db.redis.cache.refresh.RefreshTokenService;
@@ -52,10 +52,10 @@ public class JwtAuthHelper {
 	 * 사용자 정보를 기본으로 accessToken, refreshToken을 생성한다. <br>
 	 * refreshToken은 redis에 저장한다.
 	 *
-	 * @param user : {@link User}
+	 * @param user : {@link Member}
 	 * @return {@link CustomJwts}
 	 */
-	public CustomJwts createToken(User user) {
+	public CustomJwts createToken(Member user) {
 		String accessToken = accessTokenProvider.createToken(AccessTokenClaim.of(user.getId()));
 		String refreshToken = refreshTokenProvider.createToken(RefreshTokenClaim.of(user.getId()));
 
@@ -109,11 +109,11 @@ public class JwtAuthHelper {
 	/**
 	 * userId에 연결된 accessToken, refreshToken을 삭제합니다.
 	 *
-	 * @param userId : 사용자 ID
-	 * @param accessToken : 삭제할 accessToken
+	 * @param userId       : 사용자 ID
+	 * @param accessToken  : 삭제할 accessToken
 	 * @param refreshToken : 삭제할 refreshToken
 	 * @throws AuthException <br/>
-	 * 					 - {@link ErrorStatus#EXPIRATION_TOKEN} : 토큰이 만료되었을 때Q
+	 *                       - {@link ErrorStatus#EXPIRATION_TOKEN} : 토큰이 만료되었을 때Q
 	 */
 	public void removeJwtsToken(Long userId, String accessToken, String refreshToken) {
 		JwtClaims jwtClaims = null;
@@ -144,7 +144,7 @@ public class JwtAuthHelper {
 	 * @param request : 추출할 request
 	 * @return 추출된 accessToken
 	 * @throws UtilsException <br/>
-	 *                       - {@link ErrorStatus#EMPTY_ACCESS_KEY} : accessToken이 없을 때
+	 *                        - {@link ErrorStatus#EMPTY_ACCESS_KEY} : accessToken이 없을 때
 	 */
 	// HACK: 2024.06.22. social logout을 위해 작성된 임시 메서드 - 루카
 	public String getAccessToken(HttpServletRequest request) {

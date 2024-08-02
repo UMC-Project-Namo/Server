@@ -17,7 +17,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
-import com.namo.spring.db.mysql.domains.user.entity.User;
+import com.namo.spring.db.mysql.domains.user.entity.Member;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -38,7 +38,7 @@ public class GroupUser extends BaseTimeEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
-	private User user;
+	private Member user;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "group_id", nullable = false)
@@ -49,7 +49,7 @@ public class GroupUser extends BaseTimeEntity {
 	private String customGroupName;
 
 	@Builder
-	public GroupUser(User user, Group group, String customGroupName) {
+	public GroupUser(Member user, Group group, String customGroupName) {
 		this.user = Objects.requireNonNull(user, "user은 null일 수 없습니다.");
 		this.group = Objects.requireNonNull(group, "group은 null일 수 없습니다.");
 		this.customGroupName = customGroupName;

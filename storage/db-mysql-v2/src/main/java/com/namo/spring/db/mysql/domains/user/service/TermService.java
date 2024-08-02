@@ -21,8 +21,8 @@ public class TermService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<Term> readTermListByUserId(Long userId) {
-		return termRepository.findByUserId(userId);
+	public List<Term> readTermListByMemberId(Long memberId) {
+		return termRepository.findByMemberId(memberId);
 	}
 
 	@Transactional

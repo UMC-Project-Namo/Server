@@ -6,7 +6,7 @@ import com.namo.spring.db.mysql.common.converter.CodedEnum;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum UserStatus implements CodedEnum {
+public enum MemberStatus implements CodedEnum {
 	INACTIVE("0", "비활성화"),
 	ACTIVE("1", "활성화");
 

@@ -7,8 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-public class UserRequest {
-	private UserRequest() {
+public class MemberRequest {
+	private MemberRequest() {
 		throw new IllegalStateException("Utility class");
 	}
 

@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 import org.hibernate.annotations.DynamicInsert;
 
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
-import com.namo.spring.db.mysql.domains.user.entity.User;
+import com.namo.spring.db.mysql.domains.user.entity.Member;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -36,22 +36,22 @@ public class ActivityUser extends BaseTimeEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
-	private User user;
+	private Member user;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "activity_id", nullable = false)
 	private Activity activity;
 
 	@Builder
-	public ActivityUser(User user, Activity activity) {
+	public ActivityUser(Member user, Activity activity) {
 		this.user = Objects.requireNonNull(user, "user은 null일 수 없습니다.");
 		this.activity = Objects.requireNonNull(activity, "activity은 null일 수 없습니다.");
 	}
 
-	public ActivityUser of(User user, Activity activity) {
+	public ActivityUser of(Member user, Activity activity) {
 		return ActivityUser.builder()
-				.user(user)
-				.activity(activity)
-				.build();
+			.user(user)
+			.activity(activity)
+			.build();
 	}
 }

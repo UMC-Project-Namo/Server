@@ -23,7 +23,7 @@ import com.namo.spring.db.mysql.common.converter.CategoryTypeConverter;
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import com.namo.spring.db.mysql.domains.category.type.CategoryStatus;
 import com.namo.spring.db.mysql.domains.category.type.CategoryType;
-import com.namo.spring.db.mysql.domains.user.entity.User;
+import com.namo.spring.db.mysql.domains.user.entity.Member;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -44,7 +44,7 @@ public class Category extends BaseTimeEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
-	private User user;
+	private Member user;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "palette_id", nullable = false)
@@ -66,7 +66,8 @@ public class Category extends BaseTimeEntity {
 	private CategoryStatus status;
 
 	@Builder
-	public Category(User user, Palette palette, String name, CategoryStatus status, CategoryType type, Integer order) {
+	public Category(Member user, Palette palette, String name, CategoryStatus status, CategoryType type,
+		Integer order) {
 		if (!StringUtils.hasText(name))
 			throw new IllegalArgumentException("name는 null이거나 빈 문자열일 수 없습니다.");
 

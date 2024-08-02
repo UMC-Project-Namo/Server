@@ -19,7 +19,7 @@ import org.hibernate.type.SqlTypes;
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
 import com.namo.spring.db.mysql.domains.group.entity.Group;
-import com.namo.spring.db.mysql.domains.user.entity.User;
+import com.namo.spring.db.mysql.domains.user.entity.Member;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -40,7 +40,7 @@ public class MeetingSchedule extends BaseTimeEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
-	private User user;
+	private Member user;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "schedule_id", nullable = false)
@@ -59,7 +59,7 @@ public class MeetingSchedule extends BaseTimeEntity {
 	private String customTitle;
 
 	@Builder
-	public MeetingSchedule(User user, Schedule schedule, Category category, Group group, String customTitle) {
+	public MeetingSchedule(Member user, Schedule schedule, Category category, Group group, String customTitle) {
 		this.user = Objects.requireNonNull(user, "user은 null일 수 없습니다.");
 		this.schedule = Objects.requireNonNull(schedule, "schedule은 null일 수 없습니다.");
 		this.category = Objects.requireNonNull(category, "category은 null일 수 없습니다.");

@@ -8,8 +8,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.namo.spring.db.mysql.domains.user.entity.User;
-import com.namo.spring.db.mysql.domains.user.type.UserStatus;
+import com.namo.spring.db.mysql.domains.user.entity.Member;
+import com.namo.spring.db.mysql.domains.user.type.MemberStatus;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -49,12 +49,12 @@ public class SecurityUserDetails implements UserDetails {
 		this.accountNonLocked = accountNonLocked;
 	}
 
-	public static UserDetails from(User user) {
+	public static UserDetails from(Member user) {
 		return SecurityUserDetails.builder()
 			.userId(user.getId())
-			.username(user.getUsername())
+			.username(user.getName())
 			.authorities(List.of(new CustomGrantedAuthority(user.getUserRole().getType())))
-			.accountNonLocked(user.getStatus().equals(UserStatus.INACTIVE))
+			.accountNonLocked(user.getStatus().equals(MemberStatus.INACTIVE))
 			.build();
 	}
 

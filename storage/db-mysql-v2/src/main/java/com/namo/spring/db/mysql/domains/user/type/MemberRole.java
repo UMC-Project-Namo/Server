@@ -12,19 +12,19 @@ import com.namo.spring.db.mysql.common.converter.CodedEnum;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum UserRole implements CodedEnum {
+public enum MemberRole implements CodedEnum {
 	ADMIN("0","ROLE_ADMIN"),
 	USER("1","ROLE_USER")
 	;
 
-	private static final Map<String, UserRole> stringToEnum =
+	private static final Map<String, MemberRole> stringToEnum =
 		Stream.of(values()).collect(toMap(Object::toString, e -> e));
 
 	private final String code;
 	private final String type;
 
 	@JsonCreator
-	public static UserRole fromString(String type) {
+	public static MemberRole fromString(String type) {
 		return stringToEnum.get(type.toUpperCase());
 	}
 

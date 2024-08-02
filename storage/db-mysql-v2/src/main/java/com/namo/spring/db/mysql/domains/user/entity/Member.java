@@ -21,8 +21,8 @@ import org.springframework.util.StringUtils;
 import com.namo.spring.db.mysql.common.converter.UserRoleConverter;
 import com.namo.spring.db.mysql.common.converter.UserStatusConverter;
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
-import com.namo.spring.db.mysql.domains.user.type.UserRole;
-import com.namo.spring.db.mysql.domains.user.type.UserStatus;
+import com.namo.spring.db.mysql.domains.user.type.MemberRole;
+import com.namo.spring.db.mysql.domains.user.type.MemberStatus;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -31,11 +31,11 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "users")
+@Table(name = "member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 @SQLDelete(sql = "UPDATE users SET deleted_at = NOW(), status = 'INACVTIVE' WHERE id = ?")
-public class User extends BaseTimeEntity {
+public class Member extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,8 +43,8 @@ public class User extends BaseTimeEntity {
 	private Long id;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Column(name = "username", nullable = false, length = 50)
-	private String username;
+	@Column(name = "name", nullable = false, length = 50)
+	private String name;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Column(name = "email", nullable = false, length = 50)
@@ -56,40 +56,40 @@ public class User extends BaseTimeEntity {
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Convert(converter = UserRoleConverter.class)
-	@Column(name = "user_role", nullable = false, length = 50)
-	private UserRole userRole;
+	@Column(name = "member_role", nullable = false, length = 50)
+	private MemberRole memberRole;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Convert(converter = UserStatusConverter.class)
 	@Column(name = "status", nullable = false, length = 50)
-	private UserStatus status;
+	private MemberStatus status;
 
 	@ColumnDefault("NULL")
 	@Column(name = "deleted_at")
 	private LocalDateTime deletedAt;
 
 	@Builder
-	public User(String username, String email, String birthday, UserRole userRole, UserStatus status) {
+	public Member(String username, String email, String birthday, MemberRole userRole, MemberStatus status) {
 		if (!StringUtils.hasText(username))
 			throw new IllegalArgumentException("username은 null이거나 빈 문자열일 수 없습니다.");
 		else if (!StringUtils.hasText(email))
 			throw new IllegalArgumentException("email은 null이거나 빈 문자열일 수 없습니다.");
 
-		this.username = username;
+		this.name = username;
 		this.email = email;
 		this.birthday = birthday;
-		this.userRole = Objects.requireNonNull(userRole, "userRole은 null일 수 없습니다.");
+		this.memberRole = Objects.requireNonNull(userRole, "memberRole은 null일 수 없습니다.");
 		this.status = Objects.requireNonNull(status, "status는 null일 수 없습니다.");
 	}
 
 	@Override
 	public String toString() {
-		return "User ["
+		return "Member ["
 			+ "id='" + id + '\'' +
-			", username='" + username + '\'' +
+			", name='" + name + '\'' +
 			", email='" + email + '\'' +
 			", birthday='" + birthday + '\'' +
-			", userRole='" + userRole + '\'' +
+			", userRole='" + memberRole + '\'' +
 			", status='" + status + '\'' +
 			", deletedAt='" + deletedAt + '\'' +
 			']';

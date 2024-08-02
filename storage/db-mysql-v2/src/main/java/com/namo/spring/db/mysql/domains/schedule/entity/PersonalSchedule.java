@@ -3,7 +3,6 @@ package com.namo.spring.db.mysql.domains.schedule.entity;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -14,15 +13,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-import org.springframework.util.StringUtils;
 
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
-import com.namo.spring.db.mysql.domains.schedule.type.Location;
-import com.namo.spring.db.mysql.domains.schedule.type.Period;
-import com.namo.spring.db.mysql.domains.user.entity.User;
+import com.namo.spring.db.mysql.domains.user.entity.Member;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -43,7 +37,7 @@ public class PersonalSchedule extends BaseTimeEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
-	private User user;
+	private Member user;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "schedule_id", nullable = false)
@@ -54,7 +48,7 @@ public class PersonalSchedule extends BaseTimeEntity {
 	private Category category;
 
 	@Builder
-	public PersonalSchedule(User user, Schedule schedule, Category category) {
+	public PersonalSchedule(Member user, Schedule schedule, Category category) {
 		this.user = Objects.requireNonNull(user, "user은 null일 수 없습니다.");
 		this.schedule = Objects.requireNonNull(schedule, "schedule은 null일 수 없습니다.");
 		this.category = Objects.requireNonNull(category, "category은 null일 수 없습니다.");

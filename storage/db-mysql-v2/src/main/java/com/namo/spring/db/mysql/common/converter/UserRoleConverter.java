@@ -1,11 +1,11 @@
 package com.namo.spring.db.mysql.common.converter;
 
-import com.namo.spring.db.mysql.domains.user.type.UserRole;
+import com.namo.spring.db.mysql.domains.user.type.MemberRole;
 
-public class UserRoleConverter extends AbstractEnumAttributeConverter<UserRole>{
+public class UserRoleConverter extends AbstractEnumAttributeConverter<MemberRole> {
 	private static final String ENUM_NAME = "유저 권한";
 
 	public UserRoleConverter() {
-		super(UserRole.class, false, ENUM_NAME);
+		super(MemberRole.class, false, ENUM_NAME);
 	}
 }

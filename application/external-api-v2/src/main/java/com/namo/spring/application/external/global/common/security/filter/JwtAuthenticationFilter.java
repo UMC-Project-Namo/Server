@@ -40,7 +40,7 @@ import lombok.extern.slf4j.Slf4j;
  * <pre>
  * {@code
  *    @GetMapping("/user")
- *    public ResponseEntity<User> getUser(@AuthenticationPrincipal SecurityUser user) {
+ *    public ResponseEntity<Member> getMember(@AuthenticationPrincipal SecurityUser user) {
  *    Long id = user.getId();
  *        ...
  *    }

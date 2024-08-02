@@ -38,8 +38,8 @@ public class Term extends BaseTimeEntity {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "user_id", nullable = false)
-	private User user;
+	@JoinColumn(name = "member_id", nullable = false)
+	private Member member;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Column(name = "content", nullable = false, length = 250)
@@ -52,11 +52,11 @@ public class Term extends BaseTimeEntity {
 	private LocalDateTime agreeAt;
 
 	@Builder
-	public Term(User user, String content, boolean agree, LocalDateTime agreeAt) {
-		if(!StringUtils.hasText(content))
+	public Term(Member user, String content, boolean agree, LocalDateTime agreeAt) {
+		if (!StringUtils.hasText(content))
 			throw new IllegalArgumentException("content는 null이거나 빈 문자열일 수 없습니다.");
 
-		this.user = Objects.requireNonNull(user, "user은 null일 수 없습니다.");
+		this.member = Objects.requireNonNull(user, "member은 null일 수 없습니다.");
 		this.content = content;
 		this.agree = Objects.requireNonNull(agree, "agree은 null일 수 없습니다.");
 		this.agreeAt = agreeAt;

@@ -5,9 +5,9 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
-public class UserResponse {
+public class MemberResponse {
 
-	private UserResponse() {
+	private MemberResponse() {
 		throw new IllegalStateException("Utility class");
 	}
 
