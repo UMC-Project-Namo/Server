@@ -9,6 +9,7 @@ import java.security.spec.RSAPublicKeySpec;
 import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -146,15 +147,36 @@ public class UserService {
 	public boolean validateToken(PublicKey publicKey, String token) {
 		Claims claims = Jwts.parser().setSigningKey(publicKey).build().parseClaimsJws(token).getBody();
 
-		String issuer = (String)claims.get("iss");
-		if (!"https://appleid.apple.com".equals(issuer)) {
-			throw new IllegalArgumentException("Invalid issuer");
+		Object issuerObj = claims.get("iss");
+		if (issuerObj instanceof String) {
+			String issuer = (String)issuerObj;
+			if (!"https://appleid.apple.com".equals(issuer)) {
+				throw new IllegalArgumentException("Invalid issuer");
+			}
+		} else {
+			throw new IllegalArgumentException("Issuer is not a string");
 		}
 
-		String audience = (String)claims.get("aud");
-		log.debug("{}", audience);
-		if (!appleProperties.getClientId().equals(audience)) {
-			throw new IllegalArgumentException("Invalid audience");
+		Object audienceObj = claims.get("aud");
+		log.debug("apple aud {}", audienceObj);
+		if (audienceObj instanceof String) {
+			//String 인 경우
+			String audience = (String)audienceObj;
+			log.debug("{}", audience);
+			if (!appleProperties.getClientId().equals(audience)) {
+				throw new IllegalArgumentException("Invalid audience");
+			}
+		} else if (audienceObj instanceof LinkedHashSet<?>) {
+			// LinkedHashSet인 경우 처리
+			LinkedHashSet<String> audienceList = (LinkedHashSet<String>)audienceObj;
+			log.debug("linked {}, {}}", audienceList, audienceList.size());
+			for (String aud : audienceList) {
+				if (!appleProperties.getClientId().equals(aud)) {
+					throw new IllegalArgumentException("Invalid audience");
+				}
+			}
+		} else {
+			throw new IllegalArgumentException("Audience is not a string");
 		}
 
 		long expiration = claims.getExpiration().getTime();
