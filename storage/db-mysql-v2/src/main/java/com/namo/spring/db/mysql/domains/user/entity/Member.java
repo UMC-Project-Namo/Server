@@ -1,14 +1,18 @@
 package com.namo.spring.db.mysql.domains.user.entity;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 import org.hibernate.annotations.ColumnDefault;
@@ -46,6 +50,9 @@ public class Member extends BaseTimeEntity {
 	@Column(name = "name", nullable = false, length = 50)
 	private String name;
 
+	@Column(unique = true, nullable = false, length = 4)
+	private String tag;
+
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Column(name = "email", nullable = false, length = 50)
 	private String email;
@@ -53,6 +60,9 @@ public class Member extends BaseTimeEntity {
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Column(name = "birthday", length = 10)
 	private String birthday;  // "MM-DD"
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Friendship> friendships = new HashSet<>();
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Convert(converter = UserRoleConverter.class)

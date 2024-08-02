@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "member")
+@Table(name = "anonymous")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 public class Anonymous extends BaseTimeEntity {
@@ -39,6 +39,9 @@ public class Anonymous extends BaseTimeEntity {
 
 	@Column(name = "name_visible", nullable = false)
 	private boolean nameVisible;
+
+	@Column(unique = true, nullable = false, length = 4)
+	private String tag;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Column(name = "birthday", length = 10)
@@ -61,5 +64,5 @@ public class Anonymous extends BaseTimeEntity {
 		this.birthdayVisible = Objects.requireNonNull(birthdayVisible, "birthdayVisible은 null일 수 없습니다.");
 		this.bio = bio;
 	}
-	
+
 }
