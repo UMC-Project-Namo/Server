@@ -59,6 +59,7 @@ import com.namo.spring.db.mysql.domains.user.domain.Term;
 import com.namo.spring.db.mysql.domains.user.domain.User;
 import com.namo.spring.db.mysql.domains.user.type.SocialType;
 import com.namo.spring.db.mysql.domains.user.type.UserStatus;
+import com.namo.spring.db.redis.cache.refresh.RefreshTokenService;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -291,30 +292,30 @@ public class UserFacade {
 	}
 
 	@Transactional
-	public void removeKakaoUser(HttpServletRequest request) {
-		User user = getUserFromRequest(request);
+	public void removeKakaoUser(Long userId) {
+		User user = userService.getUser(userId);
 		String kakaoAccessToken = kakaoAuthClient.getAccessToken(user.getSocialRefreshToken());
 
 		//kakao unlink
 		kakaoAuthClient.unlinkKakao(kakaoAccessToken);
 
-		setUserInactive(request, user);
+		this.removeJwt(user);
 	}
 
 	@Transactional
-	public void removeNaverUser(HttpServletRequest request) {
-		User user = getUserFromRequest(request);
+	public void removeNaverUser(Long userId) {
+		User user = userService.getUser(userId);
 		String naverAccessToken = naverAuthClient.getAccessToken(user.getSocialRefreshToken());
 
 		//naver unlink
 		naverAuthClient.unlinkNaver(naverAccessToken);
 
-		setUserInactive(request, user);
+		this.removeJwt(user);
 	}
 
 	@Transactional
-	public void removeAppleUser(HttpServletRequest request) {
-		User user = getUserFromRequest(request);
+	public void removeAppleUser(Long userId) {
+		User user = userService.getUser(userId);
 
 		String clientSecret = createClientSecret();
 		String appleAccessToken = appleAuthClient.getAppleAccessToken(clientSecret, user.getSocialRefreshToken());
@@ -322,7 +323,12 @@ public class UserFacade {
 		//apple unlink
 		appleAuthClient.revoke(clientSecret, appleAccessToken);
 
-		setUserInactive(request, user);
+		this.removeJwt(user);
+	}
+
+	private void removeJwt(User user) {
+		CustomJwts jwts = jwtAuthHelper.createToken(user);
+		jwtAuthHelper.removeJwtsToken(user.getId(), jwts.accessToken(), jwts.refreshToken());
 	}
 
 	public String createClientSecret() {
@@ -417,24 +423,5 @@ public class UserFacade {
 
 		categoryService.createCategory(baseCategory);
 		categoryService.createCategory(groupCategory);
-	}
-
-	// HACK: 2024.06.22. social logout을 위해 작성된 임시 메서드 - 루카
-	private User getUserFromRequest(HttpServletRequest request) {
-		String accessToken = jwtAuthHelper.getAccessToken(request);
-		jwtAuthHelper.validateAccessTokenExpired(accessToken);
-
-		JwtClaims claims = accessTokenProvider.parseJwtClaimsFromToken(accessToken);
-		Long userId = JwtClaimsParserUtil.getClaimValue(claims, AccessTokenClaimKeys.USER_ID.getValue(), Long.class);
-		return userService.getUser(userId);
-	}
-
-	private void setUserInactive(HttpServletRequest request, User user) {
-		user.setStatus(UserStatus.INACTIVE);
-
-		//token 만료처리
-		String accessToken = jwtAuthHelper.getAccessToken(request);
-		String refreshToken = jwtAuthHelper.getRefreshToken(user.getId());
-		jwtAuthHelper.removeJwtsToken(user.getId(), accessToken, refreshToken);
 	}
 }
