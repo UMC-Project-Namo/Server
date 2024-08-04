@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import com.namo.spring.application.external.api.user.api.AuthApi;
 import com.namo.spring.application.external.api.user.dto.UserRequest;
 import com.namo.spring.application.external.api.user.dto.UserResponse;
 import com.namo.spring.application.external.api.user.facade.UserFacade;
+import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.core.common.response.ResponseDto;
 import com.namo.spring.db.mysql.domains.user.type.SocialType;
 
@@ -74,25 +76,28 @@ public class AuthController implements AuthApi {
 
 	@PostMapping("/kakao/delete")
 	@PreAuthorize("isAuthenticated()")
-	// TODO: 2024.07.26. SecurityContext를 이용한 사용자 정보 조회 - 루카
-	public ResponseDto<Void> removeKakaoUser(HttpServletRequest request) {
-		userFacade.removeKakaoUser(request);
+	public ResponseDto<Void> removeKakaoUser(
+		@AuthenticationPrincipal SecurityUserDetails user
+	) {
+		userFacade.removeKakaoUser(user.getUserId());
 		return ResponseDto.onSuccess(null);
 	}
 
 	@PostMapping("/naver/delete")
 	@PreAuthorize("isAuthenticated()")
-	// TODO: 2024.07.26. SecurityContext를 이용한 사용자 정보 조회 - 루카
-	public ResponseDto<Void> removeNaverUser(HttpServletRequest request) {
-		userFacade.removeNaverUser(request);
+	public ResponseDto<Void> removeNaverUser(
+		@AuthenticationPrincipal SecurityUserDetails user
+	) {
+		userFacade.removeNaverUser(user.getUserId());
 		return ResponseDto.onSuccess(null);
 	}
 
 	@PostMapping("/apple/delete")
 	@PreAuthorize("isAuthenticated()")
-	// TODO: 2024.07.26. SecurityContext를 이용한 사용자 정보 조회 - 루카
-	public ResponseDto<Void> removeAppleUser(HttpServletRequest request) {
-		userFacade.removeAppleUser(request);
+	public ResponseDto<Void> removeAppleUser(
+		@AuthenticationPrincipal SecurityUserDetails user
+	) {
+		userFacade.removeAppleUser(user.getUserId());
 		return ResponseDto.onSuccess(null);
 	}
 }

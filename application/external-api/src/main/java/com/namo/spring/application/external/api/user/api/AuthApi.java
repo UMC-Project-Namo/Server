@@ -1,14 +1,15 @@
 package com.namo.spring.application.external.api.user.api;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import com.namo.spring.application.external.api.user.dto.UserRequest;
 import com.namo.spring.application.external.api.user.dto.UserResponse;
+import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.core.common.response.ResponseDto;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -477,7 +478,7 @@ public interface AuthApi {
 			}
 			""")
 	}))
-	ResponseDto<Void> removeKakaoUser(HttpServletRequest request);
+	ResponseDto<Void> removeKakaoUser(@AuthenticationPrincipal SecurityUserDetails user);
 
 	@Operation(summary = "네이버 회원 탈퇴", description = """
 		네이버 회원 탈퇴 API, 네이버 회원 탈퇴 처리를 진행합니다.
@@ -550,7 +551,7 @@ public interface AuthApi {
 			}
 			""")
 	}))
-	ResponseDto<Void> removeNaverUser(HttpServletRequest request);
+	ResponseDto<Void> removeNaverUser(@AuthenticationPrincipal SecurityUserDetails user);
 
 	@Operation(summary = "애플 회원 탈퇴", description = """
 		애플 회원 탈퇴 API, 애플 회원 탈퇴 처리를 진행합니다.
@@ -609,5 +610,5 @@ public interface AuthApi {
 			}
 			""")
 	}))
-	ResponseDto<Void> removeAppleUser(HttpServletRequest request);
+	ResponseDto<Void> removeAppleUser(@AuthenticationPrincipal SecurityUserDetails user);
 }
