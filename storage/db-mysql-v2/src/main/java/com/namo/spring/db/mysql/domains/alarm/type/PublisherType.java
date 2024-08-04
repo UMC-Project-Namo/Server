@@ -7,17 +7,16 @@ import com.namo.spring.db.mysql.common.converter.CodedEnum;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum ReceiverDeviceType implements CodedEnum {
-	WEB("1", "웹"),
-	IOS("2", "IOS"),
-	ANDROID("3", "ANDROID"),
+public enum PublisherType implements CodedEnum {
+	USER("1", "사용자"),
+	SYSTEM("2", "시스템"),
 	;
 
 	private final String code;
 	private final String type;
 
 	@JsonCreator
-	public ReceiverDeviceType fromString(String type) {
+	public PublisherType fromString(String type) {
 		return valueOf(type.toUpperCase());
 	}
 

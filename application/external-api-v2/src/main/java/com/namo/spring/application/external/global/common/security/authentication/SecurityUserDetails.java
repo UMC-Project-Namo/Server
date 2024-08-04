@@ -53,7 +53,7 @@ public class SecurityUserDetails implements UserDetails {
 		return SecurityUserDetails.builder()
 			.userId(user.getId())
 			.username(user.getName())
-			.authorities(List.of(new CustomGrantedAuthority(user.getUserRole().getType())))
+			.authorities(List.of(new CustomGrantedAuthority(user.getMemberRole().getType())))
 			.accountNonLocked(user.getStatus().equals(MemberStatus.INACTIVE))
 			.build();
 	}

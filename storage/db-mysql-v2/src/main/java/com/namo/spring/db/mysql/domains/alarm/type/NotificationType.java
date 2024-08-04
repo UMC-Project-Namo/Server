@@ -7,17 +7,20 @@ import com.namo.spring.db.mysql.common.converter.CodedEnum;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum ReceiverDeviceType implements CodedEnum {
-	WEB("1", "웹"),
-	IOS("2", "IOS"),
-	ANDROID("3", "ANDROID"),
-	;
+public enum NotificationType implements CodedEnum {
+	FRIEND_REQUEST("1", "친구 요청"),
+	FRIEND_REQUEST_ACCEPTED("2", "친구 요청 수락"),
+	FRIEND_REQUEST_REJECTED("3", "친구 요청 거절"),
+	SCHEDULE_CREATED("4", "일정 생성"),
+	SCHEDULE_UPDATED("5", "일정 수정"),
+	SCHEDULE_DELETED("6", "일정 삭제"),
+	SCHEDULE_TO_BE_STARTED("7", "일정 시작 예정");
 
 	private final String code;
 	private final String type;
 
 	@JsonCreator
-	public ReceiverDeviceType fromString(String type) {
+	public NotificationType fromString(String type) {
 		return valueOf(type.toUpperCase());
 	}
 

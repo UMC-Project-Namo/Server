@@ -1,16 +1,18 @@
 package com.namo.spring.db.mysql.domains.alarm.entity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
+import com.namo.spring.db.mysql.common.converter.ProviderConverter;
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import com.namo.spring.db.mysql.domains.alarm.type.ReceiverDeviceType;
 
@@ -30,7 +32,9 @@ public class Device extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Enumerated(EnumType.STRING)
+	@JdbcTypeCode(SqlTypes.VARCHAR)
+	@Convert(converter = ProviderConverter.class)
+	@Column(name = "receiver_device_type", nullable = false, length = 50)
 	private ReceiverDeviceType receiverDeviceType;
 
 	@Column(name = "receiver_device_token")
