@@ -12,7 +12,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import com.namo.spring.db.mysql.common.converter.ProviderConverter;
+import com.namo.spring.db.mysql.common.converter.ReceiverDeviceTypeConverter;
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import com.namo.spring.db.mysql.domains.alarm.type.ReceiverDeviceType;
 
@@ -33,7 +33,7 @@ public class Device extends BaseTimeEntity {
 	private Long id;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Convert(converter = ProviderConverter.class)
+	@Convert(converter = ReceiverDeviceTypeConverter.class)
 	@Column(name = "receiver_device_type", nullable = false, length = 50)
 	private ReceiverDeviceType receiverDeviceType;
 

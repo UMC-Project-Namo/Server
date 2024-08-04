@@ -3,9 +3,8 @@ package com.namo.spring.db.mysql.domains.alarm.entity;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,6 +17,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import com.namo.spring.db.mysql.common.converter.NotificationTypeConverter;
+import com.namo.spring.db.mysql.common.converter.PublisherTypeConverter;
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import com.namo.spring.db.mysql.domains.alarm.type.NotificationType;
 import com.namo.spring.db.mysql.domains.alarm.type.PublisherType;
@@ -39,7 +40,9 @@ public class Notification extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Enumerated(EnumType.STRING)
+	@JdbcTypeCode(SqlTypes.VARCHAR)
+	@Convert(converter = PublisherTypeConverter.class)
+	@Column(name = "publisher_type", nullable = false, length = 50)
 	private PublisherType publisherType;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -58,8 +61,9 @@ public class Notification extends BaseTimeEntity {
 	@JoinColumn(name = "device", nullable = false)
 	private Device device;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "notification_type", nullable = false)
+	@JdbcTypeCode(SqlTypes.VARCHAR)
+	@Convert(converter = NotificationTypeConverter.class)
+	@Column(name = "notification_type", nullable = false, length = 50)
 	private NotificationType notificationType;
 
 	@Column(name = "notification_json", nullable = false)
