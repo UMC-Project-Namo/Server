@@ -1,12 +1,12 @@
 package com.namo.spring.application.external.api.user.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -68,36 +68,48 @@ public class AuthController implements AuthApi {
 	@PostMapping(value = "/logout")
 	@PreAuthorize("isAuthenticated()")
 	public ResponseDto<Void> logout(
-		@Valid @RequestBody UserRequest.LogoutDto logoutDto
+		@RequestHeader(value = "Authorization") String authHeader,
+		@RequestHeader(value = "refreshToken") String refreshToken,
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		userFacade.logout(logoutDto);
+		String accessToken = authHeader.split(" ")[1];
+		userFacade.logout(user.getUserId(), accessToken, refreshToken);
 		return ResponseDto.onSuccess(null);
 	}
 
 	@PostMapping("/kakao/delete")
 	@PreAuthorize("isAuthenticated()")
 	public ResponseDto<Void> removeKakaoUser(
+		@RequestHeader(value = "Authorization") String authHeader,
+		@RequestHeader(value = "refreshToken") String refreshToken,
 		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		userFacade.removeKakaoUser(user.getUserId());
+		String accessToken = authHeader.split(" ")[1];
+		userFacade.removeKakaoUser(user.getUserId(), accessToken, refreshToken);
 		return ResponseDto.onSuccess(null);
 	}
 
 	@PostMapping("/naver/delete")
 	@PreAuthorize("isAuthenticated()")
 	public ResponseDto<Void> removeNaverUser(
+		@RequestHeader(value = "Authorization") String authHeader,
+		@RequestHeader(value = "refreshToken") String refreshToken,
 		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		userFacade.removeNaverUser(user.getUserId());
+		String accessToken = authHeader.split(" ")[1];
+		userFacade.removeNaverUser(user.getUserId(), accessToken, refreshToken);
 		return ResponseDto.onSuccess(null);
 	}
 
 	@PostMapping("/apple/delete")
 	@PreAuthorize("isAuthenticated()")
 	public ResponseDto<Void> removeAppleUser(
+		@RequestHeader(value = "Authorization") String authHeader,
+		@RequestHeader(value = "refreshToken") String refreshToken,
 		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		userFacade.removeAppleUser(user.getUserId());
+		String accessToken = authHeader.split(" ")[1];
+		userFacade.removeAppleUser(user.getUserId(), accessToken, refreshToken);
 		return ResponseDto.onSuccess(null);
 	}
 }
