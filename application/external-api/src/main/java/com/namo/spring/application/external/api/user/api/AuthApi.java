@@ -3,6 +3,7 @@ package com.namo.spring.application.external.api.user.api;
 import jakarta.validation.Valid;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.namo.spring.application.external.api.user.dto.UserRequest;
 import com.namo.spring.application.external.api.user.dto.UserResponse;
@@ -10,6 +11,8 @@ import com.namo.spring.application.external.global.common.security.authenticatio
 import com.namo.spring.core.common.response.ResponseDto;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -379,6 +382,10 @@ public interface AuthApi {
 	);
 
 	@Operation(summary = "로그아웃", description = "로그아웃 API, 로그아웃 처리된 유저의 토큰을 만료시킵니다.")
+	@Parameters({
+		@Parameter(name = "Authorization", description = "Bearer Token", hidden = true),
+		@Parameter(name = "refreshToken", description = "Refresh Token", hidden = false)
+	})
 	@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {
 		@ExampleObject(name = "로그아웃 성공", value = """
 			{
@@ -390,7 +397,9 @@ public interface AuthApi {
 			""")
 	}))
 	ResponseDto<Void> logout(
-		@Valid @RequestBody UserRequest.LogoutDto logoutDto
+		@RequestHeader(value = "Authorization") String authHeader,
+		@RequestHeader(value = "refreshToken") String refreshToken,
+		@AuthenticationPrincipal SecurityUserDetails user
 	);
 
 	@Operation(summary = "카카오 회원 탈퇴", description = """
@@ -399,6 +408,10 @@ public interface AuthApi {
 		
 		이때, 삭제 처리는 바로 진행되는 것이 아니며 탈퇴 신청 후 3일간 유예기간이 있습니다.
 		""")
+	@Parameters({
+		@Parameter(name = "Authorization", description = "Bearer Token", hidden = true),
+		@Parameter(name = "refreshToken", description = "Refresh Token", hidden = false)
+	})
 	@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {
 		@ExampleObject(name = "카카오 회원 탈퇴 성공", value = """
 			{
@@ -478,7 +491,11 @@ public interface AuthApi {
 			}
 			""")
 	}))
-	ResponseDto<Void> removeKakaoUser(@AuthenticationPrincipal SecurityUserDetails user);
+	ResponseDto<Void> removeKakaoUser(
+		@RequestHeader(value = "Authorization") String authHeader,
+		@RequestHeader(value = "refreshToken") String refreshToken,
+		@AuthenticationPrincipal SecurityUserDetails user
+	);
 
 	@Operation(summary = "네이버 회원 탈퇴", description = """
 		네이버 회원 탈퇴 API, 네이버 회원 탈퇴 처리를 진행합니다.
@@ -486,6 +503,10 @@ public interface AuthApi {
 		
 		이때, 삭제 처리는 바로 진행되는 것이 아니며 탈퇴 신청 후 3일간 유예기간이 있습니다.
 		""")
+	@Parameters({
+		@Parameter(name = "Authorization", description = "Bearer Token", hidden = true),
+		@Parameter(name = "refreshToken", description = "Refresh Token", hidden = false)
+	})
 	@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {
 		@ExampleObject(name = "네이버 회원 탈퇴 성공", value = """
 			{
@@ -551,7 +572,11 @@ public interface AuthApi {
 			}
 			""")
 	}))
-	ResponseDto<Void> removeNaverUser(@AuthenticationPrincipal SecurityUserDetails user);
+	ResponseDto<Void> removeNaverUser(
+		@RequestHeader(value = "Authorization") String authHeader,
+		@RequestHeader(value = "refreshToken") String refreshToken,
+		@AuthenticationPrincipal SecurityUserDetails user
+	);
 
 	@Operation(summary = "애플 회원 탈퇴", description = """
 		애플 회원 탈퇴 API, 애플 회원 탈퇴 처리를 진행합니다.
@@ -559,6 +584,10 @@ public interface AuthApi {
 		
 		이때, 삭제 처리는 바로 진행되는 것이 아니며 탈퇴 신청 후 3일간 유예기간이 있습니다.
 		""")
+	@Parameters({
+		@Parameter(name = "Authorization", description = "Bearer Token", hidden = true),
+		@Parameter(name = "refreshToken", description = "Refresh Token", hidden = false)
+	})
 	@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {
 		@ExampleObject(name = "애플 회원 탈퇴 성공", value = """
 			{
@@ -610,5 +639,9 @@ public interface AuthApi {
 			}
 			""")
 	}))
-	ResponseDto<Void> removeAppleUser(@AuthenticationPrincipal SecurityUserDetails user);
+	ResponseDto<Void> removeAppleUser(
+		@RequestHeader(value = "Authorization") String authHeader,
+		@RequestHeader(value = "refreshToken") String refreshToken,
+		@AuthenticationPrincipal SecurityUserDetails user
+	);
 }
