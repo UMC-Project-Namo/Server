@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import jakarta.servlet.http.HttpServletRequest;
-
 import org.json.simple.JSONObject;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -59,7 +57,6 @@ import com.namo.spring.db.mysql.domains.user.domain.Term;
 import com.namo.spring.db.mysql.domains.user.domain.User;
 import com.namo.spring.db.mysql.domains.user.type.SocialType;
 import com.namo.spring.db.mysql.domains.user.type.UserStatus;
-import com.namo.spring.db.redis.cache.refresh.RefreshTokenService;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -71,7 +68,6 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class UserFacade {
 	private final JwtProvider refreshTokenProvider;
-	private final JwtProvider accessTokenProvider;
 	private final JwtAuthHelper jwtAuthHelper;
 
 	private final SocialUtils socialUtils;
@@ -95,7 +91,6 @@ public class UserFacade {
 
 	public UserFacade(
 		@RefreshTokenStrategy JwtProvider refreshTokenProvider,
-		@AccessTokenStrategy JwtProvider accessTokenProvider,
 		JwtAuthHelper jwtAuthHelper,
 
 		SocialUtils socialUtils,
@@ -118,7 +113,6 @@ public class UserFacade {
 		AppleProperties appleProperties
 	) {
 		this.refreshTokenProvider = refreshTokenProvider;
-		this.accessTokenProvider = accessTokenProvider;
 		this.jwtAuthHelper = jwtAuthHelper;
 		this.socialUtils = socialUtils;
 		this.fileUtils = fileUtils;
@@ -275,13 +269,9 @@ public class UserFacade {
 		return reissueRes;
 	}
 
-	// TODO: 2024.06.22. 추후에 api를 수정하거나 Service를 분리하는 등 수정해야할 듯? - 루카
 	@Transactional
-	public void logout(UserRequest.LogoutDto logoutDto) {
-		JwtClaims jwtClaims = accessTokenProvider.parseJwtClaimsFromToken(logoutDto.getAccessToken());
-		Long userId = JwtClaimsParserUtil.getClaimValue(jwtClaims, AccessTokenClaimKeys.USER_ID.getValue(), Long.class);
-		String refreshToken = jwtAuthHelper.getRefreshToken(userId);
-		jwtAuthHelper.removeJwtsToken(userId, logoutDto.getAccessToken(), refreshToken);
+	public void logout(Long userId, String accessToken, String refreshToken) {
+		jwtAuthHelper.removeJwtsToken(userId, accessToken, refreshToken);
 	}
 
 	@Transactional(readOnly = false)
@@ -292,43 +282,40 @@ public class UserFacade {
 	}
 
 	@Transactional
-	public void removeKakaoUser(Long userId) {
+	public void removeKakaoUser(Long userId, String accessToken, String refreshToken) {
 		User user = userService.getUser(userId);
-		String kakaoAccessToken = kakaoAuthClient.getAccessToken(user.getSocialRefreshToken());
 
 		//kakao unlink
+		String kakaoAccessToken = kakaoAuthClient.getAccessToken(user.getSocialRefreshToken());
 		kakaoAuthClient.unlinkKakao(kakaoAccessToken);
 
-		this.removeJwt(user);
+		// Token 삭제
+		jwtAuthHelper.removeJwtsToken(userId, accessToken, refreshToken);
 	}
 
 	@Transactional
-	public void removeNaverUser(Long userId) {
+	public void removeNaverUser(Long userId, String accessToken, String refreshToken) {
 		User user = userService.getUser(userId);
-		String naverAccessToken = naverAuthClient.getAccessToken(user.getSocialRefreshToken());
 
 		//naver unlink
+		String naverAccessToken = naverAuthClient.getAccessToken(user.getSocialRefreshToken());
 		naverAuthClient.unlinkNaver(naverAccessToken);
 
-		this.removeJwt(user);
+		// Token 삭제
+		jwtAuthHelper.removeJwtsToken(userId, accessToken, refreshToken);
 	}
 
 	@Transactional
-	public void removeAppleUser(Long userId) {
+	public void removeAppleUser(Long userId, String accessToken, String refreshToken) {
 		User user = userService.getUser(userId);
 
+		// apple unlink
 		String clientSecret = createClientSecret();
 		String appleAccessToken = appleAuthClient.getAppleAccessToken(clientSecret, user.getSocialRefreshToken());
-
-		//apple unlink
 		appleAuthClient.revoke(clientSecret, appleAccessToken);
 
-		this.removeJwt(user);
-	}
-
-	private void removeJwt(User user) {
-		CustomJwts jwts = jwtAuthHelper.createToken(user);
-		jwtAuthHelper.removeJwtsToken(user.getId(), jwts.accessToken(), jwts.refreshToken());
+		// Token 삭제
+		jwtAuthHelper.removeJwtsToken(userId, accessToken, refreshToken);
 	}
 
 	public String createClientSecret() {
