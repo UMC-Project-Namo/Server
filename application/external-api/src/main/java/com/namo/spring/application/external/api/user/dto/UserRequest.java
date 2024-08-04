@@ -17,14 +17,6 @@ public class UserRequest {
 	@Getter
 	@AllArgsConstructor
 	@NoArgsConstructor
-	public static class LogoutDto {
-		@NotBlank
-		private String accessToken;
-	}
-
-	@Getter
-	@AllArgsConstructor
-	@NoArgsConstructor
 	@Schema(description = "토큰 재발급 요청 DTO")
 	public static class ReissueDto {
 		@Schema(description = "재발급 요청을 위한 refreshToken", example = "exampleRefreshToken")
