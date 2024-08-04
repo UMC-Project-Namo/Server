@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import jakarta.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.tuple.Pair;
 import org.json.simple.JSONObject;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -34,10 +32,7 @@ import com.namo.spring.application.external.api.user.dto.UserRequest;
 import com.namo.spring.application.external.api.user.dto.UserResponse;
 import com.namo.spring.application.external.api.user.helper.JwtAuthHelper;
 import com.namo.spring.application.external.api.user.service.UserService;
-import com.namo.spring.application.external.global.common.annotation.AccessTokenStrategy;
 import com.namo.spring.application.external.global.common.security.jwt.CustomJwts;
-import com.namo.spring.application.external.global.common.security.jwt.JwtClaimsParserUtil;
-import com.namo.spring.application.external.global.common.security.jwt.access.AccessTokenClaimKeys;
 import com.namo.spring.application.external.global.utils.SocialUtils;
 import com.namo.spring.client.social.apple.client.AppleAuthClient;
 import com.namo.spring.client.social.apple.dto.AppleResponse;
@@ -48,8 +43,6 @@ import com.namo.spring.client.social.kakao.client.KakaoAuthClient;
 import com.namo.spring.client.social.naver.client.NaverAuthClient;
 import com.namo.spring.core.infra.common.aws.s3.FileUtils;
 import com.namo.spring.core.infra.common.constant.FilePath;
-import com.namo.spring.core.infra.common.jwt.JwtClaims;
-import com.namo.spring.core.infra.common.jwt.JwtProvider;
 import com.namo.spring.db.mysql.domains.group.domain.MoimScheduleAndUser;
 import com.namo.spring.db.mysql.domains.individual.domain.Category;
 import com.namo.spring.db.mysql.domains.individual.domain.Image;
@@ -59,7 +52,6 @@ import com.namo.spring.db.mysql.domains.user.domain.Term;
 import com.namo.spring.db.mysql.domains.user.domain.User;
 import com.namo.spring.db.mysql.domains.user.type.SocialType;
 import com.namo.spring.db.mysql.domains.user.type.UserStatus;
-import com.namo.spring.db.redis.cache.refresh.RefreshTokenService;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -70,7 +62,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class UserFacade {
-	private final JwtProvider accessTokenProvider;
 	private final JwtAuthHelper jwtAuthHelper;
 
 	private final SocialUtils socialUtils;
@@ -93,7 +84,6 @@ public class UserFacade {
 	private final AppleProperties appleProperties;
 
 	public UserFacade(
-		@AccessTokenStrategy JwtProvider accessTokenProvider,
 		JwtAuthHelper jwtAuthHelper,
 
 		SocialUtils socialUtils,
@@ -115,7 +105,6 @@ public class UserFacade {
 		AppleUtils appleUtils,
 		AppleProperties appleProperties
 	) {
-		this.accessTokenProvider = accessTokenProvider;
 		this.jwtAuthHelper = jwtAuthHelper;
 		this.socialUtils = socialUtils;
 		this.fileUtils = fileUtils;
@@ -263,13 +252,9 @@ public class UserFacade {
 		);
 	}
 
-	// TODO: 2024.06.22. 추후에 api를 수정하거나 Service를 분리하는 등 수정해야할 듯? - 루카
 	@Transactional
-	public void logout(UserRequest.LogoutDto logoutDto) {
-		JwtClaims jwtClaims = accessTokenProvider.parseJwtClaimsFromToken(logoutDto.getAccessToken());
-		Long userId = JwtClaimsParserUtil.getClaimValue(jwtClaims, AccessTokenClaimKeys.USER_ID.getValue(), Long.class);
-		String refreshToken = jwtAuthHelper.getRefreshToken(userId);
-		jwtAuthHelper.removeJwtsToken(userId, logoutDto.getAccessToken(), refreshToken);
+	public void logout(Long userId, String accessToken, String refreshToken) {
+		jwtAuthHelper.removeJwtsToken(userId, accessToken, refreshToken);
 	}
 
 	@Transactional(readOnly = false)
@@ -280,43 +265,40 @@ public class UserFacade {
 	}
 
 	@Transactional
-	public void removeKakaoUser(Long userId) {
+	public void removeKakaoUser(Long userId, String accessToken, String refreshToken) {
 		User user = userService.getUser(userId);
-		String kakaoAccessToken = kakaoAuthClient.getAccessToken(user.getSocialRefreshToken());
 
 		//kakao unlink
+		String kakaoAccessToken = kakaoAuthClient.getAccessToken(user.getSocialRefreshToken());
 		kakaoAuthClient.unlinkKakao(kakaoAccessToken);
 
-		this.removeJwt(user);
+		// Token 삭제
+		jwtAuthHelper.removeJwtsToken(userId, accessToken, refreshToken);
 	}
 
 	@Transactional
-	public void removeNaverUser(Long userId) {
+	public void removeNaverUser(Long userId, String accessToken, String refreshToken) {
 		User user = userService.getUser(userId);
-		String naverAccessToken = naverAuthClient.getAccessToken(user.getSocialRefreshToken());
 
 		//naver unlink
+		String naverAccessToken = naverAuthClient.getAccessToken(user.getSocialRefreshToken());
 		naverAuthClient.unlinkNaver(naverAccessToken);
 
-		this.removeJwt(user);
+		// Token 삭제
+		jwtAuthHelper.removeJwtsToken(userId, accessToken, refreshToken);
 	}
 
 	@Transactional
-	public void removeAppleUser(Long userId) {
+	public void removeAppleUser(Long userId, String accessToken, String refreshToken) {
 		User user = userService.getUser(userId);
 
+		// apple unlink
 		String clientSecret = createClientSecret();
 		String appleAccessToken = appleAuthClient.getAppleAccessToken(clientSecret, user.getSocialRefreshToken());
-
-		//apple unlink
 		appleAuthClient.revoke(clientSecret, appleAccessToken);
 
-		this.removeJwt(user);
-	}
-
-	private void removeJwt(User user) {
-		CustomJwts jwts = jwtAuthHelper.createToken(user);
-		jwtAuthHelper.removeJwtsToken(user.getId(), jwts.accessToken(), jwts.refreshToken());
+		// Token 삭제
+		jwtAuthHelper.removeJwtsToken(userId, accessToken, refreshToken);
 	}
 
 	public String createClientSecret() {
