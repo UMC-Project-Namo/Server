@@ -10,6 +10,7 @@ import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.method.HandlerMethod;
 
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCode;
@@ -34,6 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Configuration
+@Profile({"local", "dev"})
 public class SwaggerConfig {
 
 	private static final String API_NAME = "Namo Api";
