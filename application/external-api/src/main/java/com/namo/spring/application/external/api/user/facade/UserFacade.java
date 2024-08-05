@@ -243,8 +243,8 @@ public class UserFacade {
 	}
 
 	@Transactional
-	public UserResponse.ReissueDto reissueAccessToken(UserRequest.ReissueDto reissueDto) {
-		Pair<Long, CustomJwts> user = jwtAuthHelper.refresh(reissueDto.getRefreshToken());
+	public UserResponse.ReissueDto reissueAccessToken(String refreshToken) {
+		Pair<Long, CustomJwts> user = jwtAuthHelper.refresh(refreshToken);
 		return UserResponseConverter.toReissueDto(
 			user.getValue().accessToken(),
 			user.getValue().refreshToken()
