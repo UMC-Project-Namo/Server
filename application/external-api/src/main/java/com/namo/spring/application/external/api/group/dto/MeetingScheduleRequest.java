@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 public class MeetingScheduleRequest {
+
 	private MeetingScheduleRequest() {
 		throw new IllegalStateException("Util class");
 	}

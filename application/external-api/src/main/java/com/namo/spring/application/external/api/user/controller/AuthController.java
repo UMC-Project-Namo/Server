@@ -57,12 +57,11 @@ public class AuthController implements AuthApi {
 	}
 
 	@PostMapping(value = "/reissuance")
-	@PreAuthorize("isAuthenticated()")
+	@PreAuthorize("isAnonymous()")
 	public ResponseDto<UserResponse.ReissueDto> reissueAccessToken(
-		@Valid @RequestBody UserRequest.ReissueDto reissueDto
+		@RequestHeader(value = "refreshToken") String refreshToken
 	) {
-		UserResponse.ReissueDto result = userFacade.reissueAccessToken(reissueDto);
-		return ResponseDto.onSuccess(result);
+		return ResponseDto.onSuccess(userFacade.reissueAccessToken(refreshToken));
 	}
 
 	@PostMapping(value = "/logout")

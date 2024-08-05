@@ -345,6 +345,9 @@ public interface AuthApi {
 	);
 
 	@Operation(summary = "토큰 재발급", description = "토큰 재발급")
+	@Parameters({
+		@Parameter(name = "refreshToken", description = "Refresh Token", hidden = false)
+	})
 	@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {
 		@ExampleObject(name = "토큰 재발급 성공", value = """
 			{
@@ -378,7 +381,7 @@ public interface AuthApi {
 			""")
 	}))
 	ResponseDto<UserResponse.ReissueDto> reissueAccessToken(
-		@Valid @RequestBody UserRequest.ReissueDto reissueDto
+		@RequestHeader(value = "refreshHeader") String refreshToken
 	);
 
 	@Operation(summary = "로그아웃", description = "로그아웃 API, 로그아웃 처리된 유저의 토큰을 만료시킵니다.")

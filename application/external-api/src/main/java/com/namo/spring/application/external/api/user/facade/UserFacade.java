@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.json.simple.JSONObject;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -31,11 +32,7 @@ import com.namo.spring.application.external.api.user.dto.UserRequest;
 import com.namo.spring.application.external.api.user.dto.UserResponse;
 import com.namo.spring.application.external.api.user.helper.JwtAuthHelper;
 import com.namo.spring.application.external.api.user.service.UserService;
-import com.namo.spring.application.external.global.common.annotation.AccessTokenStrategy;
-import com.namo.spring.application.external.global.common.annotation.RefreshTokenStrategy;
 import com.namo.spring.application.external.global.common.security.jwt.CustomJwts;
-import com.namo.spring.application.external.global.common.security.jwt.JwtClaimsParserUtil;
-import com.namo.spring.application.external.global.common.security.jwt.access.AccessTokenClaimKeys;
 import com.namo.spring.application.external.global.utils.SocialUtils;
 import com.namo.spring.client.social.apple.client.AppleAuthClient;
 import com.namo.spring.client.social.apple.dto.AppleResponse;
@@ -46,8 +43,6 @@ import com.namo.spring.client.social.kakao.client.KakaoAuthClient;
 import com.namo.spring.client.social.naver.client.NaverAuthClient;
 import com.namo.spring.core.infra.common.aws.s3.FileUtils;
 import com.namo.spring.core.infra.common.constant.FilePath;
-import com.namo.spring.core.infra.common.jwt.JwtClaims;
-import com.namo.spring.core.infra.common.jwt.JwtProvider;
 import com.namo.spring.db.mysql.domains.group.domain.MoimScheduleAndUser;
 import com.namo.spring.db.mysql.domains.individual.domain.Category;
 import com.namo.spring.db.mysql.domains.individual.domain.Image;
@@ -62,12 +57,13 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class UserFacade {
-	private final JwtProvider refreshTokenProvider;
 	private final JwtAuthHelper jwtAuthHelper;
 
 	private final SocialUtils socialUtils;
@@ -88,49 +84,6 @@ public class UserFacade {
 	private final AppleAuthClient appleAuthClient;
 	private final AppleUtils appleUtils;
 	private final AppleProperties appleProperties;
-
-	public UserFacade(
-		@RefreshTokenStrategy JwtProvider refreshTokenProvider,
-		JwtAuthHelper jwtAuthHelper,
-
-		SocialUtils socialUtils,
-		FileUtils fileUtils,
-
-		UserService userService,
-		PaletteService paletteService,
-		CategoryService categoryService,
-		ScheduleService scheduleService,
-		AlarmService alarmService,
-		ImageService imageService,
-		GroupAndUserService groupAndUserService,
-		GroupScheduleAndUserService groupScheduleAndUserService,
-		GroupActivityService groupActivityService,
-
-		KakaoAuthClient kakaoAuthClient,
-		NaverAuthClient naverAuthClient,
-		AppleAuthClient appleAuthClient,
-		AppleUtils appleUtils,
-		AppleProperties appleProperties
-	) {
-		this.refreshTokenProvider = refreshTokenProvider;
-		this.jwtAuthHelper = jwtAuthHelper;
-		this.socialUtils = socialUtils;
-		this.fileUtils = fileUtils;
-		this.userService = userService;
-		this.paletteService = paletteService;
-		this.categoryService = categoryService;
-		this.scheduleService = scheduleService;
-		this.alarmService = alarmService;
-		this.imageService = imageService;
-		this.groupAndUserService = groupAndUserService;
-		this.groupScheduleAndUserService = groupScheduleAndUserService;
-		this.groupActivityService = groupActivityService;
-		this.kakaoAuthClient = kakaoAuthClient;
-		this.naverAuthClient = naverAuthClient;
-		this.appleAuthClient = appleAuthClient;
-		this.appleUtils = appleUtils;
-		this.appleProperties = appleProperties;
-	}
 
 	// TODO: 2024.06.22. 추후에 Social Login을 한번에 처리할 수 있는 Util 클래스로 묶기 - 루카
 	@Transactional
@@ -163,7 +116,6 @@ public class UserFacade {
 
 		//get apple refresh token
 		String clientSecret = createClientSecret();
-
 		String appleRefreshToken = appleAuthClient.getAppleRefreshToken(clientSecret, req.getAuthorizationCode());
 		String email = "";
 
@@ -252,21 +204,12 @@ public class UserFacade {
 	}
 
 	@Transactional
-	public UserResponse.ReissueDto reissueAccessToken(UserRequest.ReissueDto reissueDto) {
-		jwtAuthHelper.validateRefreshTokenExpired(reissueDto.getRefreshToken());
-		userService.checkLogoutUser(reissueDto);
-
-		JwtClaims claims = refreshTokenProvider.parseJwtClaimsFromToken(reissueDto.getRefreshToken());
-		Long userId = JwtClaimsParserUtil.getClaimValue(claims, AccessTokenClaimKeys.USER_ID.getValue(),
-			Long::parseLong);
-
-		User user = userService.getUser(userId);
-
-		CustomJwts jwts = jwtAuthHelper.createToken(user);
-		UserResponse.ReissueDto reissueRes = UserResponseConverter.toReissueDto(jwts.accessToken(),
-			jwts.refreshToken());
-		user.updateRefreshToken(reissueRes.getRefreshToken());
-		return reissueRes;
+	public UserResponse.ReissueDto reissueAccessToken(String refreshToken) {
+		Pair<Long, CustomJwts> user = jwtAuthHelper.refresh(refreshToken);
+		return UserResponseConverter.toReissueDto(
+			user.getValue().accessToken(),
+			user.getValue().refreshToken()
+		);
 	}
 
 	@Transactional
