@@ -1,11 +1,12 @@
 package com.namo.spring.application.external.api.user.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,6 +14,7 @@ import com.namo.spring.application.external.api.user.api.AuthApi;
 import com.namo.spring.application.external.api.user.dto.UserRequest;
 import com.namo.spring.application.external.api.user.dto.UserResponse;
 import com.namo.spring.application.external.api.user.facade.UserFacade;
+import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.core.common.response.ResponseDto;
 import com.namo.spring.db.mysql.domains.user.type.SocialType;
 
@@ -66,33 +68,48 @@ public class AuthController implements AuthApi {
 	@PostMapping(value = "/logout")
 	@PreAuthorize("isAuthenticated()")
 	public ResponseDto<Void> logout(
-		@Valid @RequestBody UserRequest.LogoutDto logoutDto
+		@RequestHeader(value = "Authorization") String authHeader,
+		@RequestHeader(value = "refreshToken") String refreshToken,
+		@AuthenticationPrincipal SecurityUserDetails user
 	) {
-		userFacade.logout(logoutDto);
+		String accessToken = authHeader.split(" ")[1];
+		userFacade.logout(user.getUserId(), accessToken, refreshToken);
 		return ResponseDto.onSuccess(null);
 	}
 
 	@PostMapping("/kakao/delete")
 	@PreAuthorize("isAuthenticated()")
-	// TODO: 2024.07.26. SecurityContext를 이용한 사용자 정보 조회 - 루카
-	public ResponseDto<Void> removeKakaoUser(HttpServletRequest request) {
-		userFacade.removeKakaoUser(request);
+	public ResponseDto<Void> removeKakaoUser(
+		@RequestHeader(value = "Authorization") String authHeader,
+		@RequestHeader(value = "refreshToken") String refreshToken,
+		@AuthenticationPrincipal SecurityUserDetails user
+	) {
+		String accessToken = authHeader.split(" ")[1];
+		userFacade.removeKakaoUser(user.getUserId(), accessToken, refreshToken);
 		return ResponseDto.onSuccess(null);
 	}
 
 	@PostMapping("/naver/delete")
 	@PreAuthorize("isAuthenticated()")
-	// TODO: 2024.07.26. SecurityContext를 이용한 사용자 정보 조회 - 루카
-	public ResponseDto<Void> removeNaverUser(HttpServletRequest request) {
-		userFacade.removeNaverUser(request);
+	public ResponseDto<Void> removeNaverUser(
+		@RequestHeader(value = "Authorization") String authHeader,
+		@RequestHeader(value = "refreshToken") String refreshToken,
+		@AuthenticationPrincipal SecurityUserDetails user
+	) {
+		String accessToken = authHeader.split(" ")[1];
+		userFacade.removeNaverUser(user.getUserId(), accessToken, refreshToken);
 		return ResponseDto.onSuccess(null);
 	}
 
 	@PostMapping("/apple/delete")
 	@PreAuthorize("isAuthenticated()")
-	// TODO: 2024.07.26. SecurityContext를 이용한 사용자 정보 조회 - 루카
-	public ResponseDto<Void> removeAppleUser(HttpServletRequest request) {
-		userFacade.removeAppleUser(request);
+	public ResponseDto<Void> removeAppleUser(
+		@RequestHeader(value = "Authorization") String authHeader,
+		@RequestHeader(value = "refreshToken") String refreshToken,
+		@AuthenticationPrincipal SecurityUserDetails user
+	) {
+		String accessToken = authHeader.split(" ")[1];
+		userFacade.removeAppleUser(user.getUserId(), accessToken, refreshToken);
 		return ResponseDto.onSuccess(null);
 	}
 }

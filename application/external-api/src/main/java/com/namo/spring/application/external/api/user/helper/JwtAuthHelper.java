@@ -133,41 +133,6 @@ public class JwtAuthHelper {
 		deleteAccessToken(userId, accessToken);
 	}
 
-	// HACK: 2024.06.22. logout을 위해 작성된 임시 메서드 - 루카
-	public String getRefreshToken(Long userId) {
-		return refreshTokenService.findOrElseThrow(userId).getToken();
-	}
-
-	/**
-	 * 주어진 request에서 accessToken을 추출합니다.
-	 *
-	 * @param request : 추출할 request
-	 * @return 추출된 accessToken
-	 * @throws UtilsException <br/>
-	 *                        - {@link ErrorStatus#EMPTY_ACCESS_KEY} : accessToken이 없을 때
-	 */
-	// HACK: 2024.06.22. social logout을 위해 작성된 임시 메서드 - 루카
-	public String getAccessToken(HttpServletRequest request) {
-		String accessToken = request.getHeader(AuthConstants.AUTHORIZATION.getValue());
-
-		if (accessToken == null || accessToken.isEmpty()) {
-			throw new UtilsException(ErrorStatus.EMPTY_ACCESS_KEY);
-		}
-
-		return accessToken.replace(AuthConstants.TOKEN_PREFIX.getValue(), "");
-	}
-
-	/**
-	 * 주어진 accessToken이 만료되었는지 확인합니다.
-	 *
-	 * @param token : 확인할 accessToken
-	 * @return 만료되었으면 true, 그렇지 않으면 false
-	 */
-	// HACK: 2024.06.22. spring security 적용 후 삭제될 임시 메서드입니다. - 루카
-	public boolean validateAccessTokenExpired(String token) {
-		return accessTokenProvider.isTokenExpired(token);
-	}
-
 	/**
 	 * 주어진 refreshToken이 만료되었는지 확인합니다.
 	 *

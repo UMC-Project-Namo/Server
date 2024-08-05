@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import jakarta.servlet.http.HttpServletRequest;
-
 import org.json.simple.JSONObject;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -70,7 +68,6 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class UserFacade {
 	private final JwtProvider refreshTokenProvider;
-	private final JwtProvider accessTokenProvider;
 	private final JwtAuthHelper jwtAuthHelper;
 
 	private final SocialUtils socialUtils;
@@ -94,7 +91,6 @@ public class UserFacade {
 
 	public UserFacade(
 		@RefreshTokenStrategy JwtProvider refreshTokenProvider,
-		@AccessTokenStrategy JwtProvider accessTokenProvider,
 		JwtAuthHelper jwtAuthHelper,
 
 		SocialUtils socialUtils,
@@ -117,7 +113,6 @@ public class UserFacade {
 		AppleProperties appleProperties
 	) {
 		this.refreshTokenProvider = refreshTokenProvider;
-		this.accessTokenProvider = accessTokenProvider;
 		this.jwtAuthHelper = jwtAuthHelper;
 		this.socialUtils = socialUtils;
 		this.fileUtils = fileUtils;
@@ -274,13 +269,9 @@ public class UserFacade {
 		return reissueRes;
 	}
 
-	// TODO: 2024.06.22. 추후에 api를 수정하거나 Service를 분리하는 등 수정해야할 듯? - 루카
 	@Transactional
-	public void logout(UserRequest.LogoutDto logoutDto) {
-		JwtClaims jwtClaims = accessTokenProvider.parseJwtClaimsFromToken(logoutDto.getAccessToken());
-		Long userId = JwtClaimsParserUtil.getClaimValue(jwtClaims, AccessTokenClaimKeys.USER_ID.getValue(), Long.class);
-		String refreshToken = jwtAuthHelper.getRefreshToken(userId);
-		jwtAuthHelper.removeJwtsToken(userId, logoutDto.getAccessToken(), refreshToken);
+	public void logout(Long userId, String accessToken, String refreshToken) {
+		jwtAuthHelper.removeJwtsToken(userId, accessToken, refreshToken);
 	}
 
 	@Transactional(readOnly = false)
@@ -291,38 +282,40 @@ public class UserFacade {
 	}
 
 	@Transactional
-	public void removeKakaoUser(HttpServletRequest request) {
-		User user = getUserFromRequest(request);
-		String kakaoAccessToken = kakaoAuthClient.getAccessToken(user.getSocialRefreshToken());
+	public void removeKakaoUser(Long userId, String accessToken, String refreshToken) {
+		User user = userService.getUser(userId);
 
 		//kakao unlink
+		String kakaoAccessToken = kakaoAuthClient.getAccessToken(user.getSocialRefreshToken());
 		kakaoAuthClient.unlinkKakao(kakaoAccessToken);
 
-		setUserInactive(request, user);
+		// Token 삭제
+		jwtAuthHelper.removeJwtsToken(userId, accessToken, refreshToken);
 	}
 
 	@Transactional
-	public void removeNaverUser(HttpServletRequest request) {
-		User user = getUserFromRequest(request);
-		String naverAccessToken = naverAuthClient.getAccessToken(user.getSocialRefreshToken());
+	public void removeNaverUser(Long userId, String accessToken, String refreshToken) {
+		User user = userService.getUser(userId);
 
 		//naver unlink
+		String naverAccessToken = naverAuthClient.getAccessToken(user.getSocialRefreshToken());
 		naverAuthClient.unlinkNaver(naverAccessToken);
 
-		setUserInactive(request, user);
+		// Token 삭제
+		jwtAuthHelper.removeJwtsToken(userId, accessToken, refreshToken);
 	}
 
 	@Transactional
-	public void removeAppleUser(HttpServletRequest request) {
-		User user = getUserFromRequest(request);
+	public void removeAppleUser(Long userId, String accessToken, String refreshToken) {
+		User user = userService.getUser(userId);
 
+		// apple unlink
 		String clientSecret = createClientSecret();
 		String appleAccessToken = appleAuthClient.getAppleAccessToken(clientSecret, user.getSocialRefreshToken());
-
-		//apple unlink
 		appleAuthClient.revoke(clientSecret, appleAccessToken);
 
-		setUserInactive(request, user);
+		// Token 삭제
+		jwtAuthHelper.removeJwtsToken(userId, accessToken, refreshToken);
 	}
 
 	public String createClientSecret() {
@@ -417,24 +410,5 @@ public class UserFacade {
 
 		categoryService.createCategory(baseCategory);
 		categoryService.createCategory(groupCategory);
-	}
-
-	// HACK: 2024.06.22. social logout을 위해 작성된 임시 메서드 - 루카
-	private User getUserFromRequest(HttpServletRequest request) {
-		String accessToken = jwtAuthHelper.getAccessToken(request);
-		jwtAuthHelper.validateAccessTokenExpired(accessToken);
-
-		JwtClaims claims = accessTokenProvider.parseJwtClaimsFromToken(accessToken);
-		Long userId = JwtClaimsParserUtil.getClaimValue(claims, AccessTokenClaimKeys.USER_ID.getValue(), Long.class);
-		return userService.getUser(userId);
-	}
-
-	private void setUserInactive(HttpServletRequest request, User user) {
-		user.setStatus(UserStatus.INACTIVE);
-
-		//token 만료처리
-		String accessToken = jwtAuthHelper.getAccessToken(request);
-		String refreshToken = jwtAuthHelper.getRefreshToken(user.getId());
-		jwtAuthHelper.removeJwtsToken(user.getId(), accessToken, refreshToken);
 	}
 }
