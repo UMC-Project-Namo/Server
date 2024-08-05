@@ -61,13 +61,13 @@ public enum ErrorStatus implements BaseErrorCode {
 	 * 404 : NOT FOUND 오류
 	 */
 	NOT_FOUND_USER_FAILURE(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
-	NOT_FOUND_SCHEDULE_FAILURE(HttpStatus.NOT_FOUND, "스케줄을 찾을 수 없습니다."),
+	NOT_FOUND_SCHEDULE_FAILURE(HttpStatus.NOT_FOUND, "일정을 찾을 수 없습니다."),
 	NOT_FOUND_CATEGORY_FAILURE(HttpStatus.NOT_FOUND, "카테고리를 찾을 수 없습니다."),
 	NOT_FOUND_PALETTE_FAILURE(HttpStatus.NOT_FOUND, "팔레트를 찾을 수 없습니다."),
 	NOT_FOUND_DIARY_FAILURE(HttpStatus.NOT_FOUND, "다이어리를 찾을 수 없습니다."),
 	NOT_FOUND_GROUP_DIARY_FAILURE(HttpStatus.NOT_FOUND, "모임 메모 장소를 찾을 수 없습니다."),
-	NOT_FOUND_GROUP_FAILURE(HttpStatus.NOT_FOUND, "모임을 찾을 수 없습니다."),
-	NOT_FOUND_GROUP_AND_USER_FAILURE(HttpStatus.NOT_FOUND, "그룹 구성원이 아닙니다."),
+	NOT_FOUND_GROUP_FAILURE(HttpStatus.NOT_FOUND, "그룹을 찾을 수 없습니다."),
+	NOT_FOUND_GROUP_AND_USER_FAILURE(HttpStatus.NOT_FOUND, "모임 일정의 참여자가 아닙니다."),
 	NOT_FOUND_GROUP_SCHEDULE_AND_USER_FAILURE(HttpStatus.NOT_FOUND, "그룹 스케줄 구성원이 아닙니다."),
 	NOT_FOUND_GROUP_MEMO_FAILURE(HttpStatus.NOT_FOUND, "모임 메모를 찾을 수 없습니다."),
 	NOT_FOUND_GROUP_MEMO_LOCATION_FAILURE(HttpStatus.NOT_FOUND, "모임 활동을 찾을 수 없습니다."),

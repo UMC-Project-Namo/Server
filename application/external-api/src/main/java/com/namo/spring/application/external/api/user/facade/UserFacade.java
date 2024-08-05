@@ -83,47 +83,6 @@ public class UserFacade {
 	private final AppleUtils appleUtils;
 	private final AppleProperties appleProperties;
 
-	public UserFacade(
-		JwtAuthHelper jwtAuthHelper,
-
-		SocialUtils socialUtils,
-		FileUtils fileUtils,
-
-		UserService userService,
-		PaletteService paletteService,
-		CategoryService categoryService,
-		ScheduleService scheduleService,
-		AlarmService alarmService,
-		ImageService imageService,
-		GroupAndUserService groupAndUserService,
-		GroupScheduleAndUserService groupScheduleAndUserService,
-		GroupActivityService groupActivityService,
-
-		KakaoAuthClient kakaoAuthClient,
-		NaverAuthClient naverAuthClient,
-		AppleAuthClient appleAuthClient,
-		AppleUtils appleUtils,
-		AppleProperties appleProperties
-	) {
-		this.jwtAuthHelper = jwtAuthHelper;
-		this.socialUtils = socialUtils;
-		this.fileUtils = fileUtils;
-		this.userService = userService;
-		this.paletteService = paletteService;
-		this.categoryService = categoryService;
-		this.scheduleService = scheduleService;
-		this.alarmService = alarmService;
-		this.imageService = imageService;
-		this.groupAndUserService = groupAndUserService;
-		this.groupScheduleAndUserService = groupScheduleAndUserService;
-		this.groupActivityService = groupActivityService;
-		this.kakaoAuthClient = kakaoAuthClient;
-		this.naverAuthClient = naverAuthClient;
-		this.appleAuthClient = appleAuthClient;
-		this.appleUtils = appleUtils;
-		this.appleProperties = appleProperties;
-	}
-
 	// TODO: 2024.06.22. 추후에 Social Login을 한번에 처리할 수 있는 Util 클래스로 묶기 - 루카
 	@Transactional
 	public UserResponse.SignUpDto signupKakao(UserRequest.SocialSignUpDto signUpDto, SocialType socialType) {
