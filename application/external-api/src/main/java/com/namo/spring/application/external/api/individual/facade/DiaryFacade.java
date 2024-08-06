@@ -35,12 +35,12 @@ public class DiaryFacade {
 	public DiaryResponse.ScheduleIdDto createDiary(
 		Long scheduleId,
 		String content,
-		List<MultipartFile> imgs
+		List<MultipartFile> createImages
 	) {
 		Schedule schedule = scheduleService.getScheduleById(scheduleId);
 		schedule.updateDiaryContents(content);
-		if (imgs != null) {
-			createDiaryImages(imgs, schedule);
+		if (createImages != null) {
+			createDiaryImages(createImages, schedule);
 		}
 		return DiaryResponseConverter.toScheduleIdRes(schedule);
 	}
