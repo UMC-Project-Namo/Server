@@ -50,11 +50,11 @@ public class DiaryController {
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
 	public ResponseDto<DiaryResponse.ScheduleIdDto> createDiary(
-		@Parameter(description = "기록용 이미지") @RequestPart(required = false) List<MultipartFile> createImages,
+		@Parameter(description = "기록용 이미지") @RequestPart(required = false) List<MultipartFile> imgs,
 		@Parameter(description = "일정 ID") @RequestPart String scheduleId,
 		@Parameter(description = "기록 내용") @RequestPart(required = false) String content
 	) {
-		DiaryResponse.ScheduleIdDto dto = diaryFacade.createDiary(Long.valueOf(scheduleId), content, createImages);
+		DiaryResponse.ScheduleIdDto dto = diaryFacade.createDiary(Long.valueOf(scheduleId), content, imgs);
 		return ResponseDto.onSuccess(dto);
 	}
 
