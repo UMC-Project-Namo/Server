@@ -92,5 +92,5 @@ jobs:
           working-directory: /home/ssm-user
           command: |
             docker system prune -a -f
-            docker pull namongdev/spirngboot-dev
+            docker compose pull
             docker compose up -d
