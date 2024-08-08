@@ -191,16 +191,12 @@ public class UserFacade {
 
 		CustomJwts jwts = jwtAuthHelper.createToken(savedUser);
 
-		UserResponse.SignUpDto signUpRes = UserResponseConverter.toSignUpDto(
+		return UserResponseConverter.toSignUpDto(
 			jwts.accessToken(),
 			jwts.refreshToken(),
 			isNewUser,
 			terms
 		);
-
-		jwtAuthHelper.refresh(jwts.refreshToken());
-
-		return signUpRes;
 	}
 
 	@Transactional
