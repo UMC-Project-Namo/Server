@@ -57,7 +57,6 @@ public class AuthController implements AuthApi {
 	}
 
 	@PostMapping(value = "/reissuance")
-	@PreAuthorize("isAnonymous()")
 	public ResponseDto<UserResponse.ReissueDto> reissueAccessToken(
 		@RequestHeader(value = "refreshToken") String refreshToken
 	) {

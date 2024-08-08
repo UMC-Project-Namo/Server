@@ -16,4 +16,5 @@ public class WebSecurityUrl {
 		"/api-docs/**", "/v3/api-docs/**",
 		"/swagger-ui/**", "/swagger"
 	};
+	protected static final String[] REISSUANCE_ENDPOINTS = {"/api/v1/auths/reissuance"};
 }
