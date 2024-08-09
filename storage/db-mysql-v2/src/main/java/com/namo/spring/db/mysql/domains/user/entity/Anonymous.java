@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "anonymous")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
-public class Anonymous extends BaseTimeEntity {
+public class Anonymous extends BaseTimeEntity implements User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

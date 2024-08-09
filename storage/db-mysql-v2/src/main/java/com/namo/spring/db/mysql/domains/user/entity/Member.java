@@ -39,7 +39,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 @SQLDelete(sql = "UPDATE members SET deleted_at = NOW(), status = 'INACVTIVE' WHERE id = ?")
-public class Member extends BaseTimeEntity {
+public class Member extends BaseTimeEntity implements User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,19 +47,29 @@ public class Member extends BaseTimeEntity {
 	private Long id;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
+	@Column(name = "email", nullable = false, length = 50)
+	private String email;
+
+	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Column(name = "name", nullable = false, length = 50)
 	private String name;
+
+	@Column(name = "name_visible", nullable = false)
+	private boolean nameVisible;
 
 	@Column(unique = true, nullable = false, length = 4)
 	private String tag;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Column(name = "email", nullable = false, length = 50)
-	private String email;
-
-	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Column(name = "birthday", length = 10)
 	private String birthday;  // "MM-DD"
+
+	@Column(name = "birthday_visible", nullable = false)
+	private boolean birthdayVisible;
+
+	@Column(name = "bio")
+	@JdbcTypeCode(SqlTypes.VARCHAR)
+	private String bio;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Friendship> friendships = new HashSet<>();
@@ -79,15 +89,17 @@ public class Member extends BaseTimeEntity {
 	private LocalDateTime deletedAt;
 
 	@Builder
-	public Member(String name, String email, String birthday, MemberRole userRole, MemberStatus status) {
+	public Member(String name, String tag, String email, String birthday, MemberRole userRole, MemberStatus status) {
 		if (!StringUtils.hasText(name))
 			throw new IllegalArgumentException("name은 null이거나 빈 문자열일 수 없습니다.");
 		else if (!StringUtils.hasText(email))
 			throw new IllegalArgumentException("email은 null이거나 빈 문자열일 수 없습니다.");
-
 		this.name = name;
+		this.nameVisible = true;
+		this.tag = tag;
 		this.email = email;
 		this.birthday = birthday;
+		this.birthdayVisible = true;
 		this.memberRole = Objects.requireNonNull(userRole, "memberRole은 null일 수 없습니다.");
 		this.status = Objects.requireNonNull(status, "status는 null일 수 없습니다.");
 	}
