@@ -17,6 +17,7 @@ import org.hibernate.annotations.DynamicInsert;
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
 import com.namo.spring.db.mysql.domains.category.entity.Palette;
+import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 
 import lombok.AccessLevel;
@@ -40,8 +41,12 @@ public class Participant extends BaseTimeEntity {
 	private int isOwner;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "member_id")
 	private Member member;
+
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "anonymous_id")
+	private Anonymous anonymous;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "schedule_id", nullable = false)
