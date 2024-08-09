@@ -15,7 +15,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
-import com.namo.spring.db.mysql.domains.schedule.entity.Participants;
+import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -35,7 +35,7 @@ public class Diary extends BaseTimeEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "participants_id", nullable = false)
-	private Participants participants;
+	private Participant participants;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Column(name = "memo", nullable = false, length = 250)

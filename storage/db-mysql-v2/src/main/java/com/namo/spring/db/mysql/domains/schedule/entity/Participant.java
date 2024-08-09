@@ -29,7 +29,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "participants")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
-public class Participants extends BaseTimeEntity {
+public class Participant extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,7 +56,7 @@ public class Participants extends BaseTimeEntity {
 	private Palette palette;
 
 	@Builder
-	public Participants(int isOwner, Member member, Schedule schedule, Category category, Palette palette) {
+	public Participant(int isOwner, Member member, Schedule schedule, Category category, Palette palette) {
 		this.isOwner = Objects.requireNonNull(isOwner, "isOwner은 null일 수 없습니다.");
 		this.member = member;
 		this.schedule = Objects.requireNonNull(schedule, "schedule은 null일 수 없습니다.");
@@ -64,8 +64,8 @@ public class Participants extends BaseTimeEntity {
 		this.palette = Objects.requireNonNull(palette, "palette은 null일 수 없습니다.");
 	}
 
-	public Participants of(int isOwner, Member member, Schedule schedule, Category category, Palette palette) {
-		return Participants.builder()
+	public Participant of(int isOwner, Member member, Schedule schedule, Category category, Palette palette) {
+		return Participant.builder()
 			.isOwner(isOwner)
 			.member(member)
 			.schedule(schedule)

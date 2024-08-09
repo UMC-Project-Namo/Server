@@ -6,6 +6,4 @@ public interface User {
 	String getName();
 
 	String getTag();
-
-	String getBirthday();
 }

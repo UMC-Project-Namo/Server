@@ -16,7 +16,7 @@ import jakarta.persistence.Table;
 import org.hibernate.annotations.DynamicInsert;
 
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
-import com.namo.spring.db.mysql.domains.schedule.entity.Participants;
+import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -36,7 +36,7 @@ public class ActivityParticipants extends BaseTimeEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@Column(name = "participants_id", nullable = false)
-	private Participants participants;
+	private Participant participants;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "activity_id", nullable = false)
@@ -46,7 +46,7 @@ public class ActivityParticipants extends BaseTimeEntity {
 	private BigDecimal amount;
 
 	@Builder
-	public ActivityParticipants(Participants participants, Activity activity, BigDecimal amount) {
+	public ActivityParticipants(Participant participants, Activity activity, BigDecimal amount) {
 		this.participants = Objects.requireNonNull(participants, "participants은 null일 수 없습니다.");
 		this.activity = Objects.requireNonNull(activity, "activity은 null일 수 없습니다.");
 		this.amount = Objects.requireNonNull(amount, "amount은 null일 수 없습니다.");

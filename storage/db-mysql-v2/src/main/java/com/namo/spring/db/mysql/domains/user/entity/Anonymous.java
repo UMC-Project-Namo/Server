@@ -44,25 +44,18 @@ public class Anonymous extends BaseTimeEntity implements User {
 	private String tag;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Column(name = "birthday", length = 10)
-	private String birthday;  // "MM-DD"
-
-	@Column(name = "birthday_visible", nullable = false)
-	private boolean birthdayVisible;
-
-	@Column(name = "bio")
-	@JdbcTypeCode(SqlTypes.VARCHAR)
-	private String bio;
+	@Column(name = "name", nullable = false, length = 50)
+	private String nickname;
 
 	@Builder
-	public Anonymous(String name, boolean nameVisible, String birthday, boolean birthdayVisible, String bio) {
+	public Anonymous(String name, boolean nameVisible, String birthday, boolean birthdayVisible, String bio, String tag,
+		String nickname) {
 		if (!StringUtils.hasText(name))
 			throw new IllegalArgumentException("name은 null이거나 빈 문자열일 수 없습니다.");
 		this.name = name;
 		this.nameVisible = Objects.requireNonNull(nameVisible, "nameVisible은 null일 수 없습니다.");
-		this.birthday = birthday;
-		this.birthdayVisible = Objects.requireNonNull(birthdayVisible, "birthdayVisible은 null일 수 없습니다.");
-		this.bio = bio;
+		this.tag = tag;
+		this.nickname = nickname;
 	}
 
 }

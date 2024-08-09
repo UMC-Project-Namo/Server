@@ -59,7 +59,7 @@ public class Oauth extends BaseTimeEntity {
 	private String socialRefreshToken;
 
 	@Builder
-	public Oauth(Provider provider, String providerId, String loginId, String socialRefreshToken, Member user) {
+	public Oauth(Provider provider, String providerId, String loginId, String socialRefreshToken, Member member) {
 		if (!StringUtils.hasText(providerId))
 			throw new IllegalArgumentException("providerId은 null이거나 빈 문자열일 수 없습니다.");
 		else if (!StringUtils.hasText(loginId))
@@ -69,7 +69,7 @@ public class Oauth extends BaseTimeEntity {
 		this.providerId = providerId;
 		this.loginId = loginId;
 		this.socialRefreshToken = socialRefreshToken;
-		this.member = Objects.requireNonNull(user, "user은 null일 수 없습니다.");
+		this.member = Objects.requireNonNull(member, "user은 null일 수 없습니다.");
 	}
 
 	@Override

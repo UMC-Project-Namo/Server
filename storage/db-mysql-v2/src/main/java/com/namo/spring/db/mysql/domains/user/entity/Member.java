@@ -57,6 +57,10 @@ public class Member extends BaseTimeEntity implements User {
 	@Column(name = "name_visible", nullable = false)
 	private boolean nameVisible;
 
+	@JdbcTypeCode(SqlTypes.VARCHAR)
+	@Column(name = "name", nullable = false, length = 50)
+	private String nickname;
+
 	@Column(unique = true, nullable = false, length = 4)
 	private String tag;
 
@@ -71,7 +75,7 @@ public class Member extends BaseTimeEntity implements User {
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	private String bio;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Friendship> friendships = new HashSet<>();
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
