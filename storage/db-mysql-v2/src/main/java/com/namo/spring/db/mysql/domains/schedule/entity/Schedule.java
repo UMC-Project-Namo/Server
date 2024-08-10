@@ -46,6 +46,9 @@ public class Schedule extends BaseTimeEntity {
 	@Column(nullable = false, columnDefinition = "TINYINT")
 	private int scheduleType;
 
+	@Column(length = 16)
+	private int invitationCode;
+
 	@Builder
 	public Schedule(String title, Period period, Location location, int scheduleType) {
 		if (!StringUtils.hasText(title))

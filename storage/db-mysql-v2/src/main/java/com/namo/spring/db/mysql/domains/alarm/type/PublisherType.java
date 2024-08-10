@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum PublisherType implements CodedEnum {
-	USER("1", "사용자"),
+	MEMBER("1", "사용자"),
 	SYSTEM("2", "시스템"),
 	;
 

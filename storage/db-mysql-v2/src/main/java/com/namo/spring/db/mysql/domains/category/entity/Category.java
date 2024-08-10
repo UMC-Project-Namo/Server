@@ -64,16 +64,16 @@ public class Category extends BaseTimeEntity {
 	private CategoryStatus status;
 
 	@Builder
-	public Category(Member user, Palette palette, String name, CategoryStatus status, CategoryType type,
-		Integer order) {
+	public Category(Member member, Palette palette, String name, CategoryStatus status, CategoryType type,
+		Integer orderNumber) {
 		if (!StringUtils.hasText(name))
 			throw new IllegalArgumentException("name는 null이거나 빈 문자열일 수 없습니다.");
 
-		this.member = Objects.requireNonNull(user, "user은 null일 수 없습니다.");
+		this.member = Objects.requireNonNull(member, "user은 null일 수 없습니다.");
 		this.palette = Objects.requireNonNull(palette, "palette은 null일 수 없습니다.");
 		this.name = name;
 		this.status = Objects.requireNonNull(status, "status은 null일 수 없습니다.");
 		this.type = Objects.requireNonNull(type, "type은 null일 수 없습니다.");
-		this.orderNumber = Objects.requireNonNull(order, "order은 null일 수 없습니다.");
+		this.orderNumber = Objects.requireNonNull(orderNumber, "orderNumber는 null일 수 없습니다.");
 	}
 }

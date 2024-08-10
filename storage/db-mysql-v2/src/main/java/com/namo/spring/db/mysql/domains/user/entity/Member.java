@@ -21,8 +21,8 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.type.SqlTypes;
 import org.springframework.util.StringUtils;
 
-import com.namo.spring.db.mysql.common.converter.UserRoleConverter;
-import com.namo.spring.db.mysql.common.converter.UserStatusConverter;
+import com.namo.spring.db.mysql.common.converter.MemberRoleConverter;
+import com.namo.spring.db.mysql.common.converter.MemberStatusConverter;
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import com.namo.spring.db.mysql.domains.user.type.MemberRole;
 import com.namo.spring.db.mysql.domains.user.type.MemberStatus;
@@ -76,12 +76,12 @@ public class Member extends BaseTimeEntity implements User {
 	private Set<Friendship> friendships = new HashSet<>();
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Convert(converter = UserRoleConverter.class)
+	@Convert(converter = MemberRoleConverter.class)
 	@Column(nullable = false, length = 50)
 	private MemberRole memberRole;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Convert(converter = UserStatusConverter.class)
+	@Convert(converter = MemberStatusConverter.class)
 	@Column(nullable = false, length = 50)
 	private MemberStatus status;
 
