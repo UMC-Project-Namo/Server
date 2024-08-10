@@ -37,7 +37,7 @@ public class Oauth extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", nullable = false)
+	@Column(nullable = false)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -46,16 +46,15 @@ public class Oauth extends BaseTimeEntity {
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Convert(converter = ProviderConverter.class)
-	@Column(name = "provider", nullable = false, length = 50)
+	@Column(nullable = false, length = 50)
 	private Provider provider;
 
-	@Column(name = "provider_id", nullable = false)
+	@Column(nullable = false)
 	private String providerId;
 
-	@Column(name = "login_id", nullable = false)
+	@Column(nullable = false)
 	private String loginId;
 
-	@Column(name = "social_refresh_token")
 	private String socialRefreshToken;
 
 	@Builder

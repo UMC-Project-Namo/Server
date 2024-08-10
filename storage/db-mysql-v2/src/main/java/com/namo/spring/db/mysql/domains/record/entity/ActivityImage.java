@@ -10,7 +10,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -25,13 +24,12 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "activity_image")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ActivityImage extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", nullable = false)
+	@Column(nullable = false)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -39,10 +37,10 @@ public class ActivityImage extends BaseTimeEntity {
 	private Activity activity;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Column(name = "image_url", nullable = false)
+	@Column(nullable = false)
 	private String imageUrl;
 
-	@Column(name = "image_order", nullable = false)
+	@Column(nullable = false)
 	private Integer imageOrder;
 
 	@Builder

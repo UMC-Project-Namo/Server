@@ -11,7 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -31,7 +30,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "notification")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 public class Notification extends BaseTimeEntity {
@@ -42,7 +40,7 @@ public class Notification extends BaseTimeEntity {
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Convert(converter = PublisherTypeConverter.class)
-	@Column(name = "publisher_type", nullable = false, length = 50)
+	@Column(nullable = false, length = 50)
 	private PublisherType publisherType;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -50,7 +48,7 @@ public class Notification extends BaseTimeEntity {
 	private Member publisher;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Column(name = "publisher_name", nullable = false, length = 20)
+	@Column(nullable = false, length = 20)
 	private String publisherName;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -58,24 +56,22 @@ public class Notification extends BaseTimeEntity {
 	private Member receiver;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "device", nullable = false)
+	@JoinColumn(name = "device_id", nullable = false)
 	private Device device;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Convert(converter = NotificationTypeConverter.class)
-	@Column(name = "notification_type", nullable = false, length = 50)
+	@Column(nullable = false, length = 50)
 	private NotificationType notificationType;
 
-	@Column(name = "notification_json", nullable = false)
+	@Column(nullable = false)
 	private String notificationJson;
 
-	@Column(name = "notification_title", nullable = false)
+	@Column(nullable = false)
 	private boolean isRead;
 
-	@Column(name = "read_at")
 	private LocalDateTime readAt;
 
-	@Column(name = "deleted_at")
 	private boolean isDeleted;
 
 	@Builder

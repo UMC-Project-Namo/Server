@@ -11,7 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -28,7 +27,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "activity")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 public class Activity extends BaseTimeEntity {
@@ -38,14 +36,14 @@ public class Activity extends BaseTimeEntity {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "schedule_id", nullable = false)
+	@JoinColumn(nullable = false)
 	private Schedule schedule;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Column(name = "title", nullable = false, length = 50)
+	@Column(nullable = false, length = 50)
 	private String title;
 
-	@Column(name = "total_amount", nullable = false)
+	@Column(nullable = false)
 	private BigDecimal totalAmount;
 
 	@Builder

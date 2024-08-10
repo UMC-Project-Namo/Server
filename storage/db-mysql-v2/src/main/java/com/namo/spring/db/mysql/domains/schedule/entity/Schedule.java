@@ -6,7 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -24,18 +23,17 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "schedule")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 public class Schedule extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", nullable = false)
+	@Column(nullable = false)
 	private Long id;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Column(name = "title", nullable = false, length = 50)
+	@Column(nullable = false, length = 50)
 	private String title;
 
 	@Embedded
@@ -45,7 +43,7 @@ public class Schedule extends BaseTimeEntity {
 	private Location location;
 
 	// 0: 개인, 1: 그룹
-	@Column(name = "schedule_type", nullable = false, columnDefinition = "TINYINT")
+	@Column(nullable = false, columnDefinition = "TINYINT")
 	private int scheduleType;
 
 	@Builder

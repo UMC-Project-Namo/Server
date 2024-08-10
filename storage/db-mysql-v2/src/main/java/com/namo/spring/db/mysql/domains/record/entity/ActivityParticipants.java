@@ -11,7 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 
@@ -25,7 +24,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "activity_participants")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 public class ActivityParticipants extends BaseTimeEntity {
@@ -35,19 +33,19 @@ public class ActivityParticipants extends BaseTimeEntity {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@Column(name = "participants_id", nullable = false)
-	private Participant participants;
+	@JoinColumn(name = "participant_id", nullable = false)
+	private Participant participant;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "activity_id", nullable = false)
 	private Activity activity;
 
-	@Column(name = "total_amount", nullable = false)
+	@Column(nullable = false)
 	private BigDecimal amount;
 
 	@Builder
-	public ActivityParticipants(Participant participants, Activity activity, BigDecimal amount) {
-		this.participants = Objects.requireNonNull(participants, "participants은 null일 수 없습니다.");
+	public ActivityParticipants(Participant participant, Activity activity, BigDecimal amount) {
+		this.participant = Objects.requireNonNull(participant, "participants은 null일 수 없습니다.");
 		this.activity = Objects.requireNonNull(activity, "activity은 null일 수 없습니다.");
 		this.amount = Objects.requireNonNull(amount, "amount은 null일 수 없습니다.");
 	}

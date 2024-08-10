@@ -6,7 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -23,7 +22,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "notification")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 public class Device extends BaseTimeEntity {
@@ -34,13 +32,11 @@ public class Device extends BaseTimeEntity {
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Convert(converter = ReceiverDeviceTypeConverter.class)
-	@Column(name = "receiver_device_type", nullable = false, length = 50)
+	@Column(nullable = false, length = 50)
 	private ReceiverDeviceType receiverDeviceType;
 
-	@Column(name = "receiver_device_token")
 	private String receiverDeviceToken;
 
-	@Column(name = "receiver_device_agent")
 	private String receiverDeviceAgent;
 
 	@Builder

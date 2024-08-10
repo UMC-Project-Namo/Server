@@ -7,7 +7,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -23,35 +22,38 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "anonymous")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 public class Anonymous extends BaseTimeEntity implements User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", nullable = false)
+	@Column(nullable = false)
 	private Long id;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Column(name = "name", nullable = false, length = 50)
+	@Column(nullable = false, length = 50)
 	private String name;
 
-	@Column(name = "name_visible", nullable = false)
+	@Column(nullable = false)
 	private boolean nameVisible;
 
-	@Column(unique = true, nullable = false, length = 4)
+	@Column(nullable = false, length = 4)
 	private String tag;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Column(name = "name", nullable = false, length = 50)
+	@Column(nullable = false, length = 50)
 	private String nickname;
 
 	@Builder
-	public Anonymous(String name, boolean nameVisible, String birthday, boolean birthdayVisible, String bio, String tag,
+	public Anonymous(String name, boolean nameVisible, String tag,
 		String nickname) {
 		if (!StringUtils.hasText(name))
 			throw new IllegalArgumentException("name은 null이거나 빈 문자열일 수 없습니다.");
+		if (!StringUtils.hasText(nickname))
+			throw new IllegalArgumentException("nickname은 null이거나 빈 문자열일 수 없습니다.");
+		if (!StringUtils.hasText(tag))
+			throw new IllegalArgumentException("tag는 null이거나 빈 문자열일 수 없습니다.");
 		this.name = name;
 		this.nameVisible = Objects.requireNonNull(nameVisible, "nameVisible은 null일 수 없습니다.");
 		this.tag = tag;

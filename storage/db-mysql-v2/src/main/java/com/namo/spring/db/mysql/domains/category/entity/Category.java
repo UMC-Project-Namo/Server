@@ -11,7 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -32,14 +31,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "category")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
 public class Category extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", nullable = false)
+	@Column(nullable = false)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -51,18 +49,18 @@ public class Category extends BaseTimeEntity {
 	private Palette palette;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Column(name = "name", nullable = false, length = 50)
+	@Column(nullable = false, length = 50)
 	private String name;
 
 	@Convert(converter = CategoryTypeConverter.class)
-	@Column(name = "type", nullable = false, length = 50)
+	@Column(nullable = false, length = 50)
 	private CategoryType type;
 
-	@Column(name = "order_num", nullable = false)
-	private Integer order;
+	@Column(nullable = false)
+	private Integer orderNumber;
 
 	@Convert(converter = CategoryStatusConverter.class)
-	@Column(name = "status", nullable = false, length = 50)
+	@Column(nullable = false, length = 50)
 	private CategoryStatus status;
 
 	@Builder
@@ -76,6 +74,6 @@ public class Category extends BaseTimeEntity {
 		this.name = name;
 		this.status = Objects.requireNonNull(status, "status은 null일 수 없습니다.");
 		this.type = Objects.requireNonNull(type, "type은 null일 수 없습니다.");
-		this.order = Objects.requireNonNull(order, "order은 null일 수 없습니다.");
+		this.orderNumber = Objects.requireNonNull(order, "order은 null일 수 없습니다.");
 	}
 }

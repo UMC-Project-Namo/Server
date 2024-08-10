@@ -13,7 +13,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -35,43 +34,41 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
-@SQLDelete(sql = "UPDATE members SET deleted_at = NOW(), status = 'INACVTIVE' WHERE id = ?")
+@SQLDelete(sql = "UPDATE member SET deleted_at = NOW(), status = 'INACVTIVE' WHERE id = ?")
 public class Member extends BaseTimeEntity implements User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", nullable = false)
+	@Column(nullable = false)
 	private Long id;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Column(name = "email", nullable = false, length = 50)
+	@Column(nullable = false, length = 50)
 	private String email;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Column(name = "name", nullable = false, length = 50)
+	@Column(nullable = false, length = 50)
 	private String name;
 
-	@Column(name = "name_visible", nullable = false)
+	@Column(nullable = false)
 	private boolean nameVisible;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Column(name = "name", nullable = false, length = 50)
+	@Column(nullable = false, length = 50)
 	private String nickname;
 
-	@Column(unique = true, nullable = false, length = 4)
+	@Column(nullable = false, length = 4)
 	private String tag;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Column(name = "birthday", length = 10)
+	@Column(length = 10)
 	private String birthday;  // "MM-DD"
 
-	@Column(name = "birthday_visible", nullable = false)
+	@Column(nullable = false)
 	private boolean birthdayVisible;
 
-	@Column(name = "bio")
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	private String bio;
 
@@ -80,16 +77,15 @@ public class Member extends BaseTimeEntity implements User {
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Convert(converter = UserRoleConverter.class)
-	@Column(name = "member_role", nullable = false, length = 50)
+	@Column(nullable = false, length = 50)
 	private MemberRole memberRole;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Convert(converter = UserStatusConverter.class)
-	@Column(name = "status", nullable = false, length = 50)
+	@Column(nullable = false, length = 50)
 	private MemberStatus status;
 
 	@ColumnDefault("NULL")
-	@Column(name = "deleted_at")
 	private LocalDateTime deletedAt;
 
 	@Builder
