@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class DiaryImage extends BaseTimeEntity {
+public class DiaryImage extends BaseTimeEntity implements Image {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,11 +61,13 @@ public class DiaryImage extends BaseTimeEntity {
 			.build();
 	}
 
-	public void updateImgOrder(Integer imageOrder) {
+	@Override
+	public void updateImageOrder(Integer imageOrder) {
 		this.imageOrder = Objects.requireNonNull(imageOrder, "imageOrder은 null일 수 없습니다.");
 	}
 
-	public void updateImgUrl(String imageUrl) {
+	@Override
+	public void updateImageUrl(String imageUrl) {
 		if (!StringUtils.hasText(imageUrl))
 			throw new IllegalArgumentException("imageUrl은 null이거나 빈 문자열일 수 없습니다.");
 		this.imageUrl = imageUrl;
