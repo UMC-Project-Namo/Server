@@ -32,10 +32,6 @@ public class Notification extends BaseTimeEntity {
     @Column(nullable = false, length = 50)
     private PublisherType publisherType;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "publisher_id")
-    private Member publisher;
-
     @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(nullable = false, length = 20)
     private String publisherName;
@@ -64,10 +60,9 @@ public class Notification extends BaseTimeEntity {
     private boolean isDeleted;
 
     @Builder
-    public Notification(PublisherType publisherType, Member publisher, String publisherName, Member receiver,
+    public Notification(PublisherType publisherType, String publisherName, Member receiver,
                         Device device, NotificationType notificationType, String notificationJson) {
         this.publisherType = publisherType;
-        this.publisher = publisher;
         this.publisherName = publisherName;
         this.receiver = receiver;
         this.notificationType = notificationType;

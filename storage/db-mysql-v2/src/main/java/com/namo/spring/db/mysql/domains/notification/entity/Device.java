@@ -3,6 +3,7 @@ package com.namo.spring.db.mysql.domains.notification.entity;
 import com.namo.spring.db.mysql.common.converter.ReceiverDeviceTypeConverter;
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import com.namo.spring.db.mysql.domains.notification.type.ReceiverDeviceType;
+import com.namo.spring.db.mysql.domains.user.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -22,6 +23,10 @@ public class Device extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
+
     @JdbcTypeCode(SqlTypes.VARCHAR)
     @Convert(converter = ReceiverDeviceTypeConverter.class)
     @Column(nullable = false, length = 50)
@@ -32,7 +37,8 @@ public class Device extends BaseTimeEntity {
     private String receiverDeviceAgent;
 
     @Builder
-    public Device(ReceiverDeviceType receiverDeviceType, String receiverDeviceToken, String receiverDeviceAgent) {
+    public Device(Member member, ReceiverDeviceType receiverDeviceType, String receiverDeviceToken, String receiverDeviceAgent) {
+        this.member = member;
         this.receiverDeviceType = receiverDeviceType;
         this.receiverDeviceToken = receiverDeviceToken;
         this.receiverDeviceAgent = receiverDeviceAgent;
