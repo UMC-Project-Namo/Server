@@ -1,11 +1,11 @@
 package com.namo.spring.db.mysql.common.converter;
 
-import com.namo.spring.db.mysql.domains.alarm.type.NotificationType;
+import com.namo.spring.db.mysql.domains.notification.type.NotificationType;
 
 public class NotificationTypeConverter extends AbstractEnumAttributeConverter<NotificationType> {
-	private static final String ENUM_NAME = "알림 타입";
+    private static final String ENUM_NAME = "알림 타입";
 
-	public NotificationTypeConverter() {
-		super(NotificationType.class, false, ENUM_NAME);
-	}
+    public NotificationTypeConverter() {
+        super(NotificationType.class, false, ENUM_NAME);
+    }
 }
