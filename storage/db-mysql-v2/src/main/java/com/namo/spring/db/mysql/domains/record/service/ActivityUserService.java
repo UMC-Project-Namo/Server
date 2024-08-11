@@ -1,32 +1,31 @@
 package com.namo.spring.db.mysql.domains.record.service;
 
-import java.util.Optional;
-
+import com.namo.spring.core.common.annotation.DomainService;
+import com.namo.spring.db.mysql.domains.record.entity.ActivityParticipant;
+import com.namo.spring.db.mysql.domains.record.repository.ActivityParticipantRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.namo.spring.core.common.annotation.DomainService;
-import com.namo.spring.db.mysql.domains.record.entity.ActivityParticipants;
-import com.namo.spring.db.mysql.domains.record.repository.ActivityParticipantsRepository;
+import java.util.Optional;
 
-import lombok.RequiredArgsConstructor;
 
 @DomainService
 @RequiredArgsConstructor
 public class ActivityUserService {
-	private final ActivityParticipantsRepository activityUserRepository;
+    private final ActivityParticipantRepository activityUserRepository;
 
-	@Transactional
-	public ActivityParticipants createActivityParticipants(ActivityParticipants activityParticipants) {
-		return activityUserRepository.save(activityParticipants);
-	}
+    @Transactional
+    public ActivityParticipant createActivityParticipant(ActivityParticipant activityParticipant) {
+        return activityUserRepository.save(activityParticipant);
+    }
 
-	@Transactional(readOnly = true)
-	public Optional<ActivityParticipants> readActivityParticipants(Long activityParticipantsId) {
-		return activityUserRepository.findById(activityParticipantsId);
-	}
+    @Transactional(readOnly = true)
+    public Optional<ActivityParticipant> readActivityParticipant(Long activityParticipantId) {
+        return activityUserRepository.findById(activityParticipantId);
+    }
 
-	@Transactional
-	public void deleteActivityParticipants(Long activityParticipantsId) {
-		activityUserRepository.deleteById(activityParticipantsId);
-	}
+    @Transactional
+    public void deleteActivityParticipant(Long activityParticipantId) {
+        activityUserRepository.deleteById(activityParticipantId);
+    }
 }
