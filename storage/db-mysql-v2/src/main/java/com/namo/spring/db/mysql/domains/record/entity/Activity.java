@@ -46,12 +46,17 @@ public class Activity extends BaseTimeEntity {
 	@Column(nullable = false)
 	private BigDecimal totalAmount;
 
+	@JdbcTypeCode(SqlTypes.VARCHAR)
+	@Column(length = 50)
+	private String categoryTag;
+
 	@Builder
-	public Activity(Schedule schedule, String title, BigDecimal totalAmount) {
+	public Activity(Schedule schedule, String title, BigDecimal totalAmount, String categoryTag) {
 		if (!StringUtils.hasText(title))
 			throw new IllegalArgumentException("title은 null이거나 빈 문자열일 수 없습니다.");
 		this.schedule = Objects.requireNonNull(schedule, "schedule은 null일 수 없습니다.");
 		this.title = title;
 		this.totalAmount = totalAmount;
+		this.categoryTag = categoryTag;
 	}
 }
