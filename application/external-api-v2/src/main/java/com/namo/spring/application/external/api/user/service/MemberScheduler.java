@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class MemberScheduler {
 
-	private final MemberLoginService memberService;
+	private final MemberManageService memberManageService;
 
 	/**
 	 * 매일 자정에 실행되며, 탈퇴 이후 3일간 활동이 없는 사용자를 DB에서 삭제한다.
@@ -24,11 +24,11 @@ public class MemberScheduler {
 	@Scheduled(cron = "0 0 0 * * *")
 	@Transactional
 	public void removeInactiveUsersFromDB() {
-		List<Member> inactiveMembers = memberService.getInactiveMember();
+		List<Member> inactiveMembers = memberManageService.getInactiveMember();
 		for (Member member : inactiveMembers) {
 			log.debug("[Delete] user name : " + member.getName());
 			// TODO : 관련 삭제
-			memberService.removeMember(member);
+			memberManageService.removeMember(member);
 		}
 	}
 

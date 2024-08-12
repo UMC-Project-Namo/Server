@@ -13,14 +13,12 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum MemberRole implements CodedEnum {
-	ADMIN("0","ROLE_ADMIN"),
-	USER("1","ROLE_USER")
-	;
+	ADMIN("ROLE_ADMIN"),
+	USER("ROLE_USER");
 
 	private static final Map<String, MemberRole> stringToEnum =
 		Stream.of(values()).collect(toMap(Object::toString, e -> e));
 
-	private final String code;
 	private final String type;
 
 	@JsonCreator
@@ -40,6 +38,6 @@ public enum MemberRole implements CodedEnum {
 
 	@Override
 	public String getCode() {
-		return this.code;
+		return null;
 	}
 }
