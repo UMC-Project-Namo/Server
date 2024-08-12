@@ -1,11 +1,10 @@
 package com.namo.spring.db.mysql.domains.oauth.repository;
 
-import java.util.Optional;
-
+import com.namo.spring.db.mysql.domains.oauth.entity.Oauth;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.namo.spring.db.mysql.domains.oauth.entity.Oauth;
+import java.util.Optional;
 
 public interface OauthRepository extends JpaRepository<Oauth, Long> {
-	Optional<Oauth> findByUserId(Long userId);
+    Optional<Oauth> findByMemberId(Long userId);
 }
