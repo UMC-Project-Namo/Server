@@ -65,7 +65,7 @@ public class Term extends BaseTimeEntity {
 		this.agreeAt = null;
 	}
 
-	public void update() {
+	public void updateDate() {
 		this.updatedAt = LocalDateTime.now();
 	}
 }

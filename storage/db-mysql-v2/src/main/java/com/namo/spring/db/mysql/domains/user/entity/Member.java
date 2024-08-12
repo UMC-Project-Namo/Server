@@ -63,10 +63,10 @@ public class Member extends BaseTimeEntity implements User {
 	private boolean nameVisible;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Column(nullable = false, length = 50)
+	@Column(length = 50)
 	private String nickname;
 
-	@Column(nullable = false, length = 4)
+	@Column(length = 4)
 	private String tag;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
@@ -81,7 +81,7 @@ public class Member extends BaseTimeEntity implements User {
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Convert(converter = MemberRoleConverter.class)
-	@Column(nullable = false, length = 50)
+	@Column(nullable = false, columnDefinition = "VARCHAR(20) DEFAULT 'USER'")
 	private MemberRole memberRole;
 
 	@Enumerated(EnumType.STRING)
@@ -124,7 +124,7 @@ public class Member extends BaseTimeEntity implements User {
 		this.email = email;
 		this.birthday = birthday;
 		this.birthdayVisible = true;
-		this.memberRole = Objects.requireNonNull(userRole, "memberRole은 null일 수 없습니다.");
+		this.memberRole = MemberRole.USER;
 		this.status = Objects.requireNonNull(status, "status는 null일 수 없습니다.");
 		this.socialType = socialType;
 		this.socialRefreshToken = socialRefreshToken;

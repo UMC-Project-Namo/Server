@@ -1,12 +1,15 @@
 package com.namo.spring.db.mysql.domains.user.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.transaction.annotation.Transactional;
 
 import com.namo.spring.core.common.annotation.DomainService;
+import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.entity.Term;
 import com.namo.spring.db.mysql.domains.user.repository.TermRepository;
+import com.namo.spring.db.mysql.domains.user.type.Content;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,8 +28,14 @@ public class TermService {
 		return termRepository.findByMemberId(memberId);
 	}
 
+	@Transactional(readOnly = true)
+	public Optional<Term> readTerm(Content content, Member member) {
+		return termRepository.findTermByContentAndMember(content, member);
+	}
+
 	@Transactional
 	public void deleteTerm(Long termId) {
 		termRepository.deleteById(termId);
 	}
+
 }
