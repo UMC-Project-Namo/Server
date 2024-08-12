@@ -3,7 +3,6 @@ package com.namo.spring.db.mysql.domains.user.entity;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -24,7 +23,6 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.type.SqlTypes;
 import org.springframework.util.StringUtils;
 
-import com.namo.spring.db.mysql.common.converter.MemberRoleConverter;
 import com.namo.spring.db.mysql.common.converter.MemberStatusConverter;
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
@@ -79,9 +77,8 @@ public class Member extends BaseTimeEntity implements User {
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	private String bio;
 
-	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Convert(converter = MemberRoleConverter.class)
-	@Column(nullable = false, columnDefinition = "VARCHAR(20) DEFAULT 'USER'")
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
 	private MemberRole memberRole;
 
 	@Enumerated(EnumType.STRING)
@@ -125,7 +122,7 @@ public class Member extends BaseTimeEntity implements User {
 		this.birthday = birthday;
 		this.birthdayVisible = true;
 		this.memberRole = MemberRole.USER;
-		this.status = Objects.requireNonNull(status, "status는 null일 수 없습니다.");
+		this.status = MemberStatus.ACTIVE;
 		this.socialType = socialType;
 		this.socialRefreshToken = socialRefreshToken;
 	}
@@ -143,11 +140,11 @@ public class Member extends BaseTimeEntity implements User {
 			']';
 	}
 
-	public void changeActive() {
+	public void changeToActive() {
 		this.status = MemberStatus.ACTIVE;
 	}
 
-	public void changeInactive() {
+	public void changeToInactive() {
 		this.status = MemberStatus.INACTIVE;
 	}
 
