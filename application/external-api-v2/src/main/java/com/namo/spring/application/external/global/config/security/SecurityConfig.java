@@ -34,7 +34,6 @@ public class SecurityConfig {
 	private final AccessDeniedHandler accessDeniedHandler;
 	private final AuthenticationEntryPoint authenticationEntryPoint;
 
-
 	@Bean
 	@Profile({"local", "dev", "test"})
 	@Order(SecurityProperties.BASIC_AUTH_ORDER)
@@ -83,8 +82,9 @@ public class SecurityConfig {
 			.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
 			.requestMatchers(HttpMethod.OPTIONS, "*").permitAll()
 			.requestMatchers(HttpMethod.GET, READ_ONLY_PUBLIC_ENDPOINTS).permitAll()
+			.requestMatchers(REISSUANCE_ENDPOINTS).permitAll()
 			.requestMatchers(PUBLIC_ENDPOINTS).permitAll()
 			.requestMatchers(AUTHENTICATED_ENDPOINTS).authenticated()
-			.requestMatchers(ANONYMOUS_ENDPOINTS).anonymous();
+			.requestMatchers(ANONYMOUS_ENDPOINTS).permitAll();
 	}
 }

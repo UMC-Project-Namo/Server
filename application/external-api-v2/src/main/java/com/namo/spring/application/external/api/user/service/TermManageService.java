@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class TermManage {
+public class TermManageService {
 
 	private final TermService termService;
 
