@@ -20,8 +20,8 @@ import org.springframework.util.StringUtils;
 
 import com.namo.spring.db.mysql.common.converter.ProviderConverter;
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
-import com.namo.spring.db.mysql.domains.user.entity.User;
 import com.namo.spring.db.mysql.domains.oauth.type.Provider;
+import com.namo.spring.db.mysql.domains.user.entity.Member;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -37,29 +37,28 @@ public class Oauth extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", nullable = false)
+	@Column(nullable = false)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "user_id", nullable = false)
-	private User user;
+	@JoinColumn(name = "member_id", nullable = false)
+	private Member member;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Convert(converter = ProviderConverter.class)
-	@Column(name = "provider", nullable = false, length = 50)
+	@Column(nullable = false, length = 50)
 	private Provider provider;
 
-	@Column(name = "provider_id", nullable = false)
+	@Column(nullable = false)
 	private String providerId;
 
-	@Column(name = "login_id", nullable = false)
+	@Column(nullable = false)
 	private String loginId;
 
-	@Column(name = "social_refresh_token")
 	private String socialRefreshToken;
 
 	@Builder
-	public Oauth(Provider provider, String providerId, String loginId, String socialRefreshToken, User user) {
+	public Oauth(Provider provider, String providerId, String loginId, String socialRefreshToken, Member member) {
 		if (!StringUtils.hasText(providerId))
 			throw new IllegalArgumentException("providerId은 null이거나 빈 문자열일 수 없습니다.");
 		else if (!StringUtils.hasText(loginId))
@@ -69,7 +68,7 @@ public class Oauth extends BaseTimeEntity {
 		this.providerId = providerId;
 		this.loginId = loginId;
 		this.socialRefreshToken = socialRefreshToken;
-		this.user = Objects.requireNonNull(user, "user은 null일 수 없습니다.");
+		this.member = Objects.requireNonNull(member, "user은 null일 수 없습니다.");
 	}
 
 	@Override
@@ -80,7 +79,7 @@ public class Oauth extends BaseTimeEntity {
 			+ "providerId='" + providerId + "', "
 			+ "loginId='" + loginId + "', "
 			+ "socialRefreshToken='" + socialRefreshToken + "', "
-			+ "user='" + user + "'"
+			+ "member='" + member + "'"
 			+ "]";
 	}
 }

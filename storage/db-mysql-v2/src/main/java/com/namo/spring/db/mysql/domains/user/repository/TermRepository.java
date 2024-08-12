@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.namo.spring.db.mysql.domains.user.entity.Term;
 
 public interface TermRepository extends JpaRepository<Term, Long> {
-	List<Term> findByUserId(Long userId);
+	List<Term> findByMemberId(Long memberId);
 }

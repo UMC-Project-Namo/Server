@@ -85,3 +85,5 @@
     - `individual` 도메인 모듈 분리 (`entity`, `repository` 패키지 `external-api` 모듈에서 이동)
 - 2024.06.24
     - `group` 도메인 모듈 분리 (`entity`, `repository` 패키지 `external-api` 모듈에서 이동)
+- 2024.08.02
+    - `Schedule` 도메인 통합, V2 엔티티 설정

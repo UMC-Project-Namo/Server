@@ -1,6 +1,5 @@
-package com.namo.spring.db.mysql.domains.user.entity;
+package com.namo.spring.db.mysql.domains.record.entity;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
@@ -18,6 +17,7 @@ import org.hibernate.type.SqlTypes;
 import org.springframework.util.StringUtils;
 
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
+import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
-public class Term extends BaseTimeEntity {
+public class Diary extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,37 +36,18 @@ public class Term extends BaseTimeEntity {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "member_id", nullable = false)
-	private Member member;
+	@JoinColumn(name = "participant_id", nullable = false)
+	private Participant participant;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Column(nullable = false, length = 250)
-	private String content;
-
-	@Column(nullable = false)
-	private boolean agree;
-
-	private LocalDateTime agreeAt;
+	private String memo;
 
 	@Builder
-	public Term(Member user, String content, boolean agree, LocalDateTime agreeAt) {
-		if (!StringUtils.hasText(content))
-			throw new IllegalArgumentException("content는 null이거나 빈 문자열일 수 없습니다.");
-
-		this.member = Objects.requireNonNull(user, "member은 null일 수 없습니다.");
-		this.content = content;
-		this.agree = Objects.requireNonNull(agree, "agree은 null일 수 없습니다.");
-		this.agreeAt = agreeAt;
+	public Diary(Participant participant, String memo) {
+		this.participant = Objects.requireNonNull(participant, "participant은 null일 수 없습니다.");
+		if (!StringUtils.hasText(memo))
+			throw new IllegalArgumentException("memo은 null이거나 빈 문자열일 수 없습니다.");
+		this.memo = memo;
 	}
-
-	public void checkAgree() {
-		this.agree = true;
-		this.agreeAt = LocalDateTime.now();
-	}
-
-	public void checkDisagree() {
-		this.agree = false;
-		this.agreeAt = null;
-	}
-
 }

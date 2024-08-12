@@ -1,11 +1,16 @@
-package com.namo.spring.db.mysql.domains.schedule.entity;
+package com.namo.spring.db.mysql.domains.record.entity;
+
+import java.math.BigDecimal;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -13,8 +18,7 @@ import org.hibernate.type.SqlTypes;
 import org.springframework.util.StringUtils;
 
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
-import com.namo.spring.db.mysql.domains.schedule.type.Location;
-import com.namo.spring.db.mysql.domains.schedule.type.Period;
+import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -25,46 +29,34 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
-public class Schedule extends BaseTimeEntity {
+public class Activity extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(nullable = false)
 	private Long id;
+
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(nullable = false)
+	private Schedule schedule;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Column(nullable = false, length = 50)
 	private String title;
 
-	@Embedded
-	private Period period;
+	@Column(nullable = false)
+	private BigDecimal totalAmount;
 
-	@Embedded
-	private Location location;
-
-	// 0: 개인, 1: 그룹
-	@Column(nullable = false, columnDefinition = "TINYINT")
-	private int scheduleType;
-
-	@Column(length = 16)
-	private int invitationCode;
+	@JdbcTypeCode(SqlTypes.VARCHAR)
+	@Column(length = 50)
+	private String categoryTag;
 
 	@Builder
-	public Schedule(String title, Period period, Location location, int scheduleType) {
+	public Activity(Schedule schedule, String title, BigDecimal totalAmount, String categoryTag) {
 		if (!StringUtils.hasText(title))
 			throw new IllegalArgumentException("title은 null이거나 빈 문자열일 수 없습니다.");
+		this.schedule = Objects.requireNonNull(schedule, "schedule은 null일 수 없습니다.");
 		this.title = title;
-		this.period = period;
-		this.location = location;
-		this.scheduleType = scheduleType;
-	}
-
-	public Schedule of(String title, Period period, Location location, int scheduleType) {
-		return Schedule.builder()
-			.title(title)
-			.period(period)
-			.location(location)
-			.scheduleType(scheduleType)
-			.build();
+		this.totalAmount = totalAmount;
+		this.categoryTag = categoryTag;
 	}
 }
