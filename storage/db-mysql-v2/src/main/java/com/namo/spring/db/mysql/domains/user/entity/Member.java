@@ -2,6 +2,7 @@ package com.namo.spring.db.mysql.domains.user.entity;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -9,6 +10,8 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,8 +27,12 @@ import org.springframework.util.StringUtils;
 import com.namo.spring.db.mysql.common.converter.MemberRoleConverter;
 import com.namo.spring.db.mysql.common.converter.MemberStatusConverter;
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
+import com.namo.spring.db.mysql.domains.category.entity.Category;
+import com.namo.spring.db.mysql.domains.notification.entity.Notification;
+import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.user.type.MemberRole;
 import com.namo.spring.db.mysql.domains.user.type.MemberStatus;
+import com.namo.spring.db.mysql.domains.user.type.SocialType;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -72,13 +79,17 @@ public class Member extends BaseTimeEntity implements User {
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	private String bio;
 
-	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<Friendship> friendships = new HashSet<>();
-
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Convert(converter = MemberRoleConverter.class)
 	@Column(nullable = false, length = 50)
 	private MemberRole memberRole;
+
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private SocialType socialType;
+
+	@Column(nullable = false)
+	private String socialRefreshToken;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Convert(converter = MemberStatusConverter.class)
@@ -88,8 +99,21 @@ public class Member extends BaseTimeEntity implements User {
 	@ColumnDefault("NULL")
 	private LocalDateTime deletedAt;
 
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Friendship> friendships = new HashSet<>();
+
+	@OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Notification> notifications;
+
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Category> categories;
+
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Participant> participants;
+
 	@Builder
-	public Member(String name, String tag, String email, String birthday, MemberRole userRole, MemberStatus status) {
+	public Member(String name, String tag, String email, String birthday, MemberRole userRole, MemberStatus status,
+		SocialType socialType, String socialRefreshToken) {
 		if (!StringUtils.hasText(name))
 			throw new IllegalArgumentException("name은 null이거나 빈 문자열일 수 없습니다.");
 		else if (!StringUtils.hasText(email))
@@ -102,6 +126,8 @@ public class Member extends BaseTimeEntity implements User {
 		this.birthdayVisible = true;
 		this.memberRole = Objects.requireNonNull(userRole, "memberRole은 null일 수 없습니다.");
 		this.status = Objects.requireNonNull(status, "status는 null일 수 없습니다.");
+		this.socialType = socialType;
+		this.socialRefreshToken = socialRefreshToken;
 	}
 
 	@Override
@@ -115,5 +141,17 @@ public class Member extends BaseTimeEntity implements User {
 			", status='" + status + '\'' +
 			", deletedAt='" + deletedAt + '\'' +
 			']';
+	}
+
+	public void changeActive() {
+		this.status = MemberStatus.ACTIVE;
+	}
+
+	public void changeInactive() {
+		this.status = MemberStatus.INACTIVE;
+	}
+
+	public void updateSocialRefreshToken(String socialRefreshToken) {
+		this.socialRefreshToken = socialRefreshToken;
 	}
 }
