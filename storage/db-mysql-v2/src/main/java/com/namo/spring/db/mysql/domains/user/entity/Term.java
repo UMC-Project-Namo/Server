@@ -48,11 +48,11 @@ public class Term extends BaseTimeEntity {
 	private LocalDateTime agreeAt;
 
 	@Builder
-	public Term(Member user, Content content, boolean agree, LocalDateTime agreeAt) {
+	public Term(Member user, Content content, boolean agree) {
 		this.member = Objects.requireNonNull(user, "member은 null일 수 없습니다.");
 		this.content = content;
 		this.agree = Objects.requireNonNull(agree, "agree은 null일 수 없습니다.");
-		this.agreeAt = agreeAt;
+		this.agreeAt = LocalDateTime.now();
 	}
 
 	public void checkAgree() {
@@ -65,7 +65,7 @@ public class Term extends BaseTimeEntity {
 		this.agreeAt = null;
 	}
 
-	public void updateDate() {
+	public void update() {
 		this.updatedAt = LocalDateTime.now();
 	}
 }

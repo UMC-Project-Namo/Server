@@ -22,7 +22,7 @@ public class TermManage {
 			validateTermAgreement(term);
 			termService.readTerm(term.getContent(), term.getMember())
 				.ifPresentOrElse(
-					Term::updateDate,
+					Term::update,
 					() -> termService.createTerm(term)
 				);
 		}
