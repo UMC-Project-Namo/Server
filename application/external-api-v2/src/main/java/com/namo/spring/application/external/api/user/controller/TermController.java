@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.namo.spring.application.external.api.user.dto.MemberRequest;
+import com.namo.spring.application.external.api.user.facade.TermFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.core.common.code.status.ErrorStatus;
@@ -25,6 +26,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/v2/terms")
 public class TermController {
 
+	private final TermFacade termFacade;
+
 	@Operation(summary = "약관을 동의합니다. ", description = "약관 동의 API")
 	@PostMapping("")
 	@ApiErrorCodes(value = {
@@ -33,9 +36,10 @@ public class TermController {
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
 		ErrorStatus.INTERNET_SERVER_ERROR
 	})
-	public ResponseDto<Void> createTerm(@Valid @RequestBody MemberRequest.TermDto termDto,
-		@AuthenticationPrincipal SecurityUserDetails user) {
-		return null;
+	public ResponseDto<String> createTerm(@Valid @RequestBody MemberRequest.TermDto termDto,
+		@AuthenticationPrincipal SecurityUserDetails member) {
+		termFacade.termAgreement(termDto, member.getUserId());
+		return ResponseDto.onSuccess("약관 동의 완료");
 	}
 
 }
