@@ -92,6 +92,6 @@ public class MemberManageService {
 
     private void makeBaseCategory(Member member) {
         categoryMaker.makePersonalCategory(member);
-        categoryMaker.makeGroupCategory(member);
+        categoryMaker.makeMeetingCategory(member);
     }
 }

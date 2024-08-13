@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 public class CategoryMaker {
 
     private static final Long BASE_PERSONAL_PALETTE_ID = ColorChip.getBasePersonalCategoryColorId();
-    private static final Long BASE_GROUP_PALETTE_ID = ColorChip.getBaseMeetingCategoryColorId();
+    private static final Long BASE_MEETING_PALETTE_ID = ColorChip.getBaseMeetingCategoryColorId();
 
     private final PaletteService paletteService;
     private final CategoryService categoryService;
@@ -37,8 +37,8 @@ public class CategoryMaker {
         categoryService.createCategory(target);
     }
 
-    public void makeGroupCategory(Member member) {
-        Palette palette = paletteService.getPalette(BASE_GROUP_PALETTE_ID);
+    public void makeMeetingCategory(Member member) {
+        Palette palette = paletteService.getPalette(BASE_MEETING_PALETTE_ID);
 
         Category target = Category.builder()
                 .member(member)
