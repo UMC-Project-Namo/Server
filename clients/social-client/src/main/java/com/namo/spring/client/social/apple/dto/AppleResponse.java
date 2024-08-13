@@ -22,9 +22,9 @@ public class AppleResponse {
 		private String use;
 		private String alg;
 		@JsonProperty("n")
-		private String modulus;
+		private String modulus; //RSA public key의 모듈러스 값
 		@JsonProperty("e")
-		private String exponent;
+		private String exponent; // RSA public key의 지수 값
 	}
 
 	@Getter

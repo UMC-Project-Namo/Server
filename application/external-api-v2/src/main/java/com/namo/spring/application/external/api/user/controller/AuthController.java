@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.namo.spring.application.external.api.user.api.AuthApi;
 import com.namo.spring.application.external.api.user.dto.MemberRequest;
 import com.namo.spring.application.external.api.user.dto.MemberResponse;
-import com.namo.spring.application.external.api.user.facade.MemberFacade;
+import com.namo.spring.application.external.api.user.facade.AuthFacade;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.core.common.response.ResponseDto;
 import com.namo.spring.db.mysql.domains.user.type.SocialType;
@@ -29,14 +29,14 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/v2/auths")
 public class AuthController implements AuthApi {
 
-	private final MemberFacade memberFacade;
+	private final AuthFacade memberFacade;
 
 	@PostMapping(value = "/signup/apple")
 	@PreAuthorize("isAnonymous()")
 	public ResponseDto<MemberResponse.SignUpDto> appleSignup(
 		@Valid @RequestBody MemberRequest.AppleSignUpDto dto
 	) {
-		MemberResponse.SignUpDto signupDto = memberFacade.signupApple(dto, SocialType.APPLE);
+		MemberResponse.SignUpDto signupDto = memberFacade.signupApple(dto);
 		return ResponseDto.onSuccess(signupDto);
 	}
 
