@@ -3,7 +3,7 @@ package com.namo.spring.application.external.api.user.service;
 import java.math.BigInteger;
 import java.util.Base64;
 
-public class KeyDecoder {
+public abstract class KeyDecoder {
 
 	private static final int POSITIVE_SIG_NUM = 1;
 
