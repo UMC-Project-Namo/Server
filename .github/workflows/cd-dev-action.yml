@@ -74,7 +74,7 @@ jobs:
       - name: Docker Image Build & Push
         env:
           NAME: namongdev # 계정 명
-          REPO: springboot-dev # 레포 이름
+          REPO: springboot-dev-v2 # 레포 이름
         run: |
           docker build -t $REPO .
           docker tag $REPO:latest $NAME/$REPO:latest
