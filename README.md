@@ -15,6 +15,8 @@
     - [2️⃣ Infrastructure Architecture](#2-infrastructure-architecture)
     - [3️⃣ Multi-Module Architecture](#3-multi-module-architecture)
 - [✍🏻 나모 서버 팀원들은 이렇게 작업해요](#-나모-서버-팀원들은-이렇게-작업해요)
+    - [캐슬/이호성](#캐슬이호성)
+    - [다나/서주원](#다나서주원)
     - [매실/김현재](#매실김현재)
     - [루카/최선규](#루카최선규)
     - [초코/김현지](#초코김현지)
@@ -80,6 +82,14 @@
 - [support](./support/README.md): 모듈은 프로젝트에 독립적으로 사용될 수 있는 기능을 제공한다.
 
 ## ✍🏻 나모 서버 팀원들은 이렇게 작업해요
+
+### 캐슬/이호성
+
+- [여러 이미지가 포함된 데이터를 수정하기](https://namo-log.vercel.app/server-editing-image)
+
+### 다나/서주원
+
+- [나모 DB의 더 나은 미래를 위한 Flyway 도입기](https://namo-log.vercel.app/server-using-flyway)
 
 ### 매실/김현재
 
