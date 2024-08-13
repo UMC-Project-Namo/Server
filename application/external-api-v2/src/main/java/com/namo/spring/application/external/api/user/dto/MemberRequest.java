@@ -41,6 +41,8 @@ public class MemberRequest {
 	}
 
 	@Getter
+	@NoArgsConstructor
+	@AllArgsConstructor
 	public static class AppleSignUpDto {
 		@NotBlank
 		private String authorizationCode;

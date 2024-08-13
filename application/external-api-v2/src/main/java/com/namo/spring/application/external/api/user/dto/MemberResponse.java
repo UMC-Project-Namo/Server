@@ -17,6 +17,7 @@ public class MemberResponse {
 		private String accessToken;
 		private String refreshToken;
 		private boolean newUser;
+		private boolean signUpComplete;
 		private List<TermsDto> terms;
 	}
 

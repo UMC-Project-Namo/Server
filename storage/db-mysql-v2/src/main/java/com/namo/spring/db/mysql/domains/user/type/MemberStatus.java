@@ -7,11 +7,11 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum MemberStatus implements CodedEnum {
-	INACTIVE("0", "비활성화"),
-	ACTIVE("1", "활성화");
+	INACTIVE("비활성화", "1"),
+	ACTIVE("활성화", "2");
 
-	private final String code;
 	private final String type;
+	private final String code;
 
 	@Override
 	public String toString() {

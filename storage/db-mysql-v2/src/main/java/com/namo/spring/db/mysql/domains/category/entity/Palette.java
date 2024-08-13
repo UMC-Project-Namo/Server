@@ -9,12 +9,14 @@ import jakarta.persistence.Id;
 import org.hibernate.annotations.DynamicInsert;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @DynamicInsert
 public class Palette {
 

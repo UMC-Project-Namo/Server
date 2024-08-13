@@ -5,6 +5,8 @@ import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,11 +15,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-import org.springframework.util.StringUtils;
 
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
+import com.namo.spring.db.mysql.domains.user.type.Content;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -39,9 +39,8 @@ public class Term extends BaseTimeEntity {
 	@JoinColumn(name = "member_id", nullable = false)
 	private Member member;
 
-	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Column(nullable = false, length = 250)
-	private String content;
+	@Enumerated(EnumType.STRING)
+	private Content content;
 
 	@Column(nullable = false)
 	private boolean agree;
@@ -49,14 +48,11 @@ public class Term extends BaseTimeEntity {
 	private LocalDateTime agreeAt;
 
 	@Builder
-	public Term(Member user, String content, boolean agree, LocalDateTime agreeAt) {
-		if (!StringUtils.hasText(content))
-			throw new IllegalArgumentException("content는 null이거나 빈 문자열일 수 없습니다.");
-
+	public Term(Member user, Content content, boolean agree) {
 		this.member = Objects.requireNonNull(user, "member은 null일 수 없습니다.");
 		this.content = content;
 		this.agree = Objects.requireNonNull(agree, "agree은 null일 수 없습니다.");
-		this.agreeAt = agreeAt;
+		this.agreeAt = LocalDateTime.now();
 	}
 
 	public void checkAgree() {
@@ -69,4 +65,7 @@ public class Term extends BaseTimeEntity {
 		this.agreeAt = null;
 	}
 
+	public void update() {
+		this.updatedAt = LocalDateTime.now();
+	}
 }

@@ -1,7 +1,9 @@
 package com.namo.spring.db.mysql.domains.schedule.entity;
 
+import java.util.List;
 import java.util.Objects;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,12 +12,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 import org.hibernate.annotations.DynamicInsert;
 
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
 import com.namo.spring.db.mysql.domains.category.entity.Palette;
+import com.namo.spring.db.mysql.domains.record.entity.ActivityParticipant;
+import com.namo.spring.db.mysql.domains.record.entity.Diary;
 import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.entity.User;
@@ -58,6 +63,12 @@ public class Participant extends BaseTimeEntity {
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "palette_id", nullable = false)
 	private Palette palette;
+
+	@OneToMany(mappedBy = "participant", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Diary> diaries;
+
+	@OneToMany(mappedBy = "participant", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ActivityParticipant> activityParticipants;
 
 	@Builder
 	public Participant(int isOwner, Schedule schedule, Category category, Palette palette, User user) {
