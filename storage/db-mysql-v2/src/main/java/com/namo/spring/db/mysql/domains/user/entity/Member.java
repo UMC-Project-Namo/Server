@@ -151,4 +151,8 @@ public class Member extends BaseTimeEntity implements User {
 	public void updateSocialRefreshToken(String socialRefreshToken) {
 		this.socialRefreshToken = socialRefreshToken;
 	}
+
+	public boolean isSignUpComplete() {
+		return this.nickname != null && this.birthday != null && this.tag != null;
+	}
 }
