@@ -1,7 +1,7 @@
 package com.namo.spring.application.external.api.schedule.usecase;
 
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
-import com.namo.spring.application.external.api.schedule.service.ScheduleSearchService;
+import com.namo.spring.application.external.api.schedule.service.ScheduleManageService;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.exception.MemberException;
@@ -19,7 +19,7 @@ import static com.namo.spring.application.external.api.schedule.converter.Meetin
 @Component
 public class MeetingScheduleUsecase {
     private final MemberService memberService;
-    private final ScheduleSearchService scheduleSearchService;
+    private final ScheduleManageService scheduleManageService;
 
     private Member getMember(Long memberId) {
         return memberService.readMember(memberId)
@@ -27,7 +27,7 @@ public class MeetingScheduleUsecase {
     }
 
     public List<MeetingScheduleResponse.GetMeetingScheduleDto> getMeetingSchedules(Long memberId) {
-        return toGetMeetingScheduleDtos(scheduleSearchService.getMeetingSchedulesByMember(getMember(memberId)));
+        return toGetMeetingScheduleDtos(scheduleManageService.getMeetingSchedulesByMember(getMember(memberId)));
     }
 
 }

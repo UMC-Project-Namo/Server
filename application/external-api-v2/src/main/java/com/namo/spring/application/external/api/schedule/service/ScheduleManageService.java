@@ -12,7 +12,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ScheduleSearchService {
+public class ScheduleManageService {
     private ScheduleService scheduleService;
 
     public List<MeetingScheduleQueryDto> getMeetingSchedulesByMember(Member member) {
