@@ -1,13 +1,13 @@
 ---
 spring.config.activate.on-profile: "local"
 
-swagger.server.url: http://localhost:8080
+swagger.server.url: http://localhost:9001
 
 springdoc:
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
   swagger-ui:
-    path: /swagger
+    path: /api/v2/swagger
     tags-sorter: alpha
     operations-sorter: method
     display-request-duration: true
@@ -25,7 +25,7 @@ springdoc:
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
   swagger-ui:
-    path: /swagger
+    path: /api/v2/swagger
     tags-sorter: alpha
     operations-sorter: method
     display-request-duration: true
