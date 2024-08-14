@@ -1,5 +1,5 @@
 FROM openjdk:17-jdk-alpine AS builder
-ARG JAR_FILE=application/external-api-v2/build/libs/*.jar
+ARG JAR_FILE=application/external-api/build/libs/*.jar
 COPY ${JAR_FILE} application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
