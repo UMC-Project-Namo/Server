@@ -75,7 +75,6 @@ public class MemberManageService {
 	}
 
 	public Member createNewAppleMember(MemberRequest.AppleSignUpDto req, String email, String appleRefreshToken) {
-		checkEmailAndName(email, req.getUsername());
 		log.debug("Creating new apple member");
 		Member newMember = memberService.createMember(MemberConverter.toMember(
 			email,
