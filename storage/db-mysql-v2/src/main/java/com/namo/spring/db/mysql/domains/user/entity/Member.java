@@ -21,7 +21,6 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.type.SqlTypes;
-import org.springframework.util.StringUtils;
 
 import com.namo.spring.db.mysql.common.converter.MemberStatusConverter;
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
@@ -54,7 +53,7 @@ public class Member extends BaseTimeEntity implements User {
 	private String email;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Column(nullable = false, length = 50)
+	@Column(length = 50)
 	private String name;
 
 	@Column(nullable = false)
@@ -111,8 +110,6 @@ public class Member extends BaseTimeEntity implements User {
 	@Builder
 	public Member(String name, String tag, String email, String birthday, MemberRole userRole, MemberStatus status,
 		SocialType socialType, String socialRefreshToken) {
-		if (!StringUtils.hasText(name))
-			throw new IllegalArgumentException("name은 null이거나 빈 문자열일 수 없습니다.");
 		this.name = name;
 		this.nameVisible = true;
 		this.tag = tag;
