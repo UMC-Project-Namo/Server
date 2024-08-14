@@ -30,7 +30,9 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SocialLoginService {
@@ -115,7 +117,10 @@ public class SocialLoginService {
 			.build()
 			.parseClaimsJws(req.getIdentityToken())
 			.getBody();
-		return claims.get("email", String.class);
+		String appleOauthId = claims.get("sub", String.class);
+		String appleEmail = claims.get("email", String.class);
+		log.debug("email: {}, oauthId : {}", appleEmail, appleOauthId);
+		return appleEmail;
 	}
 
 	private PublicKey createRSAPublicKey(AppleResponse.ApplePublicKeyDto applePublicKey) {
