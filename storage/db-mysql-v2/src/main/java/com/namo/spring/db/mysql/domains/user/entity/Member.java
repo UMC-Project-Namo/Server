@@ -50,7 +50,7 @@ public class Member extends BaseTimeEntity implements User {
 	private Long id;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Column(nullable = false, length = 50)
+	@Column(length = 50)
 	private String email;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
@@ -113,8 +113,6 @@ public class Member extends BaseTimeEntity implements User {
 		SocialType socialType, String socialRefreshToken) {
 		if (!StringUtils.hasText(name))
 			throw new IllegalArgumentException("name은 null이거나 빈 문자열일 수 없습니다.");
-		else if (!StringUtils.hasText(email))
-			throw new IllegalArgumentException("email은 null이거나 빈 문자열일 수 없습니다.");
 		this.name = name;
 		this.nameVisible = true;
 		this.tag = tag;
