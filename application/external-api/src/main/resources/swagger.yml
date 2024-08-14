@@ -14,7 +14,7 @@ springdoc:
     disable-swagger-default-url: true
   show-actuator: true
   api-docs:
-    path: /v3/api-docs
+    path: /api/v1/v3/api-docs
 
 ---
 spring.config.activate.on-profile: "dev"
@@ -32,7 +32,7 @@ springdoc:
     disable-swagger-default-url: true
   show-actuator: true
   api-docs:
-    path: /v3/api-docs
+    path: /api/v1/v3/api-docs
 
 ---
 spring.config.activate.on-profile: prod
