@@ -13,8 +13,8 @@ public class WebSecurityUrl {
     };
     protected static final String[] ANONYMOUS_ENDPOINTS = {"/api/v1/auths/**"};
     protected static final String[] SWAGGER_ENDPOINTS = {
-            "/api-docs/**", "/v3/api-docs/**",
-            "/swagger-ui/**", "/swagger"
+            "/api/v1/api-docs/**", "/api/v1/v3/api-docs/**",
+            "/api/v1/swagger-ui/**", "/api/v1/swagger"
     };
     protected static final String[] REISSUANCE_ENDPOINTS = {"/api/v1/auths/reissuance"};
 }
