@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static com.namo.spring.application.external.api.schedule.converter.MeetingScheduleResponseConverter.toGetMeetingScheduleDtos;
+import static com.namo.spring.application.external.api.schedule.converter.MeetingScheduleResponseConverter.toGetMeetingScheduleItemDtos;
 
 @Service
 @RequiredArgsConstructor
@@ -22,9 +22,8 @@ public class MeetingScheduleUsecase {
     private final ScheduleManageService scheduleManageService;
     private final ParticipantManageService participantManageService;
 
-    @Transactional(readOnly = true)
-    public List<MeetingScheduleResponse.GetMeetingScheduleDto> getMeetingSchedules(Long memberId) {
-        return toGetMeetingScheduleDtos(scheduleManageService.getMeetingSchedulesByMember(memberId));
+    public List<MeetingScheduleResponse.GetMeetingScheduleItemDto> getMeetingSchedules(Long memberId) {
+        return toGetMeetingScheduleItemDtos(scheduleManageService.getMeetingSchedulesByMember(memberId));
     }
 
     @Transactional

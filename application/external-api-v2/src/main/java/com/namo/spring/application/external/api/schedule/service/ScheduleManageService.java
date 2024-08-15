@@ -2,10 +2,10 @@ package com.namo.spring.application.external.api.schedule.service;
 
 import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
 import com.namo.spring.core.common.code.status.ErrorStatus;
-import com.namo.spring.db.mysql.domains.category.service.CategoryService;
-import com.namo.spring.db.mysql.domains.schedule.dto.MeetingScheduleQueryDto;
+import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
+import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
 import com.namo.spring.db.mysql.domains.schedule.service.ScheduleService;
 import com.namo.spring.db.mysql.domains.schedule.type.Period;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -25,8 +26,8 @@ import java.util.List;
 public class ScheduleManageService {
     private final ScheduleMaker scheduleMaker;
     private final ScheduleService scheduleService;
+    private final ParticipantService participantService;
     private final MemberService memberService;
-    private final CategoryService categoryService;
 
     @Transactional(readOnly = true)
     public Member getMember(Long memberId) {
@@ -36,9 +37,14 @@ public class ScheduleManageService {
     }
 
     @Transactional(readOnly = true)
-    public List<MeetingScheduleQueryDto> getMeetingSchedulesByMember(Long memberId) {
+    public List<Participant> getMeetingSchedulesByMember(Long memberId) {
         Member member = getMember(memberId);
-        return scheduleService.readMeetingSchedulesWithParticipantsByMember(member);
+        List<Long> participantIds = participantService.findParticipantsWithSchedulesByScheduleIds(member).stream()
+                .map(Participant::getSchedule)
+                .map(Schedule::getId)
+                .collect(Collectors.toList());
+        List<Participant> participantsWithSchedules = participantService.findParticipantsWithSchedulesByScheduleIds(participantIds);
+        return participantsWithSchedules;
     }
 
     @Transactional

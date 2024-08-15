@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "개인", description = "개인 일정 API")
+@Tag(name = "개인 일정", description = "개인 일정 API")
 @Slf4j
 @RequiredArgsConstructor
 @RestController
