@@ -66,4 +66,19 @@ public class MemberRequest {
 		}
 	}
 
+	@Getter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class CompleteSignUpDto {
+		@NotNull
+		private String email;
+		@NotNull
+		private String name;
+		@NotNull
+		private String nickname;
+		@NotNull
+		private String birthday;
+
+		private String bio;
+	}
 }

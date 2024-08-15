@@ -16,6 +16,7 @@ import com.namo.spring.application.external.api.user.dto.MemberResponse;
 import com.namo.spring.application.external.api.user.helper.JwtAuthHelper;
 import com.namo.spring.application.external.api.user.service.MemberManageService;
 import com.namo.spring.application.external.api.user.service.SocialLoginService;
+import com.namo.spring.application.external.api.user.service.TagGenerator;
 import com.namo.spring.application.external.global.common.security.jwt.CustomJwts;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.type.SocialType;
@@ -30,6 +31,7 @@ public class AuthFacade {
 	private final JwtAuthHelper jwtAuthHelper;
 	private final SocialLoginService socialLoginService;
 	private final MemberManageService memberManageService;
+	private final TagGenerator tagGenerator;
 
 	@Transactional
 	public MemberResponse.SignUpDto socialSignup(MemberRequest.SocialSignUpDto signUpDto, SocialType socialType) {
@@ -100,5 +102,13 @@ public class AuthFacade {
 		socialLoginService.unlinkSocialAccount(member);
 		jwtAuthHelper.removeJwtsToken(memberId, accessToken, refreshToken);
 		member.changeToInactive();
+	}
+
+	public Member completeSignup(MemberRequest.CompleteSignUpDto dto, Long memberId) {
+		Member member = memberManageService.getMember(memberId);
+		memberManageService.validateEmail(member.getSocialType(), dto.getEmail());
+		String tag = tagGenerator.generateTag(member.getNickname());
+		member.signUpComplete(dto.getName(), dto.getNickname(), dto.getBirthday(), dto.getBio(), tag);
+		return member;
 	}
 }

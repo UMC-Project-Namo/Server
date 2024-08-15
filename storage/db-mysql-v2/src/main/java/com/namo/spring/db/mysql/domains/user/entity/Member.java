@@ -154,4 +154,13 @@ public class Member extends BaseTimeEntity implements User {
 	public boolean isSignUpComplete() {
 		return !status.equals(MemberStatus.PENDING);
 	}
+
+	public void signUpComplete(String name, String nickname, String birthday, String bio, String tag) {
+		this.name = name;
+		this.nickname = nickname;
+		this.birthday = birthday;
+		this.bio = bio;
+		this.tag = tag;
+		this.status = MemberStatus.ACTIVE;
+	}
 }

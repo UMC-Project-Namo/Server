@@ -34,4 +34,14 @@ public class MemberResponse {
 		private String accessToken;
 		private String refreshToken;
 	}
+
+	@Getter
+	@Builder
+	public static class SignUpDoneDto {
+		private String nickname;
+		private String tag;
+		private String name;
+		private String bio;
+		private String birth;
+	}
 }

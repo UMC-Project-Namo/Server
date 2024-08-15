@@ -2,6 +2,7 @@ package com.namo.spring.application.external.api.user.converter;
 
 import java.util.Map;
 
+import com.namo.spring.application.external.api.user.dto.MemberResponse;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.type.SocialType;
 
@@ -26,6 +27,16 @@ public class MemberConverter {
 			.authId(authId)
 			.socialType(socialType)
 			.socialRefreshToken(socialRefreshToken)
+			.build();
+	}
+
+	public static MemberResponse.SignUpDoneDto toSignUpDoneDto(Member member) {
+		return MemberResponse.SignUpDoneDto.builder()
+			.nickname(member.getName())
+			.tag(member.getTag())
+			.name(member.getName())
+			.bio(member.getBio())
+			.birth(member.getBirthday())
 			.build();
 	}
 
