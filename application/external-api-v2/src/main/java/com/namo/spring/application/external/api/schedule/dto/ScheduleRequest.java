@@ -20,7 +20,7 @@ public class ScheduleRequest {
     @Getter
     public static class PostPersonalScheduleDto {
         @NotBlank
-        @Schema(description = "모임 일정 이름", example = "나모 정기 회의")
+        @Schema(description = "일정 이름", example = "알바")
         private String title;
         @NotNull
         @Schema(description = "카테고리 ID")

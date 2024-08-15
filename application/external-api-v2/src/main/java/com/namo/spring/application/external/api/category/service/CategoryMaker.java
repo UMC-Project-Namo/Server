@@ -1,4 +1,4 @@
-package com.namo.spring.application.external.api.Category.service;
+package com.namo.spring.application.external.api.category.service;
 
 import com.namo.spring.db.mysql.domains.category.entity.Category;
 import com.namo.spring.db.mysql.domains.category.entity.Palette;
@@ -16,8 +16,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class CategoryMaker {
 
-    private static final Long BASE_PERSONAL_PALETTE_ID = ColorChip.getBasePersonalCategoryColorId();
-    private static final Long BASE_MEETING_PALETTE_ID = ColorChip.getBaseMeetingCategoryColorId();
+    private static final Long BASE_PERSONAL_PALETTE_ID = ColorChip.getBaseCategoryPaletteId();
+    private static final Long BASE_MEETING_PALETTE_ID = ColorChip.getBaseMeetingCategoryPaletteId();
 
     private final PaletteService paletteService;
     private final CategoryService categoryService;
