@@ -105,4 +105,10 @@ public class MemberManageService {
 			.map(Member::getTag)
 			.toList();
 	}
+
+	public void validateEmail(SocialType socialType, String email) {
+		if (memberRepository.existsByEmailAndSocialType(email, socialType)) {
+			throw new MemberException(ErrorStatus.DUPLICATE_EMAIL_FAILURE);
+		}
+	}
 }

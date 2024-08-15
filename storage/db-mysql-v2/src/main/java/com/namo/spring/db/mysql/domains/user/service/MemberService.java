@@ -1,5 +1,6 @@
 package com.namo.spring.db.mysql.domains.user.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -13,25 +14,30 @@ import lombok.RequiredArgsConstructor;
 @DomainService
 @RequiredArgsConstructor
 public class MemberService {
-	private final MemberRepository userRepository;
+	private final MemberRepository memberRepository;
 
 	@Transactional
 	public Member createMember(Member member) {
-		return userRepository.save(member);
+		return memberRepository.save(member);
 	}
 
 	@Transactional(readOnly = true)
 	public Optional<Member> readMember(Long memberId) {
-		return userRepository.findById(memberId);
+		return memberRepository.findById(memberId);
 	}
 
 	@Transactional
 	public void deleteMember(Long memberId) {
-		userRepository.deleteById(memberId);
+		memberRepository.deleteById(memberId);
 	}
 
 	@Transactional
 	public void deleteMember(Member member) {
-		userRepository.delete(member);
+		memberRepository.delete(member);
+	}
+
+	@Transactional(readOnly = true)
+	public List<Member> readMemberByNickname(String nickname) {
+		return memberRepository.findMembersByNickname(nickname);
 	}
 }
