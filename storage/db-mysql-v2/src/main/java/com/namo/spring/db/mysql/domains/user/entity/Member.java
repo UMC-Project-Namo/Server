@@ -48,7 +48,7 @@ public class Member extends BaseTimeEntity implements User {
 	@Column(nullable = false)
 	private Long id;
 
-	@Column(nullable = false, unique = true)
+	@Column(unique = true)
 	private String authId;
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
@@ -155,10 +155,11 @@ public class Member extends BaseTimeEntity implements User {
 		return !status.equals(MemberStatus.PENDING);
 	}
 
-	public void signUpComplete(String name, String nickname, String birthday, String bio, String tag) {
+	public void signUpComplete(String name, String nickname, String email, String birthday, String bio, String tag) {
 		this.name = name;
 		this.nickname = nickname;
 		this.birthday = birthday;
+		this.email = email;
 		this.bio = bio;
 		this.tag = tag;
 		this.status = MemberStatus.ACTIVE;

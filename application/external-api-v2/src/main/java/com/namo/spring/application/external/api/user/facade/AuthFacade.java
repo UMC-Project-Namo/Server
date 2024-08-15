@@ -104,11 +104,13 @@ public class AuthFacade {
 		member.changeToInactive();
 	}
 
+	@Transactional
 	public Member completeSignup(MemberRequest.CompleteSignUpDto dto, Long memberId) {
 		Member member = memberManageService.getMember(memberId);
-		memberManageService.validateEmail(member.getSocialType(), dto.getEmail());
 		String tag = tagGenerator.generateTag(member.getNickname());
-		member.signUpComplete(dto.getName(), dto.getNickname(), dto.getBirthday(), dto.getBio(), tag);
+		member.signUpComplete(dto.getName(), dto.getNickname(), dto.getEmail(), dto.getBirthday(), dto.getBio(), tag);
+		// memberManageService.validateEmail(member.getSocialType(), dto.getEmail());
+		memberManageService.saveMember(member);
 		return member;
 	}
 }

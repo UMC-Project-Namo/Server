@@ -32,7 +32,7 @@ public class MemberConverter {
 
 	public static MemberResponse.SignUpDoneDto toSignUpDoneDto(Member member) {
 		return MemberResponse.SignUpDoneDto.builder()
-			.nickname(member.getName())
+			.nickname(member.getNickname())
 			.tag(member.getTag())
 			.name(member.getName())
 			.bio(member.getBio())
