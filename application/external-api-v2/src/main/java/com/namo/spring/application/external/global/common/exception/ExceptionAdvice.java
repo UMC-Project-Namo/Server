@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestControllerAdvice(annotations = {RestController.class})
 public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
-	@org.springframework.web.bind.annotation.ExceptionHandler
+	@ExceptionHandler
 	public ResponseEntity<Object> validation(ConstraintViolationException e, WebRequest request) {
 		String errorMessage = e.getConstraintViolations().stream()
 			.map(ConstraintViolation::getMessage)
@@ -41,7 +41,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 	}
 
 	@Override
-	protected ResponseEntity<Object> handleMethodArgumentNotValid(
+	public ResponseEntity<Object> handleMethodArgumentNotValid(
 		MethodArgumentNotValidException e,
 		HttpHeaders headers,
 		HttpStatusCode status,
@@ -57,11 +57,14 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 				errors.merge(fieldName, errorMessage,
 					(existingErrorMessage, newErrorMessage) -> existingErrorMessage + ", " + newErrorMessage);
 			});
-		return handleExceptionInternalArgs(e,
+
+		return handleExceptionInternalArgs(
+			e,
 			HttpHeaders.EMPTY,
 			ErrorStatus.BAD_REQUEST,
 			request,
-			errors);
+			errors
+		);
 	}
 
 	@org.springframework.web.bind.annotation.ExceptionHandler
@@ -74,12 +77,13 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 			HttpHeaders.EMPTY,
 			ErrorStatus.INTERNAL_SERVER_ERROR.getHttpStatus(),
 			request,
-			e.getMessage());
+			e.getMessage()
+		);
 	}
 
 	@ExceptionHandler(value = GeneralException.class)
 	public ResponseEntity onThrowException(GeneralException generalException, HttpServletRequest request) {
-		ResponseDto.ErrorReasonDto errorReasonHttpStatus = generalException.getErrorReasonHttpStatus();
+		ResponseDto.ErrorReasonDto errorReasonHttpStatus = generalException.getErrorReason();
 		return handleExceptionInternal(generalException, errorReasonHttpStatus, null, request);
 	}
 
@@ -87,10 +91,9 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 		Exception e,
 		ResponseDto.ErrorReasonDto reason,
 		HttpHeaders headers,
-		HttpServletRequest request) {
-
+		HttpServletRequest request
+	) {
 		ResponseDto<Object> body = ResponseDto.onFailure(reason.getCode(), reason.getMessage(), null);
-		//        e.printStackTrace();
 
 		WebRequest webRequest = new ServletWebRequest(request);
 		return super.handleExceptionInternal(
@@ -104,13 +107,13 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
 	private ResponseEntity<Object> handleExceptionInternalFalse(
 		Exception e,
-		ErrorStatus errorCommonStatus,
+		ErrorStatus errorStatus,
 		HttpHeaders headers,
 		HttpStatus status,
 		WebRequest request,
 		String errorPoint
 	) {
-		ResponseDto<Object> body = ResponseDto.onFailure(errorCommonStatus.getCode(), errorCommonStatus.getMessage(),
+		ResponseDto<Object> body = ResponseDto.onFailure(errorStatus.getCode(), errorStatus.getMessage(),
 			errorPoint);
 		return super.handleExceptionInternal(
 			e,
@@ -119,26 +122,26 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 			status,
 			request
 		);
-
 	}
 
 	private ResponseEntity<Object> handleExceptionInternalArgs(
 		Exception e,
 		HttpHeaders headers,
-		ErrorStatus errorCommonStatus,
+		ErrorStatus errorStatus,
 		WebRequest request,
 		Map<String, String> errorArgs
 	) {
 		ResponseDto<Object> body = ResponseDto.onFailure(
-			errorCommonStatus.getCode(),
-			errorCommonStatus.getMessage(),
-			errorArgs);
+			errorStatus.getCode(),
+			errorStatus.getMessage(),
+			errorArgs
+		);
 
 		return super.handleExceptionInternal(
 			e,
 			body,
 			headers,
-			errorCommonStatus.getHttpStatus(),
+			errorStatus.getHttpStatus(),
 			request
 		);
 	}
@@ -152,7 +155,8 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 		ResponseDto<Object> body = ResponseDto.onFailure(
 			errorCommonStatus.getCode(),
 			errorCommonStatus.getMessage(),
-			null);
+			null
+		);
 
 		return super.handleExceptionInternal(
 			e,
@@ -162,5 +166,4 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 			request
 		);
 	}
-
 }
