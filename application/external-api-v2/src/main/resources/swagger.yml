@@ -1,7 +1,7 @@
 ---
 spring.config.activate.on-profile: "local"
 
-swagger.server.url: http://localhost:8080
+swagger.server.url: http://localhost:9001
 
 springdoc:
   default-consumes-media-type: application/json;charset=UTF-8
