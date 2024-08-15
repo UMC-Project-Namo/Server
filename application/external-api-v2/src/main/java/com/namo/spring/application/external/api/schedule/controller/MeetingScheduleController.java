@@ -1,5 +1,6 @@
 package com.namo.spring.application.external.api.schedule.controller;
 
+import com.namo.spring.application.external.api.schedule.api.MeetingScheduleApi;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
 import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
 import com.namo.spring.application.external.api.schedule.usecase.MeetingScheduleUsecase;
@@ -21,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v2/schedules/meeting")
-public class MeetingScheduleController {
+public class MeetingScheduleController implements MeetingScheduleApi {
     private final MeetingScheduleUsecase meetingScheduleUsecase;
 
     /**
