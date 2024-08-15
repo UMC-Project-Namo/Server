@@ -46,6 +46,10 @@ public class MemberManageService {
 		return memberRepository.findMemberByEmailAndSocialType(email, socialType);
 	}
 
+	public Optional<Member> getMemberAuthId(String authId) {
+		return memberRepository.findMemberByAuthId(authId);
+	}
+
 	public List<Member> getInactiveMember() {
 		return memberRepository.findMembersByStatusAndDate(MemberStatus.INACTIVE, LocalDateTime.now().minusDays(3));
 	}
@@ -74,11 +78,10 @@ public class MemberManageService {
 		return new MemberDto.MemberCreationRecord(savedMember, true);
 	}
 
-	public Member createNewAppleMember(MemberRequest.AppleSignUpDto req, String email, String appleRefreshToken) {
+	public Member createNewAppleMember(MemberRequest.AppleSignUpDto req, String authId, String appleRefreshToken) {
 		log.debug("Creating new apple member");
 		Member newMember = memberService.createMember(MemberConverter.toMember(
-			email,
-			req.getUsername(),
+			authId,
 			appleRefreshToken,
 			SocialType.APPLE));
 		makeBaseCategory(newMember);

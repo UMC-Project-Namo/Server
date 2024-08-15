@@ -40,8 +40,8 @@ public class AuthFacade {
 	@Transactional
 	public MemberResponse.SignUpDto signupApple(MemberRequest.AppleSignUpDto req) {
 		String appleRefreshToken = socialLoginService.getAppleRefreshToken(req);
-		String email = socialLoginService.determineEmail(req);
-		return processAppleSignup(req, email, appleRefreshToken);
+		String authId = socialLoginService.getAppleAuthId(req);
+		return processAppleSignup(req, authId, appleRefreshToken);
 	}
 
 	private MemberResponse.SignUpDto processSocialSignup(MemberRequest.SocialSignUpDto signUpDto, SocialType socialType,
@@ -52,20 +52,20 @@ public class AuthFacade {
 		return createSignUpResponse(memberInfo.member(), memberInfo.isNewUser());
 	}
 
-	private MemberResponse.SignUpDto processAppleSignup(MemberRequest.AppleSignUpDto req, String email,
+	private MemberResponse.SignUpDto processAppleSignup(MemberRequest.AppleSignUpDto req, String authId,
 		String appleRefreshToken) {
-		MemberDto.MemberCreationRecord memberInfo = processOrRetrieveAppleMember(req, email, appleRefreshToken);
+		MemberDto.MemberCreationRecord memberInfo = processOrRetrieveAppleMember(req, appleRefreshToken, authId);
 		return createSignUpResponse(memberInfo.member(), memberInfo.isNewUser());
 	}
 
-	private MemberDto.MemberCreationRecord processOrRetrieveAppleMember(MemberRequest.AppleSignUpDto req, String email,
-		String appleRefreshToken) {
-		return memberManageService.getMemberByEmailAndSocialType(email, SocialType.APPLE)
+	private MemberDto.MemberCreationRecord processOrRetrieveAppleMember(MemberRequest.AppleSignUpDto req,
+		String appleRefreshToken, String authId) {
+		return memberManageService.getMemberAuthId(authId)
 			.map(existingMember -> new MemberDto.MemberCreationRecord(
 				memberManageService.updateExistingAppleMember(existingMember, appleRefreshToken),
 				false))
 			.orElseGet(() -> new MemberDto.MemberCreationRecord(
-				memberManageService.createNewAppleMember(req, email, appleRefreshToken),
+				memberManageService.createNewAppleMember(req, authId, appleRefreshToken),
 				true));
 	}
 
