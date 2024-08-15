@@ -53,7 +53,7 @@ public class GroupFacade {
         String url = BASE_URL;
 
         if (img != null && !img.isEmpty()) {
-            url = fileUtils.uploadImage(img, FilePath.GROUP_PROFILE_IMG);
+            url = fileUtils.uploadImage(img, FilePath.MEETING_PROFILE_IMG);
         }
 
         Moim group = GroupConverter.toGroup(groupName, url);

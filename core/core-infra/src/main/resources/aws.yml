@@ -25,7 +25,7 @@ server:
 app:
   image:
     url:
-      group: ${BASE_MOIM_IMAGE_URL}
+      meeting: ${BASE_MOIM_IMAGE_URL}
 
 ---
 spring.config.activate.on-profile: local

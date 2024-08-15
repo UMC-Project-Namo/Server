@@ -153,7 +153,7 @@ public class MeetingScheduleFacade {
         List<String> urls = groupMemoLocationImgs.stream()
                 .map(MoimMemoLocationImg::getUrl)
                 .toList();
-        fileUtils.deleteImages(urls, FilePath.GROUP_ACTIVITY_IMG);
+        fileUtils.deleteImages(urls, FilePath.MEETING_ACTIVITY_IMG);
         groupActivityService.removeGroupActivityImgs(groupMemoLocations);
     }
 

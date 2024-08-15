@@ -8,5 +8,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @RequiredArgsConstructor
 @ConfigurationProperties(prefix = "app.image.url")
 public class ImageUrlProperties {
-    private final String group;
+    private final String meeting;
 }
