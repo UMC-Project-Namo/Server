@@ -98,4 +98,11 @@ public class MemberManageService {
 		categoryMaker.makeIndividualCategory(member);
 		categoryMaker.makeGroupCategory(member);
 	}
+
+	public List<String> getMemberTagsByNickname(String nickname) {
+		List<Member> members = memberService.readMemberByNickname(nickname);
+		return members.stream()
+			.map(Member::getTag)
+			.toList();
+	}
 }

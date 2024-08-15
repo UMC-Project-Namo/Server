@@ -26,4 +26,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
 	@Query("select u from Member u where u.status in :status and u.updatedAt < :localDateTime")
 	List<Member> findMembersByStatusAndDate(MemberStatus status, LocalDateTime localDateTime);
+
+	List<Member> findMembersByNickname(String nickname);
 }
