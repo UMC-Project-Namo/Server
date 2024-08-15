@@ -35,6 +35,7 @@ public interface AuthApi {
 					"accessToken": "exmapleAccessToken",
 					"refreshToken": "exampleRefreshToken",
 					"newUser": true,
+					"signUpComplete": false,
 					"terms": [
 						{
 							"content": "exampleContent",
@@ -270,6 +271,7 @@ public interface AuthApi {
 					"accessToken": "exmapleAccessToken",
 					"refreshToken": "exampleRefreshToken",
 					"newUser": true,
+					"signUpComplete": false,
 					"terms": [
 						{
 							"content": "exampleContent",
