@@ -53,7 +53,6 @@ public class AuthController implements AuthApi {
 	}
 
 	@PostMapping(value = "/signup/complete")
-	@PreAuthorize("isAuthenticated()")
 	public ResponseDto<MemberResponse.SignUpDoneDto> completeSignup(
 		@Valid @RequestBody MemberRequest.CompleteSignUpDto dto,
 		@AuthenticationPrincipal SecurityUserDetails member

@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 
 import org.springframework.http.HttpHeaders;
@@ -30,10 +29,10 @@ import lombok.extern.slf4j.Slf4j;
 @RestControllerAdvice(annotations = {RestController.class})
 public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
-	@ExceptionHandler
+	@org.springframework.web.bind.annotation.ExceptionHandler
 	public ResponseEntity<Object> validation(ConstraintViolationException e, WebRequest request) {
 		String errorMessage = e.getConstraintViolations().stream()
-			.map(ConstraintViolation::getMessage)
+			.map(constraintViolation -> constraintViolation.getMessage())
 			.findFirst()
 			.orElseThrow(() -> new RuntimeException("ConstraintViolationException 추출 도중 에러 발생"));
 
@@ -41,59 +40,40 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 	}
 
 	@Override
-	public ResponseEntity<Object> handleMethodArgumentNotValid(
-		MethodArgumentNotValidException e,
-		HttpHeaders headers,
-		HttpStatusCode status,
-		WebRequest request
-	) {
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
+		HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+
 		Map<String, String> errors = new LinkedHashMap<>();
 
-		e.getBindingResult()
-			.getFieldErrors()
+		e.getBindingResult().getFieldErrors().stream()
 			.forEach(fieldError -> {
 				String fieldName = fieldError.getField();
 				String errorMessage = Optional.ofNullable(fieldError.getDefaultMessage()).orElse("");
 				errors.merge(fieldName, errorMessage,
 					(existingErrorMessage, newErrorMessage) -> existingErrorMessage + ", " + newErrorMessage);
 			});
-
-		return handleExceptionInternalArgs(
-			e,
-			HttpHeaders.EMPTY,
-			ErrorStatus.BAD_REQUEST,
-			request,
-			errors
-		);
+		return handleExceptionInternalArgs(e, HttpHeaders.EMPTY, ErrorStatus.valueOf("_BAD_REQUEST"), request, errors);
 	}
 
 	@org.springframework.web.bind.annotation.ExceptionHandler
 	public ResponseEntity<Object> exception(Exception e, WebRequest request) {
 		e.printStackTrace();
 
-		return handleExceptionInternalFalse(
-			e,
-			ErrorStatus.INTERNAL_SERVER_ERROR,
-			HttpHeaders.EMPTY,
-			ErrorStatus.INTERNAL_SERVER_ERROR.getHttpStatus(),
-			request,
-			e.getMessage()
-		);
+		return handleExceptionInternalFalse(e, ErrorStatus.INTERNAL_SERVER_ERROR, HttpHeaders.EMPTY,
+			ErrorStatus.INTERNAL_SERVER_ERROR.getHttpStatus(), request, e.getMessage());
 	}
 
 	@ExceptionHandler(value = GeneralException.class)
 	public ResponseEntity onThrowException(GeneralException generalException, HttpServletRequest request) {
-		ResponseDto.ErrorReasonDto errorReasonHttpStatus = generalException.getErrorReason();
+		ResponseDto.ErrorReasonDto errorReasonHttpStatus = generalException.getErrorReasonHttpStatus();
 		return handleExceptionInternal(generalException, errorReasonHttpStatus, null, request);
 	}
 
-	private ResponseEntity<Object> handleExceptionInternal(
-		Exception e,
-		ResponseDto.ErrorReasonDto reason,
-		HttpHeaders headers,
-		HttpServletRequest request
-	) {
+	private ResponseEntity<Object> handleExceptionInternal(Exception e, ResponseDto.ErrorReasonDto reason,
+		HttpHeaders headers, HttpServletRequest request) {
+
 		ResponseDto<Object> body = ResponseDto.onFailure(reason.getCode(), reason.getMessage(), null);
+		//        e.printStackTrace();
 
 		WebRequest webRequest = new ServletWebRequest(request);
 		return super.handleExceptionInternal(
@@ -105,15 +85,9 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 		);
 	}
 
-	private ResponseEntity<Object> handleExceptionInternalFalse(
-		Exception e,
-		ErrorStatus errorStatus,
-		HttpHeaders headers,
-		HttpStatus status,
-		WebRequest request,
-		String errorPoint
-	) {
-		ResponseDto<Object> body = ResponseDto.onFailure(errorStatus.getCode(), errorStatus.getMessage(),
+	private ResponseEntity<Object> handleExceptionInternalFalse(Exception e, ErrorStatus errorCommonStatus,
+		HttpHeaders headers, HttpStatus status, WebRequest request, String errorPoint) {
+		ResponseDto<Object> body = ResponseDto.onFailure(errorCommonStatus.getCode(), errorCommonStatus.getMessage(),
 			errorPoint);
 		return super.handleExceptionInternal(
 			e,
@@ -122,42 +96,14 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 			status,
 			request
 		);
+
 	}
 
-	private ResponseEntity<Object> handleExceptionInternalArgs(
-		Exception e,
-		HttpHeaders headers,
-		ErrorStatus errorStatus,
-		WebRequest request,
-		Map<String, String> errorArgs
-	) {
-		ResponseDto<Object> body = ResponseDto.onFailure(
-			errorStatus.getCode(),
-			errorStatus.getMessage(),
-			errorArgs
-		);
-
-		return super.handleExceptionInternal(
-			e,
-			body,
-			headers,
-			errorStatus.getHttpStatus(),
-			request
-		);
-	}
-
-	private ResponseEntity<Object> handleExceptionInternalConstraint(
-		Exception e,
+	private ResponseEntity<Object> handleExceptionInternalArgs(Exception e, HttpHeaders headers,
 		ErrorStatus errorCommonStatus,
-		HttpHeaders headers,
-		WebRequest request
-	) {
-		ResponseDto<Object> body = ResponseDto.onFailure(
-			errorCommonStatus.getCode(),
-			errorCommonStatus.getMessage(),
-			null
-		);
-
+		WebRequest request, Map<String, String> errorArgs) {
+		ResponseDto<Object> body = ResponseDto.onFailure(errorCommonStatus.getCode(), errorCommonStatus.getMessage(),
+			errorArgs);
 		return super.handleExceptionInternal(
 			e,
 			body,
@@ -166,4 +112,18 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 			request
 		);
 	}
+
+	private ResponseEntity<Object> handleExceptionInternalConstraint(Exception e, ErrorStatus errorCommonStatus,
+		HttpHeaders headers, WebRequest request) {
+		ResponseDto<Object> body = ResponseDto.onFailure(errorCommonStatus.getCode(), errorCommonStatus.getMessage(),
+			null);
+		return super.handleExceptionInternal(
+			e,
+			body,
+			headers,
+			errorCommonStatus.getHttpStatus(),
+			request
+		);
+	}
+
 }
