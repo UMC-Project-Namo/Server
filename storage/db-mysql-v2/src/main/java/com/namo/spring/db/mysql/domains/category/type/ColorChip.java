@@ -26,11 +26,15 @@ public enum ColorChip {
         return this.id;
     }
 
-    public static Long getBasePersonalCategoryColorId() {
+    public static Long getBaseCategoryPaletteId() {
         return COLOR_1.id;
     }
 
-    public static Long getBaseMeetingCategoryColorId() {
+    public static Long getBaseMeetingCategoryPaletteId() {
         return COLOR_4.id;
+    }
+
+    public static Long getMeetingScheduleOwnerPaletteId() {
+        return COLOR_5.id;
     }
 }
