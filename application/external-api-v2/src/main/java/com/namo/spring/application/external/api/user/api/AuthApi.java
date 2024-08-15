@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.namo.spring.application.external.api.user.dto.MemberRequest;
@@ -347,6 +348,13 @@ public interface AuthApi {
 	}))
 	ResponseDto<MemberResponse.SignUpDto> appleSignup(
 		@Valid @RequestBody MemberRequest.AppleSignUpDto dto
+	);
+
+	@Operation(summary = "회원가입 완료", description = "회원가입 완료 처리를 진행합니다. 이 과정을 거치지 않으면 소셜 연결만 되어있는 상태입니다.")
+	@PostMapping(value = "/signup/complete")
+	public ResponseDto<MemberResponse.SignUpDoneDto> completeSignup(
+		@Valid @org.springframework.web.bind.annotation.RequestBody MemberRequest.CompleteSignUpDto dto,
+		@AuthenticationPrincipal SecurityUserDetails member
 	);
 
 	@Operation(summary = "토큰 재발급", description = "토큰 재발급")
