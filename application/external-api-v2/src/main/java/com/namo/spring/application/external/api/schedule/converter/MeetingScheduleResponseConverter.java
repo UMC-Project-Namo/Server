@@ -3,6 +3,7 @@ package com.namo.spring.application.external.api.schedule.converter;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
 import com.namo.spring.db.mysql.domains.schedule.dto.MeetingScheduleQueryDto;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
+import com.namo.spring.db.mysql.domains.schedule.type.ParticipateStatus;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +30,7 @@ public class MeetingScheduleResponseConverter {
 
     private static String toParticipantsNickname(List<Participant> participantList) {
         return participantList.stream()
+                .filter(participant -> participant.getStatus() == ParticipateStatus.ACTIVE)
                 .map(MeetingScheduleResponseConverter::getParticipantNickName)
                 .collect(Collectors.joining(", "));
     }
