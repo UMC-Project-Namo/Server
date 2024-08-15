@@ -10,8 +10,8 @@ import java.util.Optional;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    @Query("select c from Category c join fetch c.member where c.member= :member and c.type = '3'")
-    Optional<Category> findBaseCategoryByMember(@Param("member") Member member);
+    @Query("select c from Category c join fetch c.member where c.id = :id and c.member= :member")
+    Optional<Category> findCategoryByMemberAndId(@Param("id") Long id, @Param("member") Member member);
 
     @Query("select c from Category c join fetch c.member where c.member= :member and c.type = '2'")
     Optional<Category> findMeetingCategoryByMember(@Param("member") Member member);

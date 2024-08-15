@@ -28,8 +28,8 @@ public class CategoryService {
 
 
     @Transactional(readOnly = true)
-    public Category readBaseCategoryByMember(Member member) {
-        return categoryRepository.findBaseCategoryByMember(member).orElseThrow(
+    public Category readCategoryByMemberAndId(Long categoryId, Member member) {
+        return categoryRepository.findCategoryByMemberAndId(categoryId, member).orElseThrow(
                 () -> new CategoryException(ErrorStatus.NOT_FOUND_CATEGORY_FAILURE)
         );
     }
