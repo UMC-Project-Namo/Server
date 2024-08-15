@@ -8,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum MemberStatus implements CodedEnum {
 	INACTIVE("비활성화", "1"),
-	ACTIVE("활성화", "2");
+	ACTIVE("활성화", "2"),
+	PENDING("회원가입 대기", "3");
 
 	private final String type;
 	private final String code;
