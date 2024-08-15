@@ -1,8 +1,18 @@
 package com.namo.spring.db.mysql.domains.category.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.namo.spring.db.mysql.domains.category.entity.Category;
+import com.namo.spring.db.mysql.domains.user.entity.Member;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.Optional;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
+
+    @Query("select c from Category c join fetch c.member where c.member= :member and c.type = '3'")
+    Optional<Category> findBaseCategoryByMember(@Param("member") Member member);
+
+    @Query("select c from Category c join fetch c.member where c.member= :member and c.type = '2'")
+    Optional<Category> findMeetingCategoryByMember(@Param("member") Member member);
 }

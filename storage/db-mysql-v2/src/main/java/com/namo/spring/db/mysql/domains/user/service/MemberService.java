@@ -8,6 +8,8 @@ import com.namo.spring.db.mysql.domains.user.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @DomainService
 @RequiredArgsConstructor
 public class MemberService {
@@ -23,6 +25,11 @@ public class MemberService {
         return memberRepository.findById(memberId).orElseThrow(
                 () -> new MemberException(ErrorStatus.NOT_FOUND_USER_FAILURE)
         );
+    }
+
+    @Transactional(readOnly = true)
+    public List<Member> readMembersById(List<Long> memberIds) {
+        return memberRepository.findMembersById(memberIds);
     }
 
     @Transactional
