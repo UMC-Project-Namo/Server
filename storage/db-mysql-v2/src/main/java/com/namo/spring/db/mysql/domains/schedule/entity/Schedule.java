@@ -41,28 +41,30 @@ public class Schedule extends BaseTimeEntity {
     @Column(nullable = false, columnDefinition = "TINYINT")
     private int scheduleType;
 
-    @Column(length = 16)
-    private int invitationCode;
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    private String imageUrl;
 
     @OneToMany(mappedBy = "schedule", fetch = FetchType.LAZY)
     private List<Participant> participantList = new ArrayList<>();
 
     @Builder
-    public Schedule(String title, Period period, Location location, int scheduleType) {
+    public Schedule(String title, Period period, Location location, int scheduleType, String imageUrl) {
         if (!StringUtils.hasText(title))
             throw new IllegalArgumentException("title은 null이거나 빈 문자열일 수 없습니다.");
         this.title = title;
         this.period = period;
         this.location = location;
         this.scheduleType = scheduleType;
+        this.imageUrl = imageUrl;
     }
 
-    public Schedule of(String title, Period period, Location location, int scheduleType) {
+    public static Schedule of(String title, Period period, Location location, int scheduleType, String imageUrl) {
         return Schedule.builder()
                 .title(title)
                 .period(period)
                 .location(location)
                 .scheduleType(scheduleType)
+                .imageUrl(imageUrl)
                 .build();
     }
 }
