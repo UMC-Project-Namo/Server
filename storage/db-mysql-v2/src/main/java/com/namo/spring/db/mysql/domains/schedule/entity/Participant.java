@@ -33,11 +33,11 @@ public class Participant extends BaseTimeEntity {
     @Column(nullable = false, columnDefinition = "TINYINT")
     private int isOwner;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "anonymous_id")
     private Anonymous anonymous;
 
