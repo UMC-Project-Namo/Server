@@ -48,8 +48,6 @@ public class MemberRequest {
 		private String authorizationCode;
 		@NotBlank
 		private String identityToken;
-		private String email;
-		private String username;
 	}
 
 	@NoArgsConstructor

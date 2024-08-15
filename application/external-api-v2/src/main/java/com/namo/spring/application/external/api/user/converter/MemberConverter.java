@@ -3,7 +3,6 @@ package com.namo.spring.application.external.api.user.converter;
 import java.util.Map;
 
 import com.namo.spring.db.mysql.domains.user.entity.Member;
-import com.namo.spring.db.mysql.domains.user.type.MemberStatus;
 import com.namo.spring.db.mysql.domains.user.type.SocialType;
 
 public class MemberConverter {
@@ -17,17 +16,14 @@ public class MemberConverter {
 			.email(response.get("email"))
 			.name(response.get("nickname"))
 			.birthday(response.getOrDefault("birthday", null))
-			.status(MemberStatus.ACTIVE)
 			.socialType(socialType)
 			.socialRefreshToken(socialRefreshToken)
 			.build();
 	}
 
-	public static Member toMember(String email, String name, String socialRefreshToken, SocialType socialType) {
+	public static Member toMember(String authId, String socialRefreshToken, SocialType socialType) {
 		return Member.builder()
-			.email(email)
-			.name(name)
-			.status(MemberStatus.ACTIVE)
+			.authId(authId)
 			.socialType(socialType)
 			.socialRefreshToken(socialRefreshToken)
 			.build();

@@ -104,11 +104,7 @@ public class SocialLoginService {
 		return appleRefreshToken;
 	}
 
-	public String determineEmail(MemberRequest.AppleSignUpDto req) {
-		return req.getEmail().isBlank() ? getAppleEmail(req) : req.getEmail();
-	}
-
-	private String getAppleEmail(MemberRequest.AppleSignUpDto req) {
+	public String getAppleAuthId(MemberRequest.AppleSignUpDto req) {
 		PublicKey publicKey = createRSAPublicKey(
 			appleAuthClient.getApplePublicKey(appleAuthClient.getApplePublicKeys(), getHeaderJson(req))
 		);
