@@ -1,5 +1,6 @@
 package com.namo.spring.application.external.api.schedule.controller;
 
+import com.namo.spring.application.external.api.schedule.api.PersonalScheduleApi;
 import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
 import com.namo.spring.application.external.api.schedule.usecase.PersonalScheduleUsecase;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
@@ -20,11 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v2/schedules/personal")
-public class PersonalScheduleController {
+public class PersonalScheduleController implements PersonalScheduleApi {
     private final PersonalScheduleUsecase personalScheduleUsecase;
 
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseDto<Long> createSchedule(
+    public ResponseDto<Long> createPersonalSchedule(
             @Valid @RequestBody ScheduleRequest.PostPersonalScheduleDto dto,
             @AuthenticationPrincipal SecurityUserDetails member) {
         return ResponseDto.onSuccess(personalScheduleUsecase.createPersonalSchedule(dto, member.getUserId()));
