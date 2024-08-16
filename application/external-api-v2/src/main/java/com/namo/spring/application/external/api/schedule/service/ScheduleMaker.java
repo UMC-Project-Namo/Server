@@ -14,8 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import static com.namo.spring.application.external.api.schedule.converter.ScheduleConverter.toMeetingSchedule;
-import static com.namo.spring.application.external.api.schedule.converter.ScheduleConverter.toPersonalSchedule;
+import static com.namo.spring.application.external.api.schedule.converter.ScheduleConverter.toSchedule;
 
 @Component
 @RequiredArgsConstructor
@@ -30,7 +29,7 @@ public class ScheduleMaker {
     @Transactional
     public Schedule createPersonalSchedule(ScheduleRequest.PostPersonalScheduleDto dto, Period period) {
         Location location = Location.of(dto.getLongitude(), dto.getLatitude(), dto.getLocationName(), dto.getKakaoLocationId());
-        Schedule schedule = toPersonalSchedule(dto.getTitle(), period, location);
+        Schedule schedule = toSchedule(dto.getTitle(), period, location, PERSONAL_SCHEDULE_TYPE, null);
         return scheduleService.createSchedule(schedule);
     }
 
@@ -43,11 +42,8 @@ public class ScheduleMaker {
             url = fileUtils.uploadImage(image, FilePath.MEETING_PROFILE_IMG);
         }
 
-        Schedule schedule = toMeetingSchedule(dto.getTitle(), period, location, url);
+        Schedule schedule = toSchedule(dto.getTitle(), period, location, MEETING_SCHEDULE_TYPE, url);
         return scheduleService.createSchedule(schedule);
     }
 
-    private void validateScheduleType(int scheduleType) {
-
-    }
 }
