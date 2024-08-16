@@ -1,5 +1,6 @@
 package com.namo.spring.application.external.api.schedule.api;
 
+import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
 import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
@@ -14,6 +15,8 @@ import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 
 @Tag(name = "모임", description = "모임 일정 관련 API")
@@ -59,4 +62,32 @@ public interface MeetingScheduleApi {
                                             @RequestPart(required = false) MultipartFile image,
                                             @AuthenticationPrincipal SecurityUserDetails member);
 
+    @Operation(summary = "모임 일정 목록 조회", description = "모임 일정 목록을 조회합니다. ")
+    @ApiErrorCodes(value = {ErrorStatus.EMPTY_ACCESS_KEY, ErrorStatus.EXPIRATION_ACCESS_TOKEN, ErrorStatus.EXPIRATION_REFRESH_TOKEN, ErrorStatus.INTERNET_SERVER_ERROR})
+    @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "모임 일정 생성 성공", value = """
+            {
+                "isSuccess": true,
+                "code": 200,
+                "message": "성공",
+                "result": [
+                  {
+                    "meetingScheduleId": 1,
+                    "title": "나모 정기 회의",
+                    "startDate": 1722999600,
+                    "imageUrl": "https://namo-public-image.s3.ap-northeast-2.amazonaws.com/mongi_512.png",
+                    "participantsNum": 9,
+                    "participantsNickname": "뚜뚜, 코코아, 다나, 캐슬, 짱구, 연현, 램프, 반디, 유즈"
+                  }
+                ]
+              }
+            """)}))
+    @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "요청 실패 - 모임 일정에 참여할 유저를 찾을 수 없습니다.", value = """
+            {
+            	"isSuccess": false,
+            	"code": 404,
+            	"message": "유저를 찾을 수 없습니다."
+            }
+            """)
+    }))
+    ResponseDto<List<MeetingScheduleResponse.GetMeetingScheduleItemDto>> findMyMeetingSchedules(@AuthenticationPrincipal SecurityUserDetails member);
 }
