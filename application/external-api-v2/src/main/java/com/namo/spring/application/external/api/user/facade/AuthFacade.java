@@ -62,12 +62,12 @@ public class AuthFacade {
 
 	private MemberDto.MemberCreationRecord processOrRetrieveAppleMember(MemberRequest.AppleSignUpDto req,
 		String appleRefreshToken, String authId) {
-		return memberManageService.getMemberAuthId(authId)
+		return memberManageService.getMemberByEmailAndSocialType(authId, SocialType.APPLE)
 			.map(existingMember -> new MemberDto.MemberCreationRecord(
 				memberManageService.updateExistingAppleMember(existingMember, appleRefreshToken),
 				false))
 			.orElseGet(() -> new MemberDto.MemberCreationRecord(
-				memberManageService.createNewAppleMember(req, authId, appleRefreshToken),
+				memberManageService.createNewAppleMember(authId, appleRefreshToken),
 				true));
 	}
 
@@ -108,8 +108,7 @@ public class AuthFacade {
 	public Member completeSignup(MemberRequest.CompleteSignUpDto dto, Long memberId) {
 		Member member = memberManageService.getMember(memberId);
 		String tag = tagGenerator.generateTag(member.getNickname());
-		member.signUpComplete(dto.getName(), dto.getNickname(), dto.getEmail(), dto.getBirthday(), dto.getBio(), tag);
-		// memberManageService.validateEmail(member.getSocialType(), dto.getEmail());
+		member.signUpComplete(dto.getName(), dto.getNickname(), dto.getBirthday(), dto.getBio(), tag);
 		memberManageService.saveMember(member);
 		return member;
 	}
