@@ -14,7 +14,7 @@ public class ParticipantConverter {
         throw new IllegalStateException("Util Class");
     }
 
-    public static Participant toOwnerParticipant(User user, Schedule schedule, Category category, Palette palette) {
+    public static Participant toParticipant(User user, Schedule schedule, Category category, Palette palette) {
         return Participant.builder()
                 .isOwner(ParticipantRole.OWNER.getValue())
                 .user(user)
@@ -22,17 +22,6 @@ public class ParticipantConverter {
                 .status(ParticipateStatus.ACTIVE)
                 .category(category)
                 .palette(palette)
-                .build();
-    }
-
-    public static Participant toNonOwnerParticipant(User user, Schedule schedule) {
-        return Participant.builder()
-                .isOwner(ParticipantRole.NON_OWNER.getValue())
-                .user(user)
-                .schedule(schedule)
-                .status(ParticipateStatus.INACTIVE)
-                .category(null)
-                .palette(null)
                 .build();
     }
 }

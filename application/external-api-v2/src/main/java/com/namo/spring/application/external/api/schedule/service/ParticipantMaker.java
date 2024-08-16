@@ -13,8 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.namo.spring.application.external.api.schedule.converter.ParticipantConverter.toNonOwnerParticipant;
-import static com.namo.spring.application.external.api.schedule.converter.ParticipantConverter.toOwnerParticipant;
+import static com.namo.spring.application.external.api.schedule.converter.ParticipantConverter.toParticipant;
 
 @Component
 @RequiredArgsConstructor
@@ -26,20 +25,20 @@ public class ParticipantMaker {
 
     @Transactional
     public void makePersonalScheduleOwner(Schedule schedule, Member member, Category category) {
-        Participant participant = toOwnerParticipant(member, schedule, category, null);
+        Participant participant = toParticipant(member, schedule, category, null);
         participantService.createParticipant(participant);
     }
 
     @Transactional
     public void makeMeetingScheduleOwner(Schedule schedule, Member member, Category category) {
         Palette palette = paletteService.getPalette(MEETING_SCHEDULE_OWNER_PALETTE_ID);
-        Participant participant = toOwnerParticipant(member, schedule, category, palette);
+        Participant participant = toParticipant(member, schedule, category, palette);
         participantService.createParticipant(participant);
     }
 
     @Transactional
     public void makeMeetingScheduleParticipant(Schedule schedule, User user) {
-        Participant participant = toNonOwnerParticipant(user, schedule);
+        Participant participant = toParticipant(user, schedule, null, null);
         participantService.createParticipant(participant);
     }
 
