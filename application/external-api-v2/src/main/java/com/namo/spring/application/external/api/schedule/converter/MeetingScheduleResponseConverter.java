@@ -1,6 +1,7 @@
 package com.namo.spring.application.external.api.schedule.converter;
 
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
+import com.namo.spring.core.common.utils.DateUtil;
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantItemQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 
@@ -24,15 +25,17 @@ public class MeetingScheduleResponseConverter {
 
         return scheduleParticipantsMap.entrySet().stream()
                 .map(entry -> toGetMeetingScheduleItemDto(
-                        entry.getKey(), entry.getValue().get(0).getTitle(), entry.getValue().get(0).getImageUrl(), entry.getValue()))
+                        entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList());
     }
 
-    public static MeetingScheduleResponse.GetMeetingScheduleItemDto toGetMeetingScheduleItemDto(Long id, String title, String imageUrl, List<ScheduleParticipantItemQuery> participants) {
+    public static MeetingScheduleResponse.GetMeetingScheduleItemDto toGetMeetingScheduleItemDto(Long id, List<ScheduleParticipantItemQuery> participants) {
+        ScheduleParticipantItemQuery scheduleInfo = participants.get(0);
         return MeetingScheduleResponse.GetMeetingScheduleItemDto.builder()
                 .meetingScheduleId(id)
-                .title(title)
-                .imageUrl(imageUrl)
+                .title(scheduleInfo.getTitle())
+                .startDate(DateUtil.toSeconds(scheduleInfo.getStartDate()))
+                .imageUrl(scheduleInfo.getImageUrl())
                 .participantsNum(participants.size())
                 .participantsNickname(toParticipantsNickname(participants))
                 .build();
