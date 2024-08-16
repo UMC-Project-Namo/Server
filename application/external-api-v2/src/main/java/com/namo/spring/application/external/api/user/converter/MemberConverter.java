@@ -24,7 +24,7 @@ public class MemberConverter {
 
 	public static Member toMember(String authId, String socialRefreshToken, SocialType socialType) {
 		return Member.builder()
-			.authId(authId)
+			.email(authId)
 			.socialType(socialType)
 			.socialRefreshToken(socialRefreshToken)
 			.build();

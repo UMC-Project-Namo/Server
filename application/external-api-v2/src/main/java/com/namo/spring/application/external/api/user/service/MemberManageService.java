@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.namo.spring.application.external.api.Category.service.CategoryMaker;
 import com.namo.spring.application.external.api.user.converter.MemberConverter;
 import com.namo.spring.application.external.api.user.dto.MemberDto;
-import com.namo.spring.application.external.api.user.dto.MemberRequest;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.entity.Term;
@@ -82,7 +81,7 @@ public class MemberManageService {
 		return new MemberDto.MemberCreationRecord(savedMember, true);
 	}
 
-	public Member createNewAppleMember(MemberRequest.AppleSignUpDto req, String authId, String appleRefreshToken) {
+	public Member createNewAppleMember(String authId, String appleRefreshToken) {
 		log.debug("Creating new apple member");
 		Member newMember = memberService.createMember(MemberConverter.toMember(
 			authId,
