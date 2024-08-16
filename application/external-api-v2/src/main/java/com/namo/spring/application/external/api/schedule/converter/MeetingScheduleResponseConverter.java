@@ -3,7 +3,6 @@ package com.namo.spring.application.external.api.schedule.converter;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantItemQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
-import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -15,7 +14,7 @@ public class MeetingScheduleResponseConverter {
         throw new IllegalStateException("Util Class");
     }
 
-    public static List<MeetingScheduleResponse.GetMeetingScheduleItemDto> toGetMeetingScheduleItemDtos2(List<ScheduleParticipantItemQuery> participants) {
+    public static List<MeetingScheduleResponse.GetMeetingScheduleItemDto> toGetMeetingScheduleItemDtos(List<ScheduleParticipantItemQuery> participants) {
         Map<Long, List<ScheduleParticipantItemQuery>> scheduleParticipantsMap = participants.stream()
                 .collect(Collectors.groupingBy(
                         ScheduleParticipantItemQuery::getScheduleId,
@@ -33,39 +32,11 @@ public class MeetingScheduleResponseConverter {
                 .meetingScheduleId(id)
                 .title(title)
                 .participantsNum(participants.size())
-                .participantsNickname(toParticipantsNickname2(participants))
-                .build();
-    }
-
-    public static List<MeetingScheduleResponse.GetMeetingScheduleItemDto> toGetMeetingScheduleItemDtos(List<Participant> participants) {
-        Map<Schedule, List<Participant>> scheduleParticipantsMap = participants.stream()
-                .collect(Collectors.groupingBy(
-                        Participant::getSchedule,
-                        LinkedHashMap::new,
-                        Collectors.toList()
-                ));
-
-        return scheduleParticipantsMap.entrySet().stream()
-                .map(map -> toGetMeetingScheduleItemDto(map.getKey(), map.getValue()))
-                .collect(Collectors.toList());
-    }
-
-    public static MeetingScheduleResponse.GetMeetingScheduleItemDto toGetMeetingScheduleItemDto(Schedule schedule, List<Participant> participants) {
-        return MeetingScheduleResponse.GetMeetingScheduleItemDto.builder()
-                .meetingScheduleId(schedule.getId())
-                .title(schedule.getTitle())
-                .participantsNum(participants.size())
                 .participantsNickname(toParticipantsNickname(participants))
                 .build();
     }
 
-    private static String toParticipantsNickname(List<Participant> participantList) {
-        return participantList.stream()
-                .map(MeetingScheduleResponseConverter::getParticipantNickName)
-                .collect(Collectors.joining(", "));
-    }
-
-    private static String toParticipantsNickname2(List<ScheduleParticipantItemQuery> participantList) {
+    private static String toParticipantsNickname(List<ScheduleParticipantItemQuery> participantList) {
         return participantList.stream()
                 .map(ScheduleParticipantItemQuery::getParticipantName)
                 .collect(Collectors.joining(", "));
