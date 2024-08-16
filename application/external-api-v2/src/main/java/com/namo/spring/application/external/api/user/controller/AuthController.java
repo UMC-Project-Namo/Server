@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.namo.spring.application.external.api.user.api.AuthApi;
+import com.namo.spring.application.external.api.user.converter.MemberConverter;
 import com.namo.spring.application.external.api.user.dto.MemberRequest;
 import com.namo.spring.application.external.api.user.dto.MemberResponse;
 import com.namo.spring.application.external.api.user.facade.AuthFacade;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.core.common.response.ResponseDto;
+import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.type.SocialType;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -50,6 +52,15 @@ public class AuthController implements AuthApi {
 		return ResponseDto.onSuccess(signupDto);
 	}
 
+	@PostMapping(value = "/signup/complete")
+	public ResponseDto<MemberResponse.SignUpDoneDto> completeSignup(
+		@Valid @RequestBody MemberRequest.CompleteSignUpDto dto,
+		@AuthenticationPrincipal SecurityUserDetails member
+	) {
+		Member target = memberFacade.completeSignup(dto, member.getUserId());
+		return ResponseDto.onSuccess(MemberConverter.toSignUpDoneDto(target));
+	}
+
 	@PostMapping(value = "/reissuance")
 	public ResponseDto<MemberResponse.ReissueDto> reissueAccessToken(
 		@RequestHeader(value = "refreshToken") String refreshToken
@@ -62,10 +73,10 @@ public class AuthController implements AuthApi {
 	public ResponseDto<String> logout(
 		@RequestHeader(value = "Authorization") String authHeader,
 		@RequestHeader(value = "refreshToken") String refreshToken,
-		@AuthenticationPrincipal SecurityUserDetails user
+		@AuthenticationPrincipal SecurityUserDetails member
 	) {
 		String accessToken = authHeader.split(" ")[1];
-		memberFacade.logout(user.getUserId(), accessToken, refreshToken);
+		memberFacade.logout(member.getUserId(), accessToken, refreshToken);
 		return ResponseDto.onSuccess("로그아웃 되었습니다.");
 	}
 
@@ -74,10 +85,10 @@ public class AuthController implements AuthApi {
 	public ResponseDto<String> removeAuthUser(
 		@RequestHeader(value = "Authorization") String authHeader,
 		@RequestHeader(value = "refreshToken") String refreshToken,
-		@AuthenticationPrincipal SecurityUserDetails user
+		@AuthenticationPrincipal SecurityUserDetails member
 	) {
 		String accessToken = authHeader.split(" ")[1];
-		memberFacade.removeSocialMember(user.getUserId(), accessToken, refreshToken);
+		memberFacade.removeSocialMember(member.getUserId(), accessToken, refreshToken);
 		return ResponseDto.onSuccess("회원탈퇴가 완료되었습니다.");
 	}
 

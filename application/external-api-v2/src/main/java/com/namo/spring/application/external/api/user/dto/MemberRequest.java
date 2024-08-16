@@ -48,8 +48,6 @@ public class MemberRequest {
 		private String authorizationCode;
 		@NotBlank
 		private String identityToken;
-		private String email;
-		private String username;
 	}
 
 	@NoArgsConstructor
@@ -68,4 +66,17 @@ public class MemberRequest {
 		}
 	}
 
+	@Getter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class CompleteSignUpDto {
+		@NotNull(message = "이름은 필수값입니다.")
+		private String name;
+		@NotNull(message = "닉네임은 필수값입니다.")
+		private String nickname;
+
+		@NotNull(message = "생년월일은 필수값입니다.")
+		private String birthday;
+		private String bio;
+	}
 }

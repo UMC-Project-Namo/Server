@@ -15,6 +15,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
 	Optional<Member> findMemberByEmail(String email);
 
+	Optional<Member> findMemberByAuthId(String authId);
+
 	Optional<Member> findMemberByEmailAndSocialType(String email, SocialType socialType);
 
 	Optional<Member> findMemberBySocialRefreshToken(String refreshToken);
@@ -24,4 +26,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
 	@Query("select u from Member u where u.status in :status and u.updatedAt < :localDateTime")
 	List<Member> findMembersByStatusAndDate(MemberStatus status, LocalDateTime localDateTime);
+
+	List<Member> findMembersByNickname(String nickname);
+
+	boolean existsByEmailAndSocialType(String email, SocialType socialType);
 }

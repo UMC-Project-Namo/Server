@@ -95,6 +95,7 @@ public enum ErrorStatus implements BaseErrorCode {
 	DIARY_EXISTS_FAILURE(HttpStatus.NOT_FOUND, "이미 존재하는 다이어리 입니다."),
 	DUPLICATE_PARTICIPATE_FAILURE(HttpStatus.NOT_FOUND, "이미 가입한 그룹입니다."),
 	DUPLICATE_GROUP_MEMO_FAILURE(HttpStatus.NOT_FOUND, "이미 모임 메모가 생성되어 있습니다."),
+	DUPLICATE_EMAIL_FAILURE(HttpStatus.NOT_FOUND, "이미 해당 소셜 이메일이 가입되어 있습니다."),
 
 	/**
 	 * 404 : 오용 오류

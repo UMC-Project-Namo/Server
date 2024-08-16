@@ -16,6 +16,7 @@ import com.namo.spring.application.external.api.user.dto.MemberResponse;
 import com.namo.spring.application.external.api.user.helper.JwtAuthHelper;
 import com.namo.spring.application.external.api.user.service.MemberManageService;
 import com.namo.spring.application.external.api.user.service.SocialLoginService;
+import com.namo.spring.application.external.api.user.service.TagGenerator;
 import com.namo.spring.application.external.global.common.security.jwt.CustomJwts;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.type.SocialType;
@@ -30,6 +31,7 @@ public class AuthFacade {
 	private final JwtAuthHelper jwtAuthHelper;
 	private final SocialLoginService socialLoginService;
 	private final MemberManageService memberManageService;
+	private final TagGenerator tagGenerator;
 
 	@Transactional
 	public MemberResponse.SignUpDto socialSignup(MemberRequest.SocialSignUpDto signUpDto, SocialType socialType) {
@@ -40,8 +42,8 @@ public class AuthFacade {
 	@Transactional
 	public MemberResponse.SignUpDto signupApple(MemberRequest.AppleSignUpDto req) {
 		String appleRefreshToken = socialLoginService.getAppleRefreshToken(req);
-		String email = socialLoginService.determineEmail(req);
-		return processAppleSignup(req, email, appleRefreshToken);
+		String authId = socialLoginService.getAppleAuthId(req);
+		return processAppleSignup(req, authId, appleRefreshToken);
 	}
 
 	private MemberResponse.SignUpDto processSocialSignup(MemberRequest.SocialSignUpDto signUpDto, SocialType socialType,
@@ -52,20 +54,20 @@ public class AuthFacade {
 		return createSignUpResponse(memberInfo.member(), memberInfo.isNewUser());
 	}
 
-	private MemberResponse.SignUpDto processAppleSignup(MemberRequest.AppleSignUpDto req, String email,
+	private MemberResponse.SignUpDto processAppleSignup(MemberRequest.AppleSignUpDto req, String authId,
 		String appleRefreshToken) {
-		MemberDto.MemberCreationRecord memberInfo = processOrRetrieveAppleMember(req, email, appleRefreshToken);
+		MemberDto.MemberCreationRecord memberInfo = processOrRetrieveAppleMember(req, appleRefreshToken, authId);
 		return createSignUpResponse(memberInfo.member(), memberInfo.isNewUser());
 	}
 
-	private MemberDto.MemberCreationRecord processOrRetrieveAppleMember(MemberRequest.AppleSignUpDto req, String email,
-		String appleRefreshToken) {
-		return memberManageService.getMemberByEmailAndSocialType(email, SocialType.APPLE)
+	private MemberDto.MemberCreationRecord processOrRetrieveAppleMember(MemberRequest.AppleSignUpDto req,
+		String appleRefreshToken, String authId) {
+		return memberManageService.getMemberByEmailAndSocialType(authId, SocialType.APPLE)
 			.map(existingMember -> new MemberDto.MemberCreationRecord(
 				memberManageService.updateExistingAppleMember(existingMember, appleRefreshToken),
 				false))
 			.orElseGet(() -> new MemberDto.MemberCreationRecord(
-				memberManageService.createNewAppleMember(req, email, appleRefreshToken),
+				memberManageService.createNewAppleMember(authId, appleRefreshToken),
 				true));
 	}
 
@@ -100,5 +102,14 @@ public class AuthFacade {
 		socialLoginService.unlinkSocialAccount(member);
 		jwtAuthHelper.removeJwtsToken(memberId, accessToken, refreshToken);
 		member.changeToInactive();
+	}
+
+	@Transactional
+	public Member completeSignup(MemberRequest.CompleteSignUpDto dto, Long memberId) {
+		Member member = memberManageService.getMember(memberId);
+		String tag = tagGenerator.generateTag(member.getNickname());
+		member.signUpComplete(dto.getName(), dto.getNickname(), dto.getBirthday(), dto.getBio(), tag);
+		memberManageService.saveMember(member);
+		return member;
 	}
 }

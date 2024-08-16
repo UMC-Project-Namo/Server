@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.namo.spring.application.external.api.Category.service.CategoryMaker;
 import com.namo.spring.application.external.api.user.converter.MemberConverter;
 import com.namo.spring.application.external.api.user.dto.MemberDto;
-import com.namo.spring.application.external.api.user.dto.MemberRequest;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.entity.Term;
@@ -46,8 +45,16 @@ public class MemberManageService {
 		return memberRepository.findMemberByEmailAndSocialType(email, socialType);
 	}
 
+	public Optional<Member> getMemberAuthId(String authId) {
+		return memberRepository.findMemberByAuthId(authId);
+	}
+
 	public List<Member> getInactiveMember() {
 		return memberRepository.findMembersByStatusAndDate(MemberStatus.INACTIVE, LocalDateTime.now().minusDays(3));
+	}
+
+	public void saveMember(Member member) {
+		memberRepository.save(member);
 	}
 
 	public void removeMember(Member member) {
@@ -74,11 +81,10 @@ public class MemberManageService {
 		return new MemberDto.MemberCreationRecord(savedMember, true);
 	}
 
-	public Member createNewAppleMember(MemberRequest.AppleSignUpDto req, String email, String appleRefreshToken) {
+	public Member createNewAppleMember(String authId, String appleRefreshToken) {
 		log.debug("Creating new apple member");
 		Member newMember = memberService.createMember(MemberConverter.toMember(
-			email,
-			req.getUsername(),
+			authId,
 			appleRefreshToken,
 			SocialType.APPLE));
 		makeBaseCategory(newMember);
@@ -94,5 +100,18 @@ public class MemberManageService {
 	private void makeBaseCategory(Member member) {
 		categoryMaker.makeIndividualCategory(member);
 		categoryMaker.makeGroupCategory(member);
+	}
+
+	public List<String> getMemberTagsByNickname(String nickname) {
+		List<Member> members = memberService.readMemberByNickname(nickname);
+		return members.stream()
+			.map(Member::getTag)
+			.toList();
+	}
+
+	public void validateEmail(SocialType socialType, String email) {
+		if (memberRepository.existsByEmailAndSocialType(email, socialType)) {
+			throw new MemberException(ErrorStatus.DUPLICATE_EMAIL_FAILURE);
+		}
 	}
 }

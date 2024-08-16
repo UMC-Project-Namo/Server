@@ -48,6 +48,9 @@ public class Member extends BaseTimeEntity implements User {
 	@Column(nullable = false)
 	private Long id;
 
+	@Column(unique = true)
+	private String authId;
+
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Column(length = 50)
 	private String email;
@@ -108,16 +111,17 @@ public class Member extends BaseTimeEntity implements User {
 	private List<Participant> participants;
 
 	@Builder
-	public Member(String name, String tag, String email, String birthday, MemberRole userRole, MemberStatus status,
+	public Member(String name, String tag, String birthday, String authId, String email,
 		SocialType socialType, String socialRefreshToken) {
 		this.name = name;
 		this.nameVisible = true;
 		this.tag = tag;
 		this.email = email;
+		this.authId = authId;
 		this.birthday = birthday;
 		this.birthdayVisible = true;
 		this.memberRole = MemberRole.USER;
-		this.status = MemberStatus.ACTIVE;
+		this.status = MemberStatus.PENDING;
 		this.socialType = socialType;
 		this.socialRefreshToken = socialRefreshToken;
 	}
@@ -148,6 +152,15 @@ public class Member extends BaseTimeEntity implements User {
 	}
 
 	public boolean isSignUpComplete() {
-		return this.nickname != null && this.birthday != null && this.tag != null;
+		return !status.equals(MemberStatus.PENDING);
+	}
+
+	public void signUpComplete(String name, String nickname, String birthday, String bio, String tag) {
+		this.name = name;
+		this.nickname = nickname;
+		this.birthday = birthday;
+		this.bio = bio;
+		this.tag = tag;
+		this.status = MemberStatus.ACTIVE;
 	}
 }
