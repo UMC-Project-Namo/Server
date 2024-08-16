@@ -2,6 +2,7 @@ package com.namo.spring.application.external.api.schedule.service;
 
 import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
 import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantItemQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
@@ -37,13 +38,13 @@ public class ScheduleManageService {
     }
 
     @Transactional(readOnly = true)
-    public List<Participant> getMeetingSchedulesByMember(Long memberId) {
+    public List<ScheduleParticipantItemQuery> getMeetingScheduleItemsByMember(Long memberId) {
         Member member = getMember(memberId);
-        List<Long> participantIds = participantService.findParticipantsWithSchedulesByScheduleIds(member).stream()
+        List<Long> participantIds = participantService.findScheduleParticipantItemsByScheduleIds(member).stream()
                 .map(Participant::getSchedule)
                 .map(Schedule::getId)
                 .collect(Collectors.toList());
-        List<Participant> participantsWithSchedules = participantService.findParticipantsWithSchedulesByScheduleIds(participantIds);
+        List<ScheduleParticipantItemQuery> participantsWithSchedules = participantService.findScheduleParticipantItemsByScheduleIds(participantIds);
         return participantsWithSchedules;
     }
 
