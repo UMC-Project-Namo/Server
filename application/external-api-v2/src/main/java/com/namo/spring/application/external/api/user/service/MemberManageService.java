@@ -25,92 +25,92 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberManageService {
 
-	private final MemberRepository memberRepository;
-	private final TermRepository termRepository;
-	private final MemberService memberService;
-	private final CategoryMaker categoryMaker;
+    private final MemberRepository memberRepository;
+    private final TermRepository termRepository;
+    private final MemberService memberService;
+    private final CategoryMaker categoryMaker;
 
-	public List<Term> getTerms(Member member) {
-		return termRepository.findTermsByMember(member);
-	}
+    public List<Term> getTerms(Member member) {
+        return termRepository.findTermsByMember(member);
+    }
 
-	public Member getMember(Long memberId) {
-		return memberRepository.findById(memberId)
-			.orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_USER_FAILURE));
-	}
+    public Member getMember(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_USER_FAILURE));
+    }
 
-	public Optional<Member> getMemberByEmailAndSocialType(String email, SocialType socialType) {
-		return memberRepository.findMemberByEmailAndSocialType(email, socialType);
-	}
+    public Optional<Member> getMemberByEmailAndSocialType(String email, SocialType socialType) {
+        return memberRepository.findMemberByEmailAndSocialType(email, socialType);
+    }
 
-	public Optional<Member> getMemberAuthId(String authId) {
-		return memberRepository.findMemberByAuthId(authId);
-	}
+    public Optional<Member> getMemberAuthId(String authId) {
+        return memberRepository.findMemberByAuthId(authId);
+    }
 
-	public List<Member> getInactiveMember() {
-		return memberRepository.findMembersByStatusAndDate(MemberStatus.INACTIVE, LocalDateTime.now().minusDays(3));
-	}
+    public List<Member> getInactiveMember() {
+        return memberRepository.findMembersByStatusAndDate(MemberStatus.INACTIVE, LocalDateTime.now().minusDays(3));
+    }
 
-	public void saveMember(Member member) {
-		memberRepository.save(member);
-	}
+    public void saveMember(Member member) {
+        memberRepository.save(member);
+    }
 
-	public void removeMember(Member member) {
-		memberRepository.delete(member);
-	}
+    public void removeMember(Member member) {
+        memberRepository.delete(member);
+    }
 
-	public void checkEmailAndName(String email, String name) {
-		if (email.isBlank() || name.isBlank()) {
-			throw new MemberException(ErrorStatus.USER_POST_ERROR);
-		}
-	}
+    public void checkEmailAndName(String email, String name) {
+        if (email.isBlank() || name.isBlank()) {
+            throw new MemberException(ErrorStatus.USER_POST_ERROR);
+        }
+    }
 
-	public MemberDto.MemberCreationRecord updateExistingMember(Member existingMember, String socialRefreshToken) {
-		existingMember.changeToActive();
-		existingMember.updateSocialRefreshToken(socialRefreshToken);
-		return new MemberDto.MemberCreationRecord(existingMember, false);
-	}
+    public MemberDto.MemberCreationRecord updateExistingMember(Member existingMember, String socialRefreshToken) {
+        existingMember.changeToActive();
+        existingMember.updateSocialRefreshToken(socialRefreshToken);
+        return new MemberDto.MemberCreationRecord(existingMember, false);
+    }
 
-	public MemberDto.MemberCreationRecord createNewMember(Member member) {
-		checkEmailAndName(member.getEmail(), member.getName());
-		log.debug("Creating new social member");
-		Member savedMember = memberService.createMember(member);
-		makeBaseCategory(savedMember);
-		return new MemberDto.MemberCreationRecord(savedMember, true);
-	}
+    public MemberDto.MemberCreationRecord createNewMember(Member member) {
+        checkEmailAndName(member.getEmail(), member.getName());
+        log.debug("Creating new social member");
+        Member savedMember = memberService.createMember(member);
+        makeBaseCategory(savedMember);
+        return new MemberDto.MemberCreationRecord(savedMember, true);
+    }
 
-	public Member createNewAppleMember(String authId, String appleRefreshToken) {
-		log.debug("Creating new apple member");
-		Member newMember = memberService.createMember(MemberConverter.toMember(
-			authId,
-			appleRefreshToken,
-			SocialType.APPLE));
-		makeBaseCategory(newMember);
-		return newMember;
-	}
+    public Member createNewAppleMember(String authId, String appleRefreshToken) {
+        log.debug("Creating new apple member");
+        Member newMember = memberService.createMember(MemberConverter.toMember(
+                authId,
+                appleRefreshToken,
+                SocialType.APPLE));
+        makeBaseCategory(newMember);
+        return newMember;
+    }
 
-	public Member updateExistingAppleMember(Member existingMember, String appleRefreshToken) {
-		existingMember.changeToActive();
-		existingMember.updateSocialRefreshToken(appleRefreshToken);
-		return existingMember;
-	}
+    public Member updateExistingAppleMember(Member existingMember, String appleRefreshToken) {
+        existingMember.changeToActive();
+        existingMember.updateSocialRefreshToken(appleRefreshToken);
+        return existingMember;
+    }
 
-	private void makeBaseCategory(Member member) {
-		categoryMaker.makeIndividualCategory(member);
-		categoryMaker.makeGroupCategory(member);
-	}
+    private void makeBaseCategory(Member member) {
+        categoryMaker.makePersonalCategory(member);
+        categoryMaker.makeMeetingCategory(member);
+    }
 
-	public List<String> getMemberTagsByNickname(String nickname) {
-		List<Member> members = memberService.readMemberByNickname(nickname);
-		return members.stream()
-			.map(Member::getTag)
-			.toList();
-	}
+    public List<String> getMemberTagsByNickname(String nickname) {
+        List<Member> members = memberService.readMemberByNickname(nickname);
+        return members.stream()
+                .map(Member::getTag)
+                .toList();
+    }
 
-	public void validateEmail(SocialType socialType, String email) {
-		if (memberRepository.existsByEmailAndSocialType(email, socialType)) {
-			throw new MemberException(ErrorStatus.DUPLICATE_EMAIL_FAILURE);
-		}
-	}
+    public void validateEmail(SocialType socialType, String email) {
+        if (memberRepository.existsByEmailAndSocialType(email, socialType)) {
+            throw new MemberException(ErrorStatus.DUPLICATE_EMAIL_FAILURE);
+        }
+    }
 
 }
