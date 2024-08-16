@@ -19,6 +19,8 @@ public class MeetingScheduleResponse {
         private Long meetingScheduleId;
         @Schema(description = "모임 일정 제목", example = "나모 정기 회의")
         private String title;
+        @Schema(description = "모임 일정 이미지  url", example = "")
+        private String imageUrl;
         @Schema(description = "모임 일정 참여자 수", example = "9")
         private Integer participantsNum;
         @Schema(description = "모임 일정 참여자 이름", example = "뚜뚜,코코아,다나,캐슬,짱구,연현,램프,반디,유즈")

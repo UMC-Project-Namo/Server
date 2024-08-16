@@ -23,14 +23,16 @@ public class MeetingScheduleResponseConverter {
                 ));
 
         return scheduleParticipantsMap.entrySet().stream()
-                .map(entry -> toGetMeetingScheduleItemDto(entry.getKey(), entry.getValue().get(0).getTitle(), entry.getValue()))
+                .map(entry -> toGetMeetingScheduleItemDto(
+                        entry.getKey(), entry.getValue().get(0).getTitle(), entry.getValue().get(0).getImageUrl(), entry.getValue()))
                 .collect(Collectors.toList());
     }
 
-    public static MeetingScheduleResponse.GetMeetingScheduleItemDto toGetMeetingScheduleItemDto(Long id, String title, List<ScheduleParticipantItemQuery> participants) {
+    public static MeetingScheduleResponse.GetMeetingScheduleItemDto toGetMeetingScheduleItemDto(Long id, String title, String imageUrl, List<ScheduleParticipantItemQuery> participants) {
         return MeetingScheduleResponse.GetMeetingScheduleItemDto.builder()
                 .meetingScheduleId(id)
                 .title(title)
+                .imageUrl(imageUrl)
                 .participantsNum(participants.size())
                 .participantsNickname(toParticipantsNickname(participants))
                 .build();

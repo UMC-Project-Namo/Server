@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 public class ScheduleParticipantItemQuery {
     Long scheduleId;
     String title;
+    String imageUrl;
     String participantName;
 }
