@@ -70,8 +70,6 @@ public class MemberRequest {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class CompleteSignUpDto {
-		@NotNull(message = "이메일은 필수값입니다.")
-		private String email;
 		@NotNull(message = "이름은 필수값입니다.")
 		private String name;
 		@NotNull(message = "닉네임은 필수값입니다.")
