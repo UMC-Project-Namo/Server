@@ -7,6 +7,8 @@ import com.namo.spring.db.mysql.domains.category.service.CategoryService;
 import com.namo.spring.db.mysql.domains.category.service.PaletteService;
 import com.namo.spring.db.mysql.domains.category.type.ColorChip;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
+import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
+import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
 import com.namo.spring.db.mysql.domains.user.entity.Friendship;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.exception.MemberException;
@@ -29,6 +31,7 @@ public class ParticipantManageService {
     private final CategoryService categoryService;
     private final PaletteService paletteService;
     private final FriendshipService friendshipService;
+    private final ParticipantService participantService;
 
     public void createPersonalScheduleParticipant(Member member, Schedule schedule, Long categoryId) {
         Category category = categoryService.readCategoryByMemberAndId(categoryId, member);
@@ -59,6 +62,12 @@ public class ParticipantManageService {
             throw new MemberException(ErrorStatus.NOT_FOUND_FRIENDSHIP_FAILURE);
         }
         return friends;
+    }
+
+    private void checkMemberIsOwner(Long scheduleId, Long memberId) {
+        if (!participantService.existsParticipantByMemberIdAndScheduleId(scheduleId, memberId)) {
+            throw new ScheduleException(ErrorStatus.NOT_SCHEDULE_OWNER);
+        }
     }
 
 }
