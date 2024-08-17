@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ScheduleManageService {
     private final ScheduleMaker scheduleMaker;
+    private final ParticipantManageService participantManageService;
     private final ParticipantService participantService;
 
     @Transactional(readOnly = true)
@@ -36,16 +37,18 @@ public class ScheduleManageService {
     }
 
     @Transactional
-    public Schedule createPersonalSchedule(ScheduleRequest.PostPersonalScheduleDto dto) {
+    public Schedule createPersonalSchedule(ScheduleRequest.PostPersonalScheduleDto dto, Member member) {
         Period period = getValidatedPeriod(dto.getStartDate(), dto.getEndDate());
         Schedule schedule = scheduleMaker.createPersonalSchedule(dto, period);
+        participantManageService.createPersonalScheduleParticipant(member, schedule, dto.getCategoryId());
         return schedule;
     }
 
     @Transactional
-    public Schedule createMeetingSchedule(ScheduleRequest.PostMeetingScheduleDto dto, MultipartFile image) {
+    public Schedule createMeetingSchedule(ScheduleRequest.PostMeetingScheduleDto dto, Member scheduleOwner, MultipartFile image, List<Member> participants) {
         Period period = getValidatedPeriod(dto.getStartDate(), dto.getEndDate());
         Schedule schedule = scheduleMaker.createMeetingSchedule(dto, period, image);
+        participantManageService.createMeetingScheduleParticipants(scheduleOwner, schedule, participants);
         return schedule;
     }
 
