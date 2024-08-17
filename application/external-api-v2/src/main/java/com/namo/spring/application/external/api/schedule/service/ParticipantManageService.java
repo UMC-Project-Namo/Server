@@ -27,13 +27,6 @@ public class ParticipantManageService {
     private final CategoryService categoryService;
     private final PaletteService paletteService;
 
-    @Transactional(readOnly = true)
-    public Member getMember(Long memberId) {
-        return memberService.readMember(memberId).orElseThrow(
-                () -> new MemberException(ErrorStatus.NOT_FOUND_USER_FAILURE)
-        );
-    }
-
     @Transactional
     public void createPersonalScheduleParticipant(Member member, Schedule schedule, Long categoryId) {
         Category category = categoryService.readCategoryByMemberAndId(categoryId, member);
