@@ -1,7 +1,6 @@
 package com.namo.spring.db.mysql.domains.schedule.service;
 
 import com.namo.spring.core.common.annotation.DomainService;
-import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantItemQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.repository.ParticipantRepository;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
@@ -30,11 +29,6 @@ public class ParticipantService {
     @Transactional(readOnly = true)
     public List<Participant> findScheduleParticipantItemsByScheduleIds(Member member) {
         return participantRepository.findParticipantsByMemberAndScheduleType(member, ScheduleType.MEETING.getValue());
-    }
-
-    @Transactional(readOnly = true)
-    public List<ScheduleParticipantItemQuery> findScheduleParticipantItemsByScheduleIds(List<Long> ids) {
-        return participantRepository.findScheduleParticipantItemsByIds(ids);
     }
 
     @Transactional
