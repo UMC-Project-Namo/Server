@@ -7,6 +7,7 @@ import com.namo.spring.db.mysql.domains.category.service.CategoryService;
 import com.namo.spring.db.mysql.domains.category.service.PaletteService;
 import com.namo.spring.db.mysql.domains.category.type.ColorChip;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
+import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.exception.MemberException;
 import com.namo.spring.db.mysql.domains.user.service.MemberService;
@@ -46,6 +47,9 @@ public class ParticipantManageService {
 
     @Transactional(readOnly = true)
     public List<Member> getValidatedMeetingParticipants(List<Long> memberIds) {
+        if (memberIds.size() > 9) {
+            throw new ScheduleException(ErrorStatus.MEETING_PARTICIPANT_LIMIT_EXCEEDED);
+        }
         List<Member> participants = memberService.readMembersById(memberIds);
         if (participants.size() != memberIds.size()) {
             throw new MemberException(ErrorStatus.NOT_FOUND_USER_FAILURE);

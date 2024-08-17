@@ -5,7 +5,9 @@ import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
 import com.namo.spring.application.external.api.schedule.service.ParticipantManageService;
 import com.namo.spring.application.external.api.schedule.service.ScheduleManageService;
 import com.namo.spring.application.external.api.user.service.MemberManageService;
+import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
+import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -33,6 +35,9 @@ public class MeetingScheduleUsecase {
 
     @Transactional
     public Long createMeetingSchedule(ScheduleRequest.PostMeetingScheduleDto dto, MultipartFile image, Long memberId) {
+        if (dto.getParticipants().size() > 9) {
+            throw new ScheduleException(ErrorStatus.MEETING_PARTICIPANT_LIMIT_EXCEEDED);
+        }
         Member scheduleOwner = memberManageService.getMember(memberId);
         List<Member> participants = participantManageService.getValidatedMeetingParticipants(dto.getParticipants());
         Schedule schedule = scheduleManageService.createMeetingSchedule(dto, image);
