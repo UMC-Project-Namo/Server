@@ -7,7 +7,6 @@ import com.namo.spring.db.mysql.domains.category.service.CategoryService;
 import com.namo.spring.db.mysql.domains.category.service.PaletteService;
 import com.namo.spring.db.mysql.domains.category.type.ColorChip;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
-import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.exception.MemberException;
 import com.namo.spring.db.mysql.domains.user.service.MemberService;
@@ -17,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.namo.spring.application.external.global.utils.MeetingValidationUtils.validateParticipantNumber;
 
 @Slf4j
 @Service
@@ -40,16 +41,12 @@ public class ParticipantManageService {
         Palette palette = paletteService.getPalette(MEETING_SCHEDULE_OWNER_PALETTE_ID);
         participantMaker.makeScheduleOwner(schedule, scheduleOwner, category, palette);
 
-        for (Member participant : participants) {
-            participantMaker.makeMeetingScheduleParticipant(schedule, participant);
-        }
+        participants.forEach(participant -> participantMaker.makeMeetingScheduleParticipant(schedule, participant));
     }
 
     @Transactional(readOnly = true)
     public List<Member> getValidatedMeetingParticipants(List<Long> memberIds) {
-        if (memberIds.size() > 9) {
-            throw new ScheduleException(ErrorStatus.MEETING_PARTICIPANT_LIMIT_EXCEEDED);
-        }
+        validateParticipantNumber(memberIds.size());
         List<Member> participants = memberService.readMembersById(memberIds);
         if (participants.size() != memberIds.size()) {
             throw new MemberException(ErrorStatus.NOT_FOUND_USER_FAILURE);

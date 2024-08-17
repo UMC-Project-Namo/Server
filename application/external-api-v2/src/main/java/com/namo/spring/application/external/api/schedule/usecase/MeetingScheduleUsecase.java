@@ -5,9 +5,7 @@ import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
 import com.namo.spring.application.external.api.schedule.service.ParticipantManageService;
 import com.namo.spring.application.external.api.schedule.service.ScheduleManageService;
 import com.namo.spring.application.external.api.user.service.MemberManageService;
-import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
-import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 import static com.namo.spring.application.external.api.schedule.converter.MeetingScheduleResponseConverter.toGetMeetingScheduleItemDtos;
+import static com.namo.spring.application.external.global.utils.MeetingValidationUtils.validateParticipantNumber;
 
 @Service
 @RequiredArgsConstructor
@@ -35,13 +34,10 @@ public class MeetingScheduleUsecase {
 
     @Transactional
     public Long createMeetingSchedule(ScheduleRequest.PostMeetingScheduleDto dto, MultipartFile image, Long memberId) {
-        if (dto.getParticipants().size() > 9) {
-            throw new ScheduleException(ErrorStatus.MEETING_PARTICIPANT_LIMIT_EXCEEDED);
-        }
+        validateParticipantNumber(dto.getParticipants().size());
         Member scheduleOwner = memberManageService.getMember(memberId);
         List<Member> participants = participantManageService.getValidatedMeetingParticipants(dto.getParticipants());
-        Schedule schedule = scheduleManageService.createMeetingSchedule(dto, image);
-        participantManageService.createMeetingScheduleParticipants(scheduleOwner, schedule, participants);
+        Schedule schedule = scheduleManageService.createMeetingSchedule(dto, scheduleOwner, image, participants);
         return schedule.getId();
     }
 }

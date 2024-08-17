@@ -34,7 +34,7 @@ public class GroupAndUserService {
 
     private void validateGroupIsFull(Moim group) {
         if (group.isFull()) {
-            throw new GroupException(ErrorStatus.MEETING_PARTICIPANT_LIMIT_EXCEEDED);
+            throw new GroupException(ErrorStatus.MEETING_INVALID_PARTICIPANT_NUMBER);
         }
     }
 
