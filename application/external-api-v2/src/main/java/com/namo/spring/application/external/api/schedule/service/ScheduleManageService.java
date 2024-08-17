@@ -7,11 +7,8 @@ import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
 import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
-import com.namo.spring.db.mysql.domains.schedule.service.ScheduleService;
 import com.namo.spring.db.mysql.domains.schedule.type.Period;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
-import com.namo.spring.db.mysql.domains.user.exception.MemberException;
-import com.namo.spring.db.mysql.domains.user.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,16 +23,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ScheduleManageService {
     private final ScheduleMaker scheduleMaker;
-    private final ScheduleService scheduleService;
     private final ParticipantService participantService;
-    private final MemberService memberService;
-
-    @Transactional(readOnly = true)
-    public Member getMember(Long memberId) {
-        return memberService.readMember(memberId).orElseThrow(
-                () -> new MemberException(ErrorStatus.NOT_FOUND_USER_FAILURE)
-        );
-    }
 
     @Transactional(readOnly = true)
     public List<ScheduleParticipantItemQuery> getMeetingScheduleItemsByMember(Member member) {

@@ -25,6 +25,7 @@ public class MeetingScheduleUsecase {
     private final MemberManageService memberManageService;
     private final ParticipantManageService participantManageService;
 
+    @Transactional(readOnly = true)
     public List<MeetingScheduleResponse.GetMeetingScheduleItemDto> getMeetingSchedules(Long memberId) {
         Member member = memberManageService.getMember(memberId);
         return toGetMeetingScheduleItemDtos(scheduleManageService.getMeetingScheduleItemsByMember(member));
