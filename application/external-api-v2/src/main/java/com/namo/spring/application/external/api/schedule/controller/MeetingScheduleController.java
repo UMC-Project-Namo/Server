@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@Tag(name = "모임", description = "모임 일정 관련 API")
+@Tag(name = "모임 일정", description = "모임 일정 관련 API")
 @Slf4j
 @RequiredArgsConstructor
 @RestController
