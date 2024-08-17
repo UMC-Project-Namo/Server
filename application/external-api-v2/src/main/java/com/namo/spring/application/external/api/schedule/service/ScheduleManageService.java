@@ -38,8 +38,7 @@ public class ScheduleManageService {
     }
 
     @Transactional(readOnly = true)
-    public List<ScheduleParticipantItemQuery> getMeetingScheduleItemsByMember(Long memberId) {
-        Member member = getMember(memberId);
+    public List<ScheduleParticipantItemQuery> getMeetingScheduleItemsByMember(Member member) {
         List<Long> participantIds = participantService.findScheduleParticipantItemsByScheduleIds(member).stream()
                 .map(Participant::getSchedule)
                 .map(Schedule::getId)
@@ -49,14 +48,14 @@ public class ScheduleManageService {
     }
 
     @Transactional
-    public Schedule createPersonalSchedule(ScheduleRequest.PostPersonalScheduleDto dto, Long memberId) {
+    public Schedule createPersonalSchedule(ScheduleRequest.PostPersonalScheduleDto dto) {
         Period period = getValidatedPeriod(dto.getStartDate(), dto.getEndDate());
         Schedule schedule = scheduleMaker.createPersonalSchedule(dto, period);
         return schedule;
     }
 
     @Transactional
-    public Schedule createMeetingSchedule(ScheduleRequest.PostMeetingScheduleDto dto, MultipartFile image, Long memberId) {
+    public Schedule createMeetingSchedule(ScheduleRequest.PostMeetingScheduleDto dto, MultipartFile image) {
         Period period = getValidatedPeriod(dto.getStartDate(), dto.getEndDate());
         Schedule schedule = scheduleMaker.createMeetingSchedule(dto, period, image);
         return schedule;

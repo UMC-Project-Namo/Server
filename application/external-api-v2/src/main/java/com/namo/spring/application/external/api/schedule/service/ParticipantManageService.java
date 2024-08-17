@@ -2,7 +2,10 @@ package com.namo.spring.application.external.api.schedule.service;
 
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
+import com.namo.spring.db.mysql.domains.category.entity.Palette;
 import com.namo.spring.db.mysql.domains.category.service.CategoryService;
+import com.namo.spring.db.mysql.domains.category.service.PaletteService;
+import com.namo.spring.db.mysql.domains.category.type.ColorChip;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.exception.MemberException;
@@ -18,9 +21,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ParticipantManageService {
+    private static final Long MEETING_SCHEDULE_OWNER_PALETTE_ID = ColorChip.getMeetingScheduleOwnerPaletteId();
     private final ParticipantMaker participantMaker;
     private final MemberService memberService;
     private final CategoryService categoryService;
+    private final PaletteService paletteService;
 
     @Transactional(readOnly = true)
     public Member getMember(Long memberId) {
@@ -30,27 +35,26 @@ public class ParticipantManageService {
     }
 
     @Transactional
-    public void createPersonalScheduleParticipant(Long memberId, Schedule schedule, Long categoryId) {
-        Member member = getMember(memberId);
+    public void createPersonalScheduleParticipant(Member member, Schedule schedule, Long categoryId) {
         Category category = categoryService.readCategoryByMemberAndId(categoryId, member);
-        participantMaker.makePersonalScheduleOwner(schedule, member, category);
+        participantMaker.makeScheduleOwner(schedule, member, category, null);
     }
 
     @Transactional
-    public void createMeetingScheduleParticipants(Long memberId, Schedule schedule, List<Long> members) {
-        Member member = getMember(memberId);
-        List<Member> participants = getValidatedMeetingParticipants(members);
-        Category category = categoryService.readMeetingCategoryByMember(member);
-        participantMaker.makeMeetingScheduleOwner(schedule, member, category);
+    public void createMeetingScheduleParticipants(Member scheduleOwner, Schedule schedule, List<Member> participants) {
+        Category category = categoryService.readMeetingCategoryByMember(scheduleOwner);
+        Palette palette = paletteService.getPalette(MEETING_SCHEDULE_OWNER_PALETTE_ID);
+        participantMaker.makeScheduleOwner(schedule, scheduleOwner, category, palette);
 
         for (Member participant : participants) {
             participantMaker.makeMeetingScheduleParticipant(schedule, participant);
         }
     }
 
-    private List<Member> getValidatedMeetingParticipants(List<Long> participantIds) {
-        List<Member> participants = memberService.readMembersById(participantIds);
-        if (participants.size() != participantIds.size()) {
+    @Transactional(readOnly = true)
+    public List<Member> getValidatedMeetingParticipants(List<Long> memberIds) {
+        List<Member> participants = memberService.readMembersById(memberIds);
+        if (participants.size() != memberIds.size()) {
             throw new MemberException(ErrorStatus.NOT_FOUND_USER_FAILURE);
         } else return participants;
     }
