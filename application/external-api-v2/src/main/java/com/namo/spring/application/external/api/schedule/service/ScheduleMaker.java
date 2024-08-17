@@ -6,7 +6,6 @@ import com.namo.spring.core.infra.common.constant.FilePath;
 import com.namo.spring.core.infra.common.properties.ImageUrlProperties;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.service.ScheduleService;
-import com.namo.spring.db.mysql.domains.schedule.type.Location;
 import com.namo.spring.db.mysql.domains.schedule.type.Period;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 import lombok.RequiredArgsConstructor;
@@ -28,21 +27,18 @@ public class ScheduleMaker {
 
     @Transactional
     public Schedule createPersonalSchedule(ScheduleRequest.PostPersonalScheduleDto dto, Period period) {
-        Location location = Location.of(dto.getLongitude(), dto.getLatitude(), dto.getLocationName(), dto.getKakaoLocationId());
-        Schedule schedule = toSchedule(dto.getTitle(), period, location, PERSONAL_SCHEDULE_TYPE, null);
+        Schedule schedule = toSchedule(dto.getTitle(), period, dto.getLocation(), PERSONAL_SCHEDULE_TYPE, null, null, null);
         return scheduleService.createSchedule(schedule);
     }
 
     @Transactional
     public Schedule createMeetingSchedule(ScheduleRequest.PostMeetingScheduleDto dto, Period period, MultipartFile image) {
-        Location location = Location.of(dto.getLongitude(), dto.getLatitude(), dto.getLocationName(), dto.getKakaoLocationId());
-
         String url = imageUrlProperties.getMeeting();
         if (image != null && !image.isEmpty()) {
             url = fileUtils.uploadImage(image, FilePath.MEETING_PROFILE_IMG);
         }
 
-        Schedule schedule = toSchedule(dto.getTitle(), period, location, MEETING_SCHEDULE_TYPE, url);
+        Schedule schedule = toSchedule(dto.getTitle(), period, dto.getLocation(), MEETING_SCHEDULE_TYPE, url, 0, "");
         return scheduleService.createSchedule(schedule);
     }
 
