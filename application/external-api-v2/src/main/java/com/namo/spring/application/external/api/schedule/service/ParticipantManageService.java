@@ -36,11 +36,11 @@ public class ParticipantManageService {
     }
 
     @Transactional
-    public void createMeetingScheduleParticipants(Member scheduleOwner, Schedule schedule, List<Member> participants) {
-        Category category = categoryService.readMeetingCategoryByMember(scheduleOwner);
+    public void createMeetingScheduleParticipants(Member owner, Schedule schedule, List<Member> participants) {
+        Category category = categoryService.readMeetingCategoryByMember(owner);
         Palette palette = paletteService.getPalette(MEETING_SCHEDULE_OWNER_PALETTE_ID);
-        participantMaker.makeScheduleOwner(schedule, scheduleOwner, category, palette);
-
+        participantMaker.makeScheduleOwner(schedule, owner, category, palette);
+        schedule.addActiveParticipant(owner.getNickname());
         participants.forEach(participant -> participantMaker.makeMeetingScheduleParticipant(schedule, participant));
     }
 

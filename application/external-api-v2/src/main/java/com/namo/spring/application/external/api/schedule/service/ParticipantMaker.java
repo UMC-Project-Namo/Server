@@ -5,6 +5,7 @@ import com.namo.spring.db.mysql.domains.category.entity.Palette;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
+import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -21,13 +22,13 @@ public class ParticipantMaker {
 
     @Transactional
     public void makeScheduleOwner(Schedule schedule, Member member, Category category, Palette palette) {
-        Participant participant = toParticipant(member, schedule, category, palette);
+        Participant participant = toParticipant(member, schedule, ParticipantStatus.ACTIVE, category, palette);
         participantService.createParticipant(participant);
     }
 
     @Transactional
     public void makeMeetingScheduleParticipant(Schedule schedule, User user) {
-        Participant participant = toParticipant(user, schedule, null, null);
+        Participant participant = toParticipant(user, schedule, ParticipantStatus.INACTIVE, null, null);
         participantService.createParticipant(participant);
     }
 
