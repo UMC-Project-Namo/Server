@@ -18,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.namo.spring.application.external.global.utils.MeetingValidationUtils.validateParticipantCount;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -45,11 +47,12 @@ public class ScheduleManageService {
     }
 
     @Transactional
-    public Schedule createMeetingSchedule(ScheduleRequest.PostMeetingScheduleDto dto, Member scheduleOwner, MultipartFile image) {
+    public Schedule createMeetingSchedule(ScheduleRequest.PostMeetingScheduleDto dto, Member owner, MultipartFile image) {
         Period period = getValidatedPeriod(dto.getPeriod());
         Schedule schedule = scheduleMaker.createMeetingSchedule(dto, period, image);
-        List<Member> participants = participantManageService.getValidatedMeetingParticipants(dto.getParticipants());
-        participantManageService.createMeetingScheduleParticipants(scheduleOwner, schedule, participants);
+        validateParticipantCount(dto.getParticipants().size());
+        List<Member> participants = participantManageService.getValidatedMeetingParticipants(owner, dto.getParticipants());
+        participantManageService.createMeetingScheduleParticipants(owner, schedule, participants);
         return schedule;
     }
 
@@ -59,5 +62,11 @@ public class ScheduleManageService {
             throw new ScheduleException(ErrorStatus.INVALID_DATE);
         }
         return period;
+    }
+
+    public void checkMemberIsOwner(Long scheduleId, Long memberId) {
+        if (!participantService.existsParticipantByMemberIdAndScheduleId(scheduleId, memberId)) {
+            throw new ScheduleException(ErrorStatus.NOT_SCHEDULE_OWNER);
+        }
     }
 }

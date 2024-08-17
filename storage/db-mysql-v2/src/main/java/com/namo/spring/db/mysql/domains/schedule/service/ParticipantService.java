@@ -31,7 +31,13 @@ public class ParticipantService {
         return participantRepository.findParticipantsByMemberAndScheduleType(member, ScheduleType.MEETING.getValue());
     }
 
+    @Transactional(readOnly = true)
+    public boolean existsParticipantByMemberIdAndScheduleId(Long scheduleId, Long memberId) {
+        return participantRepository.existsParticipantByScheduleIdAndMemberId(scheduleId, memberId);
+    }
+
     @Transactional
+
     public void deleteParticipant(Long id) {
         participantRepository.deleteById(id);
     }
