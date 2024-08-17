@@ -22,8 +22,10 @@ server:
     local: ${NAMO_LOCAL_DOMAIN:127.0.0.1:8080}
     service: ${NAMO_SERVICE_DOMAIN:127.0.0.1:8080}
 
-moim:
-  base-url-image: ${BASE_MOIM_IMAGE_URL}
+app:
+  image:
+    url:
+      meeting: ${BASE_MOIM_IMAGE_URL}
 
 ---
 spring.config.activate.on-profile: local
