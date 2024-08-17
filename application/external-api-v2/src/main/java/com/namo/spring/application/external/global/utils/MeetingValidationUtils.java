@@ -3,6 +3,8 @@ package com.namo.spring.application.external.global.utils;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
 
+import java.util.List;
+
 public class MeetingValidationUtils {
     private MeetingValidationUtils() {
         throw new IllegalStateException("Utility class");
@@ -12,8 +14,14 @@ public class MeetingValidationUtils {
     private static final int MAX_PARTICIPANTS = 9;
 
     public static void validateParticipantNumber(int participantNumber) {
-        if (!(participantNumber < MIN_PARTICIPANTS || participantNumber > MAX_PARTICIPANTS)) {
+        if (participantNumber < MIN_PARTICIPANTS || participantNumber > MAX_PARTICIPANTS) {
             throw new ScheduleException(ErrorStatus.MEETING_INVALID_PARTICIPANT_NUMBER);
+        }
+    }
+
+    public static void validateOwnerNotInParticipants(Long ownerId, List<Long> participantIds) {
+        if (participantIds.contains(ownerId)) {
+            throw new ScheduleException(ErrorStatus.MEETING_DUPLICATE_PARTICIPANT);
         }
     }
 }
