@@ -37,7 +37,7 @@ public class ParticipantManageService {
     }
 
     @Transactional
-    public void createMeetingScheduleParcitipants(Long memberId, Schedule schedule, List<Long> members) {
+    public void createMeetingScheduleParticipants(Long memberId, Schedule schedule, List<Long> members) {
         Member member = getMember(memberId);
         List<Member> participants = getValidatedMeetingParticipants(members);
         Category category = categoryService.readMeetingCategoryByMember(member);

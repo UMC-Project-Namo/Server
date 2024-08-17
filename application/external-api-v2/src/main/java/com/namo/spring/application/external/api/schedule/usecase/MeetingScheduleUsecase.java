@@ -29,7 +29,7 @@ public class MeetingScheduleUsecase {
     @Transactional
     public Long createMeetingSchedule(ScheduleRequest.PostMeetingScheduleDto dto, MultipartFile image, Long memberId) {
         Schedule schedule = scheduleManageService.createMeetingSchedule(dto, image, memberId);
-        participantManageService.createMeetingScheduleParcitipants(memberId, schedule, dto.getParticipants());
+        participantManageService.createMeetingScheduleParticipants(memberId, schedule, dto.getParticipants());
         return schedule.getId();
     }
 }
