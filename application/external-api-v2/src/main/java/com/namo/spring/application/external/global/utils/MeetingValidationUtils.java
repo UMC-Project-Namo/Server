@@ -13,9 +13,9 @@ public class MeetingValidationUtils {
     private static final int MIN_PARTICIPANTS = 1;
     private static final int MAX_PARTICIPANTS = 9;
 
-    public static void validateParticipantNumber(int participantNumber) {
+    public static void validateParticipantCount(int participantNumber) {
         if (participantNumber < MIN_PARTICIPANTS || participantNumber > MAX_PARTICIPANTS) {
-            throw new ScheduleException(ErrorStatus.MEETING_INVALID_PARTICIPANT_NUMBER);
+            throw new ScheduleException(ErrorStatus.MEETING_INVALID_PARTICIPANT_COUNT);
         }
     }
 
