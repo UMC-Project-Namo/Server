@@ -38,8 +38,7 @@ public class MeetingScheduleUsecase {
         validateOwnerNotInParticipants(memberId, dto.getParticipants());
         validateParticipantNumber(dto.getParticipants().size());
         Member scheduleOwner = memberManageService.getMember(memberId);
-        List<Member> participants = participantManageService.getValidatedMeetingParticipants(dto.getParticipants());
-        Schedule schedule = scheduleManageService.createMeetingSchedule(dto, scheduleOwner, image, participants);
+        Schedule schedule = scheduleManageService.createMeetingSchedule(dto, scheduleOwner, image);
         return schedule.getId();
     }
 }
