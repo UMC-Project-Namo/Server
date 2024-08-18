@@ -51,7 +51,7 @@ public interface MeetingScheduleApi {
                     	"message": "시작 날짜가 종료 날짜 이전 이어야 합니다."
                     }
                     """),
-            @ExampleObject(name = "요청 실패 - 모임의 생성자는 초대할 수 없습니다.", value = """
+            @ExampleObject(name = "요청 실패 - 중복되는 참여자입니다.", value = """
                     {
                     	"isSuccess": false,
                     	"code": 404,
@@ -84,7 +84,7 @@ public interface MeetingScheduleApi {
                                             @RequestPart(required = false) MultipartFile image,
                                             @AuthenticationPrincipal SecurityUserDetails member);
 
-    @Operation(summary = "모임 일정 목록 조회", description = "모임 일정 목록을 조회합니다. ")
+    @Operation(summary = "모임 일정 목록 조회", description = "모임 일정 목록을 조회합니다.")
     @ApiErrorCodes(value = {ErrorStatus.EMPTY_ACCESS_KEY, ErrorStatus.EXPIRATION_ACCESS_TOKEN, ErrorStatus.EXPIRATION_REFRESH_TOKEN, ErrorStatus.INTERNET_SERVER_ERROR})
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "모임 일정 생성 성공", value = """
             {

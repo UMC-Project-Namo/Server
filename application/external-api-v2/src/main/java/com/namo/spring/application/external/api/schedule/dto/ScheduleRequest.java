@@ -42,7 +42,7 @@ public class ScheduleRequest {
         @NotNull(message = "일정 시작일, 종료일 정보는 필수 입니다.")
         private PeriodDto period;
         private LocationDto location;
-        @NotNull(message = "일정에 참여할 친구 ID 값은 필수입니다.")
+        @NotNull(message = "모임 일정에 참여할 친구는 1명부터 9명까지 입력 가능합니다.")
         @Schema(description = "스케줄에 참여할 유저 ID")
         private List<Long> participants;
     }
