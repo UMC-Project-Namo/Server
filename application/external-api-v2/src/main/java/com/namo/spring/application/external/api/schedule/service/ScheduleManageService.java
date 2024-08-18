@@ -63,10 +63,4 @@ public class ScheduleManageService {
         }
         return period;
     }
-
-    public void checkMemberIsOwner(Long scheduleId, Long memberId) {
-        if (!participantService.existsParticipantByMemberIdAndScheduleId(scheduleId, memberId)) {
-            throw new ScheduleException(ErrorStatus.NOT_SCHEDULE_OWNER);
-        }
-    }
 }

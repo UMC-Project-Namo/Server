@@ -51,11 +51,11 @@ public class ParticipantManageService {
 //        if (memberIds.size() != participants.size()) {
 //            throw new MemberException(ErrorStatus.NOT_FOUND_USER_FAILURE);
 //        }
-        return validateParticipantsAreFriend(owner, memberIds);
+        return validateParticipantsAreFriend(owner.getId(), memberIds);
     }
 
-    private List<Member> validateParticipantsAreFriend(Member member, List<Long> memberIds) {
-        List<Member> friends = friendshipService.readFriendshipsByMember(member, memberIds).stream()
+    private List<Member> validateParticipantsAreFriend(Long memberId, List<Long> memberIds) {
+        List<Member> friends = friendshipService.readFriendshipsByMember(memberId, memberIds).stream()
                 .map(Friendship::getFriend)
                 .collect(Collectors.toList());
         if (memberIds.size() != friends.size()) {
