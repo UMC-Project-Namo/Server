@@ -51,13 +51,35 @@ public interface MeetingScheduleApi {
                     	"message": "시작 날짜가 종료 날짜 이전 이어야 합니다."
                     }
                     """),
-            @ExampleObject(name = "요청 실패 - 모임 일정에 대한 이미지 파일 업로인 과정에서 오류가 발생하였습니다. ", value = """
+            @ExampleObject(name = "요청 실패 - 모임의 생성자는 초대할 수 없습니다.", value = """
+                    {
+                    	"isSuccess": false,
+                    	"code": 404,
+                    	"message": "중복되는 참여자입니다."
+                    }
+                    """),
+            @ExampleObject(name = "요청 실패 - 친구인 유저를 찾을 수 없습니다.", value = """
+                    {
+                    	"isSuccess": false,
+                    	"code": 404,
+                    	"message": "친구인 유저를 찾을 수 없습니다."
+                    }
+                    """),
+            @ExampleObject(name = "요청 실패 - 모임 일정은 최소 1명, 최대 9명까지 초대 가능합니다.", value = """
+                    {
+                    	"isSuccess": false,
+                    	"code": 404,
+                    	"message": "모임 일정은 최소 1명, 최대 9명까지 초대 가능합니다."
+                    }
+                    """),
+            @ExampleObject(name = "요청 실패 - 모임 일정에 대한 이미지 파일 업로드 과정에서 오류가 발생하였습니다. ", value = """
                     {
                     	"isSuccess": false,
                     	"code": 404,
                     	"message": "파일 업로드 과정에서 오류가 발생하였습니다."
                     }
-                    """)}))
+                    """)
+    }))
     ResponseDto<Long> createMeetingSchedule(@Valid @RequestPart ScheduleRequest.PostMeetingScheduleDto dto,
                                             @RequestPart(required = false) MultipartFile image,
                                             @AuthenticationPrincipal SecurityUserDetails member);

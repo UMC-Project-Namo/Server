@@ -35,6 +35,7 @@ public class MeetingScheduleUsecase {
     public Long createMeetingSchedule(ScheduleRequest.PostMeetingScheduleDto dto, MultipartFile image, Long memberId) {
         validateOwnerNotInParticipants(memberId, dto.getParticipants());
         validateParticipantCount(dto.getParticipants().size());
+
         Member owner = memberManageService.getMember(memberId);
         Schedule schedule = scheduleManageService.createMeetingSchedule(dto, owner, image);
         return schedule.getId();
