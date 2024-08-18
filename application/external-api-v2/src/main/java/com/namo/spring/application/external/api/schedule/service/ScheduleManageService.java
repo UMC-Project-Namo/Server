@@ -18,8 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.namo.spring.application.external.global.utils.MeetingValidationUtils.validateParticipantCount;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -50,7 +48,6 @@ public class ScheduleManageService {
     public Schedule createMeetingSchedule(ScheduleRequest.PostMeetingScheduleDto dto, Member owner, MultipartFile image) {
         Period period = getValidatedPeriod(dto.getPeriod());
         Schedule schedule = scheduleMaker.createMeetingSchedule(dto, period, image);
-        validateParticipantCount(dto.getParticipants().size());
         List<Member> participants = participantManageService.getValidatedMeetingParticipants(owner, dto.getParticipants());
         participantManageService.createMeetingScheduleParticipants(owner, schedule, participants);
         return schedule;
