@@ -15,8 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 import static com.namo.spring.application.external.api.schedule.converter.MeetingScheduleResponseConverter.toGetMeetingScheduleItemDtos;
-import static com.namo.spring.application.external.global.utils.MeetingValidationUtils.validateOwnerNotInParticipants;
 import static com.namo.spring.application.external.global.utils.MeetingValidationUtils.validateParticipantCount;
+import static com.namo.spring.application.external.global.utils.MeetingValidationUtils.validateParticipantIds;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +33,7 @@ public class MeetingScheduleUsecase {
 
     @Transactional
     public Long createMeetingSchedule(ScheduleRequest.PostMeetingScheduleDto dto, MultipartFile image, Long memberId) {
-        validateOwnerNotInParticipants(memberId, dto.getParticipants());
+        validateParticipantIds(memberId, dto.getParticipants());
         validateParticipantCount(dto.getParticipants().size());
 
         Member owner = memberManageService.getMember(memberId);
