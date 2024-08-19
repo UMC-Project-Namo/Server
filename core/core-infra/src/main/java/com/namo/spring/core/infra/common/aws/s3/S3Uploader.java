@@ -53,9 +53,8 @@ public class S3Uploader {
 	 * @return presigned url
 	 */
 	public String getPreSignedUrl(String prefix, String fileName) {
-		if (!prefix.isEmpty()) {
+		if (!prefix.isEmpty())
 			fileName = createPath(prefix, fileName);
-		}
 
 		GeneratePresignedUrlRequest generatePresignedUrlRequest = getGeneratePreSignedUrlRequest(
 			awsS3Config.getBucketName(), fileName);
