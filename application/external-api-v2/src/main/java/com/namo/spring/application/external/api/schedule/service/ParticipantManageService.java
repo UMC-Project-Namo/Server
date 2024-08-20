@@ -13,7 +13,6 @@ import com.namo.spring.db.mysql.domains.user.entity.Friendship;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.exception.MemberException;
 import com.namo.spring.db.mysql.domains.user.service.FriendshipService;
-import com.namo.spring.db.mysql.domains.user.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,7 +26,6 @@ import java.util.stream.Collectors;
 public class ParticipantManageService {
     private static final Long MEETING_SCHEDULE_OWNER_PALETTE_ID = ColorChip.getMeetingScheduleOwnerPaletteId();
     private final ParticipantMaker participantMaker;
-    private final MemberService memberService;
     private final CategoryService categoryService;
     private final PaletteService paletteService;
     private final FriendshipService friendshipService;
@@ -47,7 +45,7 @@ public class ParticipantManageService {
     }
 
     public List<Member> getValidatedMeetingParticipants(Member owner, List<Long> memberIds) {
-        List<Member> friends = friendshipService.readFriendshipsByMember(owner.getId(), memberIds).stream()
+        List<Member> friends = friendshipService.readFriendshipsByMemberIdAndFriendIds(owner.getId(), memberIds).stream()
                 .map(Friendship::getFriend)
                 .collect(Collectors.toList());
         if (memberIds.size() != friends.size()) {

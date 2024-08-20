@@ -12,7 +12,7 @@ import java.util.List;
 public class FriendshipService {
     private final FriendshipRepository friendshipRepository;
 
-    public List<Friendship> readFriendshipsByMember(Long memberId, List<Long> members) {
-        return friendshipRepository.findAcceptedFriendshipsByMemberAndFriendIds(memberId, members);
+    public List<Friendship> readFriendshipsByMemberIdAndFriendIds(Long memberId, List<Long> members) {
+        return friendshipRepository.findAcceptedFriendshipsByMembeIdAndFriendIds(memberId, members);
     }
 }
