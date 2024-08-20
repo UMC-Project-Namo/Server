@@ -47,15 +47,7 @@ public class ParticipantManageService {
     }
 
     public List<Member> getValidatedMeetingParticipants(Member owner, List<Long> memberIds) {
-//        List<Member> participants = memberService.readMembersById(memberIds);
-//        if (memberIds.size() != participants.size()) {
-//            throw new MemberException(ErrorStatus.NOT_FOUND_USER_FAILURE);
-//        }
-        return validateParticipantsAreFriend(owner.getId(), memberIds);
-    }
-
-    private List<Member> validateParticipantsAreFriend(Long memberId, List<Long> memberIds) {
-        List<Member> friends = friendshipService.readFriendshipsByMember(memberId, memberIds).stream()
+        List<Member> friends = friendshipService.readFriendshipsByMember(owner.getId(), memberIds).stream()
                 .map(Friendship::getFriend)
                 .collect(Collectors.toList());
         if (memberIds.size() != friends.size()) {

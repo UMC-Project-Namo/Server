@@ -3,6 +3,7 @@ package com.namo.spring.db.mysql.domains.user.service;
 import com.namo.spring.core.common.annotation.DomainService;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.repository.MemberRepository;
+import com.namo.spring.db.mysql.domains.user.type.MemberStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +26,8 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public List<Member> readMembersById(List<Long> memberIds) {
-        return memberRepository.findMembersById(memberIds);
+    public List<Member> readActiveMembersById(List<Long> memberIds) {
+        return memberRepository.findMembersByIdInAndStatusIs(memberIds, MemberStatus.ACTIVE);
     }
 
     @Transactional

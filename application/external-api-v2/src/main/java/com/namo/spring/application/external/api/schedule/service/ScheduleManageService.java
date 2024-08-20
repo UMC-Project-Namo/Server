@@ -46,9 +46,9 @@ public class ScheduleManageService {
 
     @Transactional
     public Schedule createMeetingSchedule(ScheduleRequest.PostMeetingScheduleDto dto, Member owner, MultipartFile image) {
+        List<Member> participants = participantManageService.getValidatedMeetingParticipants(owner, dto.getParticipants());
         Period period = getValidatedPeriod(dto.getPeriod());
         Schedule schedule = scheduleMaker.createMeetingSchedule(dto, period, image);
-        List<Member> participants = participantManageService.getValidatedMeetingParticipants(owner, dto.getParticipants());
         participantManageService.createMeetingScheduleParticipants(owner, schedule, participants);
         return schedule;
     }
