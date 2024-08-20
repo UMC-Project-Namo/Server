@@ -7,6 +7,7 @@ import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.response.ResponseDto;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,7 +20,7 @@ public interface S3Api {
 	@ApiErrorCodes(value = {ErrorStatus.EMPTY_ACCESS_KEY, ErrorStatus.EXPIRATION_ACCESS_TOKEN,
 		ErrorStatus.EXPIRATION_REFRESH_TOKEN, ErrorStatus.INTERNET_SERVER_ERROR})
 	@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {
-		@ExampleObject(name = "모임 일정 생성 성공", value = """
+		@ExampleObject(name = "Presigned Url 생성 성공", value = """
 			{
 				"isSuccess": true,
 				"code": 200,
@@ -27,5 +28,9 @@ public interface S3Api {
 				"result": "image URL~"
 			}
 			""")}))
-	public ResponseDto<String> generatePresignedUrl(@RequestParam String prefix, @RequestParam String fileName);
+	public ResponseDto<String> generatePresignedUrl(
+		@Parameter(description = "업로드할 파일의 경로를 지정하는 접두어입니다. 허용되는 값: 'activity', 'diary'. 'activity'는 활동 이미지, 'diary'는 다이어리 이미지를 의미합니다.", example = "activity")
+		@RequestParam String prefix,
+		@Parameter(description = "업로드할 파일의 원본 이름입니다.", example = "example.jpg")
+		@RequestParam String fileName);
 }

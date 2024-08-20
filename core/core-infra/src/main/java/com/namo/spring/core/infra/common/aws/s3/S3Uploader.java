@@ -15,6 +15,7 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.namo.spring.core.infra.common.constant.FilePath;
 import com.namo.spring.core.infra.config.AwsS3Config;
 
 import lombok.RequiredArgsConstructor;
@@ -110,7 +111,9 @@ public class S3Uploader {
 	 */
 	private String createPath(String prefix, String fileName) {
 		String fileId = createFileId();
-		return String.format("%s/%s", prefix, fileId + fileName);
+		String filepath = FilePath.getPathForPrefix(prefix);
+
+		return String.format("%s/%s", filepath, fileId + fileName);
 	}
 }
 
