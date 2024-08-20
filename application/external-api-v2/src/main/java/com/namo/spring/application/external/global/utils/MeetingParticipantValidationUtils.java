@@ -2,17 +2,17 @@ package com.namo.spring.application.external.global.utils;
 
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class MeetingValidationUtils {
-    private MeetingValidationUtils() {
-        throw new IllegalStateException("Utility class");
-    }
-
+@Component
+@RequiredArgsConstructor
+public class MeetingParticipantValidationUtils {
     private static final int MIN_PARTICIPANTS = 1;
     private static final int MAX_PARTICIPANTS = 9;
 

@@ -1,4 +1,4 @@
-package com.namo.spring.application.external.global.utils;
+package com.namo.spring.application.external.global.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;
