@@ -89,7 +89,7 @@ public class Schedule extends BaseTimeEntity {
         if (this.participantNicknames == null || this.participantNicknames == "") {
             this.participantNicknames = nickname;
         } else {
-            this.participantNicknames += "," + nickname;
+            this.participantNicknames += ", " + nickname;
         }
         if (this.participantCount == null) {
             this.participantCount = 1;
@@ -102,10 +102,10 @@ public class Schedule extends BaseTimeEntity {
         if (!StringUtils.hasText(oldNickname) || !StringUtils.hasText(newNickname))
             throw new IllegalArgumentException("nickname은 null이거나 빈 문자열일 수 없습니다.");
         if (this.participantNicknames != null) {
-            List<String> nicknames = Arrays.asList(this.participantNicknames.split(","));
+            List<String> nicknames = Arrays.asList(this.participantNicknames.split(", "));
             this.participantNicknames = nicknames.stream()
                     .map(nickname -> nickname.equals(oldNickname) ? newNickname : nickname)
-                    .collect(Collectors.joining(","));
+                    .collect(Collectors.joining(", "));
         }
     }
 
@@ -113,9 +113,9 @@ public class Schedule extends BaseTimeEntity {
         if (!StringUtils.hasText(nickname))
             throw new IllegalArgumentException("nickname은 null이거나 빈 문자열일 수 없습니다.");
         if (this.participantNicknames != null) {
-            List<String> nicknames = new ArrayList<>(Arrays.asList(this.participantNicknames.split(",")));
+            List<String> nicknames = new ArrayList<>(Arrays.asList(this.participantNicknames.split(", ")));
             nicknames.remove(nickname);
-            this.participantNicknames = String.join(",", nicknames);
+            this.participantNicknames = String.join(", ", nicknames);
             this.participantCount = nicknames.size();
         }
     }
