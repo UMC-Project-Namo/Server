@@ -27,8 +27,6 @@ public enum ErrorStatus implements BaseErrorCode {
     MAKE_PUBLIC_KEY_FAILURE(HttpStatus.BAD_REQUEST, "애플 퍼블릭 키를 생성하는데 실패하였습니다"),
     APPLE_REQUEST_ERROR(HttpStatus.BAD_REQUEST, "애플 identityToken이 잘못되었습니다."),
     USER_POST_ERROR(HttpStatus.BAD_REQUEST, "email나 name이 비어있어 유저를 생성할 수 없습니다."),
-    MEETING_INVALID_PARTICIPANT_NUMBER(HttpStatus.BAD_REQUEST, "모임의 인원은 2명 이상, 10명 이하 입니다."),
-    MEETING_DUPLICATE_PARTICIPANT(HttpStatus.BAD_REQUEST, "중복되는 참여자입니다."),
 
     /**
      * 401 : 소셜 로그인 오류
@@ -74,6 +72,7 @@ public enum ErrorStatus implements BaseErrorCode {
     NOT_FOUND_ACTIVITY_IMG_FAILURE(HttpStatus.NOT_FOUND, "모임 활동 이미지를 찾을 수 없습니다."),
     NOT_FOUND_COLOR(HttpStatus.NOT_FOUND, "색깔을 찾을 수 없습니다."),
     NOT_FOUND_IMAGE(HttpStatus.NOT_FOUND, "이미지를 찾을 수 없습니다."),
+    NOT_FOUND_FRIENDSHIP_FAILURE(HttpStatus.NOT_FOUND, "친구인 유저를 찾을 수 없습니다."),
 
     /**
      * 404 : 예외 상황 에러
@@ -87,6 +86,9 @@ public enum ErrorStatus implements BaseErrorCode {
     NOT_HAS_GROUP_CATEGORIES_USERS(HttpStatus.NOT_FOUND, "유저들에 대한 모임의 카테고리가 없습니다."),
     INVALID_DATE(HttpStatus.NOT_FOUND, "시작 날짜가 종료 날짜 이전 이어야 합니다."),
     INVALID_ALARM(HttpStatus.NOT_FOUND, "알림 시간이 유효하지 않습니다."),
+    INVALID_MEETING_PARTICIPANT_COUNT(HttpStatus.NOT_FOUND, "모임 일정은 최소 1명, 최대 9명까지 초대 가능합니다."),
+    DUPLICATE_MEETING_PARTICIPANT(HttpStatus.NOT_FOUND, "중복되는 참여자입니다."),
+
 
     /**
      * 404 : 중복 에러
@@ -102,6 +104,7 @@ public enum ErrorStatus implements BaseErrorCode {
     NOT_USERS_CATEGORY(HttpStatus.NOT_FOUND, "해당 유저의 카테고리가 아닙니다."),
     NOT_USERS_IN_GROUP(HttpStatus.NOT_FOUND, "유저가 그룹에 포함되어 있지 않습니다."),
     NOT_IMAGE_IN_DIARY(HttpStatus.NOT_FOUND, "이미지가 다이어리에 포함되어 있지 않습니다."),
+    NOT_SCHEDULE_OWNER(HttpStatus.FORBIDDEN, "해당 일정의 생성자가 아닙니다."),
 
     /**
      * 404 : 인프라 에러

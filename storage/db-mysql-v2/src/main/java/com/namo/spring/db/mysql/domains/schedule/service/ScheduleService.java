@@ -6,6 +6,7 @@ import com.namo.spring.db.mysql.domains.schedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @DomainService
@@ -21,6 +22,11 @@ public class ScheduleService {
     @Transactional(readOnly = true)
     public Optional<Schedule> readSchedule(Long id) {
         return scheduleRepository.findById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Schedule> readSchedulesById(List<Long> ids) {
+        return scheduleRepository.findSchedulesByIdIn(ids);
     }
 
     @Transactional

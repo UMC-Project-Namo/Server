@@ -7,17 +7,19 @@ import com.namo.spring.db.mysql.domains.category.service.CategoryService;
 import com.namo.spring.db.mysql.domains.category.service.PaletteService;
 import com.namo.spring.db.mysql.domains.category.type.ColorChip;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
+import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
+import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
+import com.namo.spring.db.mysql.domains.user.entity.Friendship;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.exception.MemberException;
+import com.namo.spring.db.mysql.domains.user.service.FriendshipService;
 import com.namo.spring.db.mysql.domains.user.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-import static com.namo.spring.application.external.global.utils.MeetingValidationUtils.validateParticipantNumber;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -28,29 +30,36 @@ public class ParticipantManageService {
     private final MemberService memberService;
     private final CategoryService categoryService;
     private final PaletteService paletteService;
+    private final FriendshipService friendshipService;
+    private final ParticipantService participantService;
 
-    @Transactional
     public void createPersonalScheduleParticipant(Member member, Schedule schedule, Long categoryId) {
         Category category = categoryService.readCategoryByMemberAndId(categoryId, member);
         participantMaker.makeScheduleOwner(schedule, member, category, null);
     }
 
-    @Transactional
-    public void createMeetingScheduleParticipants(Member scheduleOwner, Schedule schedule, List<Member> participants) {
-        Category category = categoryService.readMeetingCategoryByMember(scheduleOwner);
+    public void createMeetingScheduleParticipants(Member owner, Schedule schedule, List<Member> participants) {
+        Category category = categoryService.readMeetingCategoryByMember(owner);
         Palette palette = paletteService.getPalette(MEETING_SCHEDULE_OWNER_PALETTE_ID);
-        participantMaker.makeScheduleOwner(schedule, scheduleOwner, category, palette);
-
+        participantMaker.makeScheduleOwner(schedule, owner, category, palette);
+        schedule.addActiveParticipant(owner.getNickname());
         participants.forEach(participant -> participantMaker.makeMeetingScheduleParticipant(schedule, participant));
     }
 
-    @Transactional(readOnly = true)
-    public List<Member> getValidatedMeetingParticipants(List<Long> memberIds) {
-        validateParticipantNumber(memberIds.size());
-        List<Member> participants = memberService.readMembersById(memberIds);
-        if (participants.size() != memberIds.size()) {
-            throw new MemberException(ErrorStatus.NOT_FOUND_USER_FAILURE);
-        } else return participants;
+    public List<Member> getValidatedMeetingParticipants(Member owner, List<Long> memberIds) {
+        List<Member> friends = friendshipService.readFriendshipsByMember(owner.getId(), memberIds).stream()
+                .map(Friendship::getFriend)
+                .collect(Collectors.toList());
+        if (memberIds.size() != friends.size()) {
+            throw new MemberException(ErrorStatus.NOT_FOUND_FRIENDSHIP_FAILURE);
+        }
+        return friends;
+    }
+
+    private void checkMemberIsOwner(Long scheduleId, Long memberId) {
+        if (!participantService.existsParticipantByMemberIdAndScheduleId(scheduleId, memberId)) {
+            throw new ScheduleException(ErrorStatus.NOT_SCHEDULE_OWNER);
+        }
     }
 
 }

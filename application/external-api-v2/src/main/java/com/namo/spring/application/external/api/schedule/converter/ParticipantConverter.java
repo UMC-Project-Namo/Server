@@ -5,7 +5,7 @@ import com.namo.spring.db.mysql.domains.category.entity.Palette;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.type.ParticipantRole;
-import com.namo.spring.db.mysql.domains.schedule.type.ParticipateStatus;
+import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 import com.namo.spring.db.mysql.domains.user.entity.User;
 
 public class ParticipantConverter {
@@ -14,12 +14,12 @@ public class ParticipantConverter {
         throw new IllegalStateException("Util Class");
     }
 
-    public static Participant toParticipant(User user, Schedule schedule, Category category, Palette palette) {
+    public static Participant toParticipant(User user, ParticipantRole role, Schedule schedule, ParticipantStatus status, Category category, Palette palette) {
         return Participant.builder()
-                .isOwner(ParticipantRole.OWNER.getValue())
+                .isOwner(role.getValue())
                 .user(user)
                 .schedule(schedule)
-                .status(ParticipateStatus.ACTIVE)
+                .status(status)
                 .category(category)
                 .palette(palette)
                 .build();

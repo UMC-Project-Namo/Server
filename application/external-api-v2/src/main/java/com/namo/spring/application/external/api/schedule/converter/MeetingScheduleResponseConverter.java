@@ -2,12 +2,10 @@ package com.namo.spring.application.external.api.schedule.converter;
 
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
 import com.namo.spring.core.common.utils.DateUtil;
-import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantItemQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
+import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MeetingScheduleResponseConverter {
@@ -15,36 +13,21 @@ public class MeetingScheduleResponseConverter {
         throw new IllegalStateException("Util Class");
     }
 
-    public static List<MeetingScheduleResponse.GetMeetingScheduleItemDto> toGetMeetingScheduleItemDtos(List<ScheduleParticipantItemQuery> participants) {
-        Map<Long, List<ScheduleParticipantItemQuery>> scheduleParticipantsMap = participants.stream()
-                .collect(Collectors.groupingBy(
-                        ScheduleParticipantItemQuery::getScheduleId,
-                        LinkedHashMap::new,
-                        Collectors.toList()
-                ));
-
-        return scheduleParticipantsMap.entrySet().stream()
-                .map(entry -> toGetMeetingScheduleItemDto(
-                        entry.getKey(), entry.getValue()))
+    public static List<MeetingScheduleResponse.GetMeetingScheduleItemDto> toGetMeetingScheduleItemDtos(List<Schedule> schedules) {
+        return schedules.stream()
+                .map(MeetingScheduleResponseConverter::toGetMeetingScheduleItemDto)
                 .collect(Collectors.toList());
     }
 
-    public static MeetingScheduleResponse.GetMeetingScheduleItemDto toGetMeetingScheduleItemDto(Long id, List<ScheduleParticipantItemQuery> participants) {
-        ScheduleParticipantItemQuery scheduleInfo = participants.get(0);
+    public static MeetingScheduleResponse.GetMeetingScheduleItemDto toGetMeetingScheduleItemDto(Schedule schedule) {
         return MeetingScheduleResponse.GetMeetingScheduleItemDto.builder()
-                .meetingScheduleId(id)
-                .title(scheduleInfo.getTitle())
-                .startDate(DateUtil.toSeconds(scheduleInfo.getStartDate()))
-                .imageUrl(scheduleInfo.getImageUrl())
-                .participantsNum(participants.size())
-                .participantsNickname(toParticipantsNickname(participants))
+                .meetingScheduleId(schedule.getId())
+                .title(schedule.getTitle())
+                .startDate(DateUtil.toSeconds(schedule.getPeriod().getStartDate()))
+                .imageUrl(schedule.getImageUrl())
+                .participantsNum(schedule.getParticipantCount())
+                .participantsNickname(schedule.getParticipantNicknames())
                 .build();
-    }
-
-    private static String toParticipantsNickname(List<ScheduleParticipantItemQuery> participantList) {
-        return participantList.stream()
-                .map(ScheduleParticipantItemQuery::getParticipantName)
-                .collect(Collectors.joining(", "));
     }
 
     private static String getParticipantNickName(Participant participant) {

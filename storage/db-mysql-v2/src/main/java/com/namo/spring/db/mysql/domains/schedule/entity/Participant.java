@@ -5,7 +5,7 @@ import com.namo.spring.db.mysql.domains.category.entity.Category;
 import com.namo.spring.db.mysql.domains.category.entity.Palette;
 import com.namo.spring.db.mysql.domains.record.entity.ActivityParticipant;
 import com.namo.spring.db.mysql.domains.record.entity.Diary;
-import com.namo.spring.db.mysql.domains.schedule.type.ParticipateStatus;
+import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.entity.User;
@@ -47,7 +47,7 @@ public class Participant extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ParticipateStatus status;
+    private ParticipantStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "category_id", nullable = true)
@@ -64,7 +64,7 @@ public class Participant extends BaseTimeEntity {
     private List<ActivityParticipant> activityParticipants;
 
     @Builder
-    public Participant(int isOwner, User user, Schedule schedule, ParticipateStatus status, Category category, Palette palette) {
+    public Participant(int isOwner, User user, Schedule schedule, ParticipantStatus status, Category category, Palette palette) {
         this.isOwner = Objects.requireNonNull(isOwner, "isOwner은 null일 수 없습니다.");
         this.member = user instanceof Member ? (Member) user : null;
         this.anonymous = user instanceof Anonymous ? (Anonymous) user : null;
@@ -74,7 +74,7 @@ public class Participant extends BaseTimeEntity {
         this.palette = palette;
     }
 
-    public static Participant of(int isOwner, User user, Schedule schedule, ParticipateStatus status, Category category, Palette palette) {
+    public static Participant of(int isOwner, User user, Schedule schedule, ParticipantStatus status, Category category, Palette palette) {
         return Participant.builder()
                 .isOwner(isOwner)
                 .user(user)
