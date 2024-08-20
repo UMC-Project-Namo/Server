@@ -44,5 +44,16 @@ public class MeetingScheduleController implements MeetingScheduleApi {
         return ResponseDto.onSuccess(meetingScheduleUsecase.getMeetingSchedules(member.getUserId()));
     }
 
+    /**
+     * 모임 생성 전/ 참여자 일정 조회 API
+     */
+    @PostMapping(path = "/preview")
+    public ResponseDto<List<MeetingScheduleResponse.GetMonthlyParticipantScheduleDto>> findMonthlyParticipantSchedules(
+            @RequestParam Integer year,
+            @RequestParam Integer month,
+            @RequestParam List<Long> participantIds,
+            @AuthenticationPrincipal SecurityUserDetails member) {
+        return ResponseDto.onSuccess(meetingScheduleUsecase.getMeetingParticiantsSchedules(participantIds, year, month, member.getUserId()));
+    }
 
 }
