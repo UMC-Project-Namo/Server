@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 public class DateUtil {
@@ -73,5 +74,16 @@ public class DateUtil {
      */
     public static LocalDateTime toLocalDateTime(Long seconds) {
         return LocalDateTime.ofInstant(Instant.ofEpochSecond(seconds), ZoneId.systemDefault());
+    }
+
+    /**
+     * 두 날짜 사이의 일수 차이를 계산
+     *
+     * @param startDate 시작 날짜
+     * @param endDate   종료 날짜
+     * @return 두 날짜 사이의 일수 (종료 날짜 - 시작 날짜)
+     */
+    public static long calculateDayInterval(LocalDateTime startDate, LocalDateTime endDate) {
+        return ChronoUnit.DAYS.between(startDate, endDate);
     }
 }
