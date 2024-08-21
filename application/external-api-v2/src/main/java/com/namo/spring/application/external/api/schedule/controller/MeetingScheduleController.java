@@ -45,7 +45,7 @@ public class MeetingScheduleController implements MeetingScheduleApi {
     }
 
     /**
-     * 모임 생성 전/ 참여자 월간 일정 조회 API
+     * 모임 생성 전/ 초대자 월간 일정 조회 API
      */
     @GetMapping(path = "/preview")
     public ResponseDto<List<MeetingScheduleResponse.GetMonthlyParticipantScheduleDto>> findMonthlyParticipantSchedules(
