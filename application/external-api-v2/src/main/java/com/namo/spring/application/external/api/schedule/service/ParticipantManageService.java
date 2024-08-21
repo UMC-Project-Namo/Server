@@ -1,10 +1,6 @@
 package com.namo.spring.application.external.api.schedule.service;
 
 import com.namo.spring.core.common.code.status.ErrorStatus;
-import com.namo.spring.db.mysql.domains.category.entity.Category;
-import com.namo.spring.db.mysql.domains.category.entity.Palette;
-import com.namo.spring.db.mysql.domains.category.service.CategoryService;
-import com.namo.spring.db.mysql.domains.category.service.PaletteService;
 import com.namo.spring.db.mysql.domains.category.type.ColorChip;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
@@ -29,20 +25,15 @@ import java.util.stream.Collectors;
 public class ParticipantManageService {
     private static final Long MEETING_SCHEDULE_OWNER_PALETTE_ID = ColorChip.getMeetingScheduleOwnerPaletteId();
     private final ParticipantMaker participantMaker;
-    private final CategoryService categoryService;
-    private final PaletteService paletteService;
     private final FriendshipService friendshipService;
     private final ParticipantService participantService;
 
     public void createPersonalScheduleParticipant(Member member, Schedule schedule, Long categoryId) {
-        Category category = categoryService.readCategoryByMemberAndId(categoryId, member);
-        participantMaker.makeScheduleOwner(schedule, member, category, null);
+        participantMaker.makeScheduleOwner(schedule, member, categoryId, null);
     }
 
     public void createMeetingScheduleParticipants(Member owner, Schedule schedule, List<Member> participants) {
-        Category category = categoryService.readMeetingCategoryByMember(owner);
-        Palette palette = paletteService.getPalette(MEETING_SCHEDULE_OWNER_PALETTE_ID);
-        participantMaker.makeScheduleOwner(schedule, owner, category, palette);
+        participantMaker.makeScheduleOwner(schedule, owner, null, MEETING_SCHEDULE_OWNER_PALETTE_ID);
         schedule.addActiveParticipant(owner.getNickname());
         participants.forEach(participant -> participantMaker.makeMeetingScheduleParticipant(schedule, participant));
     }
