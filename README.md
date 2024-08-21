@@ -85,7 +85,8 @@
 
 ### 캐슬/이호성
 
-- [여러 이미지가 포함된 데이터를 수정하기](https://namo-log.vercel.app/server-editing-image)
+- [여러 이미지가 포함된 데이터를 수정하기 : 나모의 이미지 기능 수정 과정 1편](https://namo-log.vercel.app/server-editing-image)
+- [Presigned URL 도입기 : 나모의 이미지 기능 수정 과정 2편](https://namo-log.vercel.app/Presigned%20URL%EC%9D%84%20%EC%82%AC%EC%9A%A9%ED%95%B4%EB%B3%B4%EC%9E%90.)
 
 ### 다나/서주원
 
