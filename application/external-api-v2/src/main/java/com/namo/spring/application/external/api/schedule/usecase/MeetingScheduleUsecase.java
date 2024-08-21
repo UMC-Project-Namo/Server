@@ -15,8 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static com.namo.spring.application.external.api.schedule.converter.MeetingScheduleResponseConverter.toGetMeetingScheduleItemDtos;
-import static com.namo.spring.application.external.api.schedule.converter.MeetingScheduleResponseConverter.toGetMonthlyParticipantScheduleDtos;
+import static com.namo.spring.application.external.api.schedule.converter.MeetingScheduleResponseConverter.*;
 import static com.namo.spring.application.external.global.utils.MeetingParticipantValidationUtils.validateParticipantCount;
 import static com.namo.spring.application.external.global.utils.MeetingParticipantValidationUtils.validateParticipantIds;
 import static com.namo.spring.application.external.global.utils.SchedulePeriodValidationUtils.getExtendedPeriod;
@@ -44,13 +43,21 @@ public class MeetingScheduleUsecase {
         return toGetMeetingScheduleItemDtos(scheduleManageService.getMeetingScheduleItems(member));
     }
 
-    public List<MeetingScheduleResponse.GetMonthlyParticipantScheduleDto> getMeetingParticiantsSchedules(List<Long> memberIds, int year, int month, Long memberId) {
+    public List<MeetingScheduleResponse.GetMonthlyParticipantScheduleDto> getMonthlyParticipantSchedules(List<Long> memberIds, int year, int month, Long memberId) {
         validateYearMonth(year, month);
         validateParticipantCount(memberIds.size());
         validateParticipantIds(memberId, memberIds);
 
         Member member = memberManageService.getMember(memberId);
-        List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMeetingParticipantSchedules(memberIds, getExtendedPeriod(year, month), null, member);
-        return toGetMonthlyParticipantScheduleDtos(participantsWithSchedule);
+        List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyParticipantSchedules(memberIds, getExtendedPeriod(year, month), null, member);
+        return toGetMonthlyParticipantScheduleDtos(participantsWithSchedule, memberIds, memberId);
+    }
+
+    public List<MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto> getMonthlyMeetingParticipantSchedules(Long scheduleId, int year, int month, Long memberId) {
+        validateYearMonth(year, month);
+        Member member = memberManageService.getMember(memberId);
+        Schedule schedule = scheduleManageService.getSchedule(scheduleId);
+        List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyParticipantSchedules(null, getExtendedPeriod(year, month), schedule, member);
+        return toGetMonthlyMeetingParticipantScheduleDtos(participantsWithSchedule, scheduleId);
     }
 }
