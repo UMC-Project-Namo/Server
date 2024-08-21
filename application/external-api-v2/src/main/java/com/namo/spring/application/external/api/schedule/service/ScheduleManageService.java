@@ -8,9 +8,7 @@ import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
 import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
 import com.namo.spring.db.mysql.domains.schedule.service.ScheduleService;
-import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 import com.namo.spring.db.mysql.domains.schedule.type.Period;
-import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +30,7 @@ public class ScheduleManageService {
     private final ScheduleService scheduleService;
     private final ParticipantManageService participantManageService;
     private final ParticipantService participantService;
+    private final ParticipationActionManager participationActionManager;
 
     public Schedule getSchedule(Long scheduleId) {
         return scheduleService.readSchedule(scheduleId).orElseThrow(() -> new ScheduleException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
@@ -52,7 +52,7 @@ public class ScheduleManageService {
     }
 
     public List<Schedule> getMeetingScheduleItems(Member member) {
-        List<Long> scheduleIds = participantService.findScheduleParticipantItemsByScheduleIds(member).stream()
+        List<Long> scheduleIds = participantService.readScheduleParticipantItemsByScheduleIds(member).stream()
                 .map(Participant::getSchedule)
                 .map(Schedule::getId)
                 .collect(Collectors.toList());
@@ -60,9 +60,9 @@ public class ScheduleManageService {
     }
 
     public List<ScheduleParticipantQuery> getMonthlyParticipantSchedules(List<Long> memberIds, List<LocalDateTime> period, Schedule schedule, Member member) {
-        List<Member> members = null;
+        List<Member> members = new ArrayList<>();
         if (schedule != null) {
-            members = getMeetingScheduleParticipants(schedule.getId())
+            members = participantManageService.getMeetingScheduleParticipants(schedule.getId())
                     .stream().map(Participant::getMember).collect(Collectors.toList());
         } else if (memberIds != null && !memberIds.isEmpty()) {
             members = participantManageService.getValidatedParticipants(member, memberIds);
@@ -72,10 +72,4 @@ public class ScheduleManageService {
         return participantService.readParticipantsWithScheduleAndMember(participantIds, period.get(0), period.get(1));
     }
 
-    private List<Participant> getMeetingScheduleParticipants(Long scheduleId) {
-        List<Participant> participants = participantService.readParticipantsByScheduleIdAndScheduleType(scheduleId, ScheduleType.MEETING, ParticipantStatus.ACTIVE);
-        if (participants == null) {
-            throw new ScheduleException(ErrorStatus.NOT_FOUND_SCHEDULE_OR_PARTICIPANT_FAILURE);
-        } else return participants;
-    }
 }

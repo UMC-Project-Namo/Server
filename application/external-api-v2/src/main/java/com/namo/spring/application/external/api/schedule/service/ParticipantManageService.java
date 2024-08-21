@@ -6,9 +6,12 @@ import com.namo.spring.db.mysql.domains.category.entity.Palette;
 import com.namo.spring.db.mysql.domains.category.service.CategoryService;
 import com.namo.spring.db.mysql.domains.category.service.PaletteService;
 import com.namo.spring.db.mysql.domains.category.type.ColorChip;
+import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
 import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
+import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
+import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 import com.namo.spring.db.mysql.domains.user.entity.Friendship;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.exception.MemberException;
@@ -25,7 +28,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ParticipantManageService {
     private static final Long MEETING_SCHEDULE_OWNER_PALETTE_ID = ColorChip.getMeetingScheduleOwnerPaletteId();
-
     private final ParticipantMaker participantMaker;
     private final CategoryService categoryService;
     private final PaletteService paletteService;
@@ -53,6 +55,13 @@ public class ParticipantManageService {
             throw new MemberException(ErrorStatus.NOT_FOUND_FRIENDSHIP_FAILURE);
         }
         return friends;
+    }
+
+    public List<Participant> getMeetingScheduleParticipants(Long scheduleId) {
+        List<Participant> participants = participantService.readParticipantsByScheduleIdAndScheduleType(scheduleId, ScheduleType.MEETING, ParticipantStatus.ACTIVE);
+        if (participants == null) {
+            throw new ScheduleException(ErrorStatus.NOT_FOUND_SCHEDULE_OR_PARTICIPANT_FAILURE);
+        } else return participants;
     }
 
     private void checkMemberIsOwner(Long scheduleId, Long memberId) {
