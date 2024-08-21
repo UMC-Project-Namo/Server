@@ -28,7 +28,7 @@ public class MeetingScheduleController implements MeetingScheduleApi {
     /**
      * 모임 일정 생성 API
      */
-    @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDto<Long> createMeetingSchedule(
             @Valid @RequestPart ScheduleRequest.PostMeetingScheduleDto dto,
             @RequestPart(required = false) MultipartFile image,
@@ -45,15 +45,27 @@ public class MeetingScheduleController implements MeetingScheduleApi {
     }
 
     /**
-     * 모임 생성 전/ 참여자 일정 조회 API
+     * 모임 생성 전/ 참여자 월간 일정 조회 API
      */
-    @PostMapping(path = "/preview")
+    @GetMapping(path = "/preview")
     public ResponseDto<List<MeetingScheduleResponse.GetMonthlyParticipantScheduleDto>> findMonthlyParticipantSchedules(
             @RequestParam Integer year,
             @RequestParam Integer month,
             @RequestParam List<Long> participantIds,
             @AuthenticationPrincipal SecurityUserDetails member) {
-        return ResponseDto.onSuccess(meetingScheduleUsecase.getMeetingParticiantsSchedules(participantIds, year, month, member.getUserId()));
+        return ResponseDto.onSuccess(meetingScheduleUsecase.getMonthlyParticipantSchedules(participantIds, year, month, member.getUserId()));
+    }
+
+    /**
+     * 모임 생성 후/ 참여자 월간 일정 조회 API
+     */
+    @GetMapping(path = "/{meetingScheduleId}")
+    public ResponseDto<List<MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto>> findMonthlyMeetingParticipantSchedules(
+            @PathVariable Long meetingScheduleId,
+            @RequestParam Integer year,
+            @RequestParam Integer month,
+            @AuthenticationPrincipal SecurityUserDetails member) {
+        return ResponseDto.onSuccess(meetingScheduleUsecase.getMonthlyMeetingParticipantSchedules(meetingScheduleId, year, month, member.getUserId()));
     }
 
 }
