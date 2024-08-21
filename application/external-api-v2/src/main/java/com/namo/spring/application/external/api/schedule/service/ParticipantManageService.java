@@ -6,7 +6,6 @@ import com.namo.spring.db.mysql.domains.category.entity.Palette;
 import com.namo.spring.db.mysql.domains.category.service.CategoryService;
 import com.namo.spring.db.mysql.domains.category.service.PaletteService;
 import com.namo.spring.db.mysql.domains.category.type.ColorChip;
-import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
 import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
@@ -18,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +25,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ParticipantManageService {
     private static final Long MEETING_SCHEDULE_OWNER_PALETTE_ID = ColorChip.getMeetingScheduleOwnerPaletteId();
+
     private final ParticipantMaker participantMaker;
     private final CategoryService categoryService;
     private final PaletteService paletteService;
@@ -46,7 +45,7 @@ public class ParticipantManageService {
         participants.forEach(participant -> participantMaker.makeMeetingScheduleParticipant(schedule, participant));
     }
 
-    public List<Member> getValidatedMeetingParticipants(Member owner, List<Long> memberIds) {
+    public List<Member> getValidatedParticipants(Member owner, List<Long> memberIds) {
         List<Member> friends = friendshipService.readFriendshipsByMemberIdAndFriendIds(owner.getId(), memberIds).stream()
                 .map(Friendship::getFriend)
                 .collect(Collectors.toList());
@@ -60,11 +59,6 @@ public class ParticipantManageService {
         if (!participantService.existsParticipantByMemberIdAndScheduleId(scheduleId, memberId)) {
             throw new ScheduleException(ErrorStatus.NOT_SCHEDULE_OWNER);
         }
-    }
-
-    public List<ScheduleParticipantQuery> getMeetingParticipantWithSchedule(List<Member> members, List<LocalDateTime> period) {
-        List<Long> memberIds = members.stream().map(Member::getId).collect(Collectors.toList());
-        return participantService.readParticipantsWithScheduleAndMember(memberIds, period.get(0), period.get(1));
     }
 
 }

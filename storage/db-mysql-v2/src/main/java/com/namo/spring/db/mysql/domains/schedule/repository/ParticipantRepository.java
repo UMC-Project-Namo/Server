@@ -2,6 +2,7 @@ package com.namo.spring.db.mysql.domains.schedule.repository;
 
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
+import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,8 +17,11 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
     @Query("SELECT COUNT(p) > 0 FROM Participant p WHERE p.schedule.id = :scheduleId AND p.member.id = :memberId AND p.isOwner = 1")
     boolean existsParticipantByScheduleIdAndMemberId(Long scheduleId, Long memberId);
 
+    @Query("SELECT p FROM Participant p JOIN p.schedule s JOIN p.member m WHERE s.id = :scheduleId AND s.scheduleType = :scheduleType AND p.status = :status")
+    List<Participant> findParticipantsByScheduleIdAndScheduleType(Long scheduleId, int scheduleType, ParticipantStatus status);
+
     @Query("SELECT DISTINCT new com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery(" +
-            "p.id, m.id, m.nickname, s" +
+            "p.id, p.palette.id, m.id, m.nickname, s" +
             ")FROM Participant p " +
             "JOIN p.schedule s " +
             "JOIN p.member m " +

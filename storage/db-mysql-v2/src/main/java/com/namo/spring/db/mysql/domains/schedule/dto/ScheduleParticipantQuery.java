@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ScheduleParticipantQuery {
     private Long participantId;
-    //    private Long participantPaletteId;
+    private Long participantPaletteId;
     private Long memberId;
     private String nickname;
     private Schedule schedule;
