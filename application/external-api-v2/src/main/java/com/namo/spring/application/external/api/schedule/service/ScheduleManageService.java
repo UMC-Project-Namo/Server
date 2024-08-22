@@ -8,6 +8,7 @@ import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
 import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
 import com.namo.spring.db.mysql.domains.schedule.service.ScheduleService;
+import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 import com.namo.spring.db.mysql.domains.schedule.type.Period;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +30,6 @@ public class ScheduleManageService {
     private final ScheduleService scheduleService;
     private final ParticipantManageService participantManageService;
     private final ParticipantService participantService;
-    private final ParticipationActionManager participationActionManager;
 
     public Schedule getSchedule(Long scheduleId) {
         return scheduleService.readSchedule(scheduleId).orElseThrow(() -> new ScheduleException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
@@ -59,17 +58,16 @@ public class ScheduleManageService {
         return scheduleService.readSchedulesById(scheduleIds);
     }
 
-    public List<ScheduleParticipantQuery> getMonthlyParticipantSchedules(List<Long> memberIds, List<LocalDateTime> period, Schedule schedule, Member member) {
+    public List<ScheduleParticipantQuery> getMonthlyParticipantSchedules(List<Long> memberIds, Period period, Schedule schedule, Member member) {
         List<Member> members = new ArrayList<>();
         if (schedule != null) {
-            members = participantManageService.getMeetingScheduleParticipants(schedule.getId())
+            members = participantManageService.getMeetingScheduleParticipants(schedule.getId(), ParticipantStatus.ACTIVE)
                     .stream().map(Participant::getMember).collect(Collectors.toList());
         } else if (memberIds != null && !memberIds.isEmpty()) {
             members = participantManageService.getValidatedParticipants(member, memberIds);
             members.add(member);
         }
         List<Long> participantIds = members.stream().map(Member::getId).collect(Collectors.toList());
-        return participantService.readParticipantsWithScheduleAndMember(participantIds, period.get(0), period.get(1));
+        return participantService.readParticipantsWithScheduleAndMember(participantIds, period.getStartDate(), period.getEndDate());
     }
-
 }

@@ -9,15 +9,17 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface ParticipantRepository extends JpaRepository<Participant, Long> {
+
     @Query("SELECT p FROM Participant p JOIN p.schedule s JOIN p.member m WHERE p.member = :member AND p.status = 'ACTIVE' AND s.scheduleType = :scheduleType")
     List<Participant> findParticipantsByMemberAndScheduleType(Member member, int scheduleType);
 
-    @Query("SELECT COUNT(p) > 0 FROM Participant p WHERE p.schedule.id = :scheduleId AND p.member.id = :memberId AND p.isOwner = 1")
-    boolean existsParticipantByScheduleIdAndMemberId(Long scheduleId, Long memberId);
+    @Query("SELECT p FROM Participant p JOIN FETCH p.schedule s WHERE s.id = :scheduleId AND p.member.id = :memberId")
+    Optional<Participant> findParticipantByScheduleIdAndMemberId(Long scheduleId, Long memberId);
 
-    @Query("SELECT p FROM Participant p JOIN p.schedule s JOIN p.member m WHERE s.id = :scheduleId AND s.scheduleType = :scheduleType AND p.status = :status")
+    @Query("SELECT p FROM Participant p JOIN p.schedule s JOIN FETCH p.palette WHERE s.id = :scheduleId AND s.scheduleType = :scheduleType AND (:status IS NULL OR p.status = :status)")
     List<Participant> findParticipantsByScheduleIdAndScheduleType(Long scheduleId, int scheduleType, ParticipantStatus status);
 
     @Query("SELECT DISTINCT new com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery(" +

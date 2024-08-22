@@ -30,13 +30,13 @@ public class ParticipantService {
     }
 
     @Transactional(readOnly = true)
-    public List<Participant> findScheduleParticipantItemsByScheduleIds(Member member) {
+    public List<Participant> readScheduleParticipantItemsByScheduleIds(Member member) {
         return participantRepository.findParticipantsByMemberAndScheduleType(member, ScheduleType.MEETING.getValue());
     }
 
     @Transactional(readOnly = true)
-    public boolean existsParticipantByMemberIdAndScheduleId(Long scheduleId, Long memberId) {
-        return participantRepository.existsParticipantByScheduleIdAndMemberId(scheduleId, memberId);
+    public Optional<Participant> readParticipantByScheduleIdAndMemberId(Long scheduleId, Long memberId) {
+        return participantRepository.findParticipantByScheduleIdAndMemberId(scheduleId, memberId);
     }
 
     @Transactional(readOnly = true)
