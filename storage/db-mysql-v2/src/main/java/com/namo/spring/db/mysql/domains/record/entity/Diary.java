@@ -54,11 +54,20 @@ public class Diary extends BaseTimeEntity {
 	private double enjoyRating;
 
 	@Builder
-	public Diary(Participant participant, String memo) {
+	public Diary(Participant participant, String memo, double enjoyRating) {
 		this.participant = Objects.requireNonNull(participant, "participant은 null일 수 없습니다.");
 		if (!StringUtils.hasText(memo))
 			throw new IllegalArgumentException("memo은 null이거나 빈 문자열일 수 없습니다.");
 		this.memo = memo;
+		this.enjoyRating = enjoyRating;
+	}
+
+	public static Diary of(Participant participant, String memo, double enjoyRating) {
+		return Diary.builder()
+			.participant(participant)
+			.memo(memo)
+			.enjoyRating(enjoyRating)
+			.build();
 	}
 
 	@PostPersist
