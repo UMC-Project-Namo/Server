@@ -49,6 +49,8 @@ public class Diary extends BaseTimeEntity {
 	@OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<DiaryImage> images;
 
+	private double enjoyRating;
+
 	@Builder
 	public Diary(Participant participant, String memo) {
 		this.participant = Objects.requireNonNull(participant, "participant은 null일 수 없습니다.");
