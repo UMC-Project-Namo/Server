@@ -8,7 +8,6 @@ import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
 import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
 import com.namo.spring.db.mysql.domains.schedule.service.ScheduleService;
-import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 import com.namo.spring.db.mysql.domains.schedule.type.Period;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +42,7 @@ public class ScheduleManageService {
     }
 
     public Schedule createMeetingSchedule(ScheduleRequest.PostMeetingScheduleDto dto, Member owner, MultipartFile image) {
-        List<Member> participants = participantManageService.getValidatedParticipants(owner, dto.getParticipants());
+        List<Member> participants = participantManageService.getFriendshipValidatedParticipants(owner, dto.getParticipants());
         Period period = getValidatedPeriod(dto.getPeriod().getStartDate(), dto.getPeriod().getEndDate());
         Schedule schedule = scheduleMaker.createMeetingSchedule(dto, period, image);
         participantManageService.createMeetingScheduleParticipants(owner, schedule, participants);
@@ -61,10 +60,10 @@ public class ScheduleManageService {
     public List<ScheduleParticipantQuery> getMonthlyParticipantSchedules(List<Long> memberIds, Period period, Schedule schedule, Member member) {
         List<Member> members = new ArrayList<>();
         if (schedule != null) {
-            members = participantManageService.getMeetingScheduleParticipants(schedule.getId(), ParticipantStatus.ACTIVE)
+            members = participantManageService.getMeetingScheduleParticipants(schedule.getId())
                     .stream().map(Participant::getMember).collect(Collectors.toList());
         } else if (memberIds != null && !memberIds.isEmpty()) {
-            members = participantManageService.getValidatedParticipants(member, memberIds);
+            members = participantManageService.getFriendshipValidatedParticipants(member, memberIds);
             members.add(member);
         }
         List<Long> participantIds = members.stream().map(Member::getId).collect(Collectors.toList());

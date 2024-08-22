@@ -6,6 +6,7 @@ import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
 import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
+import com.namo.spring.db.mysql.domains.schedule.type.ParticipantRole;
 import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 import com.namo.spring.db.mysql.domains.user.entity.Friendship;
@@ -38,7 +39,7 @@ public class ParticipantManageService {
         participants.forEach(participant -> participantMaker.makeMeetingScheduleParticipant(schedule, participant));
     }
 
-    public List<Member> getValidatedParticipants(Member owner, List<Long> memberIds) {
+    public List<Member> getFriendshipValidatedParticipants(Member owner, List<Long> memberIds) {
         List<Member> friends = friendshipService.readFriendshipsByMemberIdAndFriendIds(owner.getId(), memberIds).stream()
                 .map(Friendship::getFriend)
                 .collect(Collectors.toList());
@@ -55,8 +56,8 @@ public class ParticipantManageService {
         } else return participants;
     }
 
-    private void checkMemberIsOwner(Long scheduleId, Long memberId) {
-        if (!participantService.existsParticipantByMemberIdAndScheduleId(scheduleId, memberId)) {
+    private void checkParticipantIsOwner(Participant participant) {
+        if (participant.getIsOwner() != ParticipantRole.OWNER.getValue()) {
             throw new ScheduleException(ErrorStatus.NOT_SCHEDULE_OWNER);
         }
     }
