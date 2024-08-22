@@ -85,6 +85,7 @@ public class Participant extends BaseTimeEntity {
 		this.status = Objects.requireNonNull(status, "status는 null일 수 없습니다.");
 		this.category = category;
 		this.palette = palette;
+		this.hasDiary = false;
 	}
 
 	public static Participant of(int isOwner, User user, Schedule schedule, ParticipantStatus status, Category category,
