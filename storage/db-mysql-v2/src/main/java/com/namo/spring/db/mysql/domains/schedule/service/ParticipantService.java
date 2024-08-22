@@ -29,7 +29,7 @@ public class ParticipantService {
 	public Optional<Participant> readParticipant(Long id) {
 		return participantRepository.findById(id);
 	}
-	
+
 	@Transactional(readOnly = true)
 	public List<Participant> readScheduleParticipantItemsByScheduleIds(Long memberId) {
 		return participantRepository.findParticipantsByMemberAndScheduleType(memberId, ScheduleType.MEETING.getValue());
@@ -60,6 +60,10 @@ public class ParticipantService {
 
 	public void deleteParticipant(Long id) {
 		participantRepository.deleteById(id);
+	}
+
+	public Optional<Participant> readParticipants(Long memberId, Long scheduleId) {
+		return participantRepository.findParticipantByMemberIdAndScheduleId(memberId, scheduleId);
 	}
 
 }
