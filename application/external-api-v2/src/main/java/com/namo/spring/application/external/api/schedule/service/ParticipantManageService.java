@@ -58,6 +58,7 @@ public class ParticipantManageService {
 		} else
 			return participants;
 	}
+
 	// =======
 	// 	private static final Long MEETING_SCHEDULE_OWNER_PALETTE_ID = ColorChip.getMeetingScheduleOwnerPaletteId();
 	// 	private final ParticipantMaker participantMaker;
@@ -66,13 +67,13 @@ public class ParticipantManageService {
 	// 	private final CategoryService categoryService;
 	// 	private final PaletteService paletteService;
 	//
-	// 	public Participant getParticipantForDiary(Long memberId, Long scheduleId) {
-	// 		Participant participant = participantService.readParticipants(memberId, scheduleId)
-	// 			.orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_PARTICIPANT_FAILURE));
-	// 		if (participant.isHasDiary())
-	// 			throw new MemberException(ErrorStatus.ALREADY_WRITTEN_DIARY_FAILURE);
-	// 		return participant;
-	// 	}
+	public Participant getParticipantForDiary(Long memberId, Long scheduleId) {
+		Participant participant = participantService.readParticipants(memberId, scheduleId)
+			.orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_PARTICIPANT_FAILURE));
+		if (participant.isHasDiary())
+			throw new MemberException(ErrorStatus.ALREADY_WRITTEN_DIARY_FAILURE);
+		return participant;
+	}
 	//
 	// 	@Transactional(readOnly = true)
 	// 	public List<Member> getValidatedMeetingParticipants(List<Long> memberIds) {
