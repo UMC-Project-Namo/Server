@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.namo.spring.application.external.global.utils.MeetingParticipantValidationUtils.validateParticipantCount;
 import static com.namo.spring.application.external.global.utils.SchedulePeriodValidationUtils.getValidatedPeriod;
 
 @Slf4j
@@ -42,6 +43,7 @@ public class ScheduleManageService {
     }
 
     public Schedule createMeetingSchedule(ScheduleRequest.PostMeetingScheduleDto dto, Member owner, MultipartFile image) {
+        validateParticipantCount(dto.getParticipants().size());
         List<Member> participants = participantManageService.getFriendshipValidatedParticipants(owner, dto.getParticipants());
         Period period = getValidatedPeriod(dto.getPeriod().getStartDate(), dto.getPeriod().getEndDate());
         Schedule schedule = scheduleMaker.createMeetingSchedule(dto, period, image);
@@ -58,6 +60,7 @@ public class ScheduleManageService {
     }
 
     public List<ScheduleParticipantQuery> getMonthlyParticipantSchedules(List<Long> memberIds, Period period, Schedule schedule, Member member) {
+        validateParticipantCount(memberIds.size());
         List<Member> members = new ArrayList<>();
         if (schedule != null) {
             members = participantManageService.getMeetingScheduleParticipants(schedule.getId())
