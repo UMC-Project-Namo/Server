@@ -107,4 +107,12 @@ public class Participant extends BaseTimeEntity {
 		}
 		return null;
 	}
+
+	public void diaryCreated() {
+		this.hasDiary = true;
+	}
+
+	public void diaryDeleted() {
+		this.hasDiary = false;
+	}
 }

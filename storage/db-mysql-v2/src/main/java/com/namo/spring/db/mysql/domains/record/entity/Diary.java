@@ -13,6 +13,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PostPersist;
+import jakarta.persistence.PostRemove;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -58,4 +60,15 @@ public class Diary extends BaseTimeEntity {
 			throw new IllegalArgumentException("memo은 null이거나 빈 문자열일 수 없습니다.");
 		this.memo = memo;
 	}
+
+	@PostPersist
+	public void postPersist() {
+		participant.diaryCreated();
+	}
+
+	@PostRemove
+	public void PostRemove() {
+		participant.diaryDeleted();
+	}
+
 }
