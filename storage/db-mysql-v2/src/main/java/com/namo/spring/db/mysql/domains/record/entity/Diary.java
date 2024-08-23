@@ -80,4 +80,8 @@ public class Diary extends BaseTimeEntity {
 		participant.diaryDeleted();
 	}
 
+	public void update(String content, double enjoyRating) {
+		this.memo = content;
+		this.enjoyRating = enjoyRating;
+	}
 }
