@@ -1,6 +1,8 @@
 package com.namo.spring.application.external.api.record.Controller;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +40,16 @@ public class DiaryController {
 	) {
 		diaryUseCase.createDiary(memberInfo, request);
 		return ResponseDto.onSuccess("기록 생성 성공");
+	}
+
+	@PatchMapping("/{diaryId}")
+	public ResponseDto<String> updateDiary(
+		@AuthenticationPrincipal SecurityUserDetails memberInfo,
+		@PathVariable Long diaryId,
+		@RequestBody DiaryRequest.UpdateDiaryDto request
+	) {
+		diaryUseCase.updateDiary(diaryId, memberInfo, request);
+		return ResponseDto.onSuccess("기록 수정 성공");
 	}
 
 }
