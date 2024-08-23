@@ -35,7 +35,7 @@ public class MeetingScheduleResponse {
     @Getter
     @Builder
     @Schema(title = "모임 생성 전 / 월간 일정 조회 응답 DTO")
-    public static class GetMonthlyParticipantScheduleDto {
+    public static class GetMonthlyMembersScheduleDto {
         @Schema(description = "일정 ID")
         private Long scheduleId;
         @Schema(description = "일정 이름", example = "나모 정기 회의")
@@ -47,7 +47,7 @@ public class MeetingScheduleResponse {
         @Schema(description = "시작일과 종료일 차이")
         private Long interval;
         @Schema(description = "일정 참여자 목록")
-        private List<ParticipantDto> participants;
+        private List<MemberParticipantDto> participants;
         @Schema(description = "장소 위치 경도")
         private Double longitude;
         @Schema(description = "장소 위치 위도")
@@ -74,9 +74,9 @@ public class MeetingScheduleResponse {
         @Schema(description = "시작일과 종료일 차이")
         private Long interval;
         @Schema(description = "일정 참여자 목록")
-        private List<ParticipantDto> participants;
+        private List<UserParticipantDto> participants;
         @Schema(description = "현재 조회하는 모임 일정인지의 여부")
-        private boolean isCurMeetingSchedule = false;
+        private Boolean isCurMeetingSchedule = false;
         @Schema(description = "장소 위치 경도")
         private Double longitude;
         @Schema(description = "장소 위치 위도")
@@ -90,10 +90,27 @@ public class MeetingScheduleResponse {
     @AllArgsConstructor
     @Getter
     @Builder
-    @Schema(title = "모임 일정 조회 - 모임 일정의 참여자 목록")
-    public static class ParticipantDto {
+    @Schema(title = "모임 일정 조회 - 일정의 참여자 목록")
+    public static class MemberParticipantDto {
         @Schema(description = "참여자 ID")
         private Long memberId;
+        @Schema(description = "닉네임")
+        private String nickname;
+        @Schema(description = "색상")
+        private Long color;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    @Builder
+    @Schema(title = "모임 일정 조회 - 일정의 참여자 목록")
+    public static class UserParticipantDto {
+        @Schema(description = "참여자 ID")
+        private Long participantId;
+        @Schema(description = "유저 ID")
+        private Long memberId;
+        @Schema(description = "게스트 ID")
+        private Long anonymousId;
         @Schema(description = "닉네임")
         private String nickname;
         @Schema(description = "색상")

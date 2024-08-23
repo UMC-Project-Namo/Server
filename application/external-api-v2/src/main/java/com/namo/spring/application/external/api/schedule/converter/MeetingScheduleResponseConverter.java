@@ -3,12 +3,10 @@ package com.namo.spring.application.external.api.schedule.converter;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
 import com.namo.spring.core.common.utils.DateUtil;
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
-import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -36,7 +34,7 @@ public class MeetingScheduleResponseConverter {
                 .build();
     }
 
-    public static List<MeetingScheduleResponse.GetMonthlyParticipantScheduleDto> toGetMonthlyParticipantScheduleDtos(List<ScheduleParticipantQuery> participantsWithSchedule, List<Long> participantIds, Long ownerId) {
+    public static List<MeetingScheduleResponse.GetMonthlyMembersScheduleDto> toGetMonthlyParticipantScheduleDtos(List<ScheduleParticipantQuery> participantsWithSchedule, List<Long> participantIds, Long ownerId) {
         long[] palette = getPaletteColorIds();
         Map<Long, List<ScheduleParticipantQuery>> scheduleIdAndParticipant
                 = participantsWithSchedule.stream()
@@ -50,14 +48,14 @@ public class MeetingScheduleResponseConverter {
                 .collect(Collectors.toList());
     }
 
-    public static MeetingScheduleResponse.GetMonthlyParticipantScheduleDto toGetMonthlyParticipantScheduleDto(Schedule schedule, List<ScheduleParticipantQuery> participant, Map<Long, Long> participantAndPalette) {
-        return MeetingScheduleResponse.GetMonthlyParticipantScheduleDto.builder()
+    public static MeetingScheduleResponse.GetMonthlyMembersScheduleDto toGetMonthlyParticipantScheduleDto(Schedule schedule, List<ScheduleParticipantQuery> participant, Map<Long, Long> participantAndPalette) {
+        return MeetingScheduleResponse.GetMonthlyMembersScheduleDto.builder()
                 .scheduleId(schedule.getId())
                 .name(schedule.getTitle())
                 .startDate(DateUtil.toSeconds(schedule.getPeriod().getStartDate()))
                 .endDate(DateUtil.toSeconds(schedule.getPeriod().getEndDate()))
                 .interval(schedule.getPeriod().getDayInterval())
-                .participants(toParticipantDtos(participant, participantAndPalette))
+                .participants(toMemberParticipantDtos(participant, participantAndPalette))
                 .latitude(schedule.getLocation().getLatitude())
                 .longitude(schedule.getLocation().getLongitude())
                 .locationName(schedule.getLocation().getName())
@@ -65,28 +63,14 @@ public class MeetingScheduleResponseConverter {
                 .build();
     }
 
-    private static List<MeetingScheduleResponse.ParticipantDto> toParticipantDtos(List<ScheduleParticipantQuery> participant) {
+    private static List<MeetingScheduleResponse.MemberParticipantDto> toMemberParticipantDtos(List<ScheduleParticipantQuery> participant, Map<Long, Long> participantAndPalette) {
         return participant.stream()
-                .map(MeetingScheduleResponseConverter::toParticipantDto)
+                .map(p -> toMemberParticipantDto(p, participantAndPalette))
                 .collect(Collectors.toList());
     }
 
-    private static List<MeetingScheduleResponse.ParticipantDto> toParticipantDtos(List<ScheduleParticipantQuery> participant, Map<Long, Long> participantAndPalette) {
-        return participant.stream()
-                .map(p -> toParticipantDto(p, participantAndPalette))
-                .collect(Collectors.toList());
-    }
-
-    private static MeetingScheduleResponse.ParticipantDto toParticipantDto(ScheduleParticipantQuery participant) {
-        return MeetingScheduleResponse.ParticipantDto.builder()
-                .memberId(participant.getMemberId())
-                .nickname(participant.getNickname())
-                .color(participant.getParticipantPaletteId())
-                .build();
-    }
-
-    private static MeetingScheduleResponse.ParticipantDto toParticipantDto(ScheduleParticipantQuery participant, Map<Long, Long> participantAndPalette) {
-        return MeetingScheduleResponse.ParticipantDto.builder()
+    private static MeetingScheduleResponse.MemberParticipantDto toMemberParticipantDto(ScheduleParticipantQuery participant, Map<Long, Long> participantAndPalette) {
+        return MeetingScheduleResponse.MemberParticipantDto.builder()
                 .memberId(participant.getMemberId())
                 .nickname(participant.getNickname())
                 .color(participantAndPalette.get(participant.getMemberId()))
@@ -94,24 +78,24 @@ public class MeetingScheduleResponseConverter {
     }
 
 
-    public static List<MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto> toGetMonthlyMeetingParticipantScheduleDtos(List<ScheduleParticipantQuery> participantsWithSchedule, Long curScheduleId) {
+    public static List<MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto> toGetMonthlyMeetingParticipantScheduleDtos(List<ScheduleParticipantQuery> participantsWithSchedule, Schedule curSchedule) {
         Map<Long, List<ScheduleParticipantQuery>> scheduleIdAndParticipant
                 = participantsWithSchedule.stream()
                 .collect(Collectors.groupingBy(participant -> participant.getSchedule().getId()));
         return scheduleIdAndParticipant.entrySet().stream()
-                .map(entry -> toGetMonthlyMeetingParticipantScheduleDto(entry.getValue().get(0).getSchedule(), entry.getValue(), Objects.equals(entry.getKey(), curScheduleId)))
+                .map(entry -> toGetMonthlyMeetingParticipantScheduleDto(entry.getValue().get(0).getSchedule(), entry.getValue(), curSchedule))
                 .collect(Collectors.toList());
     }
 
-    public static MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto toGetMonthlyMeetingParticipantScheduleDto(Schedule schedule, List<ScheduleParticipantQuery> participant, boolean isCurMeetingSchedule) {
+    public static MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto toGetMonthlyMeetingParticipantScheduleDto(Schedule schedule, List<ScheduleParticipantQuery> participant, Schedule curSchedule) {
         return MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto.builder()
                 .scheduleId(schedule.getId())
                 .name(schedule.getTitle())
                 .startDate(DateUtil.toSeconds(schedule.getPeriod().getStartDate()))
                 .endDate(DateUtil.toSeconds(schedule.getPeriod().getEndDate()))
                 .interval(schedule.getPeriod().getDayInterval())
-                .participants(toParticipantDtos(participant))
-                .isCurMeetingSchedule(isCurMeetingSchedule)
+                .participants(toUserParticipantDtos(participant))
+                .isCurMeetingSchedule(schedule.getId().equals(curSchedule.getId()))
                 .latitude(schedule.getLocation().getLatitude())
                 .longitude(schedule.getLocation().getLongitude())
                 .locationName(schedule.getLocation().getName())
@@ -119,14 +103,20 @@ public class MeetingScheduleResponseConverter {
                 .build();
     }
 
-    private static String getParticipantNickName(Participant participant) {
-        if (participant.getMember() != null) {
-            return participant.getMember().getNickname();
-        } else if (participant.getAnonymous() != null) {
-            return participant.getAnonymous().getNickname();
-        } else {
-            return null;
-        }
+    private static List<MeetingScheduleResponse.UserParticipantDto> toUserParticipantDtos(List<ScheduleParticipantQuery> participant) {
+        return participant.stream()
+                .map(MeetingScheduleResponseConverter::toUserParticipantDto)
+                .collect(Collectors.toList());
+    }
+
+    private static MeetingScheduleResponse.UserParticipantDto toUserParticipantDto(ScheduleParticipantQuery participant) {
+        return MeetingScheduleResponse.UserParticipantDto.builder()
+                .participantId(participant.getParticipantId())
+                .memberId(participant.getMemberId())
+                .anonymousId(participant.getAnonymousId())
+                .nickname(participant.getNickname())
+                .color(participant.getParticipantPaletteId())
+                .build();
     }
 
 }

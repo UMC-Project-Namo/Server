@@ -186,7 +186,7 @@ public interface MeetingScheduleApi {
                     }
                     """)
     }))
-    ResponseDto<List<MeetingScheduleResponse.GetMonthlyParticipantScheduleDto>> findMonthlyParticipantSchedules(
+    ResponseDto<List<MeetingScheduleResponse.GetMonthlyMembersScheduleDto>> findMonthlyParticipantSchedules(
             @Parameter(description = "연도") @RequestParam Integer year,
             @Parameter(description = "월") @RequestParam Integer month,
             @Parameter(description = "초대자 ID 목록") @RequestParam List<Long> participantIds,
