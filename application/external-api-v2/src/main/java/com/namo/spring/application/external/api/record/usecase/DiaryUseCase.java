@@ -7,6 +7,7 @@ import com.namo.spring.application.external.api.record.dto.DiaryRequest;
 import com.namo.spring.application.external.api.record.serivce.DiaryManageService;
 import com.namo.spring.application.external.api.schedule.service.ParticipantManageService;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
+import com.namo.spring.db.mysql.domains.record.entity.Diary;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 
 import lombok.RequiredArgsConstructor;
@@ -23,5 +24,11 @@ public class DiaryUseCase {
 		Participant participant = participantManageService.getParticipantForDiary(memberInfo.getUserId(),
 			request.getScheduleId());
 		diaryManageService.makeDiary(request, participant);
+	}
+
+	@Transactional
+	public void updateDiary(Long diaryId, SecurityUserDetails memberInfo, DiaryRequest.UpdateDiaryDto request) {
+		Diary diary = diaryManageService.getMyDiary(diaryId, memberInfo.getUserId());
+		diaryManageService.updateDiary(diary, request);
 	}
 }
