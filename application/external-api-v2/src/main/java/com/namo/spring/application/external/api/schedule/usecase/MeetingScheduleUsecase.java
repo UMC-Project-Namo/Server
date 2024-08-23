@@ -41,20 +41,21 @@ public class MeetingScheduleUsecase {
         return toGetMeetingScheduleItemDtos(scheduleManageService.getMeetingScheduleItems(member));
     }
 
-    public List<MeetingScheduleResponse.GetMonthlyParticipantScheduleDto> getMonthlyParticipantSchedules(List<Long> memberIds, int year, int month, Long memberId) {
+    public List<MeetingScheduleResponse.GetMonthlyMembersScheduleDto> getMonthlyMemberSchedules(List<Long> memberIds, int year, int month, Long memberId) {
         validateYearMonth(year, month);
         validateUniqueParticipantIds(memberId, memberIds);
 
         Member member = memberManageService.getMember(memberId);
-        List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyParticipantSchedules(memberIds, getExtendedPeriod(year, month), null, member);
+        List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyMembersSchedules(memberIds, getExtendedPeriod(year, month), member);
         return toGetMonthlyParticipantScheduleDtos(participantsWithSchedule, memberIds, memberId);
     }
 
     public List<MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto> getMonthlyMeetingParticipantSchedules(Long scheduleId, int year, int month, Long memberId) {
         validateYearMonth(year, month);
+
         Member member = memberManageService.getMember(memberId);
         Schedule schedule = scheduleManageService.getSchedule(scheduleId);
-        List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyParticipantSchedules(null, getExtendedPeriod(year, month), schedule, member);
-        return toGetMonthlyMeetingParticipantScheduleDtos(participantsWithSchedule, scheduleId);
+        List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyMeetingParticipantSchedules(schedule, getExtendedPeriod(year, month), member);
+        return toGetMonthlyMeetingParticipantScheduleDtos(participantsWithSchedule, schedule);
     }
 }

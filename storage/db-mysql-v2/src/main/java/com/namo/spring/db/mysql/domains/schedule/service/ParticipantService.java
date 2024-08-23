@@ -45,6 +45,11 @@ public class ParticipantService {
     }
 
     @Transactional(readOnly = true)
+    public List<ScheduleParticipantQuery> readParticipantsWithScheduleAndAnonymous(List<Long> anonymousIds, LocalDateTime startDate, LocalDateTime endDate) {
+        return participantRepository.findParticipantsWithScheduleAndAnonymous(anonymousIds, startDate, endDate);
+    }
+
+    @Transactional(readOnly = true)
     public List<Participant> readParticipantsByScheduleIdAndScheduleType(Long scheduleId, ScheduleType type, ParticipantStatus status) {
         return participantRepository.findParticipantsByScheduleIdAndScheduleType(scheduleId, type.getValue(), status);
     }
