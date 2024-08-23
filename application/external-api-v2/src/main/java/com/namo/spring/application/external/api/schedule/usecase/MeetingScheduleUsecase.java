@@ -55,7 +55,7 @@ public class MeetingScheduleUsecase {
 
         Member member = memberManageService.getMember(memberId);
         Schedule schedule = scheduleManageService.getSchedule(scheduleId);
-        List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyMeetingParticipantSchedules(schedule, getExtendedPeriod(year, month), member);
+        List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyMeetingParticipantSchedules(schedule, getExtendedPeriod(year, month));
         return toGetMonthlyMeetingParticipantScheduleDtos(participantsWithSchedule, schedule);
     }
 }

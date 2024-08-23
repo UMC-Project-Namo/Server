@@ -68,7 +68,7 @@ public class ScheduleManageService {
         return participantService.readParticipantsWithScheduleAndMember(members, period.getStartDate(), period.getEndDate());
     }
 
-    public List<ScheduleParticipantQuery> getMonthlyMeetingParticipantSchedules(Schedule schedule, Period period, Member member) {
+    public List<ScheduleParticipantQuery> getMonthlyMeetingParticipantSchedules(Schedule schedule, Period period) {
         List<ScheduleParticipantQuery> results;
         List<Long> members;
         List<Long> anonymous;
