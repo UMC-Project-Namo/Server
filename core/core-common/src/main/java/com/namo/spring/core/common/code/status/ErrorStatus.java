@@ -32,7 +32,7 @@ public enum ErrorStatus implements BaseErrorCode {
 	MEETING_INVALID_PARTICIPANT_NUMBER(HttpStatus.BAD_REQUEST, "모임의 인원은 2명 이상, 10명 이하 입니다."),
 	MEETING_DUPLICATE_PARTICIPANT(HttpStatus.BAD_REQUEST, "중복되는 참여자입니다."),
 	ALREADY_WRITTEN_DIARY_FAILURE(HttpStatus.BAD_REQUEST, "이미 일기를 작성하였습니다."),
-
+	NOT_WRITTEN_DIARY_FAILURE(HttpStatus.BAD_REQUEST, "일기를 작성하지 않았습니다."),
 	/**
 	 * 401 : 소셜 로그인 오류
 	 */
