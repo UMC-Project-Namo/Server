@@ -67,13 +67,6 @@ public class ParticipantManageService {
 	// 	private final CategoryService categoryService;
 	// 	private final PaletteService paletteService;
 	//
-	public Participant getParticipantForDiary(Long memberId, Long scheduleId) {
-		Participant participant = participantService.readParticipants(memberId, scheduleId)
-			.orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_PARTICIPANT_FAILURE));
-		if (participant.isHasDiary())
-			throw new MemberException(ErrorStatus.ALREADY_WRITTEN_DIARY_FAILURE);
-		return participant;
-	}
 
 	//
 	// 	@Transactional(readOnly = true)
@@ -101,6 +94,11 @@ public class ParticipantManageService {
 	// 		participants.forEach(participant -> participantMaker.makeMeetingScheduleParticipant(schedule, participant));
 	// 	}
 	// >>>>>>> 735748e8 (:sparkles: Feat: 다이어리 작성을 위한 Participant 조회 메서드 구현 - getParticipantForDiary())
+
+	public Participant getScheduleParticipant(Long memberId, Long scheduleId) {
+		return participantService.readParticipants(memberId, scheduleId)
+			.orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_PARTICIPANT_FAILURE));
+	}
 
 	// =======
 	//
