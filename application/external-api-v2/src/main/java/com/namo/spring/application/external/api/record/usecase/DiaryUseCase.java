@@ -3,6 +3,7 @@ package com.namo.spring.application.external.api.record.usecase;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.namo.spring.application.external.api.record.converter.DiaryResponseConverter;
 import com.namo.spring.application.external.api.record.dto.DiaryRequest;
 import com.namo.spring.application.external.api.record.dto.DiaryResponse;
 import com.namo.spring.application.external.api.record.serivce.DiaryManageService;
@@ -31,5 +32,13 @@ public class DiaryUseCase {
 	public void updateDiary(Long diaryId, SecurityUserDetails memberInfo, DiaryRequest.UpdateDiaryDto request) {
 		Diary diary = diaryManageService.getMyDiary(diaryId, memberInfo.getUserId());
 		diaryManageService.updateDiary(diary, request);
+	}
+
+	@Transactional(readOnly = true)
+	public DiaryResponse.DiaryDto getScheduleDiary(Long scheduleId, SecurityUserDetails memberInfo) {
+		Participant participant = participantManageService.getScheduleParticipant(memberInfo.getUserId(),
+			scheduleId);
+		Diary diary = diaryManageService.getParticipantDiary(participant);
+		return DiaryResponseConverter.toDiaryDto(diary);
 	}
 }
