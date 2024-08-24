@@ -14,7 +14,7 @@ public class DiaryResponse {
 	public static class DiaryDto {
 		private Long diaryId;
 		private String content;
-		private Integer enjoyRating;
+		private double enjoyRating;
 		private List<DiaryImageDto> diaryImages;
 	}
 

@@ -46,7 +46,7 @@ public class Diary extends BaseTimeEntity {
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Column(nullable = false, length = 250)
-	private String memo;
+	private String content;
 
 	@OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<DiaryImage> images;
@@ -58,7 +58,7 @@ public class Diary extends BaseTimeEntity {
 		this.participant = Objects.requireNonNull(participant, "participant은 null일 수 없습니다.");
 		if (!StringUtils.hasText(memo))
 			throw new IllegalArgumentException("memo은 null이거나 빈 문자열일 수 없습니다.");
-		this.memo = memo;
+		this.content = memo;
 		this.enjoyRating = enjoyRating;
 	}
 
@@ -81,7 +81,7 @@ public class Diary extends BaseTimeEntity {
 	}
 
 	public void update(String content, double enjoyRating) {
-		this.memo = content;
+		this.content = content;
 		this.enjoyRating = enjoyRating;
 	}
 }
