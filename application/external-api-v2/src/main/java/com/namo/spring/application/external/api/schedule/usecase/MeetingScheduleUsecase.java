@@ -4,6 +4,7 @@ import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResp
 import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
 import com.namo.spring.application.external.api.schedule.service.ScheduleManageService;
 import com.namo.spring.application.external.api.user.service.MemberManageService;
+import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
@@ -28,34 +29,31 @@ public class MeetingScheduleUsecase {
     private final MemberManageService memberManageService;
 
     @Transactional
-    public Long createMeetingSchedule(ScheduleRequest.PostMeetingScheduleDto dto, MultipartFile image, Long memberId) {
-        validateUniqueParticipantIds(memberId, dto.getParticipants());
-        Member owner = memberManageService.getMember(memberId);
+    public Long createMeetingSchedule(ScheduleRequest.PostMeetingScheduleDto dto, MultipartFile image, SecurityUserDetails memberInfo) {
+        validateUniqueParticipantIds(memberInfo.getUserId(), dto.getParticipants());
+        Member owner = memberManageService.getMember(memberInfo.getUserId());
         Schedule schedule = scheduleManageService.createMeetingSchedule(dto, owner, image);
         return schedule.getId();
     }
 
     @Transactional(readOnly = true)
-    public List<MeetingScheduleResponse.GetMeetingScheduleItemDto> getMeetingSchedules(Long memberId) {
-        Member member = memberManageService.getMember(memberId);
-        return toGetMeetingScheduleItemDtos(scheduleManageService.getMeetingScheduleItems(member));
+    public List<MeetingScheduleResponse.GetMeetingScheduleItemDto> getMeetingSchedules(SecurityUserDetails member) {
+        return toGetMeetingScheduleItemDtos(scheduleManageService.getMeetingScheduleItems(member.getUserId()));
     }
 
-    public List<MeetingScheduleResponse.GetMonthlyMembersScheduleDto> getMonthlyMemberSchedules(List<Long> memberIds, int year, int month, Long memberId) {
+    public List<MeetingScheduleResponse.GetMonthlyMembersScheduleDto> getMonthlyMemberSchedules(List<Long> memberIds, int year, int month, SecurityUserDetails memberInfo) {
         validateYearMonth(year, month);
-        validateUniqueParticipantIds(memberId, memberIds);
+        validateUniqueParticipantIds(memberInfo.getUserId(), memberIds);
 
-        Member member = memberManageService.getMember(memberId);
-        List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyMembersSchedules(memberIds, getExtendedPeriod(year, month), member);
-        return toGetMonthlyParticipantScheduleDtos(participantsWithSchedule, memberIds, memberId);
+        List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyMembersSchedules(memberIds, getExtendedPeriod(year, month), memberInfo.getUserId());
+        return toGetMonthlyParticipantScheduleDtos(participantsWithSchedule, memberIds, memberInfo.getUserId());
     }
 
-    public List<MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto> getMonthlyMeetingParticipantSchedules(Long scheduleId, int year, int month, Long memberId) {
+    public List<MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto> getMonthlyMeetingParticipantSchedules(Long scheduleId, int year, int month, SecurityUserDetails memberInfo) {
         validateYearMonth(year, month);
 
-        Member member = memberManageService.getMember(memberId);
         Schedule schedule = scheduleManageService.getSchedule(scheduleId);
-        List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyMeetingParticipantSchedules(schedule, getExtendedPeriod(year, month), member);
+        List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyMeetingParticipantSchedules(schedule, getExtendedPeriod(year, month), memberInfo.getUserId());
         return toGetMonthlyMeetingParticipantScheduleDtos(participantsWithSchedule, schedule);
     }
 }

@@ -6,7 +6,6 @@ import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.repository.ParticipantRepository;
 import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
-import com.namo.spring.db.mysql.domains.user.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,8 +29,8 @@ public class ParticipantService {
     }
 
     @Transactional(readOnly = true)
-    public List<Participant> readScheduleParticipantItemsByScheduleIds(Member member) {
-        return participantRepository.findParticipantsByMemberAndScheduleType(member, ScheduleType.MEETING.getValue());
+    public List<Participant> readScheduleParticipantItemsByScheduleIds(Long memberId) {
+        return participantRepository.findParticipantsByMemberAndScheduleType(memberId, ScheduleType.MEETING.getValue());
     }
 
     @Transactional(readOnly = true)

@@ -3,7 +3,6 @@ package com.namo.spring.db.mysql.domains.schedule.repository;
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
-import com.namo.spring.db.mysql.domains.user.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -13,8 +12,8 @@ import java.util.Optional;
 
 public interface ParticipantRepository extends JpaRepository<Participant, Long> {
 
-    @Query("SELECT p FROM Participant p JOIN p.schedule s JOIN p.member m WHERE p.member = :member AND p.status = 'ACTIVE' AND s.scheduleType = :scheduleType")
-    List<Participant> findParticipantsByMemberAndScheduleType(Member member, int scheduleType);
+    @Query("SELECT p FROM Participant p JOIN p.schedule s JOIN p.member m WHERE p.member.id = :memberId AND p.status = 'ACTIVE' AND s.scheduleType = :scheduleType")
+    List<Participant> findParticipantsByMemberAndScheduleType(Long memberId, int scheduleType);
 
     @Query("SELECT p FROM Participant p JOIN FETCH p.schedule s WHERE s.id = :scheduleId AND p.member.id = :memberId")
     Optional<Participant> findParticipantByScheduleIdAndMemberId(Long scheduleId, Long memberId);

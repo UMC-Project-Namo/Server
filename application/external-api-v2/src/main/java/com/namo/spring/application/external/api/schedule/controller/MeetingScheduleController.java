@@ -32,16 +32,16 @@ public class MeetingScheduleController implements MeetingScheduleApi {
     public ResponseDto<Long> createMeetingSchedule(
             @Valid @RequestPart ScheduleRequest.PostMeetingScheduleDto dto,
             @RequestPart(required = false) MultipartFile image,
-            @AuthenticationPrincipal SecurityUserDetails member) {
-        return ResponseDto.onSuccess(meetingScheduleUsecase.createMeetingSchedule(dto, image, member.getUserId()));
+            @AuthenticationPrincipal SecurityUserDetails memberInfo) {
+        return ResponseDto.onSuccess(meetingScheduleUsecase.createMeetingSchedule(dto, image, memberInfo));
     }
 
     /**
      * 모임 일정 목록 조회 API
      */
     @GetMapping("")
-    public ResponseDto<List<MeetingScheduleResponse.GetMeetingScheduleItemDto>> findMyMeetingSchedules(@AuthenticationPrincipal SecurityUserDetails member) {
-        return ResponseDto.onSuccess(meetingScheduleUsecase.getMeetingSchedules(member.getUserId()));
+    public ResponseDto<List<MeetingScheduleResponse.GetMeetingScheduleItemDto>> findMyMeetingSchedules(@AuthenticationPrincipal SecurityUserDetails memberInfo) {
+        return ResponseDto.onSuccess(meetingScheduleUsecase.getMeetingSchedules(memberInfo));
     }
 
     /**
@@ -52,8 +52,8 @@ public class MeetingScheduleController implements MeetingScheduleApi {
             @RequestParam Integer year,
             @RequestParam Integer month,
             @RequestParam List<Long> participantIds,
-            @AuthenticationPrincipal SecurityUserDetails member) {
-        return ResponseDto.onSuccess(meetingScheduleUsecase.getMonthlyMemberSchedules(participantIds, year, month, member.getUserId()));
+            @AuthenticationPrincipal SecurityUserDetails memberInfo) {
+        return ResponseDto.onSuccess(meetingScheduleUsecase.getMonthlyMemberSchedules(participantIds, year, month, memberInfo));
     }
 
     /**
@@ -64,8 +64,8 @@ public class MeetingScheduleController implements MeetingScheduleApi {
             @PathVariable Long meetingScheduleId,
             @RequestParam Integer year,
             @RequestParam Integer month,
-            @AuthenticationPrincipal SecurityUserDetails member) {
-        return ResponseDto.onSuccess(meetingScheduleUsecase.getMonthlyMeetingParticipantSchedules(meetingScheduleId, year, month, member.getUserId()));
+            @AuthenticationPrincipal SecurityUserDetails memberInfo) {
+        return ResponseDto.onSuccess(meetingScheduleUsecase.getMonthlyMeetingParticipantSchedules(meetingScheduleId, year, month, memberInfo));
     }
 
 }

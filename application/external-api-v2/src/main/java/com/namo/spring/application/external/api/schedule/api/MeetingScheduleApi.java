@@ -222,6 +222,7 @@ public interface MeetingScheduleApi {
                         "color": 6
                       },
                     ],
+                    "isCurMeetingSchedule": true,
                     "longitude": 0,
                     "latitude": 0,
                     "locationName": "스타벅스 강남역점",

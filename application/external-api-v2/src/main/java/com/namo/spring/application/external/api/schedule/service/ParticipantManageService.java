@@ -28,8 +28,8 @@ public class ParticipantManageService {
     private final FriendshipService friendshipService;
     private final ParticipantService participantService;
 
-    public Participant getParticipantWithSchedule(Schedule schedule, Member member) {
-        return participantService.readParticipantByScheduleIdAndMemberId(schedule.getId(), member.getId()).orElseThrow(
+    public Participant getParticipantWithSchedule(Schedule schedule, Long memberId) {
+        return participantService.readParticipantByScheduleIdAndMemberId(schedule.getId(), memberId).orElseThrow(
                 () -> new ScheduleException(ErrorStatus.NOT_SCHEDULE_PARTICIPANT));
     }
 
@@ -43,8 +43,8 @@ public class ParticipantManageService {
         participants.forEach(participant -> participantMaker.makeMeetingScheduleParticipant(schedule, participant));
     }
 
-    public List<Member> getFriendshipValidatedParticipants(Member owner, List<Long> memberIds) {
-        List<Member> friends = friendshipService.readFriendshipsByMemberIdAndFriendIds(owner.getId(), memberIds).stream()
+    public List<Member> getFriendshipValidatedParticipants(Long ownerId, List<Long> memberIds) {
+        List<Member> friends = friendshipService.readFriendshipsByMemberIdAndFriendIds(ownerId, memberIds).stream()
                 .map(Friendship::getFriend)
                 .collect(Collectors.toList());
         if (memberIds.size() != friends.size()) {
@@ -53,8 +53,8 @@ public class ParticipantManageService {
         return friends;
     }
 
-    public List<Participant> getMeetingScheduleParticipants(Schedule schedule, ParticipantStatus status) {
-        List<Participant> participants = participantService.readParticipantsByScheduleIdAndScheduleType(schedule.getId(), ScheduleType.MEETING, status);
+    public List<Participant> getMeetingScheduleParticipants(Long scheduleId, ParticipantStatus status) {
+        List<Participant> participants = participantService.readParticipantsByScheduleIdAndScheduleType(scheduleId, ScheduleType.MEETING, status);
         if (participants.isEmpty()) {
             throw new ScheduleException(ErrorStatus.SCHEDULE_PARTICIPANT_IS_EMPTY_ERROR);
         } else return participants;

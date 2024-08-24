@@ -46,31 +46,31 @@ public class ScheduleManageService {
 
     public Schedule createMeetingSchedule(ScheduleRequest.PostMeetingScheduleDto dto, Member owner, MultipartFile image) {
         validateParticipantCount(dto.getParticipants().size());
-        List<Member> participants = participantManageService.getFriendshipValidatedParticipants(owner, dto.getParticipants());
+        List<Member> participants = participantManageService.getFriendshipValidatedParticipants(owner.getId(), dto.getParticipants());
         Period period = getValidatedPeriod(dto.getPeriod().getStartDate(), dto.getPeriod().getEndDate());
         Schedule schedule = scheduleMaker.createMeetingSchedule(dto, period, image);
         participantManageService.createMeetingScheduleParticipants(owner, schedule, participants);
         return schedule;
     }
 
-    public List<Schedule> getMeetingScheduleItems(Member member) {
-        List<Long> scheduleIds = participantService.readScheduleParticipantItemsByScheduleIds(member).stream()
+    public List<Schedule> getMeetingScheduleItems(Long memberId) {
+        List<Long> scheduleIds = participantService.readScheduleParticipantItemsByScheduleIds(memberId).stream()
                 .map(Participant::getSchedule)
                 .map(Schedule::getId)
                 .collect(Collectors.toList());
         return scheduleService.readSchedulesById(scheduleIds);
     }
 
-    public List<ScheduleParticipantQuery> getMonthlyMembersSchedules(List<Long> memberIds, Period period, Member member) {
+    public List<ScheduleParticipantQuery> getMonthlyMembersSchedules(List<Long> memberIds, Period period, Long memberId) {
         validateParticipantCount(memberIds.size());
-        List<Long> members = participantManageService.getFriendshipValidatedParticipants(member, memberIds).stream().map(Member::getId).collect(Collectors.toList());
-        members.add(member.getId());
+        List<Long> members = participantManageService.getFriendshipValidatedParticipants(memberId, memberIds).stream().map(Member::getId).collect(Collectors.toList());
+        members.add(memberId);
         return participantService.readParticipantsWithScheduleAndMember(members, period.getStartDate(), period.getEndDate());
     }
 
-    public List<ScheduleParticipantQuery> getMonthlyMeetingParticipantSchedules(Schedule schedule, Period period, Member member) {
-        participantManageService.getParticipantWithSchedule(schedule, member);
-        List<Participant> participants = participantManageService.getMeetingScheduleParticipants(schedule, ParticipantStatus.ACTIVE);
+    public List<ScheduleParticipantQuery> getMonthlyMeetingParticipantSchedules(Schedule schedule, Period period, Long memberId) {
+        participantManageService.getParticipantWithSchedule(schedule, memberId);
+        List<Participant> participants = participantManageService.getMeetingScheduleParticipants(schedule.getId(), ParticipantStatus.ACTIVE);
         List<Long> members = participants.stream().map(Participant::getMember).filter(Objects::nonNull).map(User::getId).collect(Collectors.toList());
         List<Long> anonymous = participants.stream().map(Participant::getAnonymous).filter(Objects::nonNull).map(User::getId).collect(Collectors.toList());
 
