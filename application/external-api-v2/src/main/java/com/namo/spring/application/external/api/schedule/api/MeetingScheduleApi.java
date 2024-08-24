@@ -127,7 +127,7 @@ public interface MeetingScheduleApi {
                   {
                     "scheduleId": 1,
                     "name": "나모 정기 회의",
-                    "startDate": 자,
+                    "startDate": 1722124800,
                     "endDate": 1722124800,
                     "interval": 3,
                     "participants": [
@@ -208,15 +208,19 @@ public interface MeetingScheduleApi {
                     "interval": null,
                     "participants": [
                       {
+                        "participantId": 2,
                         "memberId": 1,
+                        "anonymousId": null,
                         "nickname": "다나",
                         "color": 5
                       },
                       {
+                        "participantId": 3,
                         "memberId": 2,
-                        "nickname": "테스트",
+                        "anonymousId": null,
+                        "nickname": "몽이",
                         "color": 6
-                      }
+                      },
                     ],
                     "longitude": 0,
                     "latitude": 0,
