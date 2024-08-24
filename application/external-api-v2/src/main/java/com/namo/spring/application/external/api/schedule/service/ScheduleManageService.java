@@ -68,18 +68,14 @@ public class ScheduleManageService {
         return participantService.readParticipantsWithScheduleAndMember(members, period.getStartDate(), period.getEndDate());
     }
 
-    public List<ScheduleParticipantQuery> getMonthlyMeetingParticipantSchedules(Schedule schedule, Period period) {
-        List<ScheduleParticipantQuery> results;
-        List<Long> members;
-        List<Long> anonymous;
-        List<Participant> activeParticipants = participantManageService.getMeetingScheduleParticipants(schedule.getId(), ParticipantStatus.ACTIVE);
+    public List<ScheduleParticipantQuery> getMonthlyMeetingParticipantSchedules(Schedule schedule, Period period, Member member) {
+        participantManageService.getParticipantWithSchedule(schedule, member);
+        List<Participant> participants = participantManageService.getMeetingScheduleParticipants(schedule, ParticipantStatus.ACTIVE);
+        List<Long> members = participants.stream().map(Participant::getMember).filter(Objects::nonNull).map(User::getId).collect(Collectors.toList());
+        List<Long> anonymous = participants.stream().map(Participant::getAnonymous).filter(Objects::nonNull).map(User::getId).collect(Collectors.toList());
 
-        members = activeParticipants.stream().map(Participant::getMember).filter(Objects::nonNull).map(User::getId).collect(Collectors.toList());
-        anonymous = activeParticipants.stream().map(Participant::getAnonymous).filter(Objects::nonNull).map(User::getId).collect(Collectors.toList());
-
-        results = participantService.readParticipantsWithScheduleAndMember(members, period.getStartDate(), period.getEndDate());
-        results.addAll(participantService.readParticipantsWithScheduleAndAnonymous(anonymous, period.getStartDate(), period.getEndDate()));
-
-        return results;
+        List<ScheduleParticipantQuery> participantWithSchedule = participantService.readParticipantsWithScheduleAndMember(members, period.getStartDate(), period.getEndDate());
+        participantWithSchedule.addAll(participantService.readParticipantsWithScheduleAndAnonymous(anonymous, period.getStartDate(), period.getEndDate()));
+        return participantWithSchedule;
     }
 }

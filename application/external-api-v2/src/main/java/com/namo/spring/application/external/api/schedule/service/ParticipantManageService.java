@@ -28,6 +28,11 @@ public class ParticipantManageService {
     private final FriendshipService friendshipService;
     private final ParticipantService participantService;
 
+    public Participant getParticipantWithSchedule(Schedule schedule, Member member) {
+        return participantService.readParticipantByScheduleIdAndMemberId(schedule.getId(), member.getId()).orElseThrow(
+                () -> new ScheduleException(ErrorStatus.NOT_SCHEDULE_PARTICIPANT));
+    }
+
     public void createPersonalScheduleParticipant(Member member, Schedule schedule, Long categoryId) {
         participantMaker.makeScheduleOwner(schedule, member, categoryId, null);
     }
@@ -48,10 +53,10 @@ public class ParticipantManageService {
         return friends;
     }
 
-    public List<Participant> getMeetingScheduleParticipants(Long scheduleId, ParticipantStatus status) {
-        List<Participant> participants = participantService.readParticipantsByScheduleIdAndScheduleType(scheduleId, ScheduleType.MEETING, status);
-        if (participants == null) {
-            throw new ScheduleException(ErrorStatus.NOT_FOUND_SCHEDULE_OR_PARTICIPANT_FAILURE);
+    public List<Participant> getMeetingScheduleParticipants(Schedule schedule, ParticipantStatus status) {
+        List<Participant> participants = participantService.readParticipantsByScheduleIdAndScheduleType(schedule.getId(), ScheduleType.MEETING, status);
+        if (participants.isEmpty()) {
+            throw new ScheduleException(ErrorStatus.SCHEDULE_PARTICIPANT_IS_EMPTY_ERROR);
         } else return participants;
     }
 
