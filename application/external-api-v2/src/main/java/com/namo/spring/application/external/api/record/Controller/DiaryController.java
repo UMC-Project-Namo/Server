@@ -1,6 +1,7 @@
 package com.namo.spring.application.external.api.record.Controller;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.namo.spring.application.external.api.record.dto.DiaryRequest;
+import com.namo.spring.application.external.api.record.dto.DiaryResponse;
 import com.namo.spring.application.external.api.record.usecase.DiaryUseCase;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
@@ -52,4 +54,11 @@ public class DiaryController {
 		return ResponseDto.onSuccess("기록 수정 성공");
 	}
 
+	@GetMapping("/{scheduleId}")
+	public ResponseDto<DiaryResponse.DiaryDto> getDiary(
+		@AuthenticationPrincipal SecurityUserDetails memberInfo,
+		@PathVariable Long scheduleId
+	) {
+		return ResponseDto.onSuccess(null);
+	}
 }
