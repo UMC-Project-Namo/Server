@@ -15,7 +15,6 @@ import com.namo.spring.db.mysql.domains.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import static com.namo.spring.application.external.api.schedule.converter.ParticipantConverter.toParticipant;
 
@@ -27,7 +26,6 @@ public class ParticipantMaker {
     private final CategoryService categoryService;
     private final ParticipantService participantService;
 
-    @Transactional
     public void makeScheduleOwner(Schedule schedule, Member member, Long categoryId, Long paletteId) {
         Category category;
         if (categoryId != null) {
@@ -38,7 +36,6 @@ public class ParticipantMaker {
         participantService.createParticipant(participant);
     }
 
-    @Transactional
     public void makeMeetingScheduleParticipant(Schedule schedule, User user) {
         Participant participant = null;
         if (user instanceof Member) {
