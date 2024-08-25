@@ -41,6 +41,7 @@ public class MeetingScheduleUsecase {
         return toGetMeetingScheduleItemDtos(scheduleManageService.getMeetingScheduleItems(member.getUserId()));
     }
 
+    @Transactional(readOnly = true)
     public List<MeetingScheduleResponse.GetMonthlyMembersScheduleDto> getMonthlyMemberSchedules(List<Long> memberIds, int year, int month, SecurityUserDetails memberInfo) {
         validateYearMonth(year, month);
         validateUniqueParticipantIds(memberInfo.getUserId(), memberIds);
@@ -49,6 +50,7 @@ public class MeetingScheduleUsecase {
         return toGetMonthlyParticipantScheduleDtos(participantsWithSchedule, memberIds, memberInfo.getUserId());
     }
 
+    @Transactional(readOnly = true)
     public List<MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto> getMonthlyMeetingParticipantSchedules(Long scheduleId, int year, int month, SecurityUserDetails memberInfo) {
         validateYearMonth(year, month);
 
