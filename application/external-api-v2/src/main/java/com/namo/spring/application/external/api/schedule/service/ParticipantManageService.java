@@ -28,11 +28,6 @@ public class ParticipantManageService {
     private final FriendshipService friendshipService;
     private final ParticipantService participantService;
 
-    public Participant getParticipantWithSchedule(Schedule schedule, Long memberId) {
-        return participantService.readParticipantByScheduleIdAndMemberId(schedule.getId(), memberId).orElseThrow(
-                () -> new ScheduleException(ErrorStatus.NOT_SCHEDULE_PARTICIPANT));
-    }
-
     public void createPersonalScheduleParticipant(Member member, Schedule schedule, Long categoryId) {
         participantMaker.makeScheduleOwner(schedule, member, categoryId, null);
     }

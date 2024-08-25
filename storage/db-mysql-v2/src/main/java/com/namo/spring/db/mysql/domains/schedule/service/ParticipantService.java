@@ -34,8 +34,8 @@ public class ParticipantService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Participant> readParticipantByScheduleIdAndMemberId(Long scheduleId, Long memberId) {
-        return participantRepository.findParticipantByScheduleIdAndMemberId(scheduleId, memberId);
+    public boolean existsByScheduleIdAndMemberId(Long scheduleId, Long memberId) {
+        return participantRepository.existsByScheduleIdAndMemberId(scheduleId, memberId);
     }
 
     @Transactional(readOnly = true)

@@ -69,7 +69,7 @@ public class ScheduleManageService {
     }
 
     public List<ScheduleParticipantQuery> getMonthlyMeetingParticipantSchedules(Schedule schedule, Period period, Long memberId) {
-        participantManageService.getParticipantWithSchedule(schedule, memberId);
+        checkParticipantExists(schedule, memberId);
         List<Participant> participants = participantManageService.getMeetingScheduleParticipants(schedule.getId(), ParticipantStatus.ACTIVE);
         List<Long> members = participants.stream().map(Participant::getMember).filter(Objects::nonNull).map(User::getId).collect(Collectors.toList());
         List<Long> anonymous = participants.stream().map(Participant::getAnonymous).filter(Objects::nonNull).map(User::getId).collect(Collectors.toList());
@@ -77,5 +77,11 @@ public class ScheduleManageService {
         List<ScheduleParticipantQuery> participantWithSchedule = participantService.readParticipantsWithScheduleAndMember(members, period.getStartDate(), period.getEndDate());
         participantWithSchedule.addAll(participantService.readParticipantsWithScheduleAndAnonymous(anonymous, period.getStartDate(), period.getEndDate()));
         return participantWithSchedule;
+    }
+
+    private void checkParticipantExists(Schedule schedule, Long memberId) {
+        if (!participantService.existsByScheduleIdAndMemberId(schedule.getId(), memberId)) {
+            throw new ScheduleException(ErrorStatus.NOT_SCHEDULE_PARTICIPANT);
+        }
     }
 }

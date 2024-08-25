@@ -8,15 +8,13 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 public interface ParticipantRepository extends JpaRepository<Participant, Long> {
 
     @Query("SELECT p FROM Participant p JOIN p.schedule s JOIN p.member m WHERE p.member.id = :memberId AND p.status = 'ACTIVE' AND s.scheduleType = :scheduleType")
     List<Participant> findParticipantsByMemberAndScheduleType(Long memberId, int scheduleType);
 
-    @Query("SELECT p FROM Participant p JOIN FETCH p.schedule s WHERE s.id = :scheduleId AND p.member.id = :memberId")
-    Optional<Participant> findParticipantByScheduleIdAndMemberId(Long scheduleId, Long memberId);
+    boolean existsByScheduleIdAndMemberId(Long scheduleId, Long memberId);
 
     @Query("SELECT CASE " +
             "WHEN p.member IS NOT NULL THEN p.member.nickname " +
