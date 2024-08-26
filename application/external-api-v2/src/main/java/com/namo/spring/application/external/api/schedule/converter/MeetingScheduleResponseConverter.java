@@ -67,7 +67,7 @@ public class MeetingScheduleResponseConverter {
 
     private static MeetingScheduleResponse.MemberParticipantDto toMemberParticipantDto(ScheduleParticipantQuery participant, Map<Long, Long> participantAndPalette) {
         return MeetingScheduleResponse.MemberParticipantDto.builder()
-                .memberId(participant.getMemberId())
+                .userId(participant.getMemberId())
                 .nickname(participant.getNickname())
                 .color(participantAndPalette.get(participant.getMemberId()))
                 .build();
@@ -102,13 +102,22 @@ public class MeetingScheduleResponseConverter {
     }
 
     private static MeetingScheduleResponse.UserParticipantDto toUserParticipantDto(ScheduleParticipantQuery participant) {
+        Long userId = null;
+        Boolean isGuest = null;
+        if (participant.getMemberId() != null) {
+            userId = participant.getMemberId();
+            isGuest = false;
+        } else if (participant.getAnonymousId() != null) {
+            userId = participant.getAnonymousId();
+            isGuest = true;
+        }
+
         return MeetingScheduleResponse.UserParticipantDto.builder()
                 .participantId(participant.getParticipantId())
-                .memberId(participant.getMemberId())
-                .anonymousId(participant.getAnonymousId())
+                .userId(userId)
+                .isGuest(isGuest)
                 .nickname(participant.getNickname())
                 .color(participant.getParticipantPaletteId())
                 .build();
     }
-
 }

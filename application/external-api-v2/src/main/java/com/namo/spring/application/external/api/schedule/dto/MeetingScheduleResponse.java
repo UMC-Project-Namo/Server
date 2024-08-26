@@ -77,7 +77,7 @@ public class MeetingScheduleResponse {
     @Schema(title = "모임 일정 조회 - 일정의 참여자 목록")
     public static class MemberParticipantDto {
         @Schema(description = "참여자 ID")
-        private Long memberId;
+        private Long userId;
         @Schema(description = "닉네임")
         private String nickname;
         @Schema(description = "색상")
@@ -92,9 +92,9 @@ public class MeetingScheduleResponse {
         @Schema(description = "참여자 ID")
         private Long participantId;
         @Schema(description = "유저 ID")
-        private Long memberId;
-        @Schema(description = "게스트 ID")
-        private Long anonymousId;
+        private Long userId;
+        @Schema(description = "게스트 여부")
+        private Boolean isGuest;
         @Schema(description = "닉네임")
         private String nickname;
         @Schema(description = "색상")
