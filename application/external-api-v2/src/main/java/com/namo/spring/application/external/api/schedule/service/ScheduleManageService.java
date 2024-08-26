@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.namo.spring.application.external.global.utils.MeetingParticipantValidationUtils.validateParticipantCount;
@@ -71,8 +70,8 @@ public class ScheduleManageService {
     public List<ScheduleParticipantQuery> getMonthlyMeetingParticipantSchedules(Schedule schedule, Period period, Long memberId) {
         checkParticipantExists(schedule, memberId);
         List<Participant> participants = participantManageService.getMeetingScheduleParticipants(schedule.getId(), ParticipantStatus.ACTIVE);
-        List<Long> members = participants.stream().map(Participant::getMember).filter(Objects::nonNull).map(User::getId).collect(Collectors.toList());
-        List<Long> anonymous = participants.stream().map(Participant::getAnonymous).filter(Objects::nonNull).map(User::getId).collect(Collectors.toList());
+        List<Long> members = participants.stream().map(Participant::getUser).map(User::getId).collect(Collectors.toList());
+        List<Long> anonymous = participants.stream().map(Participant::getUser).map(User::getId).collect(Collectors.toList());
 
         List<ScheduleParticipantQuery> participantWithSchedule = participantService.readParticipantsWithScheduleAndMember(members, period.getStartDate(), period.getEndDate());
         participantWithSchedule.addAll(participantService.readParticipantsWithScheduleAndAnonymous(anonymous, period.getStartDate(), period.getEndDate()));
