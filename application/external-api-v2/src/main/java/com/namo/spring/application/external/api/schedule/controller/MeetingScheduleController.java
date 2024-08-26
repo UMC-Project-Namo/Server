@@ -40,7 +40,7 @@ public class MeetingScheduleController implements MeetingScheduleApi {
      * 모임 일정 목록 조회 API
      */
     @GetMapping("")
-    public ResponseDto<List<MeetingScheduleResponse.GetMeetingScheduleItemDto>> findMyMeetingSchedules(@AuthenticationPrincipal SecurityUserDetails memberInfo) {
+    public ResponseDto<List<MeetingScheduleResponse.GetMeetingScheduleItemDto>> getMyMeetingSchedules(@AuthenticationPrincipal SecurityUserDetails memberInfo) {
         return ResponseDto.onSuccess(meetingScheduleUsecase.getMeetingSchedules(memberInfo));
     }
 
@@ -48,7 +48,7 @@ public class MeetingScheduleController implements MeetingScheduleApi {
      * 모임 생성 전/ 초대자 월간 일정 조회 API
      */
     @GetMapping(path = "/preview")
-    public ResponseDto<List<MeetingScheduleResponse.GetMonthlyMembersScheduleDto>> findMonthlyParticipantSchedules(
+    public ResponseDto<List<MeetingScheduleResponse.GetMonthlyMembersScheduleDto>> getMonthlyParticipantSchedules(
             @RequestParam Integer year,
             @RequestParam Integer month,
             @RequestParam List<Long> participantIds,
@@ -59,8 +59,8 @@ public class MeetingScheduleController implements MeetingScheduleApi {
     /**
      * 모임 생성 후/ 참여자 월간 일정 조회 API
      */
-    @GetMapping(path = "/{meetingScheduleId}")
-    public ResponseDto<List<MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto>> findMonthlyMeetingParticipantSchedules(
+    @GetMapping(path = "/{meetingScheduleId}/calender")
+    public ResponseDto<List<MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto>> getMonthlyMeetingParticipantSchedules(
             @PathVariable Long meetingScheduleId,
             @RequestParam Integer year,
             @RequestParam Integer month,

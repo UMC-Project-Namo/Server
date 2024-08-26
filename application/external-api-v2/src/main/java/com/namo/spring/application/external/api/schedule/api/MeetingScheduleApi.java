@@ -114,7 +114,7 @@ public interface MeetingScheduleApi {
             }
             """)
     }))
-    ResponseDto<List<MeetingScheduleResponse.GetMeetingScheduleItemDto>> findMyMeetingSchedules(@AuthenticationPrincipal SecurityUserDetails member);
+    ResponseDto<List<MeetingScheduleResponse.GetMeetingScheduleItemDto>> getMyMeetingSchedules(@AuthenticationPrincipal SecurityUserDetails member);
 
     @Operation(summary = "모임 초대자 월간 일정 조회", description = "모임에 초대할 유저들의 월간 일정을 조회합니다.")
     @ApiErrorCodes(value = {ErrorStatus.EMPTY_ACCESS_KEY, ErrorStatus.EXPIRATION_ACCESS_TOKEN, ErrorStatus.EXPIRATION_REFRESH_TOKEN, ErrorStatus.INTERNET_SERVER_ERROR})
@@ -186,7 +186,7 @@ public interface MeetingScheduleApi {
                     }
                     """)
     }))
-    ResponseDto<List<MeetingScheduleResponse.GetMonthlyMembersScheduleDto>> findMonthlyParticipantSchedules(
+    ResponseDto<List<MeetingScheduleResponse.GetMonthlyMembersScheduleDto>> getMonthlyParticipantSchedules(
             @Parameter(description = "연도") @RequestParam Integer year,
             @Parameter(description = "월") @RequestParam Integer month,
             @Parameter(description = "초대자 ID 목록") @RequestParam List<Long> participantIds,
@@ -260,7 +260,7 @@ public interface MeetingScheduleApi {
                     }
                     """)
     }))
-    ResponseDto<List<MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto>> findMonthlyMeetingParticipantSchedules(
+    ResponseDto<List<MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto>> getMonthlyMeetingParticipantSchedules(
             @Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
             @Parameter(description = "연도") @RequestParam Integer year,
             @Parameter(description = "월") @RequestParam Integer month,
