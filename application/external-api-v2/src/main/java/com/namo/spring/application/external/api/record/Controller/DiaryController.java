@@ -54,11 +54,17 @@ public class DiaryController {
 		return ResponseDto.onSuccess("기록 수정 성공");
 	}
 
+	@Operation(summary = "기록 조회", description = "기록(일기) 단일 상세 조회 API 입니다. 개인, 단체 일정 모두 공통으로 사용합니다.")
+	@ApiErrorCodes(value = {
+		ErrorStatus.NOT_FOUND_PARTICIPANT_FAILURE,
+		ErrorStatus.NOT_WRITTEN_DIARY_FAILURE,
+	})
 	@GetMapping("/{scheduleId}")
 	public ResponseDto<DiaryResponse.DiaryDto> getDiary(
 		@AuthenticationPrincipal SecurityUserDetails memberInfo,
 		@PathVariable Long scheduleId
 	) {
-		return ResponseDto.onSuccess(null);
+		return ResponseDto.onSuccess(diaryUseCase
+			.getScheduleDiary(scheduleId, memberInfo));
 	}
 }
