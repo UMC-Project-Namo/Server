@@ -48,14 +48,6 @@ public class MeetingScheduleResponse {
         private Long interval;
         @Schema(description = "일정 참여자 목록")
         private List<MemberParticipantDto> participants;
-        @Schema(description = "장소 위치 경도")
-        private Double longitude;
-        @Schema(description = "장소 위치 위도")
-        private Double latitude;
-        @Schema(description = "장소 이름", name = "스타벅스 강남역점")
-        private String locationName;
-        @Schema(description = "장소 카카오 맵 ID")
-        private String kakaoLocationId;
     }
 
     @AllArgsConstructor
@@ -77,14 +69,6 @@ public class MeetingScheduleResponse {
         private List<UserParticipantDto> participants;
         @Schema(description = "현재 조회하는 모임 일정인지의 여부")
         private Boolean isCurMeetingSchedule = false;
-        @Schema(description = "장소 위치 경도")
-        private Double longitude;
-        @Schema(description = "장소 위치 위도")
-        private Double latitude;
-        @Schema(description = "장소 이름", name = "스타벅스 강남역점")
-        private String locationName;
-        @Schema(description = "장소 카카오 맵 ID")
-        private String kakaoLocationId;
     }
 
     @AllArgsConstructor

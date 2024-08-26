@@ -141,11 +141,7 @@ public interface MeetingScheduleApi {
                         "nickname": "테스트",
                         "color": 6
                       }
-                    ],
-                    "longitude": 0,
-                    "latitude": 0,
-                    "locationName": "스타벅스 강남역점",
-                    "kakaoLocationId": "string"
+                    ]
                   }
                 ]
               }
@@ -222,11 +218,7 @@ public interface MeetingScheduleApi {
                         "color": 6
                       },
                     ],
-                    "isCurMeetingSchedule": true,
-                    "longitude": 0,
-                    "latitude": 0,
-                    "locationName": "스타벅스 강남역점",
-                    "kakaoLocationId": "string"
+                    "isCurMeetingSchedule": true
                   }
                 ]
               }

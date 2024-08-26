@@ -56,10 +56,6 @@ public class MeetingScheduleResponseConverter {
                 .endDate(DateUtil.toSeconds(schedule.getPeriod().getEndDate()))
                 .interval(schedule.getPeriod().getDayInterval())
                 .participants(toMemberParticipantDtos(participant, participantAndPalette))
-                .latitude(schedule.getLocation().getLatitude())
-                .longitude(schedule.getLocation().getLongitude())
-                .locationName(schedule.getLocation().getName())
-                .kakaoLocationId(schedule.getLocation().getKakaoLocationId())
                 .build();
     }
 
@@ -96,10 +92,6 @@ public class MeetingScheduleResponseConverter {
                 .interval(schedule.getPeriod().getDayInterval())
                 .participants(toUserParticipantDtos(participant))
                 .isCurMeetingSchedule(schedule.getId().equals(curSchedule.getId()))
-                .latitude(schedule.getLocation().getLatitude())
-                .longitude(schedule.getLocation().getLongitude())
-                .locationName(schedule.getLocation().getName())
-                .kakaoLocationId(schedule.getLocation().getKakaoLocationId())
                 .build();
     }
 
