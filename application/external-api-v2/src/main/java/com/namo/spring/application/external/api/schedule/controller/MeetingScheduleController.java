@@ -28,21 +28,44 @@ public class MeetingScheduleController implements MeetingScheduleApi {
     /**
      * 모임 일정 생성 API
      */
-    @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDto<Long> createMeetingSchedule(
             @Valid @RequestPart ScheduleRequest.PostMeetingScheduleDto dto,
             @RequestPart(required = false) MultipartFile image,
-            @AuthenticationPrincipal SecurityUserDetails member) {
-        return ResponseDto.onSuccess(meetingScheduleUsecase.createMeetingSchedule(dto, image, member.getUserId()));
+            @AuthenticationPrincipal SecurityUserDetails memberInfo) {
+        return ResponseDto.onSuccess(meetingScheduleUsecase.createMeetingSchedule(dto, image, memberInfo));
     }
 
     /**
      * 모임 일정 목록 조회 API
      */
     @GetMapping("")
-    public ResponseDto<List<MeetingScheduleResponse.GetMeetingScheduleItemDto>> findMyMeetingSchedules(@AuthenticationPrincipal SecurityUserDetails member) {
-        return ResponseDto.onSuccess(meetingScheduleUsecase.getMeetingSchedules(member.getUserId()));
+    public ResponseDto<List<MeetingScheduleResponse.GetMeetingScheduleItemDto>> getMyMeetingSchedules(@AuthenticationPrincipal SecurityUserDetails memberInfo) {
+        return ResponseDto.onSuccess(meetingScheduleUsecase.getMeetingSchedules(memberInfo));
     }
 
+    /**
+     * 모임 생성 전/ 초대자 월간 일정 조회 API
+     */
+    @GetMapping(path = "/preview")
+    public ResponseDto<List<MeetingScheduleResponse.GetMonthlyMembersScheduleDto>> getMonthlyParticipantSchedules(
+            @RequestParam Integer year,
+            @RequestParam Integer month,
+            @RequestParam List<Long> participantIds,
+            @AuthenticationPrincipal SecurityUserDetails memberInfo) {
+        return ResponseDto.onSuccess(meetingScheduleUsecase.getMonthlyMemberSchedules(participantIds, year, month, memberInfo));
+    }
+
+    /**
+     * 모임 생성 후/ 참여자 월간 일정 조회 API
+     */
+    @GetMapping(path = "/{meetingScheduleId}/calender")
+    public ResponseDto<List<MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto>> getMonthlyMeetingParticipantSchedules(
+            @PathVariable Long meetingScheduleId,
+            @RequestParam Integer year,
+            @RequestParam Integer month,
+            @AuthenticationPrincipal SecurityUserDetails memberInfo) {
+        return ResponseDto.onSuccess(meetingScheduleUsecase.getMonthlyMeetingParticipantSchedules(meetingScheduleId, year, month, memberInfo));
+    }
 
 }

@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
     @Query("SELECT DISTINCT f FROM Friendship f JOIN FETCH f.friend WHERE f.member.id = :memberId AND f.status = 'ACCEPTED' AND f.friend.id in :members AND f.member.status = '2'")
-    List<Friendship> findAcceptedFriendshipsByMemberAndFriendIds(Long memberId, List<Long> members);
+    List<Friendship> findAcceptedFriendshipsByMembeIdAndFriendIds(Long memberId, List<Long> members);
 }

@@ -10,7 +10,6 @@ import com.namo.spring.db.mysql.domains.schedule.type.Period;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import static com.namo.spring.application.external.api.schedule.converter.ScheduleConverter.toSchedule;
@@ -25,13 +24,11 @@ public class ScheduleMaker {
     private final ImageUrlProperties imageUrlProperties;
     private final FileUtils fileUtils;
 
-    @Transactional
     public Schedule createPersonalSchedule(ScheduleRequest.PostPersonalScheduleDto dto, Period period) {
         Schedule schedule = toSchedule(dto.getTitle(), period, dto.getLocation(), PERSONAL_SCHEDULE_TYPE, null, null, null);
         return scheduleService.createSchedule(schedule);
     }
 
-    @Transactional
     public Schedule createMeetingSchedule(ScheduleRequest.PostMeetingScheduleDto dto, Period period, MultipartFile image) {
         String url = imageUrlProperties.getMeeting();
         if (image != null && !image.isEmpty()) {

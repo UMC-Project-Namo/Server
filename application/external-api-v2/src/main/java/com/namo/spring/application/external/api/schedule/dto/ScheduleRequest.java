@@ -57,9 +57,6 @@ public class ScheduleRequest {
         @NotNull(message = "일정 종료일은 필수입니다.")
         @Schema(description = "일정 종료일, unix 타임스탬프 형식")
         private Long endDate;
-        @NotNull(message = "interval은 필수입니다.")
-        @Schema(description = "시작일과 종료일 차이")
-        private Integer interval;
     }
 
     @NoArgsConstructor

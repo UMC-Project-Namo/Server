@@ -84,4 +84,14 @@ public class Participant extends BaseTimeEntity {
                 .palette(palette)
                 .build();
     }
+
+    public User getUser() {
+        if (this.member != null) {
+            return this.member;
+        } else if (this.anonymous != null) {
+            return this.anonymous;
+        }
+        return null;
+    }
+
 }

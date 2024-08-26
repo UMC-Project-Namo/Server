@@ -88,6 +88,7 @@ public enum ErrorStatus implements BaseErrorCode {
     INVALID_ALARM(HttpStatus.NOT_FOUND, "알림 시간이 유효하지 않습니다."),
     INVALID_MEETING_PARTICIPANT_COUNT(HttpStatus.NOT_FOUND, "모임 일정은 최소 1명, 최대 9명까지 초대 가능합니다."),
     DUPLICATE_MEETING_PARTICIPANT(HttpStatus.NOT_FOUND, "중복되는 참여자입니다."),
+    SCHEDULE_PARTICIPANT_IS_EMPTY_ERROR(HttpStatus.NOT_FOUND, "모임 일정의 참여자가 없습니다."),
 
 
     /**
@@ -105,6 +106,7 @@ public enum ErrorStatus implements BaseErrorCode {
     NOT_USERS_IN_GROUP(HttpStatus.NOT_FOUND, "유저가 그룹에 포함되어 있지 않습니다."),
     NOT_IMAGE_IN_DIARY(HttpStatus.NOT_FOUND, "이미지가 다이어리에 포함되어 있지 않습니다."),
     NOT_SCHEDULE_OWNER(HttpStatus.FORBIDDEN, "해당 일정의 생성자가 아닙니다."),
+    NOT_SCHEDULE_PARTICIPANT(HttpStatus.FORBIDDEN, "해당 일정의 참여자가 아닙니다."),
 
     /**
      * 404 : 인프라 에러

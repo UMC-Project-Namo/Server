@@ -2,6 +2,8 @@ package com.namo.spring.db.mysql.domains.category.type;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+
 @RequiredArgsConstructor
 public enum PaletteEnum {
     BASIC(ColorCategory.BASIC,
@@ -32,5 +34,11 @@ public enum PaletteEnum {
 
     public static ColorChip[] getPaletteColors() {
         return PALETTE.containColors;
+    }
+
+    public static long[] getPaletteColorIds() {
+        return Arrays.stream(PALETTE.containColors)
+                .mapToLong(colorChip -> colorChip.getId())
+                .toArray();
     }
 }
