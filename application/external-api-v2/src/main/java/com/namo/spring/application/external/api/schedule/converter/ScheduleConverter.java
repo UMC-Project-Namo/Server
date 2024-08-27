@@ -22,7 +22,7 @@ public class ScheduleConverter {
                 .build();
     }
 
-    private static Location toLocation(ScheduleRequest.LocationDto dto) {
+    public static Location toLocation(ScheduleRequest.LocationDto dto) {
         return Location.builder()
                 .longitude(dto.getLongitude())
                 .latitude(dto.getLatitude())
