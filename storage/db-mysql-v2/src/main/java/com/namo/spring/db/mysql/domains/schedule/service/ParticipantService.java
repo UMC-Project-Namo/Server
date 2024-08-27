@@ -49,13 +49,8 @@ public class ParticipantService {
     }
 
     @Transactional(readOnly = true)
-    public List<ScheduleParticipantQuery> readParticipantsWithScheduleAndMember(List<Long> memberIds, LocalDateTime startDate, LocalDateTime endDate) {
-        return participantRepository.findParticipantsWithScheduleAndMember(memberIds, startDate, endDate);
-    }
-
-    @Transactional(readOnly = true)
-    public List<ScheduleParticipantQuery> readParticipantsWithScheduleAndAnonymous(List<Long> anonymousIds, LocalDateTime startDate, LocalDateTime endDate) {
-        return participantRepository.findParticipantsWithScheduleAndAnonymous(anonymousIds, startDate, endDate);
+    public List<ScheduleParticipantQuery> readParticipantsWithScheduleAndAnonymous(List<Long> memberIds, List<Long> anonymousIds, LocalDateTime startDate, LocalDateTime endDate) {
+        return participantRepository.findParticipantsWithUserAndSchedule(memberIds, anonymousIds, startDate, endDate);
     }
 
     @Transactional(readOnly = true)

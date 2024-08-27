@@ -69,7 +69,7 @@ public class ScheduleManageService {
         validateParticipantCount(memberIds.size());
         List<Long> members = participantManageService.getFriendshipValidatedParticipants(memberId, memberIds).stream().map(Member::getId).collect(Collectors.toList());
         members.add(memberId);
-        return participantService.readParticipantsWithScheduleAndMember(members, period.getStartDate(), period.getEndDate());
+        return participantService.readParticipantsWithScheduleAndAnonymous(members, null, period.getStartDate(), period.getEndDate());
     }
 
     public List<ScheduleParticipantQuery> getMonthlyMeetingParticipantSchedules(Schedule schedule, Period period, Long memberId) {
@@ -78,9 +78,8 @@ public class ScheduleManageService {
         List<Long> members = participants.stream().map(Participant::getUser).map(User::getId).collect(Collectors.toList());
         List<Long> anonymous = participants.stream().map(Participant::getUser).map(User::getId).collect(Collectors.toList());
 
-        List<ScheduleParticipantQuery> participantWithSchedule = participantService.readParticipantsWithScheduleAndMember(members, period.getStartDate(), period.getEndDate());
-        participantWithSchedule.addAll(participantService.readParticipantsWithScheduleAndAnonymous(anonymous, period.getStartDate(), period.getEndDate()));
-        return participantWithSchedule;
+        return participantService.readParticipantsWithScheduleAndAnonymous(members, anonymous, period.getStartDate(), period.getEndDate())
+                ;
     }
 
     private void checkParticipantExists(Schedule schedule, Long memberId) {
@@ -111,7 +110,7 @@ public class ScheduleManageService {
         }
     }
 
-    private static void updateScheduleContent(String title, ScheduleRequest.LocationDto locationDto, ScheduleRequest.PeriodDto periodDto, Schedule schedule) {
+    private void updateScheduleContent(String title, ScheduleRequest.LocationDto locationDto, ScheduleRequest.PeriodDto periodDto, Schedule schedule) {
         Period period = getValidatedPeriod(periodDto.getStartDate(), periodDto.getEndDate());
         Location location = toLocation(locationDto);
         schedule.updateContent(title, period, location);

@@ -34,32 +34,19 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
     List<Participant> findParticipantByIdAndScheduleId(List<Long> ids, Long scheduleId, ParticipantStatus status);
 
     @Query("SELECT DISTINCT new com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery(" +
-            "p.id, p.palette.id, m.id, null, m.nickname, s" +
+            "p.id, p.palette.id, m.id, a.id, a.nickname, s" +
             ") FROM Participant p " +
             "JOIN p.schedule s " +
-            "JOIN p.member m " +
-            "WHERE m.id IN :memberIds " +
+            "LEFT JOIN p.member m " +
+            "LEFT JOIN p.anonymous a " +
+            "WHERE (m.id IN :memberIds " +
+            "OR a.id IN :anonymousIds) " +
             "AND p.status = 'ACTIVE' " +
             "AND (s.period.startDate <= :endDate " +
             "AND s.period.endDate >= :startDate) " +
             "ORDER BY s.period.startDate ASC")
-    List<ScheduleParticipantQuery> findParticipantsWithScheduleAndMember(
+    List<ScheduleParticipantQuery> findParticipantsWithUserAndSchedule(
             List<Long> memberIds,
-            LocalDateTime startDate,
-            LocalDateTime endDate
-    );
-
-    @Query("SELECT DISTINCT new com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery(" +
-            "p.id, p.palette.id, null, a.id, a.nickname, s" +
-            ") FROM Participant p " +
-            "JOIN p.schedule s " +
-            "JOIN p.anonymous a " +
-            "WHERE a.id IN :anonymousIds " +
-            "AND p.status = 'ACTIVE' " +
-            "AND (s.period.startDate <= :endDate " +
-            "AND s.period.endDate >= :startDate) " +
-            "ORDER BY s.period.startDate ASC")
-    List<ScheduleParticipantQuery> findParticipantsWithScheduleAndAnonymous(
             List<Long> anonymousIds,
             LocalDateTime startDate,
             LocalDateTime endDate
