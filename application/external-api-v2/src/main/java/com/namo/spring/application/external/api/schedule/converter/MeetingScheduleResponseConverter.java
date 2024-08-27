@@ -3,7 +3,11 @@ package com.namo.spring.application.external.api.schedule.converter;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
 import com.namo.spring.core.common.utils.DateUtil;
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
+import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
+import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
+import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
+import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
 
 import java.util.List;
 import java.util.Map;
@@ -119,5 +123,47 @@ public class MeetingScheduleResponseConverter {
                 .nickname(participant.getNickname())
                 .color(participant.getParticipantPaletteId())
                 .build();
+    }
+
+    public static MeetingScheduleResponse.GetMeetingScheduleDto toGetMeetingScheduleDto(Schedule schedule, List<Participant> participants) {
+        return MeetingScheduleResponse.GetMeetingScheduleDto.builder()
+                .scheduleId(schedule.getId())
+                .name(schedule.getTitle())
+                .imageUrl(schedule.getImageUrl())
+                .startDate(DateUtil.toSeconds(schedule.getPeriod().getStartDate()))
+                .endDate(DateUtil.toSeconds(schedule.getPeriod().getEndDate()))
+                .interval(schedule.getPeriod().getDayInterval())
+                .longitude(schedule.getLocation().getLongitude())
+                .latitude(schedule.getLocation().getLatitude())
+                .kakaoLocationId(schedule.getLocation().getKakaoLocationId())
+                .locationName(schedule.getLocation().getName())
+                .participants(toUserParticipantDetailDtos(participants))
+                .build();
+    }
+
+    private static List<MeetingScheduleResponse.UserParticipantDetailDto> toUserParticipantDetailDtos(List<Participant> participant) {
+        return participant.stream()
+                .map(MeetingScheduleResponseConverter::toUserParticipantDetailDto)
+                .collect(Collectors.toList());
+    }
+
+    private static MeetingScheduleResponse.UserParticipantDetailDto toUserParticipantDetailDto(Participant participant) {
+        return MeetingScheduleResponse.UserParticipantDetailDto.builder()
+                .participantId(participant.getId())
+                .userId(participant.getUser().getId())
+                .isGuest(participant.getUser() instanceof Anonymous)
+                .nickname(participant.getUser().getNickname())
+                .color(participant.getPalette().getId())
+                .isOwner(getParticipantIsOwner(participant.getIsOwner()))
+                .isActive(getParticipantIsActive(participant.getStatus()))
+                .build();
+    }
+
+    private static boolean getParticipantIsOwner(int isOwner) {
+        return isOwner == ScheduleType.MEETING.getValue();
+    }
+
+    private static boolean getParticipantIsActive(ParticipantStatus status) {
+        return status == ParticipantStatus.ACTIVE;
     }
 }

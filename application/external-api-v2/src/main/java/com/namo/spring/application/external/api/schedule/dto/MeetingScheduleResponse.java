@@ -34,6 +34,35 @@ public class MeetingScheduleResponse {
     @AllArgsConstructor
     @Getter
     @Builder
+    @Schema(title = "모임 상세 조회 응답 DTO")
+    public static class GetMeetingScheduleDto {
+        @Schema(description = "일정 ID")
+        private Long scheduleId;
+        @Schema(description = "일정 이름", example = "나모 정기 회의")
+        private String name;
+        @Schema(description = "모임 일정 이미지  url", example = "")
+        private String imageUrl;
+        @Schema(description = "일정 시작일, unix 타임스탬프 형식")
+        private Long startDate;
+        @Schema(description = "일정 종료일, unix 타임스탬프 형식")
+        private Long endDate;
+        @Schema(description = "시작일과 종료일 차이")
+        private Long interval;
+        @Schema(description = "일정 참여자 목록")
+        private List<UserParticipantDetailDto> participants;
+        @Schema(description = "장소 위치 경도")
+        private Double longitude;
+        @Schema(description = "장소 위치 위도")
+        private Double latitude;
+        @Schema(description = "장소 이름", name = "스타벅스 강남역점")
+        private String locationName;
+        @Schema(description = "장소 카카오 맵 ID")
+        private String kakaoLocationId;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    @Builder
     @Schema(title = "모임 생성 전 / 월간 일정 조회 응답 DTO")
     public static class GetMonthlyMembersScheduleDto {
         @Schema(description = "일정 ID")
@@ -99,5 +128,24 @@ public class MeetingScheduleResponse {
         private String nickname;
         @Schema(description = "색상")
         private Long color;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    @Builder
+    @Schema(title = "모임 일정 조회 - 일정의 참여자 목록")
+    public static class UserParticipantDetailDto {
+        @Schema(description = "참여자 ID")
+        private Long participantId;
+        @Schema(description = "유저 ID")
+        private Long userId;
+        @Schema(description = "게스트 여부")
+        private Boolean isGuest;
+        @Schema(description = "닉네임")
+        private String nickname;
+        @Schema(description = "색상")
+        private Long color;
+        private Boolean isOwner;
+        private Boolean isActive;
     }
 }
