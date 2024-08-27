@@ -10,6 +10,7 @@ import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
 import com.namo.spring.db.mysql.domains.schedule.service.ScheduleService;
 import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 import com.namo.spring.db.mysql.domains.schedule.type.Period;
+import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +33,12 @@ public class ScheduleManageService {
     private final ParticipantManageService participantManageService;
     private final ParticipantService participantService;
 
-    public Schedule getSchedule(Long scheduleId) {
-        return scheduleService.readSchedule(scheduleId).orElseThrow(() -> new ScheduleException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
+    public Schedule getMeetingSchedule(Long scheduleId) {
+        Schedule schedule = scheduleService.readSchedule(scheduleId).orElseThrow(() -> new ScheduleException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
+        if (schedule.getScheduleType() != ScheduleType.MEETING.getValue()) {
+            throw new ScheduleException(ErrorStatus.NOT_MEETING_SCHEDULE);
+        }
+        return schedule;
     }
 
     public Schedule createPersonalSchedule(ScheduleRequest.PostPersonalScheduleDto dto, Member member) {
@@ -82,5 +87,10 @@ public class ScheduleManageService {
         if (!participantService.existsByScheduleIdAndMemberId(schedule.getId(), memberId)) {
             throw new ScheduleException(ErrorStatus.NOT_SCHEDULE_PARTICIPANT);
         }
+    }
+
+    public List<Participant> getMeetingScheduleParticipants(Schedule schedule, Long memberId) {
+        checkParticipantExists(schedule, memberId);
+        return participantService.readParticipantsByScheduleIdAndStatusAndType(schedule.getId(), ScheduleType.MEETING, null);
     }
 }

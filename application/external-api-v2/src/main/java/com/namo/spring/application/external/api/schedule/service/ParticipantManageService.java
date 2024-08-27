@@ -2,6 +2,7 @@ package com.namo.spring.application.external.api.schedule.service;
 
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.category.type.ColorChip;
+import com.namo.spring.db.mysql.domains.category.type.PaletteEnum;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
@@ -24,7 +25,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ParticipantManageService {
     private static final Long MEETING_SCHEDULE_OWNER_PALETTE_ID = ColorChip.getMeetingScheduleOwnerPaletteId();
+    private static final long[] PALETTE_IDS = PaletteEnum.getPaletteColorIds();
     private final ParticipantMaker participantMaker;
+    private final ParticipationActionManager participationActionManager;
     private final FriendshipService friendshipService;
     private final ParticipantService participantService;
 
@@ -49,7 +52,7 @@ public class ParticipantManageService {
     }
 
     public List<Participant> getMeetingScheduleParticipants(Long scheduleId, ParticipantStatus status) {
-        List<Participant> participants = participantService.readParticipantsByScheduleIdAndScheduleType(scheduleId, ScheduleType.MEETING, status);
+        List<Participant> participants = participantService.readParticipantsByScheduleIdAndStatusAndType(scheduleId, ScheduleType.MEETING, status);
         if (participants.isEmpty()) {
             throw new ScheduleException(ErrorStatus.SCHEDULE_PARTICIPANT_IS_EMPTY_ERROR);
         } else return participants;
