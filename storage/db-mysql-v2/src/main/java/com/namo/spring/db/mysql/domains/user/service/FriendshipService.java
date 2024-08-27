@@ -13,6 +13,6 @@ public class FriendshipService {
     private final FriendshipRepository friendshipRepository;
 
     public List<Friendship> readFriendshipsByMemberIdAndFriendIds(Long memberId, List<Long> members) {
-        return friendshipRepository.findAcceptedFriendshipsByMembeIdAndFriendIds(memberId, members);
+        return friendshipRepository.findAcceptedFriendshipsByMemberIdAndFriendIds(memberId, members);
     }
 }
