@@ -8,9 +8,7 @@ import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
 import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
 import com.namo.spring.db.mysql.domains.schedule.service.ScheduleService;
-import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
-import com.namo.spring.db.mysql.domains.schedule.type.Period;
-import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
+import com.namo.spring.db.mysql.domains.schedule.type.*;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.namo.spring.application.external.api.schedule.converter.ScheduleConverter.toLocation;
+import static com.namo.spring.application.external.global.utils.MeetingParticipantValidationUtils.validateExistingAndNewParticipantIds;
 import static com.namo.spring.application.external.global.utils.MeetingParticipantValidationUtils.validateParticipantCount;
 import static com.namo.spring.application.external.global.utils.SchedulePeriodValidationUtils.getValidatedPeriod;
 
@@ -92,5 +92,34 @@ public class ScheduleManageService {
     public List<Participant> getMeetingScheduleParticipants(Schedule schedule, Long memberId) {
         checkParticipantExists(schedule, memberId);
         return participantService.readParticipantsByScheduleIdAndStatusAndType(schedule.getId(), ScheduleType.MEETING, null);
+    }
+
+    public void updateMeetingSchedule(ScheduleRequest.PatchMeetingScheduleDto dto, Schedule schedule, Long memberId) {
+        Participant ownerParticipant = participantManageService.getValidatedMeetingParticipantWithSchedule(memberId, schedule.getId());
+        checkParticipantIsOwner(ownerParticipant);
+        // 기존의 인원수와, 초대될 + 삭제될 member의 인원 수 검증
+        List<Long> participantIds = participantManageService.getMeetingScheduleParticipants(schedule.getId(), null).stream()
+                .filter(participant -> participant.getIsOwner() == ParticipantRole.NON_OWNER.getValue())
+                .map(Participant::getMember)
+                .map(Member::getId)
+                .collect(Collectors.toList());
+        updateScheduleContent(dto.getTitle(), dto.getLocation(), dto.getPeriod(), schedule);
+        if (dto.getParticipantUpdate() != null) {
+            validateParticipantCount(participantIds.size() + dto.getParticipantUpdate().getParticipantsToAdd().size() - dto.getParticipantUpdate().getParticipantsToRemove().size());
+            validateExistingAndNewParticipantIds(participantIds, dto.getParticipantUpdate().getParticipantsToAdd());
+            participantManageService.updateMeetingScheduleParticipants(memberId, schedule, dto.getParticipantUpdate());
+        }
+    }
+
+    private static void updateScheduleContent(String title, ScheduleRequest.LocationDto locationDto, ScheduleRequest.PeriodDto periodDto, Schedule schedule) {
+        Period period = getValidatedPeriod(periodDto.getStartDate(), periodDto.getEndDate());
+        Location location = toLocation(locationDto);
+        schedule.updateContent(title, period, location);
+    }
+
+    private void checkParticipantIsOwner(Participant participant) {
+        if (participant.getIsOwner() != ParticipantRole.OWNER.getValue()) {
+            throw new ScheduleException(ErrorStatus.NOT_SCHEDULE_OWNER);
+        }
     }
 }

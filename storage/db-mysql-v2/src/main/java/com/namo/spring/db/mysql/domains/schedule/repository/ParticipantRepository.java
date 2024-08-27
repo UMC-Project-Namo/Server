@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface ParticipantRepository extends JpaRepository<Participant, Long> {
 
@@ -16,10 +17,21 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
 
     boolean existsByScheduleIdAndMemberId(Long scheduleId, Long memberId);
 
-    @Query("SELECT p FROM Participant p JOIN FETCH p.schedule s JOIN FETCH p.palette " +
+    @Query("SELECT p FROM Participant p JOIN FETCH p.schedule s LEFT JOIN FETCH p.palette " +
             "WHERE s.id = :scheduleId AND s.scheduleType = :scheduleType " +
             "AND (:status IS NULL OR p.status = :status)")
-    List<Participant> findParticipantsByScheduleIdAndScheduleType(Long scheduleId, int scheduleType, ParticipantStatus status);
+    List<Participant> findParticipantsByScheduleIdAndStatusAndType(Long scheduleId, int scheduleType, ParticipantStatus status);
+
+    @Query("SELECT p FROM Participant p JOIN FETCH p.schedule s WHERE s.id = :scheduleId AND p.member.id = :memberId")
+    Optional<Participant> findParticipantByScheduleIdAndMemberId(Long scheduleId, Long memberId);
+
+    @Query("SELECT p " +
+            "FROM Participant p " +
+            "JOIN p.schedule s " +
+            "LEFT JOIN FETCH p.member m " +
+            "LEFT JOIN FETCH p.anonymous a " +
+            "WHERE p.id in :ids AND s.id = :scheduleId AND p.status = :status")
+    List<Participant> findParticipantByIdAndScheduleId(List<Long> ids, Long scheduleId, ParticipantStatus status);
 
     @Query("SELECT DISTINCT new com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery(" +
             "p.id, p.palette.id, m.id, null, m.nickname, s" +
@@ -52,4 +64,6 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
             LocalDateTime startDate,
             LocalDateTime endDate
     );
+
+    void deleteByIdIn(List<Long> id);
 }

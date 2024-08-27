@@ -1,5 +1,6 @@
 package com.namo.spring.application.external.api.schedule.service;
 
+import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.category.type.ColorChip;
 import com.namo.spring.db.mysql.domains.category.type.PaletteEnum;
@@ -49,6 +50,26 @@ public class ParticipantManageService {
             throw new MemberException(ErrorStatus.NOT_FOUND_FRIENDSHIP_FAILURE);
         }
         return friends;
+    }
+
+    public Participant getValidatedMeetingParticipantWithSchedule(Long memberId, Long scheduleId) {
+        return participantService.readParticipantByScheduleIdAndMemberId(scheduleId, memberId).orElseThrow(
+                () -> new ScheduleException(ErrorStatus.NOT_SCHEDULE_PARTICIPANT));
+    }
+
+    public void updateMeetingScheduleParticipants(Long ownerId, Schedule schedule, ScheduleRequest.PatchMeetingParticipantDto dto) {
+        if (dto.getParticipantsToAdd() != null && !dto.getParticipantsToAdd().isEmpty()) {
+            List<Member> participantsToAdd = getFriendshipValidatedParticipants(ownerId, dto.getParticipantsToAdd());
+            participantsToAdd.forEach(participant -> participantMaker.makeMeetingScheduleParticipant(schedule, participant));
+        }
+
+        if (dto.getParticipantsToRemove() != null && !dto.getParticipantsToRemove().isEmpty()) {
+            List<Participant> participantsToRemove = participantService.readParticipantsByIdAndScheduleId(dto.getParticipantsToRemove(), schedule.getId(), ParticipantStatus.ACTIVE);
+            if (participantsToRemove.isEmpty()) {
+                throw new ScheduleException(ErrorStatus.NOT_FOUND_PARTICIPANT_FAILURE);
+            }
+            participationActionManager.removeParticipants(schedule, participantsToRemove);
+        }
     }
 
     public List<Participant> getMeetingScheduleParticipants(Long scheduleId, ParticipantStatus status) {

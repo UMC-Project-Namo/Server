@@ -29,6 +29,16 @@ public class ParticipantService {
     }
 
     @Transactional(readOnly = true)
+    public Optional<Participant> readParticipantByScheduleIdAndMemberId(Long scheduleId, Long memberId) {
+        return participantRepository.findParticipantByScheduleIdAndMemberId(scheduleId, memberId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Participant> readParticipantsByIdAndScheduleId(List<Long> participantIds, Long scheduleId, ParticipantStatus status) {
+        return participantRepository.findParticipantByIdAndScheduleId(participantIds, scheduleId, status);
+    }
+
+    @Transactional(readOnly = true)
     public List<Participant> readScheduleParticipantItemsByScheduleIds(Long memberId) {
         return participantRepository.findParticipantsByMemberAndScheduleType(memberId, ScheduleType.MEETING.getValue());
     }
@@ -49,11 +59,15 @@ public class ParticipantService {
     }
 
     @Transactional(readOnly = true)
-    public List<Participant> readParticipantsByScheduleIdAndScheduleType(Long scheduleId, ScheduleType type, ParticipantStatus status) {
-        return participantRepository.findParticipantsByScheduleIdAndScheduleType(scheduleId, type.getValue(), status);
+    public List<Participant> readParticipantsByScheduleIdAndStatusAndType(Long scheduleId, ScheduleType type, ParticipantStatus status) {
+        return participantRepository.findParticipantsByScheduleIdAndStatusAndType(scheduleId, type.getValue(), status);
     }
 
     public void deleteParticipant(Long id) {
         participantRepository.deleteById(id);
+    }
+
+    public void deleteByIdIn(List<Long> Ids) {
+        participantRepository.deleteByIdIn(Ids);
     }
 }

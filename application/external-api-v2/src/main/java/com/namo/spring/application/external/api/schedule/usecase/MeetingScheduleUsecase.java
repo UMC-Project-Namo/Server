@@ -68,4 +68,11 @@ public class MeetingScheduleUsecase {
         List<Participant> participants = scheduleManageService.getMeetingScheduleParticipants(schedule, memberInfo.getUserId());
         return toGetMeetingScheduleDto(schedule, participants);
     }
+
+    @Transactional
+    public void updateMeetingSchedule(ScheduleRequest.PatchMeetingScheduleDto dto, Long scheduleId, SecurityUserDetails memberInfo) {
+        validateUniqueParticipantIds(memberInfo.getUserId(), dto.getParticipantUpdate());
+        Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
+        scheduleManageService.updateMeetingSchedule(dto, schedule, memberInfo.getUserId());
+    }
 }

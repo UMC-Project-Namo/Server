@@ -60,6 +60,7 @@ public enum ErrorStatus implements BaseErrorCode {
      */
     NOT_FOUND_USER_FAILURE(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
     NOT_FOUND_SCHEDULE_FAILURE(HttpStatus.NOT_FOUND, "일정을 찾을 수 없습니다."),
+    NOT_FOUND_PARTICIPANT_FAILURE(HttpStatus.NOT_FOUND, "일정의 참여자를 찾을 수 없습니다."),
     NOT_FOUND_CATEGORY_FAILURE(HttpStatus.NOT_FOUND, "카테고리를 찾을 수 없습니다."),
     NOT_FOUND_PALETTE_FAILURE(HttpStatus.NOT_FOUND, "팔레트를 찾을 수 없습니다."),
     NOT_FOUND_DIARY_FAILURE(HttpStatus.NOT_FOUND, "다이어리를 찾을 수 없습니다."),
@@ -79,6 +80,7 @@ public enum ErrorStatus implements BaseErrorCode {
      */
     NOT_DELETE_BASE_CATEGORY_FAILURE(HttpStatus.NOT_FOUND, "일정 및 모임 카테고리는 삭제 될 수 없습니다."),
     NOT_CHANGE_SPECIFIED_NAME_FAILURE(HttpStatus.NOT_FOUND, "일정 및 모임은 기본 카테고리로 지정된 이름입니다."),
+    NOT_INCLUDE_OWNER_IN_REQUEST(HttpStatus.NOT_FOUND, "모임 생성자는 참가자 목록에 포함될 수 없습니다."),
     NOT_CHECK_TERM_ERROR(HttpStatus.NOT_FOUND, "약관에 무조건 동의 해야합니다."),
     GROUP_MEMO_IS_FULL_ERROR(HttpStatus.NOT_FOUND, "모임 메모가 가득 차 있습니다."),
     NOT_INCLUDE_GROUP_USER(HttpStatus.NOT_FOUND, "모임 안에 포함되어 있지 않은 유저입니다."),
@@ -105,8 +107,9 @@ public enum ErrorStatus implements BaseErrorCode {
     NOT_USERS_CATEGORY(HttpStatus.NOT_FOUND, "해당 유저의 카테고리가 아닙니다."),
     NOT_USERS_IN_GROUP(HttpStatus.NOT_FOUND, "유저가 그룹에 포함되어 있지 않습니다."),
     NOT_IMAGE_IN_DIARY(HttpStatus.NOT_FOUND, "이미지가 다이어리에 포함되어 있지 않습니다."),
-    NOT_SCHEDULE_OWNER(HttpStatus.FORBIDDEN, "해당 일정의 생성자가 아닙니다."),
-    NOT_SCHEDULE_PARTICIPANT(HttpStatus.FORBIDDEN, "해당 일정의 참여자가 아닙니다."),
+    NOT_SCHEDULE_OWNER(HttpStatus.NOT_FOUND, "해당 일정의 생성자가 아닙니다."),
+    NOT_SCHEDULE_PARTICIPANT(HttpStatus.NOT_FOUND, "해당 일정의 참석자가 아닙니다."),
+    NOT_MEETING_SCHEDULE(HttpStatus.NOT_FOUND, "모임 일정이 아닙니다."),
 
     /**
      * 404 : 인프라 에러

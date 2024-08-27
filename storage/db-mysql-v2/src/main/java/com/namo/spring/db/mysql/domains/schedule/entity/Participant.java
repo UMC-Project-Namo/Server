@@ -94,4 +94,13 @@ public class Participant extends BaseTimeEntity {
         return null;
     }
 
+    public void activateStatus(Category category, Palette palette) {
+        this.status = ParticipantStatus.ACTIVE;
+        this.category = category;
+        this.palette = palette;
+    }
+
+    public void inactiveStatus() {
+        this.status = ParticipantStatus.INACTIVE;
+    }
 }
