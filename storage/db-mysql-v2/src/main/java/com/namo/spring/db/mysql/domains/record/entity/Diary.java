@@ -13,6 +13,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PostPersist;
+import jakarta.persistence.PostRemove;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -44,16 +46,42 @@ public class Diary extends BaseTimeEntity {
 
 	@JdbcTypeCode(SqlTypes.VARCHAR)
 	@Column(nullable = false, length = 250)
-	private String memo;
+	private String content;
 
 	@OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<DiaryImage> images;
 
+	private double enjoyRating;
+
 	@Builder
-	public Diary(Participant participant, String memo) {
+	public Diary(Participant participant, String memo, double enjoyRating) {
 		this.participant = Objects.requireNonNull(participant, "participant은 null일 수 없습니다.");
 		if (!StringUtils.hasText(memo))
 			throw new IllegalArgumentException("memo은 null이거나 빈 문자열일 수 없습니다.");
-		this.memo = memo;
+		this.content = memo;
+		this.enjoyRating = enjoyRating;
+	}
+
+	public static Diary of(Participant participant, String memo, double enjoyRating) {
+		return Diary.builder()
+			.participant(participant)
+			.memo(memo)
+			.enjoyRating(enjoyRating)
+			.build();
+	}
+
+	@PostPersist
+	public void postPersist() {
+		participant.diaryCreated();
+	}
+
+	@PostRemove
+	public void PostRemove() {
+		participant.diaryDeleted();
+	}
+
+	public void update(String content, double enjoyRating) {
+		this.content = content;
+		this.enjoyRating = enjoyRating;
 	}
 }
