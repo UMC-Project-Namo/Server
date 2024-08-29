@@ -75,13 +75,13 @@ public class ParticipantManageService {
                 .orElseThrow(() -> new PaletteException(ErrorStatus.NOT_FOUND_COLOR));
     }
 
-    public void updateMeetingScheduleParticipants(Long ownerId, Schedule schedule, ScheduleRequest.PatchMeetingParticipantDto dto) {
-        if (dto.getParticipantsToAdd() != null && !dto.getParticipantsToAdd().isEmpty()) {
+    public void updateMeetingScheduleParticipants(Long ownerId, Schedule schedule, ScheduleRequest.PatchMeetingScheduleDto dto) {
+        if (!dto.getParticipantsToAdd().isEmpty()) {
             List<Member> participantsToAdd = getFriendshipValidatedParticipants(ownerId, dto.getParticipantsToAdd());
             participantsToAdd.forEach(participant -> participantMaker.makeMeetingScheduleParticipant(schedule, participant));
         }
 
-        if (dto.getParticipantsToRemove() != null && !dto.getParticipantsToRemove().isEmpty()) {
+        if (!dto.getParticipantsToRemove().isEmpty()) {
             List<Participant> participantsToRemove = participantService.readParticipantsByIdAndScheduleId(dto.getParticipantsToRemove(), schedule.getId(), ParticipantStatus.ACTIVE);
             if (participantsToRemove.isEmpty()) {
                 throw new ScheduleException(ErrorStatus.NOT_FOUND_PARTICIPANT_FAILURE);

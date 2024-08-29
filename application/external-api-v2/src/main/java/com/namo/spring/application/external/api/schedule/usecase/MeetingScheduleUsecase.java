@@ -71,7 +71,7 @@ public class MeetingScheduleUsecase {
 
     @Transactional
     public void updateMeetingSchedule(ScheduleRequest.PatchMeetingScheduleDto dto, Long scheduleId, SecurityUserDetails memberInfo) {
-        validateUniqueParticipantIds(memberInfo.getUserId(), dto.getParticipantUpdate());
+        validateUniqueParticipantIds(memberInfo.getUserId(), dto);
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
         scheduleManageService.updateMeetingSchedule(dto, schedule, memberInfo.getUserId());
     }

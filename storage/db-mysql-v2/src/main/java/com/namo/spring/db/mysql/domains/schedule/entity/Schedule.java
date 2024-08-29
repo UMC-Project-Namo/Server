@@ -85,7 +85,9 @@ public class Schedule extends BaseTimeEntity {
     public void updateContent(String title, Period period, Location location) {
         this.title = title;
         this.period = period;
-        this.location = location;
+        if (location != null) {
+            this.location = location;
+        }
     }
 
     public void addActiveParticipant(String nickname) {

@@ -22,10 +22,10 @@ public class MeetingParticipantValidationUtils {
      * 참석자 인원 수를 검증합니다.
      * 최소 1명 이상 / 최대 9명 이하
      *
-     * @param participantNumber
+     * @param participantCount
      */
-    public static void validateParticipantCount(int participantNumber) {
-        if (participantNumber < MIN_PARTICIPANTS || participantNumber > MAX_PARTICIPANTS) {
+    public static void validateParticipantCount(int participantCount) {
+        if (participantCount < MIN_PARTICIPANTS || participantCount > MAX_PARTICIPANTS) {
             throw new ScheduleException(ErrorStatus.INVALID_MEETING_PARTICIPANT_COUNT);
         }
     }
@@ -56,13 +56,13 @@ public class MeetingParticipantValidationUtils {
      * 모임 일정 생성자가 포함되어있는지,
      * 중복되는 ID가 있는지 검증합니다.
      *
-     * @param ownerId            모임 일정 생정자 ID
-     * @param participantRequest 참석자 ID 배열
+     * @param ownerId 모임 일정 생정자 ID
+     * @param dto     참석자 ID 배열
      */
-    public static void validateUniqueParticipantIds(Long ownerId, ScheduleRequest.PatchMeetingParticipantDto participantRequest) {
+    public static void validateUniqueParticipantIds(Long ownerId, ScheduleRequest.PatchMeetingScheduleDto dto) {
         List<Long> participantIds = new ArrayList<>();
-        participantIds.addAll(participantRequest.getParticipantsToAdd());
-        participantIds.addAll(participantRequest.getParticipantsToRemove());
+        participantIds.addAll(dto.getParticipantsToAdd());
+        participantIds.addAll(dto.getParticipantsToRemove());
         validateUniqueParticipantIds(ownerId, participantIds);
     }
 

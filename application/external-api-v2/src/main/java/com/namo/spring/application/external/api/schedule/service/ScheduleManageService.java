@@ -6,6 +6,7 @@ import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
+import com.namo.spring.db.mysql.domains.schedule.repository.ParticipantRepository;
 import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
 import com.namo.spring.db.mysql.domains.schedule.service.ScheduleService;
 import com.namo.spring.db.mysql.domains.schedule.type.*;
@@ -32,6 +33,8 @@ public class ScheduleManageService {
     private final ScheduleService scheduleService;
     private final ParticipantManageService participantManageService;
     private final ParticipantService participantService;
+
+    private final ParticipantRepository participantRepository;
 
     public Schedule getMeetingSchedule(Long scheduleId) {
         Schedule schedule = scheduleService.readSchedule(scheduleId).orElseThrow(() -> new ScheduleException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
@@ -95,23 +98,22 @@ public class ScheduleManageService {
         Participant ownerParticipant = participantManageService.getValidatedMeetingParticipantWithSchedule(memberId, schedule.getId());
         checkParticipantIsOwner(ownerParticipant);
         // 기존의 인원수와, 초대될 + 삭제될 member의 인원 수 검증
-        List<Long> participantIds = participantManageService.getMeetingScheduleParticipants(schedule.getId(), null).stream()
+        List<Long> participantIds = participantRepository.findAllByScheduleId(schedule.getId()).stream()
                 .filter(participant -> participant.getIsOwner() == ParticipantRole.NON_OWNER.getValue())
                 .map(Participant::getMember)
                 .map(Member::getId)
                 .collect(Collectors.toList());
         updateScheduleContent(dto.getTitle(), dto.getLocation(), dto.getPeriod(), schedule);
-
-        if (dto.getParticipantUpdate() != null) {
-            validateParticipantCount(participantIds.size() + dto.getParticipantUpdate().getParticipantsToAdd().size() - dto.getParticipantUpdate().getParticipantsToRemove().size());
-            validateExistingAndNewParticipantIds(participantIds, dto.getParticipantUpdate().getParticipantsToAdd());
-            participantManageService.updateMeetingScheduleParticipants(memberId, schedule, dto.getParticipantUpdate());
+        if (!dto.getParticipantsToAdd().isEmpty() || !dto.getParticipantsToRemove().isEmpty()) {
+            validateParticipantCount(participantIds.size() + dto.getParticipantsToAdd().size() - dto.getParticipantsToRemove().size());
+            validateExistingAndNewParticipantIds(participantIds, dto.getParticipantsToAdd());
+            participantManageService.updateMeetingScheduleParticipants(memberId, schedule, dto);
         }
     }
 
     private void updateScheduleContent(String title, ScheduleRequest.LocationDto locationDto, ScheduleRequest.PeriodDto periodDto, Schedule schedule) {
         Period period = getValidatedPeriod(periodDto.getStartDate(), periodDto.getEndDate());
-        Location location = toLocation(locationDto);
+        Location location = locationDto != null ? toLocation(locationDto) : null;
         schedule.updateContent(title, period, location);
     }
 
