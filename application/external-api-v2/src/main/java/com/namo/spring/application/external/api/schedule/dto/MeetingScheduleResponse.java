@@ -48,8 +48,16 @@ public class MeetingScheduleResponse {
         private Long endDate;
         @Schema(description = "시작일과 종료일 차이")
         private Long interval;
+        @Schema(description = "위치 정보, 없을 시에는 null")
+        private LocationDto location;
         @Schema(description = "일정 참여자 목록")
         private List<UserParticipantDetailDto> participants;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    @Builder
+    public static class LocationDto {
         @Schema(description = "장소 위치 경도")
         private Double longitude;
         @Schema(description = "장소 위치 위도")

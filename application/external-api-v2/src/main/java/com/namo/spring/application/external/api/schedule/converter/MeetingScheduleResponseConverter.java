@@ -5,6 +5,7 @@ import com.namo.spring.core.common.utils.DateUtil;
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
+import com.namo.spring.db.mysql.domains.schedule.type.Location;
 import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
@@ -73,7 +74,7 @@ public class MeetingScheduleResponseConverter {
         return MeetingScheduleResponse.MemberParticipantDto.builder()
                 .userId(participant.getMemberId())
                 .nickname(participant.getNickname())
-                .color(participantAndPalette.get(participant.getMemberId()))
+                .colorId(participantAndPalette.get(participant.getMemberId()))
                 .build();
     }
 
@@ -110,7 +111,7 @@ public class MeetingScheduleResponseConverter {
                 .participantId(participant.getParticipantId())
                 .userId(participant.getMemberId())
                 .nickname(participant.getNickname())
-                .color(participant.getParticipantPaletteId())
+                .colorId(participant.getParticipantPaletteId())
                 .build();
     }
 
@@ -122,11 +123,17 @@ public class MeetingScheduleResponseConverter {
                 .startDate(DateUtil.toSeconds(schedule.getPeriod().getStartDate()))
                 .endDate(DateUtil.toSeconds(schedule.getPeriod().getEndDate()))
                 .interval(schedule.getPeriod().getDayInterval())
-                .longitude(schedule.getLocation().getLongitude())
-                .latitude(schedule.getLocation().getLatitude())
-                .kakaoLocationId(schedule.getLocation().getKakaoLocationId())
-                .locationName(schedule.getLocation().getName())
+                .location(schedule.getLocation() != null ? toLocationDto(schedule.getLocation()) : null)
                 .participants(toUserParticipantDetailDtos(participants))
+                .build();
+    }
+
+    private static MeetingScheduleResponse.LocationDto toLocationDto(Location location) {
+        return MeetingScheduleResponse.LocationDto.builder()
+                .longitude(location.getLongitude())
+                .latitude(location.getLatitude())
+                .kakaoLocationId(location.getKakaoLocationId())
+                .locationName(location.getName())
                 .build();
     }
 

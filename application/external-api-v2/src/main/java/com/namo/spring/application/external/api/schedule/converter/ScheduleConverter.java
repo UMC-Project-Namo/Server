@@ -14,7 +14,7 @@ public class ScheduleConverter {
         return Schedule.builder()
                 .title(title)
                 .period(period)
-                .location(toLocation(location))
+                .location(location != null ? toLocation(location) : null)
                 .scheduleType(type)
                 .imageUrl(imageUrl)
                 .participantCount(participantCount)
