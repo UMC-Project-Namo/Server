@@ -23,7 +23,7 @@ public class MeetingScheduleResponse {
         private String title;
         @Schema(description = "모임 일정 시작 일시, unix 타임 스탬프 형식")
         private Long startDate;
-        @Schema(description = "모임 일정 이미지  url", example = "")
+        @Schema(description = "모임 일정 이미지  url")
         private String imageUrl;
         @Schema(description = "모임 일정 참여자 수", example = "9")
         private Integer participantCount;
@@ -109,8 +109,8 @@ public class MeetingScheduleResponse {
         private Long userId;
         @Schema(description = "닉네임")
         private String nickname;
-        @Schema(description = "색상")
-        private Long color;
+        @Schema(description = "색상 ID")
+        private Long colorId;
     }
 
     @AllArgsConstructor
@@ -124,8 +124,8 @@ public class MeetingScheduleResponse {
         private Long userId;
         @Schema(description = "닉네임")
         private String nickname;
-        @Schema(description = "색상")
-        private Long color;
+        @Schema(description = "색상 ID")
+        private Long colorId;
     }
 
     @AllArgsConstructor
@@ -141,8 +141,8 @@ public class MeetingScheduleResponse {
         private Boolean isGuest;
         @Schema(description = "닉네임")
         private String nickname;
-        @Schema(description = "색상")
-        private Long color;
+        @Schema(description = "색상 ID")
+        private Long colorId;
         @Schema(description = "참여 여부")
         private Boolean isActive;
         @Schema(description = "방장 여부")
