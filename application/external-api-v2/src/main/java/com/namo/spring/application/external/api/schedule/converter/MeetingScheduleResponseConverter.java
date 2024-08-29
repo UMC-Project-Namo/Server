@@ -106,16 +106,9 @@ public class MeetingScheduleResponseConverter {
     }
 
     private static MeetingScheduleResponse.UserParticipantDto toUserParticipantDto(ScheduleParticipantQuery participant) {
-        Long userId = null;
-        if (participant.getMemberId() != null) {
-            userId = participant.getMemberId();
-        } else if (participant.getAnonymousId() != null) {
-            userId = participant.getAnonymousId();
-        }
-
         return MeetingScheduleResponse.UserParticipantDto.builder()
                 .participantId(participant.getParticipantId())
-                .userId(userId)
+                .userId(participant.getMemberId())
                 .nickname(participant.getNickname())
                 .color(participant.getParticipantPaletteId())
                 .build();

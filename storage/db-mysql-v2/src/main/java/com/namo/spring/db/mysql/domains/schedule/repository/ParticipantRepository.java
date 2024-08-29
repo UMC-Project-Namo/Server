@@ -34,7 +34,7 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
     List<Participant> findParticipantByIdAndScheduleId(List<Long> ids, Long scheduleId, ParticipantStatus status);
 
     @Query("SELECT DISTINCT new com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery(" +
-            "p.id, p.palette.id, m.id, a.id, a.nickname, s" +
+            "p.id, p.palette.id, m.id, m.nickname, s" +
             ") FROM Participant p " +
             "JOIN p.schedule s " +
             "LEFT JOIN p.member m " +
