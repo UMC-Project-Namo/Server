@@ -107,19 +107,15 @@ public class MeetingScheduleResponseConverter {
 
     private static MeetingScheduleResponse.UserParticipantDto toUserParticipantDto(ScheduleParticipantQuery participant) {
         Long userId = null;
-        Boolean isGuest = null;
         if (participant.getMemberId() != null) {
             userId = participant.getMemberId();
-            isGuest = false;
         } else if (participant.getAnonymousId() != null) {
             userId = participant.getAnonymousId();
-            isGuest = true;
         }
 
         return MeetingScheduleResponse.UserParticipantDto.builder()
                 .participantId(participant.getParticipantId())
                 .userId(userId)
-                .isGuest(isGuest)
                 .nickname(participant.getNickname())
                 .color(participant.getParticipantPaletteId())
                 .build();

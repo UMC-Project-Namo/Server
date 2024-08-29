@@ -116,14 +116,12 @@ public class MeetingScheduleResponse {
     @AllArgsConstructor
     @Getter
     @Builder
-    @Schema(title = "모임 일정 조회 - 일정의 참여자 목록")
+    @Schema(title = "모임 일정 조회 - 일정의 참여자 목록, 유저 제외")
     public static class UserParticipantDto {
         @Schema(description = "참여자 ID")
         private Long participantId;
         @Schema(description = "유저 ID")
         private Long userId;
-        @Schema(description = "게스트 여부")
-        private Boolean isGuest;
         @Schema(description = "닉네임")
         private String nickname;
         @Schema(description = "색상")
@@ -145,7 +143,9 @@ public class MeetingScheduleResponse {
         private String nickname;
         @Schema(description = "색상")
         private Long color;
+        @Schema(description = "방장 여부")
         private Boolean isOwner;
+        @Schema(description = "참여 여부")
         private Boolean isActive;
     }
 }

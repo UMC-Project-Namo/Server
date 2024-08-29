@@ -32,7 +32,6 @@ public class ParticipationActionManager {
 
     public void removeParticipants(Schedule schedule, List<Participant> participants) {
         List<User> users = participants.stream().map(Participant::getUser).collect(Collectors.toList());
-        log.info("remove participants {}", users.stream().map(User::getNickname).collect(Collectors.toList()));
         schedule.removeParticipants(users.stream().map(User::getNickname).collect(Collectors.toList()));
         participantService.deleteByIdIn(participants.stream().map(Participant::getId).collect(Collectors.toList()));
     }

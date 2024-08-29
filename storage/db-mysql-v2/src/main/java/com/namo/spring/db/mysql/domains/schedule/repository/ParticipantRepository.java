@@ -38,16 +38,13 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
             ") FROM Participant p " +
             "JOIN p.schedule s " +
             "LEFT JOIN p.member m " +
-            "LEFT JOIN p.anonymous a " +
-            "WHERE (m.id IN :memberIds " +
-            "OR a.id IN :anonymousIds) " +
+            "WHERE m.id IN :memberIds " +
             "AND p.status = 'ACTIVE' " +
             "AND (s.period.startDate <= :endDate " +
             "AND s.period.endDate >= :startDate) " +
             "ORDER BY s.period.startDate ASC")
     List<ScheduleParticipantQuery> findParticipantsWithUserAndSchedule(
             List<Long> memberIds,
-            List<Long> anonymousIds,
             LocalDateTime startDate,
             LocalDateTime endDate
     );

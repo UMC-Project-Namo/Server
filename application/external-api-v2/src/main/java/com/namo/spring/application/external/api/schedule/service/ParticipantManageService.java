@@ -2,6 +2,8 @@ package com.namo.spring.application.external.api.schedule.service;
 
 import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
 import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.db.mysql.domains.category.entity.Palette;
+import com.namo.spring.db.mysql.domains.category.exception.PaletteException;
 import com.namo.spring.db.mysql.domains.category.type.ColorChip;
 import com.namo.spring.db.mysql.domains.category.type.PaletteEnum;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
@@ -18,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,6 +58,21 @@ public class ParticipantManageService {
     public Participant getValidatedMeetingParticipantWithSchedule(Long memberId, Long scheduleId) {
         return participantService.readParticipantByScheduleIdAndMemberId(scheduleId, memberId).orElseThrow(
                 () -> new ScheduleException(ErrorStatus.NOT_SCHEDULE_PARTICIPANT));
+    }
+
+    public void activateParticipant(Long memberId, Long scheduleId) {
+        Participant participant = getValidatedMeetingParticipantWithSchedule(scheduleId, memberId);
+        Long paletteId = selectPaletteColorId(scheduleId);
+        participationActionManager.activateParticipant(participant.getSchedule(), participant, paletteId);
+    }
+
+    private Long selectPaletteColorId(Long scheduleId) {
+        List<Long> participantsColors = getMeetingScheduleParticipants(scheduleId, ParticipantStatus.ACTIVE)
+                .stream().map(Participant::getPalette).map(Palette::getId).collect(Collectors.toList());
+        return Arrays.stream(PALETTE_IDS)
+                .filter((color) -> !participantsColors.contains(color))
+                .findFirst()
+                .orElseThrow(() -> new PaletteException(ErrorStatus.NOT_FOUND_COLOR));
     }
 
     public void updateMeetingScheduleParticipants(Long ownerId, Schedule schedule, ScheduleRequest.PatchMeetingParticipantDto dto) {
