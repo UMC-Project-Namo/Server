@@ -57,16 +57,6 @@ public class MeetingScheduleController implements MeetingScheduleApi {
     }
 
     /**
-     * 모임 일정 상세보기 API
-     */
-    @GetMapping(path = "/{meetingScheduleId}")
-    public ResponseDto<MeetingScheduleResponse.GetMeetingScheduleDto> findMeetingSchedule(
-            @PathVariable Long meetingScheduleId,
-            @AuthenticationPrincipal SecurityUserDetails memberInfo) {
-        return ResponseDto.onSuccess(meetingScheduleUsecase.getMeetingSchedule(meetingScheduleId, memberInfo));
-    }
-
-    /**
      * 모임 생성 후/ 참여자 월간 일정 조회 API
      */
     @GetMapping(path = "/{meetingScheduleId}/calender")
@@ -79,12 +69,22 @@ public class MeetingScheduleController implements MeetingScheduleApi {
     }
 
     /**
+     * 모임 일정 상세보기 API
+     */
+    @GetMapping(path = "/{meetingScheduleId}")
+    public ResponseDto<MeetingScheduleResponse.GetMeetingScheduleDto> getMeetingSchedule(
+            @PathVariable Long meetingScheduleId,
+            @AuthenticationPrincipal SecurityUserDetails memberInfo) {
+        return ResponseDto.onSuccess(meetingScheduleUsecase.getMeetingSchedule(meetingScheduleId, memberInfo));
+    }
+
+    /**
      * 모임 일정 수정 API
      */
     @PatchMapping(path = "/{meetingScheduleId}")
     public ResponseDto<String> updateMeetingSchedule(
-            @RequestBody @Valid ScheduleRequest.PatchMeetingScheduleDto dto,
             @PathVariable Long meetingScheduleId,
+            @RequestBody @Valid ScheduleRequest.PatchMeetingScheduleDto dto,
             @AuthenticationPrincipal SecurityUserDetails memberInfo) {
         meetingScheduleUsecase.updateMeetingSchedule(dto, meetingScheduleId, memberInfo);
         return ResponseDto.onSuccess("모임 일정 수정 성공");

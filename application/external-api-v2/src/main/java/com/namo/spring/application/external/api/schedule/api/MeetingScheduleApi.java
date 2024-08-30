@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
@@ -83,8 +84,8 @@ public interface MeetingScheduleApi {
                     }
                     """)
     }))
-    ResponseDto<Long> createMeetingSchedule(@Valid @RequestPart ScheduleRequest.PostMeetingScheduleDto dto,
-                                            @RequestPart(required = false) MultipartFile image,
+    ResponseDto<Long> createMeetingSchedule(@Parameter(description = "생성 요청 dto") @Valid @RequestPart ScheduleRequest.PostMeetingScheduleDto dto,
+                                            @Parameter(description = "모임 일정 프로필 이미지") @RequestPart(required = false) MultipartFile image,
                                             @AuthenticationPrincipal SecurityUserDetails member);
 
     @Operation(summary = "모임 일정 목록 조회", description = "모임 일정 목록을 조회합니다.")
@@ -258,4 +259,109 @@ public interface MeetingScheduleApi {
             @Parameter(description = "월") @RequestParam Integer month,
             @AuthenticationPrincipal SecurityUserDetails member);
 
+    @Operation(summary = "모임 일정 수정", description = "모임 일정을 수정합니다. 수정 권한은 모임의 방장에게만 있습니다.")
+    @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "모임 일정 수정 성공", value = """
+            {
+            	"isSuccess": true,
+            	"code": 200,
+            	"message": "성공",
+            	"result": "모임 일정 수정 성공"
+            }
+            """)}))
+    @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "요청 실패 - 모임 일정에 참여할 유저를 찾을 수 없습니다.", value = """
+            {
+            	"isSuccess": false,
+            	"code": 404,
+            	"message": "유저를 찾을 수 없습니다."
+            }
+            """),
+            @ExampleObject(name = "요청 실패 - 모임 일정이 아닙니다.", value = """
+                    {
+                    	"isSuccess": false,
+                    	"code": 404,
+                    	"message": "모임 일정이 아닙니다."
+                    }
+                    """),
+            @ExampleObject(name = "요청 실패 - 모임 일정의 수정 권한이 업습니다.", value = """
+                    {
+                    	"isSuccess": false,
+                    	"code": 404,
+                    	"message": "해당 일정의 생성자가 아닙니다."
+                    }
+                    """),
+            @ExampleObject(name = "요청 실패 - 유효한 날짜 값을 입력해주세요.", value = """
+                    {
+                    	"isSuccess": false,
+                    	"code": 404,
+                    	"message": "유효한 날짜 값을 입력해주세요."
+                    }
+                    """),
+            @ExampleObject(name = "요청 실패 - 모임 일정은 최소 1명, 최대 9명까지 초대 가능합니다.", value = """
+                    {
+                    	"isSuccess": false,
+                    	"code": 404,
+                    	"message": "모임 일정은 최소 1명, 최대 9명까지 초대 가능합니다."
+                    }
+                    """),
+            @ExampleObject(name = "요청 실패 - 초대자 중에 중복되는 참여자가 있습니다.", value = """
+                    {
+                    	"isSuccess": false,
+                    	"code": 404,
+                    	"message": "중복되는 참여자입니다."
+                    }
+                    """),
+            @ExampleObject(name = "요청 실패 - 초대자 중에 친구가 아닌 유저가 있습니다.", value = """
+                    {
+                    	"isSuccess": false,
+                    	"code": 404,
+                    	"message": "친구인 유저를 찾을 수 없습니다."
+                    }
+                    """),
+            @ExampleObject(name = "요청 실패 - 입력한 값의 참여자를 찾을 수 없습니다.", value = """
+                    {
+                    	"isSuccess": false,
+                    	"code": 404,
+                    	"message": "일정의 참여자를 찾을 수 없습니다."
+                    }
+                    """)
+    }))
+    ResponseDto<String> updateMeetingSchedule(
+            @Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
+            @Parameter(description = "수정 요청 dto") @RequestBody @Valid ScheduleRequest.PatchMeetingScheduleDto dto,
+            @AuthenticationPrincipal SecurityUserDetails memberInfo);
+
+    @Operation(summary = "모임 상세 조회", description = "모임 일정을 상세 조회합니다.")
+    @ApiErrorCodes(value = {ErrorStatus.EMPTY_ACCESS_KEY, ErrorStatus.EXPIRATION_ACCESS_TOKEN, ErrorStatus.EXPIRATION_REFRESH_TOKEN, ErrorStatus.INTERNET_SERVER_ERROR})
+    @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "요청 실패 - 모임 일정에 참여할 유저를 찾을 수 없습니다.", value = """
+            {
+            	"isSuccess": false,
+            	"code": 404,
+            	"message": "유저를 찾을 수 없습니다."
+            }
+            """),
+            @ExampleObject(name = "요청 실패 - 일정을 찾을 수 없습니다.", value = """
+                    {
+                    	"isSuccess": false,
+                    	"code": 404,
+                    	"message": "일정을 찾을 수 없습니다."
+                    }
+                    """),
+            @ExampleObject(name = "요청 실패 - 모임 일정이 아닙니다.", value = """
+                    {
+                    	"isSuccess": false,
+                    	"code": 404,
+                    	"message": "모임 일정이 아닙니다."
+                    }
+                    """),
+            @ExampleObject(name = "요청 실패 - 해당 일정에 대한 읽기 권한이 없습니다.", value = """
+                    {
+                    	"isSuccess": false,
+                    	"code": 404,
+                    	"message": "해당 일정의 참석자가 아닙니다."
+                    }
+                    """)
+    }))
+    ResponseDto<MeetingScheduleResponse.GetMeetingScheduleDto> getMeetingSchedule(
+            @Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
+            @AuthenticationPrincipal SecurityUserDetails memberInfo);
 }
