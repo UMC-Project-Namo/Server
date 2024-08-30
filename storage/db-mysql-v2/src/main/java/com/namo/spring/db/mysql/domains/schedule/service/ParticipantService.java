@@ -33,6 +33,10 @@ public class ParticipantService {
         return participantRepository.findParticipantByScheduleIdAndMemberId(scheduleId, memberId);
     }
 
+    public List<Participant> readParticipantsByScheduleId(Long scheduleId) {
+        return participantRepository.findAllByScheduleId(scheduleId);
+    }
+
     @Transactional(readOnly = true)
     public List<Participant> readParticipantsByIdAndScheduleId(List<Long> participantIds, Long scheduleId, ParticipantStatus status) {
         return participantRepository.findParticipantByIdAndScheduleId(participantIds, scheduleId, status);

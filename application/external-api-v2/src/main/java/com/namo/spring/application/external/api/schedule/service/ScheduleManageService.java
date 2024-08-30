@@ -97,14 +97,14 @@ public class ScheduleManageService {
     public void updateMeetingSchedule(ScheduleRequest.PatchMeetingScheduleDto dto, Schedule schedule, Long memberId) {
         Participant ownerParticipant = participantManageService.getValidatedMeetingParticipantWithSchedule(memberId, schedule.getId());
         checkParticipantIsOwner(ownerParticipant);
-        // 기존의 인원수와, 초대될 + 삭제될 member의 인원 수 검증
-        List<Long> participantIds = participantRepository.findAllByScheduleId(schedule.getId()).stream()
-                .filter(participant -> participant.getIsOwner() == ParticipantRole.NON_OWNER.getValue())
-                .map(Participant::getMember)
-                .map(Member::getId)
-                .collect(Collectors.toList());
         updateScheduleContent(dto.getTitle(), dto.getLocation(), dto.getPeriod(), schedule);
+        // 기존의 인원과, 초대될 & 삭제될 member  검증
         if (!dto.getParticipantsToAdd().isEmpty() || !dto.getParticipantsToRemove().isEmpty()) {
+            List<Long> participantIds = participantService.readParticipantsByScheduleId(schedule.getId()).stream()
+                    .filter(participant -> participant.getIsOwner() == ParticipantRole.NON_OWNER.getValue())
+                    .map(Participant::getMember)
+                    .map(Member::getId)
+                    .collect(Collectors.toList());
             validateParticipantCount(participantIds.size() + dto.getParticipantsToAdd().size() - dto.getParticipantsToRemove().size());
             validateExistingAndNewParticipantIds(participantIds, dto.getParticipantsToAdd());
             participantManageService.updateMeetingScheduleParticipants(memberId, schedule, dto);

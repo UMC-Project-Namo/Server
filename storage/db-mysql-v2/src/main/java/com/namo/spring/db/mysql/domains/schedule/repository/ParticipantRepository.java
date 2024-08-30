@@ -12,6 +12,8 @@ import java.util.Optional;
 
 public interface ParticipantRepository extends JpaRepository<Participant, Long> {
 
+    List<Participant> findAllByScheduleId(Long scheduleId);
+
     @Query("SELECT p FROM Participant p JOIN p.schedule s JOIN p.member m WHERE p.member.id = :memberId AND p.status = 'ACTIVE' AND s.scheduleType = :scheduleType")
     List<Participant> findParticipantsByMemberAndScheduleType(Long memberId, int scheduleType);
 
