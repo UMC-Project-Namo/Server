@@ -1,8 +1,9 @@
 package com.namo.spring.db.mysql.domains.schedule.repository;
 
-import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
-import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
-import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

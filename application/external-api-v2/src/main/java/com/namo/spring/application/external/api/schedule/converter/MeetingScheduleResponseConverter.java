@@ -15,7 +15,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.namo.spring.db.mysql.domains.category.type.PaletteEnum.getPaletteColorIds;
+import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
+import com.namo.spring.core.common.utils.DateUtil;
+import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
+import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 
 public class MeetingScheduleResponseConverter {
     private MeetingScheduleResponseConverter() {

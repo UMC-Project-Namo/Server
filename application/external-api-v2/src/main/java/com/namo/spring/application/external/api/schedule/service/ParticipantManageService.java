@@ -1,5 +1,6 @@
 package com.namo.spring.application.external.api.schedule.service;
 
+
 import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.category.entity.Palette;
@@ -16,6 +17,7 @@ import com.namo.spring.db.mysql.domains.user.entity.Friendship;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.exception.MemberException;
 import com.namo.spring.db.mysql.domains.user.service.FriendshipService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

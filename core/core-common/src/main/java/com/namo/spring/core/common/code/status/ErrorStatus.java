@@ -1,10 +1,12 @@
 package com.namo.spring.core.common.code.status;
 
+import org.springframework.http.HttpStatus;
+
 import com.namo.spring.core.common.code.BaseErrorCode;
 import com.namo.spring.core.common.response.ResponseDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor

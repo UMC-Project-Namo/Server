@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.namo.spring.core.common.annotation.DomainService;
+import com.namo.spring.db.mysql.domains.record.entity.Diary;
 import com.namo.spring.db.mysql.domains.record.entity.DiaryImage;
 import com.namo.spring.db.mysql.domains.record.repository.DiaryImageRepository;
 
@@ -30,4 +31,7 @@ public class DiaryImageService {
 		diaryImageRepository.deleteById(diaryImageId);
 	}
 
+	public void deleteAll(Diary diary) {
+		diaryImageRepository.deleteAllByDiary(diary);
+	}
 }
