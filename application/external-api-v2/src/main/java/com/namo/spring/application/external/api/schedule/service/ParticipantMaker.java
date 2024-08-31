@@ -28,10 +28,13 @@ public class ParticipantMaker {
 
     public void makeScheduleOwner(Schedule schedule, Member member, Long categoryId, Long paletteId) {
         Category category;
+        Palette palette = null;
         if (categoryId != null) {
             category = categoryService.readCategoryByMemberAndId(categoryId, member);
         } else category = categoryService.readMeetingCategoryByMember(member);
-        Palette palette = paletteService.getPalette(paletteId);
+        if (paletteId != null) {
+            palette = paletteService.getPalette(paletteId);
+        }
         Participant participant = toParticipant(member, ParticipantRole.OWNER, schedule, ParticipantStatus.ACTIVE, category, palette);
         participantService.createParticipant(participant);
     }

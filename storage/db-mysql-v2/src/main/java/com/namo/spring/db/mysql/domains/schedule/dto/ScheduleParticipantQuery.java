@@ -14,7 +14,6 @@ public class ScheduleParticipantQuery {
     private Long participantId;
     private Long participantPaletteId;
     private Long memberId;
-    private Long anonymousId;
     private String nickname;
     private Schedule schedule;
 }

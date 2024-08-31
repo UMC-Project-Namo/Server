@@ -1,9 +1,11 @@
 package com.namo.spring.db.mysql.domains.user.entity;
 
 public interface User {
-	Long getId();
+    Long getId();
 
-	String getName();
+    String getName();
 
-	String getTag();
+    String getNickname();
+
+    String getTag();
 }

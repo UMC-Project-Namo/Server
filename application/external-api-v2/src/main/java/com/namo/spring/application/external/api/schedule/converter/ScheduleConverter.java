@@ -14,7 +14,7 @@ public class ScheduleConverter {
         return Schedule.builder()
                 .title(title)
                 .period(period)
-                .location(toLocation(location))
+                .location(location != null ? toLocation(location) : null)
                 .scheduleType(type)
                 .imageUrl(imageUrl)
                 .participantCount(participantCount)
@@ -22,7 +22,7 @@ public class ScheduleConverter {
                 .build();
     }
 
-    private static Location toLocation(ScheduleRequest.LocationDto dto) {
+    public static Location toLocation(ScheduleRequest.LocationDto dto) {
         return Location.builder()
                 .longitude(dto.getLongitude())
                 .latitude(dto.getLatitude())

@@ -16,7 +16,6 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Entity
@@ -83,6 +82,14 @@ public class Schedule extends BaseTimeEntity {
                 .build();
     }
 
+    public void updateContent(String title, Period period, Location location) {
+        this.title = title;
+        this.period = period;
+        if (location != null) {
+            this.location = location;
+        }
+    }
+
     public void addActiveParticipant(String nickname) {
         if (!StringUtils.hasText(nickname))
             throw new IllegalArgumentException("nickname은 null이거나 빈 문자열일 수 없습니다.");
@@ -102,22 +109,28 @@ public class Schedule extends BaseTimeEntity {
         if (!StringUtils.hasText(oldNickname) || !StringUtils.hasText(newNickname))
             throw new IllegalArgumentException("nickname은 null이거나 빈 문자열일 수 없습니다.");
         if (this.participantNicknames != null) {
-            List<String> nicknames = Arrays.asList(this.participantNicknames.split(", "));
-            this.participantNicknames = nicknames.stream()
-                    .map(nickname -> nickname.equals(oldNickname) ? newNickname : nickname)
-                    .collect(Collectors.joining(", "));
+            List<String> nicknames = new ArrayList<>(Arrays.asList(this.participantNicknames.split(", ")));
+            int index = nicknames.indexOf(oldNickname);
+            if (index != -1) {
+                nicknames.set(index, newNickname);
+                this.participantNicknames = String.join(", ", nicknames);
+            }
         }
     }
 
-    public void removeParticipant(String nickname) {
-        if (!StringUtils.hasText(nickname))
-            throw new IllegalArgumentException("nickname은 null이거나 빈 문자열일 수 없습니다.");
-        if (this.participantNicknames != null) {
-            List<String> nicknames = new ArrayList<>(Arrays.asList(this.participantNicknames.split(", ")));
-            nicknames.remove(nickname);
-            this.participantNicknames = String.join(", ", nicknames);
-            this.participantCount = nicknames.size();
+    public void removeParticipants(List<String> nicknamesToRemove) {
+        if (nicknamesToRemove == null || nicknamesToRemove.isEmpty()) {
+            throw new IllegalArgumentException("삭제할 닉네임 목록이 비어있거나 null일 수 없습니다.");
         }
+
+        List<String> currentNicknames = new ArrayList<>(Arrays.asList(this.participantNicknames.split(", ")));
+
+        for (String nicknameToRemove : nicknamesToRemove) {
+            currentNicknames.remove(nicknameToRemove); // 첫 번째 일치하는 닉네임만 제거
+        }
+
+        this.participantNicknames = String.join(", ", currentNicknames);
+        this.participantCount = currentNicknames.size();
     }
 
     public void updateInvitationUrl(String invitationUrl) {

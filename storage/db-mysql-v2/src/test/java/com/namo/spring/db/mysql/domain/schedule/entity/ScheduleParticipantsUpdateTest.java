@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -51,12 +52,13 @@ public class ScheduleParticipantsUpdateTest {
         // Given
         schedule.addActiveParticipant("Owner");
         schedule.addActiveParticipant("Participant");
+        schedule.addActiveParticipant("Participant");
 
         // When
-        schedule.updateParticipant("Owner", "updatedOwner");
+        schedule.updateParticipant("Participant", "updatedParticipant");
 
         // Then
-        assertThat(schedule.getParticipantNicknames()).isEqualTo("updatedOwner, Participant");
+        assertThat(schedule.getParticipantNicknames()).isEqualTo("Owner, updatedParticipant, Participant");
     }
 
     @Test
@@ -76,19 +78,39 @@ public class ScheduleParticipantsUpdateTest {
     @Test
     void removeParticipant_ShouldRemoveParticipant() {
         schedule.addActiveParticipant("Owner");
-        schedule.addActiveParticipant("Participant");
+        schedule.addActiveParticipant("Participant1");
+        schedule.addActiveParticipant("Participant2");
 
-        schedule.removeParticipant("Participant");
+        schedule.removeParticipants(List.of("Participant1", "Participant2"));
 
         assertThat(schedule.getParticipantNicknames()).isEqualTo("Owner");
         assertThat(schedule.getParticipantCount()).isEqualTo(1);
     }
 
     @Test
-    void removeParticipant_ShouldThrowException_WhenNicknameIsEmpty() {
-        assertThatThrownBy(() -> schedule.removeParticipant(""))
+    void removeParticipant_ShouldRemoveParticipant_DuplicateNicknameRequest() {
+        schedule.addActiveParticipant("Owner");
+        schedule.addActiveParticipant("Participant");
+        schedule.addActiveParticipant("Participant");
+
+        schedule.removeParticipants(List.of("Participant", "Participant"));
+
+        assertThat(schedule.getParticipantNicknames()).isEqualTo("Owner");
+        assertThat(schedule.getParticipantCount()).isEqualTo(1);
+    }
+
+    @Test
+    void removeParticipant_ShouldThrowException_WhenNicknameIsNull() {
+        assertThatThrownBy(() -> schedule.removeParticipants(null))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("nickname은 null이거나 빈 문자열일 수 없습니다.");
+                .hasMessage("삭제할 닉네임 목록이 비어있거나 null일 수 없습니다.");
+    }
+
+    @Test
+    void removeParticipant_ShouldThrowException_WhenNicknameIsEmpty() {
+        assertThatThrownBy(() -> schedule.removeParticipants(List.of()))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("삭제할 닉네임 목록이 비어있거나 null일 수 없습니다.");
     }
 
 }

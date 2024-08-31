@@ -2,6 +2,7 @@ package com.namo.spring.application.external.api.schedule.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,7 +28,10 @@ public class ScheduleRequest {
         @Schema(description = "카테고리 ID")
         private Long categoryId;
         @NotNull(message = "일정 시작일, 종료일 정보는 필수 입니다.")
+        @Schema(description = "기간 정보")
         private PeriodDto period;
+        @NotNull(message = "장소 정보가 없을 경우 empty object를 전송합니다.")
+        @Schema(description = "카카오 맵 장소 정보")
         private LocationDto location;
     }
 
@@ -40,7 +44,10 @@ public class ScheduleRequest {
         @Schema(description = "모임 일정 이름", example = "나모 정기 회의")
         private String title;
         @NotNull(message = "일정 시작일, 종료일 정보는 필수 입니다.")
+        @Schema(description = "기간 정보")
         private PeriodDto period;
+        @NotNull(message = "장소가 없을 시 emtpy object를 전송합니다.")
+        @Schema(description = "카카오 맵 장소 정보, 장소가 없을 시 emtpy object를 전송합니다.")
         private LocationDto location;
         @NotNull(message = "모임 일정에 참여할 친구는 1명부터 9명까지 입력 가능합니다.")
         @Schema(description = "스케줄에 참여할 유저 ID")
@@ -63,13 +70,35 @@ public class ScheduleRequest {
     @AllArgsConstructor
     @Getter
     public static class LocationDto {
-        @Schema(description = "장소 위치 위도")
-        private Double latitude;
-        @Schema(description = "장소 위치 경도")
+        @Schema(description = "카카오맵 좌표계 상의 x 좌표")
         private Double longitude;
+        @Schema(description = "카카오맵 좌표계 상의 y 좌표")
+        private Double latitude;
         @Schema(description = "장소 이름", example = "스타벅스 강남역점")
         private String locationName;
         @Schema(description = "장소 카카오 맵 ID")
         private String kakaoLocationId;
+    }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    @Schema(title = "모임 일정 수정 요청 DTO")
+    public static class PatchMeetingScheduleDto {
+        @NotBlank(message = "일정 이름 입력은 필수 입니다. 수정 사항이 없을 시 원본 값을 전송합니다.")
+        @Schema(description = "모임 일정 이름, 수정 사항이 없을 시 원본 값을 전송합니다.")
+        private String title;
+        @NotEmpty(message = "기간 입력은 필수 입니다. 수정 사항이 없을 시 원본 값을 전송합니다.")
+        @Schema(description = "기간, 수정 사항이 없을 시 원본 값을 전송합니다.")
+        private PeriodDto period;
+        @NotNull(message = "수정 사항이 없을 경우 empty object를 전송합니다.")
+        @Schema(description = "카카오 맵 장소 정보, 수정 사항이 없을 시 원본 값을 전송합니다.(원래 값이 없을 경우 empty object)")
+        private LocationDto location;
+        @NotNull(message = "추가할 유저가 없을 시 empty array를 전송하세요.")
+        @Schema(description = "스케줄에 추가할 유저 ID(userId), 추가할 유저가 없을 시 empty array를 전송합니다.")
+        private List<Long> participantsToAdd;
+        @NotNull(message = "삭제할 유저가 없을 시 empty array를 전송하세요.")
+        @Schema(description = "스케줄에서 삭제할 참가자 ID(participantId), 삭제할 유저가 없을 시 empty array를 전송합니다.")
+        private List<Long> participantsToRemove;
     }
 }
