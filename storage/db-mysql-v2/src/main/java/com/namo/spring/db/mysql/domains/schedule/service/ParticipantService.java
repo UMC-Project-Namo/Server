@@ -53,7 +53,7 @@ public class ParticipantService {
     }
 
     @Transactional(readOnly = true)
-    public List<ScheduleParticipantQuery> readParticipantsWithScheduleAndAnonymous(List<Long> memberIds, LocalDateTime startDate, LocalDateTime endDate) {
+    public List<ScheduleParticipantQuery> readParticipantsWithScheduleAndUsers(List<Long> memberIds, LocalDateTime startDate, LocalDateTime endDate) {
         return participantRepository.findParticipantsWithUserAndSchedule(memberIds, startDate, endDate);
     }
 
@@ -69,4 +69,9 @@ public class ParticipantService {
     public void deleteByIdIn(List<Long> Ids) {
         participantRepository.deleteByIdIn(Ids);
     }
+
+    public Optional<Participant> readParticipants(Long memberId, Long scheduleId) {
+        return participantRepository.findParticipantByMemberIdAndScheduleId(memberId, scheduleId);
+    }
+
 }

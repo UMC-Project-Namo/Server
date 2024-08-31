@@ -72,7 +72,7 @@ public class ScheduleManageService {
         validateParticipantCount(memberIds.size());
         List<Long> members = participantManageService.getFriendshipValidatedParticipants(memberId, memberIds).stream().map(Member::getId).collect(Collectors.toList());
         members.add(memberId);
-        return participantService.readParticipantsWithScheduleAndAnonymous(members, period.getStartDate(), period.getEndDate());
+        return participantService.readParticipantsWithScheduleAndUsers(members, period.getStartDate(), period.getEndDate());
     }
 
     public List<ScheduleParticipantQuery> getMonthlyMeetingParticipantSchedules(Schedule schedule, Period period, Long memberId) {
@@ -80,7 +80,7 @@ public class ScheduleManageService {
         List<Participant> participants = participantManageService.getMeetingScheduleParticipants(schedule.getId(), ParticipantStatus.ACTIVE);
         List<Long> members = participants.stream().map(Participant::getUser).map(User::getId).collect(Collectors.toList());
 
-        return participantService.readParticipantsWithScheduleAndAnonymous(members, period.getStartDate(), period.getEndDate());
+        return participantService.readParticipantsWithScheduleAndUsers(members, period.getStartDate(), period.getEndDate());
     }
 
     private void checkParticipantExists(Schedule schedule, Long memberId) {

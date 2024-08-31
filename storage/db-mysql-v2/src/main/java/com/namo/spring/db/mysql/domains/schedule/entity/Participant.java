@@ -3,7 +3,6 @@ package com.namo.spring.db.mysql.domains.schedule.entity;
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
 import com.namo.spring.db.mysql.domains.category.entity.Palette;
-import com.namo.spring.db.mysql.domains.record.entity.ActivityParticipant;
 import com.namo.spring.db.mysql.domains.record.entity.Diary;
 import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
@@ -57,14 +56,14 @@ public class Participant extends BaseTimeEntity {
     @JoinColumn(name = "palette_id", nullable = true)
     private Palette palette;
 
+    private boolean hasDiary;
+
     @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Diary> diaries;
 
-    @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ActivityParticipant> activityParticipants;
-
     @Builder
-    public Participant(int isOwner, User user, Schedule schedule, ParticipantStatus status, Category category, Palette palette) {
+    public Participant(int isOwner, User user, Schedule schedule, ParticipantStatus status, Category category,
+                       Palette palette) {
         this.isOwner = Objects.requireNonNull(isOwner, "isOwner은 null일 수 없습니다.");
         this.member = user instanceof Member ? (Member) user : null;
         this.anonymous = user instanceof Anonymous ? (Anonymous) user : null;
@@ -72,9 +71,11 @@ public class Participant extends BaseTimeEntity {
         this.status = Objects.requireNonNull(status, "status는 null일 수 없습니다.");
         this.category = category;
         this.palette = palette;
+        this.hasDiary = false;
     }
 
-    public static Participant of(int isOwner, User user, Schedule schedule, ParticipantStatus status, Category category, Palette palette) {
+    public static Participant of(int isOwner, User user, Schedule schedule, ParticipantStatus status, Category category,
+                                 Palette palette) {
         return Participant.builder()
                 .isOwner(isOwner)
                 .user(user)
@@ -103,4 +104,13 @@ public class Participant extends BaseTimeEntity {
     public void inactiveStatus() {
         this.status = ParticipantStatus.INACTIVE;
     }
+
+    public void diaryCreated() {
+        this.hasDiary = true;
+    }
+
+    public void diaryDeleted() {
+        this.hasDiary = false;
+    }
+
 }

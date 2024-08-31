@@ -53,7 +53,7 @@ public class DiaryImage extends BaseTimeEntity implements Image {
 		this.imageOrder = Objects.requireNonNull(imageOrder, "imageOrder은 null일 수 없습니다.");
 	}
 
-	public DiaryImage of(Diary diary, String imageUrl, Integer imageOrder) {
+	public static DiaryImage of(Diary diary, String imageUrl, Integer imageOrder) {
 		return DiaryImage.builder()
 			.diary(diary)
 			.imageUrl(imageUrl)

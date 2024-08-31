@@ -97,4 +97,10 @@ public class ParticipantManageService {
         } else return participants;
     }
 
+    public Participant getScheduleParticipant(Long memberId, Long scheduleId) {
+        return participantService.readParticipants(memberId, scheduleId)
+                .orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_PARTICIPANT_FAILURE));
+    }
+
+
 }

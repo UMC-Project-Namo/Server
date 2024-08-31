@@ -27,6 +27,14 @@ public enum ErrorStatus implements BaseErrorCode {
     MAKE_PUBLIC_KEY_FAILURE(HttpStatus.BAD_REQUEST, "애플 퍼블릭 키를 생성하는데 실패하였습니다"),
     APPLE_REQUEST_ERROR(HttpStatus.BAD_REQUEST, "애플 identityToken이 잘못되었습니다."),
     USER_POST_ERROR(HttpStatus.BAD_REQUEST, "email나 name이 비어있어 유저를 생성할 수 없습니다."),
+    MEETING_INVALID_PARTICIPANT_NUMBER(HttpStatus.BAD_REQUEST, "모임의 인원은 2명 이상, 10명 이하 입니다."),
+    MEETING_DUPLICATE_PARTICIPANT(HttpStatus.BAD_REQUEST, "중복되는 참여자입니다."),
+    ALREADY_WRITTEN_DIARY_FAILURE(HttpStatus.BAD_REQUEST, "이미 일기를 작성하였습니다."),
+    NOT_WRITTEN_DIARY_FAILURE(HttpStatus.BAD_REQUEST, "일기를 작성하지 않았습니다."),
+    NOT_MY_DIARY_FAILURE(HttpStatus.BAD_REQUEST, "해당 일기에 대한 권한이 없습니다."),
+    NOT_SCHEDULE_OWNER(HttpStatus.BAD_REQUEST, "해당 모임 일정의 생성자가 아닙니다."),
+    NOT_SCHEDULE_PARTICIPANT(HttpStatus.BAD_REQUEST, "해당 일정의 참석자가 아닙니다."),
+    NOT_MEETING_SCHEDULE(HttpStatus.BAD_REQUEST, "모임 일정이 아닙니다."),
 
     /**
      * 401 : 소셜 로그인 오류
@@ -107,9 +115,6 @@ public enum ErrorStatus implements BaseErrorCode {
     NOT_USERS_CATEGORY(HttpStatus.NOT_FOUND, "해당 유저의 카테고리가 아닙니다."),
     NOT_USERS_IN_GROUP(HttpStatus.NOT_FOUND, "유저가 그룹에 포함되어 있지 않습니다."),
     NOT_IMAGE_IN_DIARY(HttpStatus.NOT_FOUND, "이미지가 다이어리에 포함되어 있지 않습니다."),
-    NOT_SCHEDULE_OWNER(HttpStatus.NOT_FOUND, "해당 일정의 생성자가 아닙니다."),
-    NOT_SCHEDULE_PARTICIPANT(HttpStatus.NOT_FOUND, "해당 일정의 참석자가 아닙니다."),
-    NOT_MEETING_SCHEDULE(HttpStatus.NOT_FOUND, "모임 일정이 아닙니다."),
 
     /**
      * 404 : 인프라 에러
