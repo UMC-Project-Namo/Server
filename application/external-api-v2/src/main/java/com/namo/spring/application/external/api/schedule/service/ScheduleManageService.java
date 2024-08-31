@@ -6,7 +6,6 @@ import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
-import com.namo.spring.db.mysql.domains.schedule.repository.ParticipantRepository;
 import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
 import com.namo.spring.db.mysql.domains.schedule.service.ScheduleService;
 import com.namo.spring.db.mysql.domains.schedule.type.*;
@@ -33,8 +32,6 @@ public class ScheduleManageService {
     private final ScheduleService scheduleService;
     private final ParticipantManageService participantManageService;
     private final ParticipantService participantService;
-
-    private final ParticipantRepository participantRepository;
 
     public Schedule getMeetingSchedule(Long scheduleId) {
         Schedule schedule = scheduleService.readSchedule(scheduleId).orElseThrow(() -> new ScheduleException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
