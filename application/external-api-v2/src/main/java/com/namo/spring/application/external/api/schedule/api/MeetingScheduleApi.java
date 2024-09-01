@@ -101,7 +101,7 @@ public interface MeetingScheduleApi {
                     "title": "나모 정기 회의",
                     "startDate": 1722999600,
                     "imageUrl": "https://namo-public-image.s3.ap-northeast-2.amazonaws.com/mongi_512.png",
-                    "participantsNum": 9,
+                    "participantsCount": 9,
                     "participantsNickname": "뚜뚜, 코코아, 다나, 캐슬, 짱구, 연현, 램프, 반디, 유즈"
                   }
                 ]
@@ -135,12 +135,12 @@ public interface MeetingScheduleApi {
                       {
                         "memberId": 1,
                         "nickname": "다나",
-                        "color": 5
+                        "colorId": 5
                       },
                       {
                         "memberId": 2,
                         "nickname": "테스트",
-                        "color": 6
+                        "colorId": 6
                       }
                     ]
                   }
@@ -193,36 +193,34 @@ public interface MeetingScheduleApi {
     @ApiErrorCodes(value = {ErrorStatus.EMPTY_ACCESS_KEY, ErrorStatus.EXPIRATION_ACCESS_TOKEN, ErrorStatus.EXPIRATION_REFRESH_TOKEN, ErrorStatus.INTERNET_SERVER_ERROR})
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "모임 일정 참여자 월간 일정 조회 성공", value = """
             {
-                "isSuccess": true,
-                "code": 200,
-                "message": "성공",
-                "result": [
-                  {
-                    "scheduleId": 1,
-                    "name": "나모 정기 회의",
-                    "startDate": 1722124800,
-                    "endDate": 1722124800,
-                    "interval": null,
-                    "participants": [
-                      {
-                        "participantId": 2,
-                        "memberId": 1,
-                        "anonymousId": null,
-                        "nickname": "다나",
-                        "color": 5
-                      },
-                      {
-                        "participantId": 3,
-                        "memberId": 2,
-                        "anonymousId": null,
-                        "nickname": "몽이",
-                        "color": 6
-                      },
-                    ],
-                    "isCurMeetingSchedule": true
-                  }
-                ]
-              }
+                  "isSuccess":true,
+                  "code":200,
+                  "message":"성공",
+                  "result":[
+                     {
+                        "scheduleId":1,
+                        "name":"나모 정기 회의",
+                        "startDate":1722124800,
+                        "endDate":1722124800,
+                        "interval": 0,
+                        "participants":[
+                           {
+                              "participantId":2,
+                              "memberId":1,
+                              "nickname":"다나",
+                              "colorId":5
+                           },
+                           {
+                              "participantId":3,
+                              "memberId":2,
+                              "nickname":"몽이",
+                              "colorId":6
+                           }
+                        ],
+                        "isCurMeetingSchedule":true
+                     }
+                  ]
+               }
             """)}))
     @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "요청 실패 - 모임 일정에 참여할 유저를 찾을 수 없습니다.", value = """
             {
