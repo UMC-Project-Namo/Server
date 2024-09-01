@@ -85,7 +85,15 @@ public class ScheduleManageService {
         validateParticipantCount(memberIds.size());
         List<Long> members = participantManageService.getFriendshipValidatedParticipants(memberId, memberIds).stream().map(Member::getId).collect(Collectors.toList());
         members.add(memberId);
-        return participantService.readParticipantsWithUserAndScheduleByPeriod(members, period.getStartDate(), period.getEndDate());
+        return participantService.readParticipantsWithUserAndScheduleByPeriod(members, period.getStartDate(), period.getEndDate())
+                .stream()
+                // 다른 유저의 일정일 경우 공유 여부로 필터링
+                .filter(participant -> {
+                    boolean isSharedSchedule = true;
+                    if (!participant.getMemberId().equals(memberId)) isSharedSchedule = participant.getIsShared();
+                    return isSharedSchedule;
+                })
+                .collect(Collectors.toList());
     }
 
     public List<ScheduleParticipantQuery> getMonthlyMeetingParticipantSchedules(Schedule schedule, Period period, Long memberId) {
@@ -93,7 +101,15 @@ public class ScheduleManageService {
         List<Participant> participants = participantManageService.getMeetingScheduleParticipants(schedule.getId(), ParticipantStatus.ACTIVE);
         List<Long> members = participants.stream().map(Participant::getUser).map(User::getId).collect(Collectors.toList());
 
-        return participantService.readParticipantsWithUserAndScheduleByPeriod(members, period.getStartDate(), period.getEndDate());
+        return participantService.readParticipantsWithUserAndScheduleByPeriod(members, period.getStartDate(), period.getEndDate())
+                .stream()
+                // 다른 유저의 일정일 경우 공유 여부로 필터링
+                .filter(participant -> {
+                    boolean isSharedSchedule = true;
+                    if (!participant.getMemberId().equals(memberId)) isSharedSchedule = participant.getIsShared();
+                    return isSharedSchedule;
+                })
+                .collect(Collectors.toList());
     }
 
     private void checkParticipantExists(Schedule schedule, Long memberId) {
