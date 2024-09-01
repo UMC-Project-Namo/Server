@@ -63,14 +63,14 @@ public class ScheduleManageService {
     }
 
     public List<Schedule> getMeetingScheduleItems(Long memberId) {
-        List<Long> scheduleIds = participantService.readScheduleParticipantItemsByScheduleIds(memberId).stream()
+        List<Long> scheduleIds = participantService.readScheduleParticipantSummaryByScheduleIds(memberId).stream()
                 .map(Participant::getSchedule)
                 .map(Schedule::getId)
                 .collect(Collectors.toList());
         return scheduleService.readSchedulesById(scheduleIds);
     }
 
-    public List<PersonalScheduleResponse.GetMonthlyScheduleDto> getMonthlySchedules(Long memberId, Period period) {
+    public List<PersonalScheduleResponse.GetMonthlyScheduleDto> getMyMonthlySchedules(Long memberId, Period period) {
         List<Participant> monthlySchedules = participantService.readParticipantsWithScheduleAndCategoryByPeriod(memberId, period.getStartDate(), period.getEndDate());
         List<Long> scheduleIds = monthlySchedules.stream()
                 .map(Participant::getSchedule)

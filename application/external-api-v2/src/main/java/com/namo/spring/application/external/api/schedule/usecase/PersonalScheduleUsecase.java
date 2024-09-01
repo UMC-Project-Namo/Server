@@ -32,6 +32,6 @@ public class PersonalScheduleUsecase {
 
     @Transactional(readOnly = true)
     public List<PersonalScheduleResponse.GetMonthlyScheduleDto> getMyMonthlySchedules(int year, int month, SecurityUserDetails member) {
-        return scheduleManageService.getMonthlySchedules(member.getUserId(), getExtendedPeriod(year, month));
+        return scheduleManageService.getMyMonthlySchedules(member.getUserId(), getExtendedPeriod(year, month));
     }
 }

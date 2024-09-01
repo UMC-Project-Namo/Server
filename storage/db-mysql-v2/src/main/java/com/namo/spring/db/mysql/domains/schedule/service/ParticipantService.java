@@ -43,7 +43,7 @@ public class ParticipantService {
     }
 
     @Transactional(readOnly = true)
-    public List<Participant> readScheduleParticipantItemsByScheduleIds(Long memberId) {
+    public List<Participant> readScheduleParticipantSummaryByScheduleIds(Long memberId) {
         return participantRepository.findParticipantsByMemberAndScheduleType(memberId, ScheduleType.MEETING.getValue());
     }
 
