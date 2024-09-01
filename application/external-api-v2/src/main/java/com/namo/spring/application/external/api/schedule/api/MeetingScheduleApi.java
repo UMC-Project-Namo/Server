@@ -115,7 +115,7 @@ public interface MeetingScheduleApi {
             }
             """)
     }))
-    ResponseDto<List<MeetingScheduleResponse.GetMeetingScheduleItemDto>> getMyMeetingSchedules(@AuthenticationPrincipal SecurityUserDetails member);
+    ResponseDto<List<MeetingScheduleResponse.GetMeetingScheduleSummaryDto>> getMyMeetingSchedules(@AuthenticationPrincipal SecurityUserDetails member);
 
     @Operation(summary = "모임 초대자 월간 일정 조회", description = "모임에 초대할 유저들의 월간 일정을 조회합니다.")
     @ApiErrorCodes(value = {ErrorStatus.EMPTY_ACCESS_KEY, ErrorStatus.EXPIRATION_ACCESS_TOKEN, ErrorStatus.EXPIRATION_REFRESH_TOKEN, ErrorStatus.INTERNET_SERVER_ERROR})

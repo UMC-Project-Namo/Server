@@ -22,15 +22,15 @@ public class MeetingScheduleResponseConverter {
         throw new IllegalStateException("Util Class");
     }
 
-    public static List<MeetingScheduleResponse.GetMeetingScheduleItemDto> toGetMeetingScheduleItemDtos(
+    public static List<MeetingScheduleResponse.GetMeetingScheduleSummaryDto> toGetMeetingScheduleSummaryDtos(
             List<Schedule> schedules) {
         return schedules.stream()
-                .map(MeetingScheduleResponseConverter::toGetMeetingScheduleItemDto)
+                .map(MeetingScheduleResponseConverter::toGetMeetingScheduleSummaryDto)
                 .collect(Collectors.toList());
     }
 
-    public static MeetingScheduleResponse.GetMeetingScheduleItemDto toGetMeetingScheduleItemDto(Schedule schedule) {
-        return MeetingScheduleResponse.GetMeetingScheduleItemDto.builder()
+    public static MeetingScheduleResponse.GetMeetingScheduleSummaryDto toGetMeetingScheduleSummaryDto(Schedule schedule) {
+        return MeetingScheduleResponse.GetMeetingScheduleSummaryDto.builder()
                 .meetingScheduleId(schedule.getId())
                 .title(schedule.getTitle())
                 .startDate(DateUtil.toSeconds(schedule.getPeriod().getStartDate()))

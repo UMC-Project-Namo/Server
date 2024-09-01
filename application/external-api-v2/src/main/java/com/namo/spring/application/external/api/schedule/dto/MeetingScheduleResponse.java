@@ -16,7 +16,7 @@ public class MeetingScheduleResponse {
     @Getter
     @Builder
     @Schema(title = "모임 일정 목록 조회 응답 DTO")
-    public static class GetMeetingScheduleItemDto {
+    public static class GetMeetingScheduleSummaryDto {
         @Schema(description = "모임 일정 ID", example = "1")
         private Long meetingScheduleId;
         @Schema(description = "모임 일정 제목", example = "나모 정기 회의")

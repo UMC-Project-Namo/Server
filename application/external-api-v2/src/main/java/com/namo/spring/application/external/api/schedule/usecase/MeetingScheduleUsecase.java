@@ -40,8 +40,8 @@ public class MeetingScheduleUsecase {
     }
 
     @Transactional(readOnly = true)
-    public List<MeetingScheduleResponse.GetMeetingScheduleItemDto> getMeetingSchedules(SecurityUserDetails member) {
-        return toGetMeetingScheduleItemDtos(scheduleManageService.getMeetingScheduleItems(member.getUserId()));
+    public List<MeetingScheduleResponse.GetMeetingScheduleSummaryDto> getMeetingSchedules(SecurityUserDetails member) {
+        return toGetMeetingScheduleSummaryDtos(scheduleManageService.getMeetingScheduleItems(member.getUserId()));
     }
 
     @Transactional(readOnly = true)
