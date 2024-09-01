@@ -58,5 +58,9 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
 
 	Optional<Participant> findParticipantByMemberIdAndScheduleId(Long memberId, Long scheduleId);
 
-	List<Participant> findAllByMemberId(Long memberId, Pageable pageable);
+	@Query("SELECT p "
+		+ "FROM Participant p "
+		+ "WHERE p.hasDiary == true and p.member.id == :memberId "
+		+ "order by p.schedule.period.startDate desc ")
+	List<Participant> findAllByMemberIdAndHasDiary(Long memberId, Pageable pageable);
 }

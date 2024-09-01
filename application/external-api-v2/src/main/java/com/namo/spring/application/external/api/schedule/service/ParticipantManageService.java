@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -110,7 +111,8 @@ public class ParticipantManageService {
 			.orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_PARTICIPANT_FAILURE));
 	}
 
-	public List<Participant> getMyParticipation(Long memberId, Pageable pageable) {
-		return participantService.readParticipants(memberId, pageable);
+	public List<Participant> getMyParticipationForDiary(Long memberId, int page) {
+		Pageable pageable = PageRequest.of(page, 5);
+		return participantService.readParticipantsForDiary(memberId, pageable);
 	}
 }

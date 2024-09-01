@@ -80,8 +80,7 @@ public class ParticipantService {
 		return participantRepository.findParticipantByMemberIdAndScheduleId(memberId, scheduleId);
 	}
 
-	public List<Participant> readParticipants(Long memberId, Pageable pageable) {
-		return participantRepository.findAllByMemberId(memberId, pageable);
+	public List<Participant> readParticipantsForDiary(Long memberId, Pageable pageable) {
+		return participantRepository.findAllByMemberIdAndHasDiary(memberId, pageable);
 	}
-
 }
