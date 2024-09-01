@@ -49,6 +49,7 @@ public class DiaryController {
 	}
 
 	@PatchMapping("/{diaryId}")
+	@Operation(summary = "기록 수정", description = "기록(일기) 수정 API 입니다. 모든 이미지 URL을 새로 보내주어야 합니다.")
 	public ResponseDto<String> updateDiary(
 		@AuthenticationPrincipal SecurityUserDetails memberInfo,
 		@PathVariable Long diaryId,

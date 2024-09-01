@@ -1,5 +1,8 @@
 package com.namo.spring.application.external.api.record.usecase;
 
+import java.util.List;
+
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,5 +43,13 @@ public class DiaryUseCase {
 			scheduleId);
 		Diary diary = diaryManageService.getParticipantDiary(participant);
 		return DiaryResponseConverter.toDiaryDto(diary);
+	}
+
+	@Transactional(readOnly = true)
+	public List<DiaryResponse.DiaryArchiveDto> getDiaryArchiveDto(Long memberId, Pageable pageable) {
+		List<Participant> allMyParticipant = participantManageService.getMyParticipation(memberId, pageable);
+		return allMyParticipant.stream()
+			.map(DiaryResponseConverter::toDiaryArchiveDto)
+			.toList();
 	}
 }
