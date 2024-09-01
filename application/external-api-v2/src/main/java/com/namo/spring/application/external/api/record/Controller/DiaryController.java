@@ -1,5 +1,7 @@
 package com.namo.spring.application.external.api.record.Controller;
 
+import java.util.List;
+
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -72,10 +74,11 @@ public class DiaryController {
 
 	@Operation(summary = "기록 보관함 조회", description = "기록(일기) 보관함 조회 API 입니다. ")
 	@GetMapping("/archive")
-	public ResponseDto<DiaryResponse.DiaryArchiveDto> getDiaryArchive(
+	public ResponseDto<List<DiaryResponse.DiaryArchiveDto>> getDiaryArchive(
 		@AuthenticationPrincipal SecurityUserDetails memberInfo,
 		@ParameterObject Pageable pageable
 	) {
-		return ResponseDto.onSuccess(null);
+		return ResponseDto.onSuccess(diaryUseCase
+			.getDiaryArchiveDto(memberInfo.getUserId(), pageable));
 	}
 }
