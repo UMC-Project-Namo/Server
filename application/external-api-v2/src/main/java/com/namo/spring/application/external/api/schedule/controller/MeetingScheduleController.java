@@ -40,7 +40,7 @@ public class MeetingScheduleController implements MeetingScheduleApi {
      * 모임 일정 목록 조회 API
      */
     @GetMapping("")
-    public ResponseDto<List<MeetingScheduleResponse.GetMeetingScheduleItemDto>> getMyMeetingSchedules(@AuthenticationPrincipal SecurityUserDetails memberInfo) {
+    public ResponseDto<List<MeetingScheduleResponse.GetMeetingScheduleSummaryDto>> getMyMeetingSchedules(@AuthenticationPrincipal SecurityUserDetails memberInfo) {
         return ResponseDto.onSuccess(meetingScheduleUsecase.getMeetingSchedules(memberInfo));
     }
 
