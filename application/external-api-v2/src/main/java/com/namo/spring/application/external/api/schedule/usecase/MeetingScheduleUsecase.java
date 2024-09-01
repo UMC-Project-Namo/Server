@@ -59,7 +59,7 @@ public class MeetingScheduleUsecase {
 
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
         List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyMeetingParticipantSchedules(schedule, getExtendedPeriod(year, month), memberInfo.getUserId());
-        return toGetMonthlyMeetingParticipantScheduleDtos(participantsWithSchedule, schedule);
+        return toGetMonthlyMeetingParticipantScheduleDtos(participantsWithSchedule, schedule, memberInfo.getUserId());
     }
 
     @Transactional(readOnly = true)
