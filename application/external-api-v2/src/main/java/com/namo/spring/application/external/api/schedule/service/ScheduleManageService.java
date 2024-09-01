@@ -1,7 +1,10 @@
 package com.namo.spring.application.external.api.schedule.service;
 
+import com.namo.spring.application.external.api.schedule.dto.PersonalScheduleResponse;
 import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
 import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.db.mysql.domains.notification.dto.ScheduleNotificationQuery;
+import com.namo.spring.db.mysql.domains.notification.service.NotificationService;
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
@@ -19,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.namo.spring.application.external.api.schedule.converter.PersonalScheduleResponseConverter.toGetMonthlyScheduleDtos;
 import static com.namo.spring.application.external.api.schedule.converter.ScheduleConverter.toLocation;
 import static com.namo.spring.application.external.global.utils.MeetingParticipantValidationUtils.validateExistingAndNewParticipantIds;
 import static com.namo.spring.application.external.global.utils.MeetingParticipantValidationUtils.validateParticipantCount;
@@ -32,6 +36,7 @@ public class ScheduleManageService {
     private final ScheduleService scheduleService;
     private final ParticipantManageService participantManageService;
     private final ParticipantService participantService;
+    private final NotificationService notificationService;
 
     public Schedule getMeetingSchedule(Long scheduleId) {
         Schedule schedule = scheduleService.readSchedule(scheduleId).orElseThrow(() -> new ScheduleException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
@@ -65,11 +70,22 @@ public class ScheduleManageService {
         return scheduleService.readSchedulesById(scheduleIds);
     }
 
+    public List<PersonalScheduleResponse.GetMonthlyScheduleDto> getMonthlySchedules(Long memberId, Period period) {
+        List<Participant> monthlySchedules = participantService.readParticipantsWithScheduleAndCategoryByPeriod(memberId, period.getStartDate(), period.getEndDate());
+        List<Long> scheduleIds = monthlySchedules.stream()
+                .map(Participant::getSchedule)
+                .map(Schedule::getId)
+                .collect(Collectors.toList());
+        List<ScheduleNotificationQuery> notifications = notificationService.readNotificationsByReceiverIdAndScheduleIds(memberId, scheduleIds);
+
+        return toGetMonthlyScheduleDtos(monthlySchedules, notifications);
+    }
+
     public List<ScheduleParticipantQuery> getMonthlyMembersSchedules(List<Long> memberIds, Period period, Long memberId) {
         validateParticipantCount(memberIds.size());
         List<Long> members = participantManageService.getFriendshipValidatedParticipants(memberId, memberIds).stream().map(Member::getId).collect(Collectors.toList());
         members.add(memberId);
-        return participantService.readParticipantsWithScheduleAndUsers(members, period.getStartDate(), period.getEndDate());
+        return participantService.readParticipantsWithUserAndScheduleByPeriod(members, period.getStartDate(), period.getEndDate());
     }
 
     public List<ScheduleParticipantQuery> getMonthlyMeetingParticipantSchedules(Schedule schedule, Period period, Long memberId) {
@@ -77,7 +93,7 @@ public class ScheduleManageService {
         List<Participant> participants = participantManageService.getMeetingScheduleParticipants(schedule.getId(), ParticipantStatus.ACTIVE);
         List<Long> members = participants.stream().map(Participant::getUser).map(User::getId).collect(Collectors.toList());
 
-        return participantService.readParticipantsWithScheduleAndUsers(members, period.getStartDate(), period.getEndDate());
+        return participantService.readParticipantsWithUserAndScheduleByPeriod(members, period.getStartDate(), period.getEndDate());
     }
 
     private void checkParticipantExists(Schedule schedule, Long memberId) {
