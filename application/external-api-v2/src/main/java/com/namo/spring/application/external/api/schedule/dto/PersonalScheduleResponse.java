@@ -45,8 +45,11 @@ public class PersonalScheduleResponse {
     @Getter
     @Builder
     public static class MeetingInfoDto {
-        private String participantNicknames;
+        @Schema(description = "모임 인원 수")
         private Integer participantCount;
+        @Schema(description = "모임 참여자들 닉네임")
+        private String participantNicknames;
+        @Schema(description = "모임 생성자 여부")
         private Boolean isOwner;
     }
 
@@ -54,8 +57,11 @@ public class PersonalScheduleResponse {
     @Getter
     @Builder
     public static class CategoryDto {
+        @Schema(description = "카테고리 ID")
         private Long categoryId;
+        @Schema(description = "색상 ID")
         private Long colorId;
+        @Schema(description = "카테고리 이름")
         private String name;
     }
 
@@ -77,7 +83,9 @@ public class PersonalScheduleResponse {
     @Getter
     @Builder
     public static class NotificationDto {
+        @Schema(description = "알림 ID")
         private Long notificationId;
+        @Schema(description = "알림 일시, unix 타임스탬프 형식")
         private Long notifyDate;
     }
 
