@@ -61,7 +61,7 @@ public class SchedulePeriodValidationUtils {
         // 이전 달의 마지막 주 일요일로 시작 날짜 설정
         LocalDateTime startDate = firstDay.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
         // 다음 달의 첫 주 토요일로 종료 날짜 설정
-        LocalDateTime endDate = lastDay.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
+        LocalDateTime endDate = lastDay.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
         return Period.of(startDate, endDate);
     }
 }
