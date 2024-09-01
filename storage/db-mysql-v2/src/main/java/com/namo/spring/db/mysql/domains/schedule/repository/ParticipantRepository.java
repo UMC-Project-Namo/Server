@@ -39,14 +39,28 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
             "p.id, p.palette.id, m.id, m.nickname, s" +
             ") FROM Participant p " +
             "JOIN p.schedule s " +
-            "LEFT JOIN p.member m " +
+            "JOIN p.member m " +
             "WHERE m.id IN :memberIds " +
             "AND p.status = 'ACTIVE' " +
-            "AND (s.period.startDate <= :endDate " +
+            "AND (s.period.startDate < :endDate " +
             "AND s.period.endDate >= :startDate) " +
             "ORDER BY s.period.startDate ASC")
-    List<ScheduleParticipantQuery> findParticipantsWithUserAndSchedule(
+    List<ScheduleParticipantQuery> findParticipantsWithUserAndScheduleByPeriod(
             List<Long> memberIds,
+            LocalDateTime startDate,
+            LocalDateTime endDate
+    );
+
+    @Query("SELECT p FROM Participant p " +
+            "JOIN FETCH p.schedule s " +
+            "JOIN FETCH p.category c " +
+            "WHERE p.member.id = :memberId " +
+            "AND p.status = 'ACTIVE' " +
+            "AND (s.period.startDate < :endDate " +
+            "AND s.period.endDate >= :startDate) " +
+            "ORDER BY s.period.startDate ASC")
+    List<Participant> findParticipantsWithScheduleAndCategoryByPeriod(
+            Long memberId,
             LocalDateTime startDate,
             LocalDateTime endDate
     );
