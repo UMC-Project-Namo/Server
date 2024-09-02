@@ -14,6 +14,7 @@ import com.namo.spring.db.mysql.domains.category.entity.Palette;
 import com.namo.spring.db.mysql.domains.category.exception.PaletteException;
 import com.namo.spring.db.mysql.domains.category.type.ColorChip;
 import com.namo.spring.db.mysql.domains.category.type.PaletteEnum;
+import com.namo.spring.db.mysql.domains.record.exception.DiaryException;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
@@ -111,8 +112,24 @@ public class ParticipantManageService {
 			.orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_PARTICIPANT_FAILURE));
 	}
 
-	public List<Participant> getMyParticipationForDiary(Long memberId, int page) {
+	public List<Participant> getMyParticipationForArchive(Long memberId, int page, String filterType, String keyword) {
 		Pageable pageable = PageRequest.of(page, 5);
-		return participantService.readParticipantsForDiary(memberId, pageable);
+		if (filterType == null || filterType.isEmpty())
+			return participantService.readParticipantsForDiary(memberId, pageable);
+
+		switch (filterType) {
+			case "ScheduleName" -> {
+				return participantService.readParticipantByScheduleName(memberId, pageable, keyword);
+			}
+			case "DiaryContent" -> {
+				return participantService.readParticipantByDiaryContent(memberId, pageable, keyword);
+			}
+			case "MemberNickname" -> {
+				return participantService.readParticipantByMember(memberId, pageable, keyword);
+			}
+			default -> {
+				throw new DiaryException(ErrorStatus.NOT_FILTERTYPE_OF_ARCHIVE);
+			}
+		}
 	}
 }
