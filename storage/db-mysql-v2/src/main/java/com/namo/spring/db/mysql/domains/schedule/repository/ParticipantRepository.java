@@ -63,4 +63,11 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
 		+ "WHERE p.hasDiary == true and p.member.id == :memberId "
 		+ "order by p.schedule.period.startDate desc ")
 	List<Participant> findAllByMemberIdAndHasDiary(Long memberId, Pageable pageable);
+
+	@Query("SELECT p "
+		+ "FROM Participant p "
+		+ "WHERE p.hasDiary = true AND p.member.id = :memberId AND p.schedule.title LIKE %:keyword% "
+		+ "ORDER BY p.schedule.period.startDate DESC")
+	List<Participant> findAllByScheduleTitleAndHasDiary(Long memberId, String keyword, Pageable pageable);
+
 }
