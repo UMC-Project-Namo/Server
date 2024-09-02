@@ -1,7 +1,7 @@
 package com.namo.spring.application.external.api.record.Controller;
 
-import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.data.domain.Pageable;
+import java.util.List;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.namo.spring.application.external.api.record.dto.DiaryRequest;
@@ -20,6 +21,7 @@ import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.response.ResponseDto;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.RequiredArgsConstructor;
@@ -47,6 +49,11 @@ public class DiaryController {
 	}
 
 	@PatchMapping("/{diaryId}")
+	@Operation(summary = "기록 수정", description = "기록(일기) 수정 API 입니다. 모든 이미지 URL을 새로 보내주어야 합니다.")
+	@ApiErrorCodes(value = {
+		ErrorStatus.NOT_FOUND_DIARY_FAILURE,
+		ErrorStatus.NOT_MY_DIARY_FAILURE,
+	})
 	public ResponseDto<String> updateDiary(
 		@AuthenticationPrincipal SecurityUserDetails memberInfo,
 		@PathVariable Long diaryId,
@@ -71,11 +78,20 @@ public class DiaryController {
 	}
 
 	@Operation(summary = "기록 보관함 조회", description = "기록(일기) 보관함 조회 API 입니다. ")
+	@ApiErrorCodes(value = {
+		ErrorStatus.NOT_FILTERTYPE_OF_ARCHIVE,
+	})
 	@GetMapping("/archive")
-	public ResponseDto<DiaryResponse.DiaryArchiveDto> getDiaryArchive(
+	public ResponseDto<List<DiaryResponse.DiaryArchiveDto>> getDiaryArchive(
 		@AuthenticationPrincipal SecurityUserDetails memberInfo,
-		@ParameterObject Pageable pageable
+		@Parameter(description = "ScheduleName(스케쥴 이름 조회) || DiaryContent(일기 내용 조회) || MemberNickname (참여자 조회)")
+		@RequestParam(required = false) String filterType,
+		@Parameter(description = "각 필터에 맞는 검색 단어를 입력하시면 됩니다.")
+		@RequestParam(required = false) String keyword,
+		@Parameter(description = "1 부터 시작하는 page입니다. 5개의 일기씩 내림차순 조회됩니다. ")
+		@RequestParam int page
 	) {
-		return ResponseDto.onSuccess(null);
+		return ResponseDto.onSuccess(diaryUseCase
+			.getDiaryArchiveDto(memberInfo.getUserId(), page, filterType, keyword));
 	}
 }
