@@ -31,7 +31,7 @@ public class DiaryResponseConverter {
 			.scheduleDate(participant.getSchedule().getPeriod().getStartDate())
 			.scheduleId(participant.getSchedule().getId())
 			.title(participant.getSchedule().getTitle())
-			.diarySummary(toDiarySummaryDto(participant.getDiaries().get(0)))
+			.diarySummary(toDiarySummaryDto(participant.getDiary()))
 			.scheduleType(participant.getSchedule().getScheduleType())
 			.participantsCount(participant.getSchedule().getParticipantCount())
 			.participantsNames(participant.getSchedule().getParticipantNicknames())

@@ -34,8 +34,7 @@ public class DiaryManageService {
 	public Diary getParticipantDiary(Participant participant) {
 		if (!participant.isHasDiary())
 			throw new DiaryException(ErrorStatus.NOT_WRITTEN_DIARY_FAILURE);
-		//Todo: 이후 다이어리를 여러 버전으로 저장하는 기획 변경시 최신 버전을 가져오도록 수정 필요 (현재는 첫번째 다이어리만 가져옴) - 2024.8.25
-		return participant.getDiaries().get(0);
+		return participant.getDiary();
 	}
 
 	public void makeDiary(DiaryRequest.CreateDiaryDto request, Participant participant) {
