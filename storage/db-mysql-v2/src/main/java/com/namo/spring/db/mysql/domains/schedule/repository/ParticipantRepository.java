@@ -60,7 +60,7 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
 
 	@Query("SELECT p "
 		+ "FROM Participant p "
-		+ "WHERE p.hasDiary == true and p.member.id == :memberId "
+		+ "WHERE p.hasDiary = true and p.member.id = :memberId "
 		+ "order by p.schedule.period.startDate desc ")
 	List<Participant> findAllByMemberIdAndHasDiary(Long memberId, Pageable pageable);
 
@@ -70,4 +70,15 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
 		+ "ORDER BY p.schedule.period.startDate DESC")
 	List<Participant> findAllByScheduleTitleAndHasDiary(Long memberId, String keyword, Pageable pageable);
 
+	@Query("SELECT p "
+		+ "FROM Participant p "
+		+ "WHERE p.hasDiary = true AND p.member.id = :memberId AND p.diary.content LIKE %:keyword% "
+		+ "ORDER BY p.schedule.period.startDate DESC")
+	List<Participant> findAllByDiaryContentAndHasDiary(Long memberId, String keyword, Pageable pageable);
+
+	@Query("SELECT p "
+		+ "FROM Participant p "
+		+ "WHERE p.hasDiary = true AND p.member.id = :memberId AND p.schedule.participantNicknames LIKE %:keyword% "
+		+ "ORDER BY p.schedule.period.startDate DESC")
+	List<Participant> findAllByMemberAndHasDiary(Long memberId, String keyword, Pageable pageable);
 }

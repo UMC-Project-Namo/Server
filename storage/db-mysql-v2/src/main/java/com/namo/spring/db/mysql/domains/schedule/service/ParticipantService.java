@@ -87,4 +87,12 @@ public class ParticipantService {
 	public List<Participant> readParticipantByScheduleName(Long memberId, Pageable pageable, String keyword) {
 		return participantRepository.findAllByScheduleTitleAndHasDiary(memberId, keyword, pageable);
 	}
+
+	public List<Participant> readParticipantByDiaryContent(Long memberId, Pageable pageable, String keyword) {
+		return participantRepository.findAllByDiaryContentAndHasDiary(memberId, keyword, pageable);
+	}
+
+	public List<Participant> readParticipantByMember(Long memberId, Pageable pageable, String keyword) {
+		return participantRepository.findAllByMemberAndHasDiary(memberId, keyword, pageable);
+	}
 }
