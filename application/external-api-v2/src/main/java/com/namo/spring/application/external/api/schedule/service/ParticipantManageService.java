@@ -113,7 +113,7 @@ public class ParticipantManageService {
 	}
 
 	public List<Participant> getMyParticipationForArchive(Long memberId, int page, String filterType, String keyword) {
-		Pageable pageable = PageRequest.of(page, 5);
+		Pageable pageable = PageRequest.of(page - 1, 5);
 		if (filterType == null || filterType.isEmpty())
 			return participantService.readParticipantsForDiary(memberId, pageable);
 
