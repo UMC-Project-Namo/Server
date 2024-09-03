@@ -101,6 +101,4 @@ public class ParticipantManageService {
         return participantService.readParticipants(memberId, scheduleId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_PARTICIPANT_FAILURE));
     }
-
-
 }
