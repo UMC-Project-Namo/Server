@@ -32,9 +32,10 @@ public enum ErrorStatus implements BaseErrorCode {
     ALREADY_WRITTEN_DIARY_FAILURE(HttpStatus.BAD_REQUEST, "이미 일기를 작성하였습니다."),
     NOT_WRITTEN_DIARY_FAILURE(HttpStatus.BAD_REQUEST, "일기를 작성하지 않았습니다."),
     NOT_MY_DIARY_FAILURE(HttpStatus.BAD_REQUEST, "해당 일기에 대한 권한이 없습니다."),
-    NOT_SCHEDULE_OWNER(HttpStatus.BAD_REQUEST, "해당 모임 일정의 생성자가 아닙니다."),
-    NOT_SCHEDULE_PARTICIPANT(HttpStatus.BAD_REQUEST, "해당 일정의 참석자가 아닙니다."),
     NOT_MEETING_SCHEDULE(HttpStatus.BAD_REQUEST, "모임 일정이 아닙니다."),
+    INVALID_FORMAT_FAILURE(HttpStatus.BAD_REQUEST, "유효한 날짜 값을 입력해주세요"),
+    DUPLICATE_MEETING_PARTICIPANT(HttpStatus.BAD_REQUEST, "중복되는 참여자입니다."),
+    INVALID_MEETING_PARTICIPANT_COUNT(HttpStatus.BAD_REQUEST, "모임 일정은 최소 1명, 최대 9명까지 초대 가능합니다."),
 
     /**
      * 401 : 소셜 로그인 오류
@@ -62,6 +63,13 @@ public enum ErrorStatus implements BaseErrorCode {
     MALFORMED_TOKEN(HttpStatus.UNAUTHORIZED, "비정상적인 토큰입니다."),
     TAMPERED_TOKEN(HttpStatus.UNAUTHORIZED, "서명이 조작된 토큰입니다."),
     UNSUPPORTED_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "지원하지 않는 코튼입니다."),
+
+    /**
+     * 403 : 리소스 접근 권한 오명류
+     */
+    NOT_FRIENDSHIP_MEMBER(HttpStatus.BAD_REQUEST, "요청한 회원과 친구가 아닙니다."),
+    NOT_SCHEDULE_OWNER(HttpStatus.FORBIDDEN, "해당 모임 일정의 생성자가 아닙니다."),
+    NOT_SCHEDULE_PARTICIPANT(HttpStatus.FORBIDDEN, "해당 일정의 참석자가 아닙니다."),
 
     /**
      * 404 : NOT FOUND 오류
@@ -96,8 +104,6 @@ public enum ErrorStatus implements BaseErrorCode {
     NOT_HAS_GROUP_CATEGORIES_USERS(HttpStatus.NOT_FOUND, "유저들에 대한 모임의 카테고리가 없습니다."),
     INVALID_DATE(HttpStatus.NOT_FOUND, "시작 날짜가 종료 날짜 이전 이어야 합니다."),
     INVALID_ALARM(HttpStatus.NOT_FOUND, "알림 시간이 유효하지 않습니다."),
-    INVALID_MEETING_PARTICIPANT_COUNT(HttpStatus.NOT_FOUND, "모임 일정은 최소 1명, 최대 9명까지 초대 가능합니다."),
-    DUPLICATE_MEETING_PARTICIPANT(HttpStatus.NOT_FOUND, "중복되는 참여자입니다."),
     SCHEDULE_PARTICIPANT_IS_EMPTY_ERROR(HttpStatus.NOT_FOUND, "모임 일정의 참여자가 없습니다."),
 
 
@@ -128,7 +134,6 @@ public enum ErrorStatus implements BaseErrorCode {
      * 404 : IllegalArgumentException
      */
     NOT_NULL_FAILURE(HttpStatus.NOT_FOUND, "널 혹은 비어 있는 값을 카테고리 값으로 넣지 말아주세요,"),
-    INVALID_FORMAT_FAILURE(HttpStatus.NOT_FOUND, "유효한 날짜 값을 입력해주세요"),
 
     /**
      * 404 : 서버 에러

@@ -35,6 +35,28 @@ public interface MeetingScheduleApi {
             	"result": 1
             }
             """)}))
+    @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", examples = {
+            @ExampleObject(name = "요청 실패 - 시작 날짜가 종료 날짜 이전 이어야 합니다. ", value = """
+                    {
+                    	"isSuccess": false,
+                    	"code": 400,
+                    	"message": "시작 날짜가 종료 날짜 이전 이어야 합니다."
+                    }
+                    """),
+            @ExampleObject(name = "요청 실패 - 초대자 중에 중복되는 참여자가 있습니다.", value = """
+                    {
+                    	"isSuccess": false,
+                    	"code": 400,
+                    	"message": "중복되는 참여자입니다."
+                    }
+                    """),
+            @ExampleObject(name = "요청 실패 - 모임 일정은 최소 1명, 최대 9명까지 초대 가능합니다.", value = """
+                    {
+                    	"isSuccess": false,
+                    	"code": 400,
+                    	"message": "모임 일정은 최소 1명, 최대 9명까지 초대 가능합니다."
+                    }
+                    """),}))
     @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "요청 실패 - 모임 일정에 참여할 유저를 찾을 수 없습니다.", value = """
             {
             	"isSuccess": false,
@@ -48,32 +70,11 @@ public interface MeetingScheduleApi {
             	"message": "카테고리를 찾을 수 없습니다."
             }
             """),
-            @ExampleObject(name = "요청 실패 - 시작 날짜가 종료 날짜 이전 이어야 합니다. ", value = """
-                    {
-                    	"isSuccess": false,
-                    	"code": 404,
-                    	"message": "시작 날짜가 종료 날짜 이전 이어야 합니다."
-                    }
-                    """),
-            @ExampleObject(name = "요청 실패 - 중복되는 참여자입니다.", value = """
-                    {
-                    	"isSuccess": false,
-                    	"code": 404,
-                    	"message": "중복되는 참여자입니다."
-                    }
-                    """),
             @ExampleObject(name = "요청 실패 - 친구인 유저를 찾을 수 없습니다.", value = """
                     {
                     	"isSuccess": false,
                     	"code": 404,
                     	"message": "친구인 유저를 찾을 수 없습니다."
-                    }
-                    """),
-            @ExampleObject(name = "요청 실패 - 모임 일정은 최소 1명, 최대 9명까지 초대 가능합니다.", value = """
-                    {
-                    	"isSuccess": false,
-                    	"code": 404,
-                    	"message": "모임 일정은 최소 1명, 최대 9명까지 초대 가능합니다."
                     }
                     """),
             @ExampleObject(name = "요청 실패 - 모임 일정에 대한 이미지 파일 업로드 과정에서 오류가 발생하였습니다. ", value = """
@@ -222,6 +223,13 @@ public interface MeetingScheduleApi {
                   ]
                }
             """)}))
+    @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "요청 실패 - 유효한 날짜 값을 입력해주세요.", value = """
+            {
+            	"isSuccess": false,
+            	"code": 400,
+            	"message": "유효한 날짜 값을 입력해주세요."
+            }
+            """)}))
     @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "요청 실패 - 모임 일정에 참여할 유저를 찾을 수 없습니다.", value = """
             {
             	"isSuccess": false,
@@ -229,13 +237,6 @@ public interface MeetingScheduleApi {
             	"message": "유저를 찾을 수 없습니다."
             }
             """),
-            @ExampleObject(name = "요청 실패 - 유효한 날짜 값을 입력해주세요.", value = """
-                    {
-                    	"isSuccess": false,
-                    	"code": 404,
-                    	"message": "유효한 날짜 값을 입력해주세요."
-                    }
-                    """),
             @ExampleObject(name = "요청 실패 - 일정을 찾을 수 없습니다.", value = """
                     {
                     	"isSuccess": false,
@@ -266,6 +267,35 @@ public interface MeetingScheduleApi {
             	"result": "모임 일정 수정 성공"
             }
             """)}))
+    @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "요청 실패 - 유효한 날짜 값을 입력해주세요.", value = """
+            {
+            	"isSuccess": false,
+            	"code": 400,
+            	"message": "유효한 날짜 값을 입력해주세요."
+            }
+            """),
+            @ExampleObject(name = "요청 실패 - 모임 일정은 최소 1명, 최대 9명까지 초대 가능합니다.", value = """
+                    {
+                    	"isSuccess": false,
+                    	"code": 400,
+                    	"message": "모임 일정은 최소 1명, 최대 9명까지 초대 가능합니다."
+                    }
+                    """),
+            @ExampleObject(name = "요청 실패 - 초대자 중에 중복되는 참여자가 있습니다.", value = """
+                    {
+                    	"isSuccess": false,
+                    	"code": 400,
+                    	"message": "중복되는 참여자입니다."
+                    }
+                    """),}))
+    @ApiResponse(responseCode = "403", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "요청 실패 - 모임 일정의 수정 권한이 업습니다.", value = """
+            {
+            	"isSuccess": false,
+            	"code": 403,
+            	"message": "해당 일정의 생성자가 아닙니다."
+            }
+            """),
+    }))
     @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "요청 실패 - 모임 일정에 참여할 유저를 찾을 수 없습니다.", value = """
             {
             	"isSuccess": false,
@@ -278,34 +308,6 @@ public interface MeetingScheduleApi {
                     	"isSuccess": false,
                     	"code": 404,
                     	"message": "모임 일정이 아닙니다."
-                    }
-                    """),
-            @ExampleObject(name = "요청 실패 - 모임 일정의 수정 권한이 업습니다.", value = """
-                    {
-                    	"isSuccess": false,
-                    	"code": 404,
-                    	"message": "해당 일정의 생성자가 아닙니다."
-                    }
-                    """),
-            @ExampleObject(name = "요청 실패 - 유효한 날짜 값을 입력해주세요.", value = """
-                    {
-                    	"isSuccess": false,
-                    	"code": 404,
-                    	"message": "유효한 날짜 값을 입력해주세요."
-                    }
-                    """),
-            @ExampleObject(name = "요청 실패 - 모임 일정은 최소 1명, 최대 9명까지 초대 가능합니다.", value = """
-                    {
-                    	"isSuccess": false,
-                    	"code": 404,
-                    	"message": "모임 일정은 최소 1명, 최대 9명까지 초대 가능합니다."
-                    }
-                    """),
-            @ExampleObject(name = "요청 실패 - 초대자 중에 중복되는 참여자가 있습니다.", value = """
-                    {
-                    	"isSuccess": false,
-                    	"code": 404,
-                    	"message": "중복되는 참여자입니다."
                     }
                     """),
             @ExampleObject(name = "요청 실패 - 초대자 중에 친구가 아닌 유저가 있습니다.", value = """
@@ -330,6 +332,14 @@ public interface MeetingScheduleApi {
 
     @Operation(summary = "모임 상세 조회", description = "모임 일정을 상세 조회합니다.")
     @ApiErrorCodes(value = {ErrorStatus.EMPTY_ACCESS_KEY, ErrorStatus.EXPIRATION_ACCESS_TOKEN, ErrorStatus.EXPIRATION_REFRESH_TOKEN, ErrorStatus.INTERNET_SERVER_ERROR})
+    @ApiResponse(responseCode = "403", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "요청 실패 - 해당 일정에 대한 읽기 권한이 없습니다.", value = """
+            {
+            	"isSuccess": false,
+            	"code": 403,
+            	"message": "해당 일정의 참석자가 아닙니다."
+            }
+            """)
+    }))
     @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "요청 실패 - 모임 일정에 참여할 유저를 찾을 수 없습니다.", value = """
             {
             	"isSuccess": false,
@@ -349,13 +359,6 @@ public interface MeetingScheduleApi {
                     	"isSuccess": false,
                     	"code": 404,
                     	"message": "모임 일정이 아닙니다."
-                    }
-                    """),
-            @ExampleObject(name = "요청 실패 - 해당 일정에 대한 읽기 권한이 없습니다.", value = """
-                    {
-                    	"isSuccess": false,
-                    	"code": 404,
-                    	"message": "해당 일정의 참석자가 아닙니다."
                     }
                     """)
     }))
