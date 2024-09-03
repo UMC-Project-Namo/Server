@@ -53,8 +53,8 @@ public class ParticipantService {
     }
 
     @Transactional(readOnly = true)
-    public List<Participant> readParticipantsWithScheduleAndCategoryByPeriod(Long memberId, LocalDateTime startDate, LocalDateTime endDate) {
-        return participantRepository.findParticipantsWithScheduleAndCategoryByPeriod(memberId, startDate, endDate);
+    public List<Participant> readParticipantsWithScheduleAndCategoryByPeriod(Long memberId, Boolean isShared, LocalDateTime startDate, LocalDateTime endDate) {
+        return participantRepository.findParticipantsWithScheduleAndCategoryByPeriod(memberId, isShared, startDate, endDate);
     }
 
     @Transactional(readOnly = true)

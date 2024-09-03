@@ -58,9 +58,11 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
             "AND p.status = 'ACTIVE' " +
             "AND (s.period.startDate < :endDate " +
             "AND s.period.endDate >= :startDate) " +
+            "AND (:isShared IS NULL OR c.isShared = :isShared) "
             "ORDER BY s.period.startDate ASC")
     List<Participant> findParticipantsWithScheduleAndCategoryByPeriod(
             Long memberId,
+            Boolean isShared,
             LocalDateTime startDate,
             LocalDateTime endDate
     );
