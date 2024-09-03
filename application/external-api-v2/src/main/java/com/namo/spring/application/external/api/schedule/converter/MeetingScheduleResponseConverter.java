@@ -22,15 +22,15 @@ public class MeetingScheduleResponseConverter {
         throw new IllegalStateException("Util Class");
     }
 
-    public static List<MeetingScheduleResponse.GetMeetingScheduleItemDto> toGetMeetingScheduleItemDtos(
+    public static List<MeetingScheduleResponse.GetMeetingScheduleSummaryDto> toGetMeetingScheduleSummaryDtos(
             List<Schedule> schedules) {
         return schedules.stream()
-                .map(MeetingScheduleResponseConverter::toGetMeetingScheduleItemDto)
+                .map(MeetingScheduleResponseConverter::toGetMeetingScheduleSummaryDto)
                 .collect(Collectors.toList());
     }
 
-    public static MeetingScheduleResponse.GetMeetingScheduleItemDto toGetMeetingScheduleItemDto(Schedule schedule) {
-        return MeetingScheduleResponse.GetMeetingScheduleItemDto.builder()
+    public static MeetingScheduleResponse.GetMeetingScheduleSummaryDto toGetMeetingScheduleSummaryDto(Schedule schedule) {
+        return MeetingScheduleResponse.GetMeetingScheduleSummaryDto.builder()
                 .meetingScheduleId(schedule.getId())
                 .title(schedule.getTitle())
                 .startDate(DateUtil.toSeconds(schedule.getPeriod().getStartDate()))
@@ -45,6 +45,12 @@ public class MeetingScheduleResponseConverter {
         long[] palette = getPaletteColorIds();
         Map<Long, List<ScheduleParticipantQuery>> scheduleIdAndParticipant
                 = participantsWithSchedule.stream()
+                // 다른 유저의 일정일 경우 공유 여부로 필터링
+                .filter(participant -> {
+                    boolean isSharedSchedule = true;
+                    if (!participant.getMemberId().equals(ownerId)) isSharedSchedule = participant.getIsShared();
+                    return isSharedSchedule;
+                })
                 .collect(Collectors.groupingBy(participant -> participant.getSchedule().getId()));
         Map<Long, Long> participantAndPalette
                 = IntStream.range(0, participantIds.size()).boxed()
@@ -84,9 +90,15 @@ public class MeetingScheduleResponseConverter {
     }
 
     public static List<MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto> toGetMonthlyMeetingParticipantScheduleDtos(
-            List<ScheduleParticipantQuery> participantsWithSchedule, Schedule curSchedule) {
+            List<ScheduleParticipantQuery> participantsWithSchedule, Schedule curSchedule, Long curMemberId) {
         Map<Long, List<ScheduleParticipantQuery>> scheduleIdAndParticipant
                 = participantsWithSchedule.stream()
+                // 다른 유저의 일정일 경우 공유 여부로 필터링
+                .filter(participant -> {
+                    boolean isSharedSchedule = true;
+                    if (!participant.getMemberId().equals(curMemberId)) isSharedSchedule = participant.getIsShared();
+                    return isSharedSchedule;
+                })
                 .collect(Collectors.groupingBy(participant -> participant.getSchedule().getId()));
         return scheduleIdAndParticipant.entrySet().stream()
                 .map(entry -> toGetMonthlyMeetingParticipantScheduleDto(entry.getValue().get(0).getSchedule(),

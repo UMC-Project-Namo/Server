@@ -15,4 +15,8 @@ public class FriendshipService {
     public List<Friendship> readFriendshipsByMemberIdAndFriendIds(Long memberId, List<Long> members) {
         return friendshipRepository.findAcceptedFriendshipsByMemberIdAndFriendIds(memberId, members);
     }
+
+    public boolean existsByMemberIdAndFriendId(Long memberId, Long friendId) {
+        return friendshipRepository.existsByMemberIdAndFriendId(memberId, friendId);
+    }
 }

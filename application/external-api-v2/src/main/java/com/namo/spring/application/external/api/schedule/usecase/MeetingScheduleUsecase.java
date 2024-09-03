@@ -40,8 +40,8 @@ public class MeetingScheduleUsecase {
     }
 
     @Transactional(readOnly = true)
-    public List<MeetingScheduleResponse.GetMeetingScheduleItemDto> getMeetingSchedules(SecurityUserDetails member) {
-        return toGetMeetingScheduleItemDtos(scheduleManageService.getMeetingScheduleItems(member.getUserId()));
+    public List<MeetingScheduleResponse.GetMeetingScheduleSummaryDto> getMeetingSchedules(SecurityUserDetails member) {
+        return toGetMeetingScheduleSummaryDtos(scheduleManageService.getMeetingScheduleItems(member.getUserId()));
     }
 
     @Transactional(readOnly = true)
@@ -59,7 +59,7 @@ public class MeetingScheduleUsecase {
 
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
         List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyMeetingParticipantSchedules(schedule, getExtendedPeriod(year, month), memberInfo.getUserId());
-        return toGetMonthlyMeetingParticipantScheduleDtos(participantsWithSchedule, schedule);
+        return toGetMonthlyMeetingParticipantScheduleDtos(participantsWithSchedule, schedule, memberInfo.getUserId());
     }
 
     @Transactional(readOnly = true)
