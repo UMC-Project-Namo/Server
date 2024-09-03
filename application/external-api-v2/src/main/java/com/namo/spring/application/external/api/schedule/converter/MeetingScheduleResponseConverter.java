@@ -13,9 +13,6 @@ import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
-import static com.namo.spring.db.mysql.domains.category.type.PaletteEnum.getPaletteColorIds;
 
 public class MeetingScheduleResponseConverter {
     private MeetingScheduleResponseConverter() {
@@ -42,7 +39,6 @@ public class MeetingScheduleResponseConverter {
 
     public static List<MeetingScheduleResponse.GetMonthlyMembersScheduleDto> toGetMonthlyParticipantScheduleDtos(
             List<ScheduleParticipantQuery> participantsWithSchedule, List<Long> participantIds, Long ownerId) {
-        long[] palette = getPaletteColorIds();
         Map<Long, List<ScheduleParticipantQuery>> scheduleIdAndParticipant
                 = participantsWithSchedule.stream()
                 // 다른 유저의 일정일 경우 공유 여부로 필터링
@@ -52,40 +48,34 @@ public class MeetingScheduleResponseConverter {
                     return isSharedSchedule;
                 })
                 .collect(Collectors.groupingBy(participant -> participant.getSchedule().getId()));
-        Map<Long, Long> participantAndPalette
-                = IntStream.range(0, participantIds.size()).boxed()
-                .collect(Collectors.toMap(participantIds::get, i -> palette[i + 1]));
-        participantAndPalette.put(ownerId, palette[0]);
         return scheduleIdAndParticipant.entrySet().stream()
-                .map(entry -> toGetMonthlyParticipantScheduleDto(entry.getValue().get(0).getSchedule(), entry.getValue(),
-                        participantAndPalette))
+                .map(entry -> toGetMonthlyParticipantScheduleDto(entry.getValue().get(0).getSchedule(), entry.getValue()))
                 .collect(Collectors.toList());
     }
 
     public static MeetingScheduleResponse.GetMonthlyMembersScheduleDto toGetMonthlyParticipantScheduleDto(
-            Schedule schedule, List<ScheduleParticipantQuery> participant, Map<Long, Long> participantAndPalette) {
+            Schedule schedule, List<ScheduleParticipantQuery> participant) {
         return MeetingScheduleResponse.GetMonthlyMembersScheduleDto.builder()
                 .scheduleId(schedule.getId())
                 .name(schedule.getTitle())
                 .startDate(DateUtil.toSeconds(schedule.getPeriod().getStartDate()))
                 .endDate(DateUtil.toSeconds(schedule.getPeriod().getEndDate()))
                 .interval(schedule.getPeriod().getDayInterval())
-                .participants(toMemberParticipantDtos(participant, participantAndPalette))
+                .participants(toMemberParticipantDtos(participant))
                 .build();
     }
 
     private static List<MeetingScheduleResponse.MemberParticipantDto> toMemberParticipantDtos(
-            List<ScheduleParticipantQuery> participant, Map<Long, Long> participantAndPalette) {
+            List<ScheduleParticipantQuery> participant) {
         return participant.stream()
-                .map(p -> toMemberParticipantDto(p, participantAndPalette))
+                .map(MeetingScheduleResponseConverter::toMemberParticipantDto)
                 .collect(Collectors.toList());
     }
 
-    private static MeetingScheduleResponse.MemberParticipantDto toMemberParticipantDto(ScheduleParticipantQuery participant, Map<Long, Long> participantAndPalette) {
+    private static MeetingScheduleResponse.MemberParticipantDto toMemberParticipantDto(ScheduleParticipantQuery participant) {
         return MeetingScheduleResponse.MemberParticipantDto.builder()
                 .userId(participant.getMemberId())
                 .nickname(participant.getNickname())
-                .colorId(participantAndPalette.get(participant.getMemberId()))
                 .build();
     }
 
