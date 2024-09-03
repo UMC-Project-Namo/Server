@@ -56,6 +56,7 @@ public class PersonalScheduleResponseConverter {
                 .categoryId(category.getId())
                 .colorId(category.getPalette().getId())
                 .name(category.getName())
+                .isShared(category.isShared())
                 .build();
     }
 
@@ -87,6 +88,23 @@ public class PersonalScheduleResponseConverter {
         return PersonalScheduleResponse.NotificationDto.builder()
                 .notificationId(notification.getNotificationId())
                 .notifyDate(DateUtil.toSeconds(notification.getNotifyAt()))
+                .build();
+    }
+
+    public static List<PersonalScheduleResponse.GetFriendMonthlyScheduleDto> toGetFriendMonthlyScheduleDtos(List<Participant> participants) {
+        return participants.stream()
+                .map(PersonalScheduleResponseConverter::toGetFriendMonthlyScheduleDto)
+                .collect(Collectors.toList());
+    }
+
+    public static PersonalScheduleResponse.GetFriendMonthlyScheduleDto toGetFriendMonthlyScheduleDto(Participant participant) {
+        return PersonalScheduleResponse.GetFriendMonthlyScheduleDto.builder()
+                .scheduleId(participant.getSchedule().getId())
+                .title(participant.getSchedule().getTitle())
+                .category(toCategoryDto(participant.getCategory()))
+                .startDate(DateUtil.toSeconds(participant.getSchedule().getPeriod().getStartDate()))
+                .endDate(DateUtil.toSeconds(participant.getSchedule().getPeriod().getEndDate()))
+                .interval(participant.getSchedule().getPeriod().getDayInterval())
                 .build();
     }
 

@@ -63,6 +63,8 @@ public class PersonalScheduleResponse {
         private Long colorId;
         @Schema(description = "카테고리 이름")
         private String name;
+        @Schema(description = "카테고리 공유 여부")
+        private Boolean isShared;
     }
 
     @AllArgsConstructor
@@ -87,6 +89,26 @@ public class PersonalScheduleResponse {
         private Long notificationId;
         @Schema(description = "알림 일시, unix 타임스탬프 형식")
         private Long notifyDate;
+        private String trigger;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    @Builder
+    @Schema(title = "친구 일정 월간 조회 응답 DTO")
+    public static class GetFriendMonthlyScheduleDto {
+        @Schema(description = "일정 ID")
+        private Long scheduleId;
+        @Schema(description = "일정 이름", example = "나모 정기 회의")
+        private String title;
+        @Schema(description = "카테고리 정보")
+        private CategoryDto category;
+        @Schema(description = "일정 시작일, unix 타임스탬프 형식")
+        private Long startDate;
+        @Schema(description = "일정 종료일, unix 타임스탬프 형식")
+        private Long endDate;
+        @Schema(description = "시작일과 종료일 차이")
+        private Long interval;
     }
 
 }
