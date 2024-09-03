@@ -37,6 +37,10 @@ public class Notification extends BaseTimeEntity {
     @Column(nullable = false, length = 20)
     private String publisherName;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "publisher_id")
+    private Member publisher;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "receiver_id", nullable = false)
     private Member receiver;
