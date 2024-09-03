@@ -7,6 +7,7 @@ import com.namo.spring.db.mysql.domains.schedule.repository.ParticipantRepositor
 import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -75,8 +76,23 @@ public class ParticipantService {
         participantRepository.deleteByIdIn(Ids);
     }
 
-    public Optional<Participant> readParticipants(Long memberId, Long scheduleId) {
+    public Optional<Participant> readParticipant(Long memberId, Long scheduleId) {
         return participantRepository.findParticipantByMemberIdAndScheduleId(memberId, scheduleId);
     }
 
+    public List<Participant> readParticipantsForDiary(Long memberId, Pageable pageable) {
+        return participantRepository.findAllByMemberIdAndHasDiary(memberId, pageable);
+    }
+
+    public List<Participant> readParticipantByScheduleName(Long memberId, Pageable pageable, String keyword) {
+        return participantRepository.findAllByScheduleTitleAndHasDiary(memberId, keyword, pageable);
+    }
+
+    public List<Participant> readParticipantByDiaryContent(Long memberId, Pageable pageable, String keyword) {
+        return participantRepository.findAllByDiaryContentAndHasDiary(memberId, keyword, pageable);
+    }
+
+    public List<Participant> readParticipantByMember(Long memberId, Pageable pageable, String keyword) {
+        return participantRepository.findAllByMemberAndHasDiary(memberId, keyword, pageable);
+    }
 }

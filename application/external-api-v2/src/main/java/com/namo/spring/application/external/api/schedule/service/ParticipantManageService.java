@@ -6,6 +6,7 @@ import com.namo.spring.db.mysql.domains.category.entity.Palette;
 import com.namo.spring.db.mysql.domains.category.exception.PaletteException;
 import com.namo.spring.db.mysql.domains.category.type.ColorChip;
 import com.namo.spring.db.mysql.domains.category.type.PaletteEnum;
+import com.namo.spring.db.mysql.domains.record.exception.DiaryException;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
@@ -18,6 +19,8 @@ import com.namo.spring.db.mysql.domains.user.exception.MemberException;
 import com.namo.spring.db.mysql.domains.user.service.FriendshipService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -98,7 +101,28 @@ public class ParticipantManageService {
     }
 
     public Participant getScheduleParticipant(Long memberId, Long scheduleId) {
-        return participantService.readParticipants(memberId, scheduleId)
+        return participantService.readParticipant(memberId, scheduleId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_PARTICIPANT_FAILURE));
+    }
+
+    public List<Participant> getMyParticipationForArchive(Long memberId, int page, String filterType, String keyword) {
+        Pageable pageable = PageRequest.of(page - 1, 5);
+        if (filterType == null || filterType.isEmpty())
+            return participantService.readParticipantsForDiary(memberId, pageable);
+
+        switch (filterType) {
+            case "ScheduleName" -> {
+                return participantService.readParticipantByScheduleName(memberId, pageable, keyword);
+            }
+            case "DiaryContent" -> {
+                return participantService.readParticipantByDiaryContent(memberId, pageable, keyword);
+            }
+            case "MemberNickname" -> {
+                return participantService.readParticipantByMember(memberId, pageable, keyword);
+            }
+            default -> {
+                throw new DiaryException(ErrorStatus.NOT_FILTERTYPE_OF_ARCHIVE);
+            }
+        }
     }
 }

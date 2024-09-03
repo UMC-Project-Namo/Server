@@ -48,7 +48,7 @@ public class ScheduleManageService {
 
     public Schedule createPersonalSchedule(ScheduleRequest.PostPersonalScheduleDto dto, Member member) {
         Period period = getValidatedPeriod(dto.getPeriod().getStartDate(), dto.getPeriod().getEndDate());
-        Schedule schedule = scheduleMaker.createPersonalSchedule(dto, period);
+        Schedule schedule = scheduleMaker.createPersonalSchedule(dto, period, member.getNickname());
         participantManageService.createPersonalScheduleParticipant(member, schedule, dto.getCategoryId());
         return schedule;
     }

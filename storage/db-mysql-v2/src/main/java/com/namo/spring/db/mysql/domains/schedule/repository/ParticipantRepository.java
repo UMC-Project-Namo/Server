@@ -3,6 +3,7 @@ package com.namo.spring.db.mysql.domains.schedule.repository;
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -71,4 +72,27 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
 
     Optional<Participant> findParticipantByMemberIdAndScheduleId(Long memberId, Long scheduleId);
 
+    @Query("SELECT p "
+            + "FROM Participant p "
+            + "WHERE p.hasDiary = true and p.member.id = :memberId "
+            + "order by p.schedule.period.startDate desc ")
+    List<Participant> findAllByMemberIdAndHasDiary(Long memberId, Pageable pageable);
+
+    @Query("SELECT p "
+            + "FROM Participant p "
+            + "WHERE p.hasDiary = true AND p.member.id = :memberId AND p.schedule.title LIKE %:keyword% "
+            + "ORDER BY p.schedule.period.startDate DESC")
+    List<Participant> findAllByScheduleTitleAndHasDiary(Long memberId, String keyword, Pageable pageable);
+
+    @Query("SELECT p "
+            + "FROM Participant p "
+            + "WHERE p.hasDiary = true AND p.member.id = :memberId AND p.diary.content LIKE %:keyword% "
+            + "ORDER BY p.schedule.period.startDate DESC")
+    List<Participant> findAllByDiaryContentAndHasDiary(Long memberId, String keyword, Pageable pageable);
+
+    @Query("SELECT p "
+            + "FROM Participant p "
+            + "WHERE p.hasDiary = true AND p.member.id = :memberId AND p.schedule.participantNicknames LIKE %:keyword% "
+            + "ORDER BY p.schedule.period.startDate DESC")
+    List<Participant> findAllByMemberAndHasDiary(Long memberId, String keyword, Pageable pageable);
 }

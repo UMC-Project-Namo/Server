@@ -65,7 +65,7 @@ public enum ErrorStatus implements BaseErrorCode {
     UNSUPPORTED_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "지원하지 않는 코튼입니다."),
 
     /**
-     * 403 : 리소스 접근 권한 오명류
+     * 403 : 리소스 접근 권한 오류
      */
     NOT_FRIENDSHIP_MEMBER(HttpStatus.BAD_REQUEST, "요청한 회원과 친구가 아닙니다."),
     NOT_SCHEDULE_OWNER(HttpStatus.FORBIDDEN, "해당 모임 일정의 생성자가 아닙니다."),
@@ -121,6 +121,7 @@ public enum ErrorStatus implements BaseErrorCode {
     NOT_USERS_CATEGORY(HttpStatus.NOT_FOUND, "해당 유저의 카테고리가 아닙니다."),
     NOT_USERS_IN_GROUP(HttpStatus.NOT_FOUND, "유저가 그룹에 포함되어 있지 않습니다."),
     NOT_IMAGE_IN_DIARY(HttpStatus.NOT_FOUND, "이미지가 다이어리에 포함되어 있지 않습니다."),
+    NOT_FILTERTYPE_OF_ARCHIVE(HttpStatus.NOT_FOUND, "올바른 필터 타입이 아닙니다"),
 
     /**
      * 404 : 인프라 에러

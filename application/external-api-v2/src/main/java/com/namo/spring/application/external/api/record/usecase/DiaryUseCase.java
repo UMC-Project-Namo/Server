@@ -1,5 +1,7 @@
 package com.namo.spring.application.external.api.record.usecase;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,5 +42,15 @@ public class DiaryUseCase {
 			scheduleId);
 		Diary diary = diaryManageService.getParticipantDiary(participant);
 		return DiaryResponseConverter.toDiaryDto(diary);
+	}
+
+	@Transactional(readOnly = true)
+	public List<DiaryResponse.DiaryArchiveDto> getDiaryArchiveDto(Long memberId, int page, String filterType,
+		String keyword) {
+		List<Participant> allMyParticipant = participantManageService.getMyParticipationForArchive(memberId, page,
+			filterType, keyword);
+		return allMyParticipant.stream()
+			.map(DiaryResponseConverter::toDiaryArchiveDto)
+			.toList();
 	}
 }

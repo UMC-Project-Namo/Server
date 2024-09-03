@@ -34,8 +34,9 @@ public class DiaryResponse {
 	public static class DiaryArchiveDto {
 		private LocalDateTime scheduleDate;
 		private Long scheduleId;
+		private String title;
 		private DiarySummaryDto diarySummary;
-		private boolean isMeetingSchedule;
+		private int scheduleType;
 		private int participantsCount;
 		private String participantsNames;
 	}
@@ -45,9 +46,8 @@ public class DiaryResponse {
 	@AllArgsConstructor
 	public static class DiarySummaryDto {
 		private Long diaryId;
-		private String title;
 		private String content;
-		private DiaryImageDto diaryImage;
+		private List<DiaryImageDto> diaryImages;
 	}
 
 }
