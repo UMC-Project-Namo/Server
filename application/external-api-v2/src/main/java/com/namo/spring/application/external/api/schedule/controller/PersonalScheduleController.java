@@ -32,11 +32,11 @@ public class PersonalScheduleController implements PersonalScheduleApi {
     public ResponseDto<Long> createPersonalSchedule(
             @Valid @RequestBody ScheduleRequest.PostPersonalScheduleDto dto,
             @AuthenticationPrincipal SecurityUserDetails member) {
-        return ResponseDto.onSuccess(personalScheduleUsecase.createPersonalSchedule(dto, member.getUserId()));
+        return ResponseDto.onSuccess(personalScheduleUsecase.createPersonalSchedule(dto, member));
     }
 
     /**
-     * 월간 일정 조회 API
+     * 내 월간 일정 조회 API
      */
 
     @GetMapping("/calendar")
@@ -45,5 +45,18 @@ public class PersonalScheduleController implements PersonalScheduleApi {
             @RequestParam Integer month,
             @AuthenticationPrincipal SecurityUserDetails member) {
         return ResponseDto.onSuccess(personalScheduleUsecase.getMyMonthlySchedules(year, month, member));
+    }
+
+    /**
+     * 친구 월간 일정 조회 API
+     */
+
+    @GetMapping("/calendar/friends")
+    public ResponseDto<List<PersonalScheduleResponse.GetFriendMonthlyScheduleDto>> getFriendMonthlySchedules(
+            @RequestParam Integer year,
+            @RequestParam Integer month,
+            @RequestParam Long memberId,
+            @AuthenticationPrincipal SecurityUserDetails member) {
+        return ResponseDto.onSuccess(personalScheduleUsecase.getFriendMonthlySchedules(year, month, memberId, member));
     }
 }
