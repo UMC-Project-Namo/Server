@@ -44,6 +44,12 @@ public class PersonalScheduleUsecase {
         return toGetMonthlyScheduleDtos(scheduleInfo, scheduleNotifications);
     }
 
+    @Transactional
+    public void updatePersonalSchedule(ScheduleRequest.PatchPersonalScheduleDto patchPersonalScheduleDto, Long scheduleId, SecurityUserDetails memberInfo) {
+        Schedule schedule = scheduleManageService.getPersonalSchedule(scheduleId);
+        scheduleManageService.updatePersonalSchedule(patchPersonalScheduleDto, schedule, memberInfo.getUserId());
+    }
+
     @Transactional(readOnly = true)
     public List<PersonalScheduleResponse.GetFriendMonthlyScheduleDto> getFriendMonthlySchedules(int year, int month, Long targetMemberId, SecurityUserDetails memberInfo) {
         Member targetMember = memberManageService.getMember(targetMemberId);
