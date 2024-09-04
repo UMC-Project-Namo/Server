@@ -1,5 +1,6 @@
 package com.namo.spring.application.external.api.schedule.dto;
 
+import com.namo.spring.application.external.global.annotation.validation.ValidReminderTimes;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -32,6 +33,26 @@ public class ScheduleRequest {
         private PeriodDto period;
         @NotNull(message = "장소 정보가 없을 경우 empty object를 전송합니다.")
         @Schema(description = "카카오 맵 장소 정보")
+        private LocationDto location;
+        @NotNull(message = "알림이 없을 시 emtpy array를 전송합니다.")
+        @ValidReminderTimes
+        @Schema(description = "알림 트리거, 일-> 'D{1-59 까지의 정수}', 시-> 'H{1-36 까지의 정수}', 분-> 'M{1-7 까지의 정수}'")
+        private List<String> reminderTrigger;
+    }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    @Schema(title = "모임 일정 수정 요청 DTO")
+    public static class PatchPersonalScheduleDto {
+        @NotBlank(message = "일정 이름 입력은 필수 입니다. 수정 사항이 없을 시 원본 값을 전송합니다.")
+        @Schema(description = "모임 일정 이름, 수정 사항이 없을 시 원본 값을 전송합니다.")
+        private String title;
+        @NotEmpty(message = "기간 입력은 필수 입니다. 수정 사항이 없을 시 원본 값을 전송합니다.")
+        @Schema(description = "기간, 수정 사항이 없을 시 원본 값을 전송합니다.")
+        private PeriodDto period;
+        @NotNull(message = "수정 사항이 없을 경우 empty object를 전송합니다.")
+        @Schema(description = "카카오 맵 장소 정보, 수정 사항이 없을 시 원본 값을 전송합니다.(원래 값이 없을 경우 empty object)")
         private LocationDto location;
     }
 
