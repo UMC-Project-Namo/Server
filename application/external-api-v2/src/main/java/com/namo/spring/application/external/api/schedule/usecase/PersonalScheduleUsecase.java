@@ -1,5 +1,7 @@
 package com.namo.spring.application.external.api.schedule.usecase;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.namo.spring.application.external.api.notification.service.NotificationManageService;
 import com.namo.spring.application.external.api.schedule.dto.PersonalScheduleResponse;
 import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
 import com.namo.spring.application.external.api.schedule.service.ScheduleManageService;
@@ -26,10 +28,10 @@ import static com.namo.spring.application.external.global.utils.SchedulePeriodVa
 public class PersonalScheduleUsecase {
     private final MemberManageService memberManageService;
     private final ScheduleManageService scheduleManageService;
+    private final NotificationManageService notificationManageService;
 
     @Transactional
-
-    public Long createPersonalSchedule(ScheduleRequest.PostPersonalScheduleDto dto, SecurityUserDetails memberInfo) {
+    public Long createPersonalSchedule(ScheduleRequest.PostPersonalScheduleDto dto, SecurityUserDetails memberInfo) throws JsonProcessingException {
         Member member = memberManageService.getMember(memberInfo.getUserId());
         Schedule schedule = scheduleManageService.createPersonalSchedule(dto, member);
         return schedule.getId();
@@ -38,7 +40,7 @@ public class PersonalScheduleUsecase {
     @Transactional(readOnly = true)
     public List<PersonalScheduleResponse.GetMonthlyScheduleDto> getMyMonthlySchedules(int year, int month, SecurityUserDetails memberInfo) {
         List<Participant> scheduleInfo = scheduleManageService.getMyMonthlySchedules(memberInfo.getUserId(), getExtendedPeriod(year, month));
-        List<ScheduleNotificationQuery> scheduleNotifications = scheduleManageService.getScheduleNotifications(memberInfo.getUserId(), scheduleInfo);
+        List<ScheduleNotificationQuery> scheduleNotifications = notificationManageService.getScheduleNotifications(memberInfo.getUserId(), scheduleInfo);
         return toGetMonthlyScheduleDtos(scheduleInfo, scheduleNotifications);
     }
 

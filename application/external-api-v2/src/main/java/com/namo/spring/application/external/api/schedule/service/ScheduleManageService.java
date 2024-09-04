@@ -1,9 +1,9 @@
 package com.namo.spring.application.external.api.schedule.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.namo.spring.application.external.api.notification.service.NotificationManageService;
 import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
 import com.namo.spring.core.common.code.status.ErrorStatus;
-import com.namo.spring.db.mysql.domains.notification.dto.ScheduleNotificationQuery;
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
@@ -46,7 +46,7 @@ public class ScheduleManageService {
         return schedule;
     }
 
-    public Schedule createPersonalSchedule(ScheduleRequest.PostPersonalScheduleDto dto, Member member) {
+    public Schedule createPersonalSchedule(ScheduleRequest.PostPersonalScheduleDto dto, Member member) throws JsonProcessingException {
         Period period = getValidatedPeriod(dto.getPeriod().getStartDate(), dto.getPeriod().getEndDate());
         Schedule schedule = scheduleMaker.createPersonalSchedule(dto, period, member.getNickname());
         participantManageService.createPersonalScheduleParticipant(member, schedule, dto.getCategoryId());
@@ -72,14 +72,6 @@ public class ScheduleManageService {
 
     public List<Participant> getMyMonthlySchedules(Long memberId, Period period) {
         return participantService.readParticipantsWithScheduleAndCategoryByPeriod(memberId, null, period.getStartDate(), period.getEndDate());
-    }
-
-    public List<ScheduleNotificationQuery> getScheduleNotifications(Long memberId, List<Participant> schedules) {
-        List<Long> scheduleIds = schedules.stream()
-                .map(Participant::getSchedule)
-                .map(Schedule::getId)
-                .collect(Collectors.toList());
-        return notificationManageService.getScheduleNotifications(memberId, scheduleIds);
     }
 
     public List<Participant> getMemberMonthlySchedules(Long targetMemberId, Long friendId, Period period) {
