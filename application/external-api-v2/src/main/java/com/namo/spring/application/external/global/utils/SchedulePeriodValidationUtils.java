@@ -50,7 +50,7 @@ public class SchedulePeriodValidationUtils {
     /**
      * @param year  년
      * @param month 월
-     * @return 입력한 달 기준 캘린더 화면의 가장 첫 날짜와, 끝 날짜를 반환 합니다. (전 달 및 다음 달 포함)
+     * @return 입력한 달 기준 캘린더 화면의 가장 첫 날짜와, 끝 날짜의 다음 날을 반환 합니다. (전 달 및 다음 달 포함)
      */
 
     public static Period getExtendedPeriod(int year, int month) {
