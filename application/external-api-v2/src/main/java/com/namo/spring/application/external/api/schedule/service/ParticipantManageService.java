@@ -11,6 +11,7 @@ import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
 import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
+import com.namo.spring.db.mysql.domains.schedule.type.ParticipantRole;
 import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 import com.namo.spring.db.mysql.domains.user.entity.Friendship;
@@ -45,7 +46,7 @@ public class ParticipantManageService {
     public void createMeetingScheduleParticipants(Member owner, Schedule schedule, List<Member> participants) {
         participantMaker.makeScheduleOwner(schedule, owner, null, MEETING_SCHEDULE_OWNER_PALETTE_ID);
         schedule.addActiveParticipant(owner.getNickname());
-        participants.forEach(participant -> participantMaker.makeMeetingScheduleParticipant(schedule, participant));
+        participantMaker.makeMeetingScheduleParticipants(schedule, participants);
     }
 
     public List<Member> getFriendshipValidatedParticipants(Long ownerId, List<Long> memberIds) {
@@ -56,6 +57,13 @@ public class ParticipantManageService {
             throw new MemberException(ErrorStatus.NOT_FOUND_FRIENDSHIP_FAILURE);
         }
         return friends;
+    }
+
+    public void validateScheduleOwner(Schedule schedule, Long memberId) {
+        Participant participant = getValidatedMeetingParticipantWithSchedule(memberId, schedule.getId());
+        if (participant.getIsOwner() != ParticipantRole.OWNER.getValue()) {
+            throw new ScheduleException(ErrorStatus.NOT_SCHEDULE_OWNER);
+        }
     }
 
     public Participant getValidatedMeetingParticipantWithSchedule(Long memberId, Long scheduleId) {
@@ -81,7 +89,7 @@ public class ParticipantManageService {
     public void updateMeetingScheduleParticipants(Long ownerId, Schedule schedule, ScheduleRequest.PatchMeetingScheduleDto dto) {
         if (!dto.getParticipantsToAdd().isEmpty()) {
             List<Member> participantsToAdd = getFriendshipValidatedParticipants(ownerId, dto.getParticipantsToAdd());
-            participantsToAdd.forEach(participant -> participantMaker.makeMeetingScheduleParticipant(schedule, participant));
+            participantMaker.makeMeetingScheduleParticipants(schedule, participantsToAdd);
         }
 
         if (!dto.getParticipantsToRemove().isEmpty()) {

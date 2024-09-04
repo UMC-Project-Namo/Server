@@ -24,6 +24,11 @@ public class ParticipantService {
         return participantRepository.save(participant);
     }
 
+    @Transactional
+    public void createParticipants(List<Participant> participants) {
+        participantRepository.saveAll(participants);
+    }
+
     @Transactional(readOnly = true)
     public Optional<Participant> readParticipant(Long id) {
         return participantRepository.findById(id);
