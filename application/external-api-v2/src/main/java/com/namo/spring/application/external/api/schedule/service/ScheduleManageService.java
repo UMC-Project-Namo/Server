@@ -42,7 +42,7 @@ public class ScheduleManageService {
 
     public Schedule getPersonalSchedule(Long scheduleId) {
         Schedule schedule = getSchedule(scheduleId);
-        if (schedule.getScheduleType() != ScheduleType.MEETING.getValue()) {
+        if (schedule.getScheduleType() != ScheduleType.PERSONAL.getValue()) {
             throw new ScheduleException(ErrorStatus.NOT_PERSONAL_SCHEDULE);
         }
         return schedule;

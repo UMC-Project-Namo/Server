@@ -60,19 +60,19 @@ public class ParticipantManageService {
     }
 
     public void validateScheduleOwner(Schedule schedule, Long memberId) {
-        Participant participant = getValidatedMeetingParticipantWithSchedule(memberId, schedule.getId());
+        Participant participant = getValidatedParticipantWithSchedule(memberId, schedule.getId());
         if (participant.getIsOwner() != ParticipantRole.OWNER.getValue()) {
             throw new ScheduleException(ErrorStatus.NOT_SCHEDULE_OWNER);
         }
     }
 
-    public Participant getValidatedMeetingParticipantWithSchedule(Long memberId, Long scheduleId) {
+    public Participant getValidatedParticipantWithSchedule(Long memberId, Long scheduleId) {
         return participantService.readParticipantByScheduleIdAndMemberId(scheduleId, memberId).orElseThrow(
                 () -> new ScheduleException(ErrorStatus.NOT_SCHEDULE_PARTICIPANT));
     }
 
     public void activateParticipant(Long memberId, Long scheduleId) {
-        Participant participant = getValidatedMeetingParticipantWithSchedule(scheduleId, memberId);
+        Participant participant = getValidatedParticipantWithSchedule(scheduleId, memberId);
         Long paletteId = selectPaletteColorId(scheduleId);
         participationActionManager.activateParticipant(participant.getSchedule(), participant, paletteId);
     }

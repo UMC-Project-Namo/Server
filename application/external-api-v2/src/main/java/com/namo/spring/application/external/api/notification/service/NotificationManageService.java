@@ -41,11 +41,11 @@ public class NotificationManageService {
         return notificationService.readNotificationsByReceiverIdAndScheduleIds(memberId, scheduleIds);
     }
 
-    public void updateOrCreateScheduleReminderNotification(Schedule schedule, Member member, List<String> triggers) {
-        participantManageService.validateScheduleOwner(schedule, member.getId());
-        notificationService.deleteScheduleNotificationsByScheduleAndReceiver(schedule.getId(), member.getId(), NotificationType.SCHEDULE_REMINDER);
+    public void updateOrCreateScheduleReminderNotification(Long scheduleId, Member member, List<String> triggers) {
+        Participant participant = participantManageService.getValidatedParticipantWithSchedule(member.getId(), scheduleId);
+        notificationService.deleteScheduleNotificationsByScheduleAndReceiver(participant.getSchedule().getId(), member.getId(), NotificationType.SCHEDULE_REMINDER);
         if (!triggers.isEmpty()) {
-            createScheduleReminderNotification(schedule, member, triggers);
+            createScheduleReminderNotification(participant.getSchedule(), member, triggers);
         }
     }
 
