@@ -67,4 +67,22 @@ public class DiaryResponse {
 		private List<Integer> dates;
 	}
 
+	@Builder
+	@Getter
+	@AllArgsConstructor
+	public static class DayOfDiaryDto {
+		public int scheduleType;
+		public CategoryInfoDto categoryInfo;
+		private LocalDateTime scheduleDate;
+		public String scheduleTitle;
+		private ParticipantInfo participantInfo;
+	}
+
+	@Builder
+	@Getter
+	@AllArgsConstructor
+	public static class CategoryInfoDto {
+		public String name;
+		public int color;
+	}
 }
