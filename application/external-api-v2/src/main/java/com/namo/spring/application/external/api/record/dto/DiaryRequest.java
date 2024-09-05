@@ -26,6 +26,8 @@ public class DiaryRequest {
 		@Schema(description = "즐거움 지수를 넣어주세요 1~3", example = "3.0")
 		private double enjoyRating;
 		private List<CreateDiaryImageDto> diaryImages;
+		@Schema(description = "삭제할 이미지 ID를 넣어주세요", example = "1")
+		private List<Long> deleteImages;
 	}
 
 	@Getter

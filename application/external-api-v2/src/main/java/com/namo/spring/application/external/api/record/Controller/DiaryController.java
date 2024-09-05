@@ -123,7 +123,7 @@ public class DiaryController {
 	@ApiErrorCodes(value = {
 		ErrorStatus.INVALID_FORMAT_FAILURE,
 	})
-	@GetMapping("/{date}")
+	@GetMapping("/date/{date}")
 	public ResponseDto<List<DiaryResponse.DayOfDiaryDto>> getDayDiary(
 		@AuthenticationPrincipal SecurityUserDetails memberInfo,
 		@Parameter(description = "조회할 날짜입니다.", example = "2024-09-01")
