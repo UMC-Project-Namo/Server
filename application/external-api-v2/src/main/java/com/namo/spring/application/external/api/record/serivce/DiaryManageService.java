@@ -1,15 +1,11 @@
 package com.namo.spring.application.external.api.record.serivce;
 
-import java.util.List;
-
 import org.springframework.stereotype.Component;
 
 import com.namo.spring.application.external.api.record.dto.DiaryRequest;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.record.entity.Diary;
-import com.namo.spring.db.mysql.domains.record.entity.DiaryImage;
 import com.namo.spring.db.mysql.domains.record.exception.DiaryException;
-import com.namo.spring.db.mysql.domains.record.service.DiaryImageService;
 import com.namo.spring.db.mysql.domains.record.service.DiaryService;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.user.exception.MemberException;
@@ -21,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class DiaryManageService {
 
 	private final DiaryService diaryService;
-	private final DiaryImageService diaryImageService;
+	private final DiaryImageManageService diaryImageManageService;
 
 	/**
 	 * 나의 일기를 가져오는 메서드입니다.
@@ -64,28 +60,18 @@ public class DiaryManageService {
 			throw new MemberException(ErrorStatus.ALREADY_WRITTEN_DIARY_FAILURE);
 		Diary diary = Diary.of(participant, request.getContent(), request.getEnjoyRating());
 		diaryService.createDiary(diary);
-		createDiaryImages(diary, request.getDiaryImages());
+		diaryImageManageService.createDiaryImages(diary, request.getDiaryImages());
 	}
 
 	/**
 	 * 다이어리를 업데이트 하는 메서드입니다.
-	 * !! 다이어리 이미지에 대해 PUT 형태의 업데이트를 진행합니다.
+	 * !! 일기 이미지에 대한 업데이트 방식은 DiaryImageManageService가 책임을 가집니다.
 	 *
 	 * @param diary   타겟 일기
 	 * @param request 업데이트 정보
 	 */
 	public void updateDiary(Diary diary, DiaryRequest.UpdateDiaryDto request) {
 		diary.update(request.getContent(), request.getEnjoyRating());
-		diaryImageService.deleteAll(diary);
-		createDiaryImages(diary, request.getDiaryImages());
-	}
-
-	private void createDiaryImages(Diary diary, List<DiaryRequest.CreateDiaryImageDto> diaryImages) {
-		if (!diaryImages.isEmpty()) {
-			diaryImages.forEach(diaryImage -> {
-				DiaryImage image = DiaryImage.of(diary, diaryImage.getImageUrl(), diaryImage.getOrderNumber());
-				diaryImageService.createDiaryImage(image);
-			});
-		}
+		diaryImageManageService.updateDiaryImage(diary, request);
 	}
 }
