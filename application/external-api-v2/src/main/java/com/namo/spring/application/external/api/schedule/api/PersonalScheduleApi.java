@@ -1,5 +1,6 @@
 package com.namo.spring.application.external.api.schedule.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.namo.spring.application.external.api.schedule.dto.PersonalScheduleResponse;
 import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -35,7 +37,7 @@ public interface PersonalScheduleApi {
     @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "요청 실패 - 시작 날짜가 종료 날짜 이전 이어야 합니다. ", value = """
             {
             	"isSuccess": false,
-            	"code": 404,
+            	"code": 400,
             	"message": "시작 날짜가 종료 날짜 이전 이어야 합니다."
             }
             """)}))
@@ -52,12 +54,12 @@ public interface PersonalScheduleApi {
             	"message": "카테고리를 찾을 수 없습니다."
             }
             """)}))
-    ResponseDto<Long> createPersonalSchedule(@Valid @RequestBody ScheduleRequest.PostPersonalScheduleDto dto,
-                                             @AuthenticationPrincipal SecurityUserDetails member);
+    ResponseDto<Long> createPersonalSchedule(@Parameter(description = "개인 일정 생성 요청 dto") @Valid @RequestBody ScheduleRequest.PostPersonalScheduleDto dto,
+                                             @AuthenticationPrincipal SecurityUserDetails member) throws JsonProcessingException;
 
     @Operation(summary = "개인 월간 일정 조회", description = "개인 월간 일정을 조회합니다.")
     @ApiErrorCodes(value = {ErrorStatus.EMPTY_ACCESS_KEY, ErrorStatus.EXPIRATION_ACCESS_TOKEN, ErrorStatus.EXPIRATION_REFRESH_TOKEN, ErrorStatus.INTERNET_SERVER_ERROR})
-    @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "개인 일정 생성 성공", value = """
+    @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "개인 일정 조회 성공", value = """
             {
                "isSuccess":true,
                "code":200,
@@ -116,7 +118,7 @@ public interface PersonalScheduleApi {
 
     @Operation(summary = "친구 월간 일정 조회", description = "친구의 월간 일정을 조회합니다.")
     @ApiErrorCodes(value = {ErrorStatus.EMPTY_ACCESS_KEY, ErrorStatus.EXPIRATION_ACCESS_TOKEN, ErrorStatus.EXPIRATION_REFRESH_TOKEN, ErrorStatus.INTERNET_SERVER_ERROR})
-    @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "개인 일정 생성 성공", value = """
+    @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "친구 일정 조회 성공", value = """
             {
                  "isSuccess":true,
                  "code":200,
@@ -163,4 +165,71 @@ public interface PersonalScheduleApi {
             @Parameter(description = "월") @RequestParam Integer month,
             @Parameter(description = "친구 유저 ID") @RequestParam Long memberId,
             @AuthenticationPrincipal SecurityUserDetails member);
+
+    @Operation(summary = "개인 일정 내용 수정", description = "개인 일정 내용을 수정합니다.")
+    @ApiErrorCodes(value = {ErrorStatus.EMPTY_ACCESS_KEY, ErrorStatus.EXPIRATION_ACCESS_TOKEN, ErrorStatus.EXPIRATION_REFRESH_TOKEN, ErrorStatus.INTERNET_SERVER_ERROR})
+    @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "요청 실패 - 시작 날짜가 종료 날짜 이전 이어야 합니다. ", value = """
+            {
+            	"isSuccess": false,
+            	"code": 400,
+            	"message": "개인 일정이 아닙니다."
+            }
+            """),
+            @ExampleObject(name = "요청 실패 - 시작 날짜가 종료 날짜 이전 이어야 합니다. ", value = """
+                    {
+                    "isSuccess": false,
+                    "code": 400,
+                    "message": "시작 날짜가 종료 날짜 이전 이어야 합니다."
+                    }
+                    """)
+    }))
+    @ApiResponse(responseCode = "403", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "요청 실패 - 모임 일정의 수정 권한이 업습니다.", value = """
+            {
+            	"isSuccess": false,
+            	"code": 403,
+            	"message": "해당 일정의 생성자가 아닙니다."
+            }
+            """)
+    }))
+    ResponseDto<String> updatePersonalSchedules(@Parameter(description = "일정 ID") @PathVariable Long scheduleId,
+                                                @Parameter(description = "일정 내용 수정 요청 dto") @Valid @RequestBody ScheduleRequest.PatchPersonalScheduleDto dto,
+                                                @AuthenticationPrincipal SecurityUserDetails member);
+
+    @Operation(summary = "일정 알림 추가/수정/삭제", description = "일정 알림을 추가/수정/삭제 합니다. 최종적으로 일정에 설정할 알림을 array로 전송하며, 알림을 모두 삭제할 때에는 empty array를 전송합니다.")
+    @ApiErrorCodes(value = {ErrorStatus.EMPTY_ACCESS_KEY, ErrorStatus.EXPIRATION_ACCESS_TOKEN, ErrorStatus.EXPIRATION_REFRESH_TOKEN, ErrorStatus.INTERNET_SERVER_ERROR})
+    @ApiResponse(responseCode = "403", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "요청 실패 - 해당 일정에 대한 읽기 권한이 없습니다.", value = """
+            {
+            	"isSuccess": false,
+            	"code": 403,
+            	"message": "해당 일정의 참여자가 아닙니다."
+            }
+            """)
+    }))
+    @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json", examples = {
+            @ExampleObject(name = "요청 실패 - 유저의 기기 정보를 찾을 수 없습니다. ", value = """
+                    {
+                    	"isSuccess": false,
+                    	"code": 404,
+                    	"message": "유저의 기기 정보를 찾을 수 없습니다."
+                    }
+                    """),
+            @ExampleObject(name = "요청 실패 - 유저의 모바일 기기 정보를 찾을 수 없습니다. ", value = """
+                    {
+                    	"isSuccess": false,
+                    	"code": 404,
+                    	"message": "유저의 모바일 기기 정보를 찾을 수 없습니다."
+                    }
+                    """),
+            @ExampleObject(name = "요청 실패 - 푸쉬 알림 전송이 지원되지 않는 기기입니다. ", value = """
+                    {
+                    	"isSuccess": false,
+                    	"code": 404,
+                    	"message": "푸쉬 알림 전송이 지원되지 않는 기기입니다."
+                    }
+                    """)
+
+    }))
+    ResponseDto<String> updateScheduleReminder(@Parameter(description = "일정 ID") @PathVariable Long scheduleId,
+                                               @Parameter(description = "일정 알림 수정 요청 dto") @Valid @RequestBody ScheduleRequest.PutScheduleReminderDto dto,
+                                               @AuthenticationPrincipal SecurityUserDetails member);
 }

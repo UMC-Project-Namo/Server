@@ -294,7 +294,7 @@ public interface MeetingScheduleApi {
             	"code": 403,
             	"message": "해당 일정의 생성자가 아닙니다."
             }
-            """),
+            """)
     }))
     @ApiResponse(responseCode = "404", content = @Content(mediaType = "application/json", examples = {@ExampleObject(name = "요청 실패 - 모임 일정에 참여할 유저를 찾을 수 없습니다.", value = """
             {
@@ -336,7 +336,7 @@ public interface MeetingScheduleApi {
             {
             	"isSuccess": false,
             	"code": 403,
-            	"message": "해당 일정의 참석자가 아닙니다."
+            	"message": "해당 일정의 참여자가 아닙니다."
             }
             """)
     }))
