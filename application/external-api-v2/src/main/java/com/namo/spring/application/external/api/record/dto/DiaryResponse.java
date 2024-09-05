@@ -75,6 +75,7 @@ public class DiaryResponse {
 		public CategoryInfoDto categoryInfo;
 		private LocalDateTime scheduleDate;
 		public String scheduleTitle;
+		public Long diaryId;
 		private ParticipantInfo participantInfo;
 	}
 

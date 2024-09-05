@@ -87,6 +87,7 @@ public class DiaryResponseConverter {
 			.categoryInfo(toCategoryInfoDto(participant.getCategory()))
 			.scheduleDate(participant.getSchedule().getPeriod().getStartDate())
 			.scheduleTitle(participant.getSchedule().getTitle())
+			.diaryId(participant.getDiary().getId())
 			.participantInfo(toParticipantInfo(participant.getSchedule()))
 			.build();
 	}
