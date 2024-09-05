@@ -14,6 +14,7 @@ public class DiaryResponse {
 	@Builder
 	@Getter
 	@AllArgsConstructor
+	@Schema(description = "일기 상세 정보 DTO")
 	public static class DiaryDto {
 		@Schema(description = "일기 ID", example = "2")
 		private Long diaryId;
@@ -27,6 +28,7 @@ public class DiaryResponse {
 	@Builder
 	@Getter
 	@AllArgsConstructor
+	@Schema(description = "일기 이미지 정보 DTO")
 	public static class DiaryImageDto {
 		@Schema(description = "정렬 순서", example = "1")
 		private Integer orderNumber;
@@ -39,6 +41,7 @@ public class DiaryResponse {
 	@Builder
 	@Getter
 	@AllArgsConstructor
+	@Schema(description = "일기 보관함 DTO")
 	public static class DiaryArchiveDto {
 		private CategoryInfoDto categoryInfo;
 		private LocalDateTime scheduleStartDate;
@@ -56,6 +59,7 @@ public class DiaryResponse {
 	@Builder
 	@Getter
 	@AllArgsConstructor
+	@Schema(description = "스케줄 참여자 정보 DTO")
 	public static class ParticipantInfo {
 		@Schema(description = "참여자 수", example = "1")
 		private int participantsCount;
@@ -66,6 +70,7 @@ public class DiaryResponse {
 	@Builder
 	@Getter
 	@AllArgsConstructor
+	@Schema(description = "일기 정보 DTO")
 	public static class DiarySummaryDto {
 		@Schema(description = "일기 ID", example = "2")
 		private Long diaryId;
@@ -77,6 +82,7 @@ public class DiaryResponse {
 	@Builder
 	@Getter
 	@AllArgsConstructor
+	@Schema(description = "일기 존재 날짜 DTO")
 	public static class DiaryExistDateDto {
 		private int year;
 		private int month;
@@ -87,6 +93,7 @@ public class DiaryResponse {
 	@Builder
 	@Getter
 	@AllArgsConstructor
+	@Schema(description = "일별 일기에 대한 스케줄 DTO")
 	public static class DayOfDiaryDto {
 		@Schema(description = "개인 스케줄 : 0, 모임 스케줄 : 1", example = "0")
 		private int scheduleType;
@@ -103,6 +110,7 @@ public class DiaryResponse {
 	@Builder
 	@Getter
 	@AllArgsConstructor
+	@Schema(description = "카테고리 정보 DTO")
 	public static class CategoryInfoDto {
 		@Schema(description = "카테고리 이름", example = "개인 일정")
 		private String name;
