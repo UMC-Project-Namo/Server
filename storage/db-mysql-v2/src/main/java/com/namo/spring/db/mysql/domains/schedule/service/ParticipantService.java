@@ -103,8 +103,8 @@ public class ParticipantService {
 		return participantRepository.findAllByMemberAndHasDiary(memberId, keyword, pageable);
 	}
 
-	public List<Participant> readParticipantHasDiaryByMonth(Long memberId, LocalDateTime startDate,
+	public List<Participant> readParticipantHasDiaryByDateRange(Long memberId, LocalDateTime startDate,
 		LocalDateTime endDate) {
-		return participantRepository.findAllByMonthAndHasDiary(memberId, startDate, endDate);
+		return participantRepository.findAllByDateRangeAndHasDiary(memberId, startDate, endDate);
 	}
 }

@@ -107,7 +107,7 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
 		+ "WHERE p.hasDiary = true "
 		+ "AND p.member.id = :memberId "
 		+ "AND p.schedule.period.startDate BETWEEN :startDate AND :endDate")
-	List<Participant> findAllByMonthAndHasDiary(@Param("memberId") Long memberId,
+	List<Participant> findAllByDateRangeAndHasDiary(@Param("memberId") Long memberId,
 		@Param("startDate") LocalDateTime startDate,
 		@Param("endDate") LocalDateTime endDate);
 }
