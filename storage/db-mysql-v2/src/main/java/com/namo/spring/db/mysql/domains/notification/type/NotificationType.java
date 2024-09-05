@@ -13,7 +13,7 @@ public enum NotificationType implements CodedEnum {
     SCHEDULE_CREATED("4", "일정 생성"),
     SCHEDULE_UPDATED("5", "일정 수정"),
     SCHEDULE_DELETED("6", "일정 삭제"),
-    SCHEDULE_TO_BE_STARTED("7", "일정 시작 예정");
+    SCHEDULE_REMINDER("7", "일정 시작 예정");
 
     private final String code;
     private final String type;
