@@ -1,5 +1,9 @@
 package com.namo.spring.application.external.api.record.Controller;
 
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -92,19 +96,38 @@ public class DiaryController {
 		@RequestParam int page
 	) {
 		return ResponseDto.onSuccess(diaryUseCase
-			.getDiaryArchiveDto(memberInfo.getUserId(), page, filterType, keyword));
+			.getDiaryArchive(memberInfo.getUserId(), page, filterType, keyword));
 	}
 
 	@Operation(summary = "기록 캘린더 조회", description = "기록이 존재하는 달력 확인 API 입니다. 월별로 일기가 존재하는 날짜를 반환합니다. ")
-	@GetMapping("/calendar")
+	@GetMapping("/calendar/{yearMonth}")
 	public ResponseDto<DiaryResponse.DiaryExistDateDto> getArchiveCalender(
 		@AuthenticationPrincipal SecurityUserDetails memberInfo,
-		@Parameter(description = "조회할 달력의 년도입니다.", example = "2024")
-		@RequestParam int year,
-		@Parameter(description = "조회할 달력의 월입니다.", example = "9")
-		@RequestParam int month
+		@Parameter(description = "조회할 달력의 년도-월 입니다.", example = "2024-08")
+		@PathVariable String yearMonth
 	) {
-		return ResponseDto.onSuccess(diaryUseCase
-			.getExistDiaryDate(memberInfo.getUserId(), year, month));
+		try {
+			YearMonth requestedYearMonth = YearMonth.parse(yearMonth);
+			return ResponseDto.onSuccess(diaryUseCase
+				.getExistDiaryDate(memberInfo.getUserId(), requestedYearMonth));
+
+		} catch (DateTimeParseException e) {
+			throw new DateTimeException("형식에 맞지 않는 일자입니다.");
+		}
+	}
+
+	@Operation(summary = "날짜별 기록 정보 조회", description = "날짜 별 기록이 존재하는 스케줄 정보가 확인됩니다. 기록 캘린더 조회에서 요일을 선택하여 상세 정보를 확인할 때 사용하시면 됩니다.")
+	@GetMapping("/{date}")
+	public ResponseDto<List<DiaryResponse.DayOfDiaryDto>> getDayDiary(
+		@AuthenticationPrincipal SecurityUserDetails memberInfo,
+		@Parameter(description = "조회할 날짜입니다.", example = "2024-09-01")
+		@PathVariable String date) {
+		try {
+			LocalDate requestedDate = LocalDate.parse(date);
+			return ResponseDto.onSuccess(diaryUseCase
+				.getDayDiaryList(memberInfo.getUserId(), requestedDate));
+		} catch (DateTimeParseException e) {
+			throw new DateTimeException("형식에 맞지 않는 일자입니다.");
+		}
 	}
 }
