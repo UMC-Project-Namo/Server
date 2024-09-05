@@ -33,6 +33,7 @@ public enum ErrorStatus implements BaseErrorCode {
     NOT_WRITTEN_DIARY_FAILURE(HttpStatus.BAD_REQUEST, "일기를 작성하지 않았습니다."),
     NOT_MY_DIARY_FAILURE(HttpStatus.BAD_REQUEST, "해당 일기에 대한 권한이 없습니다."),
     NOT_MEETING_SCHEDULE(HttpStatus.BAD_REQUEST, "모임 일정이 아닙니다."),
+    NOT_PERSONAL_SCHEDULE(HttpStatus.BAD_REQUEST, "개인 일정이 아닙니다."),
     INVALID_FORMAT_FAILURE(HttpStatus.BAD_REQUEST, "유효한 날짜 값을 입력해주세요"),
     DUPLICATE_MEETING_PARTICIPANT(HttpStatus.BAD_REQUEST, "중복되는 참여자입니다."),
     INVALID_MEETING_PARTICIPANT_COUNT(HttpStatus.BAD_REQUEST, "모임 일정은 최소 1명, 최대 9명까지 초대 가능합니다."),
@@ -68,7 +69,7 @@ public enum ErrorStatus implements BaseErrorCode {
      * 403 : 리소스 접근 권한 오류
      */
     NOT_FRIENDSHIP_MEMBER(HttpStatus.BAD_REQUEST, "요청한 회원과 친구가 아닙니다."),
-    NOT_SCHEDULE_OWNER(HttpStatus.FORBIDDEN, "해당 모임 일정의 생성자가 아닙니다."),
+    NOT_SCHEDULE_OWNER(HttpStatus.FORBIDDEN, "해당 일정의 생성자가 아닙니다."),
     NOT_SCHEDULE_PARTICIPANT(HttpStatus.FORBIDDEN, "해당 일정의 참석자가 아닙니다."),
 
     /**
@@ -90,6 +91,7 @@ public enum ErrorStatus implements BaseErrorCode {
     NOT_FOUND_COLOR(HttpStatus.NOT_FOUND, "색깔을 찾을 수 없습니다."),
     NOT_FOUND_IMAGE(HttpStatus.NOT_FOUND, "이미지를 찾을 수 없습니다."),
     NOT_FOUND_FRIENDSHIP_FAILURE(HttpStatus.NOT_FOUND, "친구인 유저를 찾을 수 없습니다."),
+    NOT_FOUND_DEVICE_FAILURE(HttpStatus.NOT_FOUND, "유저의 기기 정보를 찾을 수 없습니다."),
 
     /**
      * 404 : 예외 상황 에러
