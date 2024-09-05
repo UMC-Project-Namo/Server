@@ -32,11 +32,19 @@ public class DiaryResponse {
 	@Getter
 	@AllArgsConstructor
 	public static class DiaryArchiveDto {
+		public CategoryInfoDto categoryInfo;
 		private LocalDateTime scheduleDate;
 		private Long scheduleId;
 		private String title;
 		private DiarySummaryDto diarySummary;
 		private int scheduleType;
+		private ParticipantInfo participantInfo;
+	}
+
+	@Builder
+	@Getter
+	@AllArgsConstructor
+	public static class ParticipantInfo {
 		private int participantsCount;
 		private String participantsNames;
 	}
