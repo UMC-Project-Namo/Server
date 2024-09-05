@@ -2,6 +2,8 @@ package com.namo.spring.application.external.api.record.usecase;
 
 import java.util.List;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,10 +49,19 @@ public class DiaryUseCase {
 	@Transactional(readOnly = true)
 	public List<DiaryResponse.DiaryArchiveDto> getDiaryArchiveDto(Long memberId, int page, String filterType,
 		String keyword) {
-		List<Participant> allMyParticipant = participantManageService.getMyParticipationForArchive(memberId, page,
+		Pageable pageable = PageRequest.of(page - 1, 5);
+		List<Participant> allMyParticipant = participantManageService.getMyParticipationForDiary(memberId, pageable,
 			filterType, keyword);
 		return allMyParticipant.stream()
 			.map(DiaryResponseConverter::toDiaryArchiveDto)
 			.toList();
+	}
+
+	@Transactional(readOnly = true)
+	public DiaryResponse.DiaryExistDateDto getExistDiaryDate(Long memberId, int year, int month) {
+		List<Participant> participants = participantManageService.getMyParticipantByMonthForDiary(memberId, year,
+			month
+		);
+		return DiaryResponseConverter.toDiaryExistDateDto(participants);
 	}
 }
