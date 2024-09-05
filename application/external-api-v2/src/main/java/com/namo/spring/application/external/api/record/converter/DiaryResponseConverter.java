@@ -34,7 +34,8 @@ public class DiaryResponseConverter {
 
 	public static DiaryResponse.DiaryArchiveDto toDiaryArchiveDto(Participant participant) {
 		return DiaryResponse.DiaryArchiveDto.builder()
-			.scheduleDate(participant.getSchedule().getPeriod().getStartDate())
+			.scheduleStartDate(participant.getSchedule().getPeriod().getStartDate())
+			.scheduleEndDate(participant.getSchedule().getPeriod().getEndDate())
 			.categoryInfo(toCategoryInfoDto(participant.getCategory()))
 			.scheduleId(participant.getSchedule().getId())
 			.title(participant.getSchedule().getTitle())
@@ -85,7 +86,8 @@ public class DiaryResponseConverter {
 		return DiaryResponse.DayOfDiaryDto.builder()
 			.scheduleType(participant.getSchedule().getScheduleType())
 			.categoryInfo(toCategoryInfoDto(participant.getCategory()))
-			.scheduleDate(participant.getSchedule().getPeriod().getStartDate())
+			.scheduleStartDate(participant.getSchedule().getPeriod().getStartDate())
+			.scheduleEndDate(participant.getSchedule().getPeriod().getEndDate())
 			.scheduleTitle(participant.getSchedule().getTitle())
 			.diaryId(participant.getDiary().getId())
 			.participantInfo(toParticipantInfo(participant.getSchedule()))

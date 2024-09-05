@@ -32,8 +32,9 @@ public class DiaryResponse {
 	@Getter
 	@AllArgsConstructor
 	public static class DiaryArchiveDto {
-		public CategoryInfoDto categoryInfo;
-		private LocalDateTime scheduleDate;
+		private CategoryInfoDto categoryInfo;
+		private LocalDateTime scheduleStartDate;
+		private LocalDateTime scheduleEndDate;
 		private Long scheduleId;
 		private String title;
 		private DiarySummaryDto diarySummary;
@@ -71,11 +72,12 @@ public class DiaryResponse {
 	@Getter
 	@AllArgsConstructor
 	public static class DayOfDiaryDto {
-		public int scheduleType;
-		public CategoryInfoDto categoryInfo;
-		private LocalDateTime scheduleDate;
-		public String scheduleTitle;
-		public Long diaryId;
+		private int scheduleType;
+		private CategoryInfoDto categoryInfo;
+		private LocalDateTime scheduleStartDate;
+		private LocalDateTime scheduleEndDate;
+		private String scheduleTitle;
+		private Long diaryId;
 		private ParticipantInfo participantInfo;
 	}
 
@@ -83,7 +85,7 @@ public class DiaryResponse {
 	@Getter
 	@AllArgsConstructor
 	public static class CategoryInfoDto {
-		public String name;
-		public int color;
+		private String name;
+		private int color;
 	}
 }
