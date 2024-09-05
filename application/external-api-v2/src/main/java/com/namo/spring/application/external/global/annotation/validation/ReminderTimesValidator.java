@@ -4,7 +4,9 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 import java.util.List;
-import java.util.regex.Pattern;
+
+import static com.namo.spring.application.external.global.config.properties.ReminderTimeConfig.NOTIFICATION_TIME_PATTERN;
+import static com.namo.spring.application.external.global.config.properties.ReminderTimeConfig.SCHEDULED_TIME_FIXED_VALUE;
 
 public class ReminderTimesValidator implements ConstraintValidator<ValidReminderTimes, List<String>> {
 
@@ -16,18 +18,14 @@ public class ReminderTimesValidator implements ConstraintValidator<ValidReminder
      * 일 -> 'D{1-7까지의 숫자}'
      */
 
-    private static final Pattern NOTIFICATION_TIME_PATTERN = Pattern.compile("^(M[1-9]|M[1-5][0-9]|H([1-9]|[1-2][0-9]|3[0-6])|D[1-7])$");
-    private static final String SCHEDULED_TIME_FIXED_VALUE = "ST";
-
     @Override
     public boolean isValid(List<String> reminderTimes, ConstraintValidatorContext context) {
         if (reminderTimes == null || reminderTimes.isEmpty()) {
             return true;
         }
         for (String reminderTime : reminderTimes) {
-            if (!reminderTimes.equals(SCHEDULED_TIME_FIXED_VALUE)) {
-                return false;
-            } else if (!NOTIFICATION_TIME_PATTERN.matcher(reminderTime).matches()) {
+            boolean isValid;
+            if (!reminderTime.equals(SCHEDULED_TIME_FIXED_VALUE) && !NOTIFICATION_TIME_PATTERN.matcher(reminderTime).matches()) {
                 return false;
             }
         }

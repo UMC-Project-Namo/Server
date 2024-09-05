@@ -1,17 +1,20 @@
 package com.namo.spring.application.external.global.utils;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ReminderTimeUtils {
-    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
+import static com.namo.spring.application.external.global.config.properties.ReminderTimeConfig.SCHEDULED_TIME_FIXED_VALUE;
+import static com.namo.spring.application.external.global.config.properties.ReminderTimeConfig.TIME_FORMATTER;
 
+public class ReminderTimeUtils {
 
     public static List<LocalDateTime> toLocalDateTimes(LocalDateTime baseTime, List<String> reminderTriggers) {
         return reminderTriggers.stream()
-                .map(reminderTime -> baseTime.minusMinutes(toMinutes(reminderTime)))
+                .map(reminderTime -> {
+                    if (reminderTime.equals(SCHEDULED_TIME_FIXED_VALUE)) return baseTime;
+                    else return baseTime.minusMinutes(toMinutes(reminderTime));
+                })
                 .collect(Collectors.toList());
     }
 
