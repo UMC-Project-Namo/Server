@@ -34,6 +34,9 @@ public class PersonalScheduleUsecase {
     public Long createPersonalSchedule(ScheduleRequest.PostPersonalScheduleDto dto, SecurityUserDetails memberInfo) throws JsonProcessingException {
         Member member = memberManageService.getMember(memberInfo.getUserId());
         Schedule schedule = scheduleManageService.createPersonalSchedule(dto, member);
+        if (!dto.getReminderTrigger().isEmpty()) {
+            notificationManageService.createScheduleReminderNotification(schedule, member, dto.getReminderTrigger());
+        }
         return schedule.getId();
     }
 
@@ -48,6 +51,13 @@ public class PersonalScheduleUsecase {
     public void updatePersonalSchedule(ScheduleRequest.PatchPersonalScheduleDto patchPersonalScheduleDto, Long scheduleId, SecurityUserDetails memberInfo) {
         Schedule schedule = scheduleManageService.getPersonalSchedule(scheduleId);
         scheduleManageService.updatePersonalSchedule(patchPersonalScheduleDto, schedule, memberInfo.getUserId());
+    }
+
+    @Transactional
+    public void updateOrCreateScheduleReminder(ScheduleRequest.PutPersonalScheduleDto dto, Long scheduleId, SecurityUserDetails memberInfo) {
+        Member member = memberManageService.getMember(memberInfo.getUserId());
+        Schedule schedule = scheduleManageService.getSchedule(scheduleId);
+        notificationManageService.updateOrCreateScheduleReminderNotification(schedule, member, dto.getReminderTrigger());
     }
 
     @Transactional(readOnly = true)

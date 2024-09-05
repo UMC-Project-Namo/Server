@@ -43,6 +43,16 @@ public class ScheduleRequest {
     @NoArgsConstructor
     @AllArgsConstructor
     @Getter
+    @Schema(title = "일정 알림 요청 DTO")
+    public static class PutPersonalScheduleDto {
+        @NotNull
+        @Schema(description = "알림 트리거, 일-> 'D{1-59 까지의 정수}', 시-> 'H{1-36 까지의 정수}', 분-> 'M{1-7 까지의 정수}'")
+        private List<@NotBlank String> reminderTrigger;
+    }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
     @Schema(title = "모임 일정 수정 요청 DTO")
     public static class PatchPersonalScheduleDto {
         @NotBlank(message = "일정 이름 입력은 필수 입니다. 수정 사항이 없을 시 원본 값을 전송합니다.")
