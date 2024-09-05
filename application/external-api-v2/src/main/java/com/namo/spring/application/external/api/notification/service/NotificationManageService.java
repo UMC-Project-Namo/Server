@@ -4,11 +4,14 @@ package com.namo.spring.application.external.api.notification.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.namo.spring.application.external.api.schedule.service.ParticipantManageService;
 import com.namo.spring.application.external.global.utils.ReminderTimeUtils;
+import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.notification.dto.ScheduleNotificationQuery;
 import com.namo.spring.db.mysql.domains.notification.entity.Device;
+import com.namo.spring.db.mysql.domains.notification.exception.NotificationException;
 import com.namo.spring.db.mysql.domains.notification.service.DeviceService;
 import com.namo.spring.db.mysql.domains.notification.service.NotificationService;
 import com.namo.spring.db.mysql.domains.notification.type.NotificationType;
+import com.namo.spring.db.mysql.domains.notification.type.ReceiverDeviceType;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
@@ -51,7 +54,7 @@ public class NotificationManageService {
 
     public void createScheduleReminderNotification(Schedule schedule, Member member, List<String> triggers) {
         List<LocalDateTime> reminderTimes = ReminderTimeUtils.toLocalDateTimes(schedule.getPeriod().getStartDate(), triggers);
-        List<Device> devices = getDeviceByMember(member.getId());
+        List<Device> devices = getMobileDevices(member.getId());
         notificationMaker.makeScheduleReminderNotifications(schedule, devices, reminderTimes);
     }
 
@@ -59,14 +62,24 @@ public class NotificationManageService {
         if (!FRIENDSHIP_NOTIFICATION_TYPES.contains(type)) {
             throw new IllegalArgumentException("에러 발생");
         }
-        List<Device> devices = getDeviceByMember(reciever.getId());
+        List<Device> devices = getMobileDevices(reciever.getId());
         notificationMaker.makeFriendshipNotification(type, publisher, devices);
+    }
+
+    private List<Device> getMobileDevices(Long recieverId) {
+        List<Device> mobileDevices = getDeviceByMember(recieverId).stream()
+                .filter(device -> !device.getReceiverDeviceType().equals(ReceiverDeviceType.WEB))
+                .collect(Collectors.toList());
+        if (mobileDevices.isEmpty()) {
+            throw new NotificationException(ErrorStatus.NOT_FOUND_MOBILE_DEVICE_FAILURE);
+        }
+        return mobileDevices;
     }
 
     private List<Device> getDeviceByMember(Long recieverId) {
         List<Device> devices = deviceService.readByMemberId(recieverId);
         if (devices.isEmpty()) {
-            throw new IllegalArgumentException("에러 발생");
+            throw new NotificationException(ErrorStatus.NOT_FOUND_DEVICE_FAILURE);
         }
         return devices;
     }

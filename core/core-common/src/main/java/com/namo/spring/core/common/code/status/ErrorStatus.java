@@ -70,7 +70,7 @@ public enum ErrorStatus implements BaseErrorCode {
      */
     NOT_FRIENDSHIP_MEMBER(HttpStatus.BAD_REQUEST, "요청한 회원과 친구가 아닙니다."),
     NOT_SCHEDULE_OWNER(HttpStatus.FORBIDDEN, "해당 일정의 생성자가 아닙니다."),
-    NOT_SCHEDULE_PARTICIPANT(HttpStatus.FORBIDDEN, "해당 일정의 참석자가 아닙니다."),
+    NOT_SCHEDULE_PARTICIPANT(HttpStatus.FORBIDDEN, "해당 일정의 참여자가 아닙니다."),
 
     /**
      * 404 : NOT FOUND 오류
@@ -91,6 +91,7 @@ public enum ErrorStatus implements BaseErrorCode {
     NOT_FOUND_COLOR(HttpStatus.NOT_FOUND, "색깔을 찾을 수 없습니다."),
     NOT_FOUND_IMAGE(HttpStatus.NOT_FOUND, "이미지를 찾을 수 없습니다."),
     NOT_FOUND_FRIENDSHIP_FAILURE(HttpStatus.NOT_FOUND, "친구인 유저를 찾을 수 없습니다."),
+    NOT_FOUND_MOBILE_DEVICE_FAILURE(HttpStatus.NOT_FOUND, "유저의 모바일 기기 정보를 찾을 수 없습니다."),
     NOT_FOUND_DEVICE_FAILURE(HttpStatus.NOT_FOUND, "유저의 기기 정보를 찾을 수 없습니다."),
 
     /**
@@ -107,6 +108,7 @@ public enum ErrorStatus implements BaseErrorCode {
     INVALID_DATE(HttpStatus.NOT_FOUND, "시작 날짜가 종료 날짜 이전 이어야 합니다."),
     INVALID_ALARM(HttpStatus.NOT_FOUND, "알림 시간이 유효하지 않습니다."),
     SCHEDULE_PARTICIPANT_IS_EMPTY_ERROR(HttpStatus.NOT_FOUND, "모임 일정의 참여자가 없습니다."),
+    NOT_SUPPORTED_DEVICE_TYPE(HttpStatus.NOT_FOUND, "푸시 알림 전송이 지원되지 않는 기기입니다."),
 
 
     /**
