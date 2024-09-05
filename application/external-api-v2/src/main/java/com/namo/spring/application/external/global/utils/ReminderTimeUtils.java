@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.namo.spring.application.external.global.config.properties.ReminderTimeConfig.SCHEDULED_TIME_FIXED_VALUE;
+import static com.namo.spring.application.external.global.config.properties.ReminderTimeConfig.SCHEDULED_TIME_TRIGGER;
 import static com.namo.spring.application.external.global.config.properties.ReminderTimeConfig.TIME_FORMATTER;
 
 public class ReminderTimeUtils {
@@ -12,7 +12,7 @@ public class ReminderTimeUtils {
     public static List<LocalDateTime> toLocalDateTimes(LocalDateTime baseTime, List<String> reminderTriggers) {
         return reminderTriggers.stream()
                 .map(reminderTime -> {
-                    if (reminderTime.equals(SCHEDULED_TIME_FIXED_VALUE)) return baseTime;
+                    if (reminderTime.equals(SCHEDULED_TIME_TRIGGER)) return baseTime;
                     else return baseTime.minusMinutes(toMinutes(reminderTime));
                 })
                 .collect(Collectors.toList());

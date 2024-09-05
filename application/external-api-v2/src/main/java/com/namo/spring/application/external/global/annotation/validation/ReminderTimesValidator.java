@@ -5,8 +5,8 @@ import jakarta.validation.ConstraintValidatorContext;
 
 import java.util.List;
 
-import static com.namo.spring.application.external.global.config.properties.ReminderTimeConfig.NOTIFICATION_TIME_PATTERN;
-import static com.namo.spring.application.external.global.config.properties.ReminderTimeConfig.SCHEDULED_TIME_FIXED_VALUE;
+import static com.namo.spring.application.external.global.config.properties.ReminderTimeConfig.REMINDER_TRIGGER_PATTERN;
+import static com.namo.spring.application.external.global.config.properties.ReminderTimeConfig.SCHEDULED_TIME_TRIGGER;
 
 public class ReminderTimesValidator implements ConstraintValidator<ValidReminderTimes, List<String>> {
 
@@ -25,7 +25,7 @@ public class ReminderTimesValidator implements ConstraintValidator<ValidReminder
         }
         for (String reminderTime : reminderTimes) {
             boolean isValid;
-            if (!reminderTime.equals(SCHEDULED_TIME_FIXED_VALUE) && !NOTIFICATION_TIME_PATTERN.matcher(reminderTime).matches()) {
+            if (!reminderTime.equals(SCHEDULED_TIME_TRIGGER) && !REMINDER_TRIGGER_PATTERN.matcher(reminderTime).matches()) {
                 return false;
             }
         }
