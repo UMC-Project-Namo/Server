@@ -108,7 +108,7 @@ public enum ErrorStatus implements BaseErrorCode {
     INVALID_DATE(HttpStatus.NOT_FOUND, "시작 날짜가 종료 날짜 이전 이어야 합니다."),
     INVALID_ALARM(HttpStatus.NOT_FOUND, "알림 시간이 유효하지 않습니다."),
     SCHEDULE_PARTICIPANT_IS_EMPTY_ERROR(HttpStatus.NOT_FOUND, "모임 일정의 참여자가 없습니다."),
-    NOT_SUPPORTED_DEVICE_TYPE(HttpStatus.NOT_FOUND, "푸시 알림 전송이 지원되지 않는 기기입니다."),
+    NOT_SUPPORTED_DEVICE_TYPE(HttpStatus.NOT_FOUND, "푸쉬 알림 전송이 지원되지 않는 기기입니다."),
 
 
     /**

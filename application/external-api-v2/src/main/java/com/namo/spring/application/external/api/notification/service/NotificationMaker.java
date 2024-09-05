@@ -2,8 +2,10 @@ package com.namo.spring.application.external.api.notification.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.namo.spring.application.external.global.utils.ReminderTimeUtils;
+import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.notification.entity.Device;
 import com.namo.spring.db.mysql.domains.notification.entity.Notification;
+import com.namo.spring.db.mysql.domains.notification.exception.NotificationException;
 import com.namo.spring.db.mysql.domains.notification.service.NotificationService;
 import com.namo.spring.db.mysql.domains.notification.type.NotificationType;
 import com.namo.spring.db.mysql.domains.notification.type.ReceiverDeviceType;
@@ -37,7 +39,7 @@ public class NotificationMaker {
                                 String message = makeFcmMessage(device, title, body);
                                 return toScheduleReminderNotification(message, device, schedule, reminderTime);
                             } catch (JsonProcessingException e) {
-                                throw new RuntimeException("에러 발생", e);
+                                throw new RuntimeException("JSON 메세지 에러 발생", e);
                             }
                         }))
                 .collect(Collectors.toList());
@@ -53,7 +55,7 @@ public class NotificationMaker {
                         String message = makeFcmMessage(device, title, body);
                         return toScheduleUpdateNotification(message, type, schedule, device);
                     } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
+                        throw new RuntimeException("JSON 메세지 에러 발생", e);
                     }
                 })
                 .collect(Collectors.toList());
@@ -73,7 +75,7 @@ public class NotificationMaker {
             return fcmJsonMessageBuilder.buildAndroidFcmMessage(device.getReceiverDeviceToken(), title, body, null);
         } else if (device.getReceiverDeviceType().equals(ReceiverDeviceType.IOS)) {
             return fcmJsonMessageBuilder.buildIOSFcmMessage(device.getReceiverDeviceToken(), title, body, null, 0);
-        } else throw new IllegalArgumentException("에러 발생");
+        } else throw new NotificationException(ErrorStatus.NOT_SUPPORTED_DEVICE_TYPE);
     }
 
 }
