@@ -1,6 +1,5 @@
 package com.namo.spring.db.mysql.domains.schedule.repository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -109,7 +108,7 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
 		+ "AND p.member.id = :memberId "
 		+ "AND p.schedule.period.startDate BETWEEN :startDate AND :endDate")
 	List<Participant> findAllByMonthAndHasDiary(@Param("memberId") Long memberId,
-		@Param("startDate") LocalDate startDate,
-		@Param("endDate") LocalDate endDate);
+		@Param("startDate") LocalDateTime startDate,
+		@Param("endDate") LocalDateTime endDate);
 }
 

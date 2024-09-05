@@ -1,6 +1,6 @@
 package com.namo.spring.application.external.api.schedule.service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -134,8 +134,11 @@ public class ParticipantManageService {
 	}
 
 	public List<Participant> getMyParticipantByMonthForDiary(Long memberId, int year, int month) {
-		LocalDate startDate = LocalDate.of(year, month, 1); // 해당 월의 첫 번째 날
-		LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth()); // 해당 월의 마지막 날
-		return participantService.readParticipantHasDiaryByMonth(memberId, startDate, endDate);
+		LocalDateTime startDateTime = LocalDateTime.of(year, month, 1, 0, 0, 0);
+		LocalDateTime endDateTime = startDateTime.withDayOfMonth(startDateTime.toLocalDate().lengthOfMonth())
+			.withHour(23)
+			.withMinute(59)
+			.withSecond(59);
+		return participantService.readParticipantHasDiaryByMonth(memberId, startDateTime, endDateTime);
 	}
 }

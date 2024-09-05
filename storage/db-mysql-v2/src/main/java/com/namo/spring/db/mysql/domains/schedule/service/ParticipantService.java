@@ -1,6 +1,5 @@
 package com.namo.spring.db.mysql.domains.schedule.service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -104,7 +103,8 @@ public class ParticipantService {
 		return participantRepository.findAllByMemberAndHasDiary(memberId, keyword, pageable);
 	}
 
-	public List<Participant> readParticipantHasDiaryByMonth(Long memberId, LocalDate startDate, LocalDate endDate) {
+	public List<Participant> readParticipantHasDiaryByMonth(Long memberId, LocalDateTime startDate,
+		LocalDateTime endDate) {
 		return participantRepository.findAllByMonthAndHasDiary(memberId, startDate, endDate);
 	}
 }

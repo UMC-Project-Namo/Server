@@ -62,6 +62,6 @@ public class DiaryUseCase {
 		List<Participant> participants = participantManageService.getMyParticipantByMonthForDiary(memberId, year,
 			month
 		);
-		return DiaryResponseConverter.toDiaryExistDateDto(participants);
+		return DiaryResponseConverter.toDiaryExistDateDto(participants, year, month);
 	}
 }

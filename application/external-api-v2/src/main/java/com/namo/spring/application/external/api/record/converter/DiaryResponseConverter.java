@@ -51,10 +51,11 @@ public class DiaryResponseConverter {
 			.build();
 	}
 
-	public static DiaryResponse.DiaryExistDateDto toDiaryExistDateDto(List<Participant> participants) {
+	public static DiaryResponse.DiaryExistDateDto toDiaryExistDateDto(List<Participant> participants, int year,
+		int month) {
 		return DiaryResponse.DiaryExistDateDto.builder()
-			.year(participants.get(0).getSchedule().getPeriod().getStartDate().getYear())
-			.month(participants.get(0).getSchedule().getPeriod().getStartDate().getMonthValue())
+			.year(year)
+			.month(month)
 			.dates(participants.stream()
 				.map(participant -> participant.getSchedule().getPeriod().getStartDate().getDayOfMonth()) // 날짜만 추출
 				.distinct() // 중복 제거 (만약 중복된 날짜가 있을 경우)
