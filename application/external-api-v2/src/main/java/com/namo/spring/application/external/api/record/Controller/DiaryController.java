@@ -1,6 +1,5 @@
 package com.namo.spring.application.external.api.record.Controller;
 
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeParseException;
@@ -23,6 +22,7 @@ import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCo
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.response.ResponseDto;
+import com.namo.spring.db.mysql.domains.record.exception.DiaryException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -100,6 +100,9 @@ public class DiaryController {
 	}
 
 	@Operation(summary = "기록 캘린더 조회", description = "기록이 존재하는 달력 확인 API 입니다. 월별로 일기가 존재하는 날짜를 반환합니다. ")
+	@ApiErrorCodes(value = {
+		ErrorStatus.INVALID_FORMAT_FAILURE,
+	})
 	@GetMapping("/calendar/{yearMonth}")
 	public ResponseDto<DiaryResponse.DiaryExistDateDto> getArchiveCalender(
 		@AuthenticationPrincipal SecurityUserDetails memberInfo,
@@ -112,11 +115,14 @@ public class DiaryController {
 				.getExistDiaryDate(memberInfo.getUserId(), requestedYearMonth));
 
 		} catch (DateTimeParseException e) {
-			throw new DateTimeException("형식에 맞지 않는 일자입니다.");
+			throw new DiaryException(ErrorStatus.INVALID_FORMAT_FAILURE);
 		}
 	}
 
 	@Operation(summary = "날짜별 기록 정보 조회", description = "날짜 별 기록이 존재하는 스케줄 정보가 확인됩니다. 기록 캘린더 조회에서 요일을 선택하여 상세 정보를 확인할 때 사용하시면 됩니다.")
+	@ApiErrorCodes(value = {
+		ErrorStatus.INVALID_FORMAT_FAILURE,
+	})
 	@GetMapping("/{date}")
 	public ResponseDto<List<DiaryResponse.DayOfDiaryDto>> getDayDiary(
 		@AuthenticationPrincipal SecurityUserDetails memberInfo,
@@ -127,7 +133,7 @@ public class DiaryController {
 			return ResponseDto.onSuccess(diaryUseCase
 				.getDayDiaryList(memberInfo.getUserId(), requestedDate));
 		} catch (DateTimeParseException e) {
-			throw new DateTimeException("형식에 맞지 않는 일자입니다.");
+			throw new DiaryException(ErrorStatus.INVALID_FORMAT_FAILURE);
 		}
 	}
 }
