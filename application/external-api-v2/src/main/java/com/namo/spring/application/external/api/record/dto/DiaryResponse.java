@@ -50,4 +50,13 @@ public class DiaryResponse {
 		private List<DiaryImageDto> diaryImages;
 	}
 
+	@Builder
+	@Getter
+	@AllArgsConstructor
+	public static class DiaryExistDateDto {
+		private int year;
+		private int month;
+		private List<Integer> dates;
+	}
+
 }
