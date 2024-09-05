@@ -3,6 +3,8 @@ package com.namo.spring.application.external.api.record.serivce;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.namo.spring.application.external.api.record.dto.DiaryRequest;
 import com.namo.spring.core.infra.common.aws.s3.FileUtils;
@@ -38,16 +40,22 @@ public class DiaryImageManageService {
 	/**
 	 * 클라우드(S3) 에서 이미지를 삭제하는 메서드입니다. (원본, 리사이징 본 모두 삭제)
 	 * !! 만약 이미지가 존재하지 않으면 로그만 남기고 Continue 됩니다.
+	 * + 새로운 트랜잭션에서 실행되어 클라우드에서 이미지 삭제에 실패해도 우선 삭제 됩니다.
 	 *
 	 * @param imageId 삭제하려는 Image ID
 	 */
-	private void deleteFromCloud(Long imageId) {
-		// 이미지가 존재하지 않을 때 로그를 남기고, 예외는 발생시키지 않음
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	protected void deleteFromCloud(Long imageId) {
 		diaryImageService.readDiaryImage(imageId).ifPresentOrElse(diaryImage -> {
-			fileUtils.delete(diaryImage.getImageUrl(), FilePath.DIARY_IMG);
-			fileUtils.delete(diaryImage.getImageUrl(), FilePath.RESIZED_DIARY_IMG);
+			try {
+				fileUtils.delete(diaryImage.getImageUrl(), FilePath.DIARY_IMG);
+				fileUtils.delete(diaryImage.getImageUrl(), FilePath.RESIZED_DIARY_IMG);
+				log.info("클라우드에서 이미지 ID {} <<<<< 삭제 성공", imageId);
+			} catch (Exception e) {
+				log.error("이미지 URL {} <<<<<<< 삭제 실패: {}", diaryImage.getImageUrl(), e.getMessage());
+			}
 		}, () -> {
-			log.info("Image with ID " + imageId + " does not exist. No deletion performed.");
+			log.info("이미지 ID {} 가 존재하지 않습니다.", imageId);
 		});
 	}
 
