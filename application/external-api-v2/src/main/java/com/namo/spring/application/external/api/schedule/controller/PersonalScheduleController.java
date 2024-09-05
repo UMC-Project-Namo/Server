@@ -70,7 +70,7 @@ public class PersonalScheduleController implements PersonalScheduleApi {
     }
 
     /**
-     * 일정 예정 알림 추가 & 수정 API
+     * 일정 예정 알림 추가/수정/삭제 API
      */
     @PutMapping("/{scheduleId}/notifications")
     public ResponseDto<String> updatePersonalSchedules(@PathVariable Long scheduleId,

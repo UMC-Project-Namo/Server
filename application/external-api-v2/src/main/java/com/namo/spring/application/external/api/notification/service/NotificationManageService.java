@@ -3,7 +3,7 @@ package com.namo.spring.application.external.api.notification.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.namo.spring.application.external.api.schedule.service.ParticipantManageService;
-import com.namo.spring.application.external.global.utils.ReminderTimesUtils;
+import com.namo.spring.application.external.global.utils.ReminderTimeUtils;
 import com.namo.spring.db.mysql.domains.notification.dto.ScheduleNotificationQuery;
 import com.namo.spring.db.mysql.domains.notification.entity.Device;
 import com.namo.spring.db.mysql.domains.notification.service.DeviceService;
@@ -41,14 +41,16 @@ public class NotificationManageService {
         return notificationService.readNotificationsByReceiverIdAndScheduleIds(memberId, scheduleIds);
     }
 
-    public void createOrUpdateScheduleReminderNotification(Schedule schedule, Member member, List<String> triggers) {
+    public void updateOrCreateScheduleReminderNotification(Schedule schedule, Member member, List<String> triggers) {
         participantManageService.validateScheduleOwner(schedule, member.getId());
         notificationService.deleteScheduleNotificationsByScheduleAndReceiver(schedule.getId(), member.getId(), NotificationType.SCHEDULE_REMINDER);
-        createScheduleReminderNotification(schedule, member, triggers);
+        if (!triggers.isEmpty()) {
+            createScheduleReminderNotification(schedule, member, triggers);
+        }
     }
 
     public void createScheduleReminderNotification(Schedule schedule, Member member, List<String> triggers) {
-        List<LocalDateTime> reminderTimes = ReminderTimesUtils.toLocalDateTimes(schedule.getPeriod().getStartDate(), triggers);
+        List<LocalDateTime> reminderTimes = ReminderTimeUtils.toLocalDateTimes(schedule.getPeriod().getStartDate(), triggers);
         List<Device> devices = getDeviceByMember(member.getId());
         notificationMaker.makeScheduleReminderNotifications(schedule, devices, reminderTimes);
     }

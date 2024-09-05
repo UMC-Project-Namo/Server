@@ -36,7 +36,7 @@ public class ScheduleRequest {
         private LocationDto location;
         @NotNull(message = "알림이 없을 시 emtpy array를 전송합니다.")
         @ValidReminderTimes
-        @Schema(description = "알림 트리거, 일-> 'D{1-59 까지의 정수}', 시-> 'H{1-36 까지의 정수}', 분-> 'M{1-7 까지의 정수}'")
+        @Schema(description = "알림 트리거, 정시 -> 'ST', 일-> 'D{1-59 까지의 정수}', 시-> 'H{1-36 까지의 정수}', 분-> 'M{1-7 까지의 정수}'")
         private List<String> reminderTrigger;
     }
 
@@ -46,7 +46,8 @@ public class ScheduleRequest {
     @Schema(title = "일정 알림 요청 DTO")
     public static class PutPersonalScheduleDto {
         @NotNull
-        @Schema(description = "알림 트리거, 일-> 'D{1-59 까지의 정수}', 시-> 'H{1-36 까지의 정수}', 분-> 'M{1-7 까지의 정수}'")
+        @ValidReminderTimes
+        @Schema(description = "알림 트리거, 정시 -> 'ST', 일-> 'D{1-59 까지의 정수}', 시-> 'H{1-36 까지의 정수}', 분-> 'M{1-7 까지의 정수}'")
         private List<@NotBlank String> reminderTrigger;
     }
 
