@@ -1,5 +1,8 @@
 package com.namo.spring.application.external.api.record.converter;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.namo.spring.application.external.api.record.dto.DiaryResponse;
 import com.namo.spring.db.mysql.domains.record.entity.Diary;
 import com.namo.spring.db.mysql.domains.record.entity.DiaryImage;
@@ -45,6 +48,18 @@ public class DiaryResponseConverter {
 			.diaryImages(diary.getImages().stream()
 				.map(DiaryResponseConverter::toDiaryImageDto)
 				.toList())
+			.build();
+	}
+
+	public static DiaryResponse.DiaryExistDateDto toDiaryExistDateDto(List<Participant> participants) {
+		return DiaryResponse.DiaryExistDateDto.builder()
+			.year(participants.get(0).getSchedule().getPeriod().getStartDate().getYear())
+			.month(participants.get(0).getSchedule().getPeriod().getStartDate().getMonthValue())
+			.dates(participants.stream()
+				.map(participant -> participant.getSchedule().getPeriod().getStartDate().getDayOfMonth()) // 날짜만 추출
+				.distinct() // 중복 제거 (만약 중복된 날짜가 있을 경우)
+				.sorted()
+				.collect(Collectors.toList()))
 			.build();
 	}
 }
