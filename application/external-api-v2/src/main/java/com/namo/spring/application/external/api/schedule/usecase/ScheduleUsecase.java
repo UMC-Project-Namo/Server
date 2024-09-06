@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ScheduleUsecase {
 
-	private ScheduleManageService scheduleManageService;
+	private final ScheduleManageService scheduleManageService;
 
 	@Transactional(readOnly = true)
 	public ScheduleResponse.ScheduleSummaryDto getScheduleSummary(Long memberId, Long scheduleId) {
