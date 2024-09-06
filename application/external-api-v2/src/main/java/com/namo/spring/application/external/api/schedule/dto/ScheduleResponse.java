@@ -26,7 +26,7 @@ public class ScheduleResponse {
 	@Builder
 	@AllArgsConstructor
 	public static class LocationInfoDto {
-		private Long locationId;
+		private String kakaoLocationId;
 		private String locationName;
 	}
 
