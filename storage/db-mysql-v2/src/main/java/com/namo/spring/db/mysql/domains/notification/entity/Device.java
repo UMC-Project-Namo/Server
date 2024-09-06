@@ -13,6 +13,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.util.List;
+
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -35,6 +37,9 @@ public class Device extends BaseTimeEntity {
     private String receiverDeviceToken;
 
     private String receiverDeviceAgent;
+
+    @OneToMany(mappedBy = "device", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notification> notifications;
 
     @Builder
     public Device(Member member, ReceiverDeviceType receiverDeviceType, String receiverDeviceToken, String receiverDeviceAgent) {

@@ -14,8 +14,8 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
             "n.id, n.schedule.id, n.notifyAt ) FROM Notification n " +
             "WHERE n.schedule.id IN :scheduleIds " +
             "AND n.notificationType = '7' " +
-            "AND n.receiver.id = :memberId")
+            "AND n.device.member.id = :memberId")
     List<ScheduleNotificationQuery> findNotificationsByReceiverIdAndScheduleIds(Long memberId, List<Long> scheduleIds);
 
-    void deleteAllByScheduleIdAndReceiverIdAndNotificationType(Long scheduleId, Long receiverId, NotificationType notificationType);
+    void deleteAllByScheduleIdAndDevice_MemberIdAndNotificationType(Long scheduleId, Long receiverId, NotificationType notificationType);
 }

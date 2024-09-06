@@ -43,7 +43,7 @@ public class NotificationService {
 
     @Transactional
     public void deleteScheduleNotificationsByScheduleAndReceiver(Long scheduleId, Long receiverId, NotificationType notificationType) {
-        notificationRepository.deleteAllByScheduleIdAndReceiverIdAndNotificationType(scheduleId, receiverId, notificationType);
+        notificationRepository.deleteAllByScheduleIdAndDevice_MemberIdAndNotificationType(scheduleId, receiverId, notificationType);
     }
 
 }

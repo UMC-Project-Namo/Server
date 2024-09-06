@@ -43,10 +43,6 @@ public class Notification extends BaseTimeEntity {
     private Member publisher;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "receiver_id", nullable = false)
-    private Member receiver;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "device_id", nullable = false)
     private Device device;
 
@@ -78,8 +74,7 @@ public class Notification extends BaseTimeEntity {
         this.publisherType = Objects.requireNonNull(publisherType, "publisherType은 null일 수 없습니다.");
         this.publisherName = publisherName;
         this.publisher = publisher;
-        this.receiver = Objects.requireNonNull(receiver, "receiver은 null일 수 없습니다.");
-        this.device = Objects.requireNonNull(device, "device은 null일 수 없습니다.");
+        this.device = Objects.requireNonNull(device, "device는 null일 수 없습니다.");
         this.schedule = schedule;
         this.notificationType = Objects.requireNonNull(notificationType, "notificationType은 null일 수 없습니다.");
         this.notificationJson = Objects.requireNonNull(notificationJson, "notificationJson은 null일 수 없습니다.");
@@ -88,13 +83,12 @@ public class Notification extends BaseTimeEntity {
         this.isDeleted = false;
     }
 
-    public static Notification of(PublisherType publisherType, Member publisher, Member receiver,
+    public static Notification of(PublisherType publisherType, Member publisher,
                                   Device device, Schedule schedule, LocalDateTime notifyAt, NotificationType notificationType, String notificationJson) {
         return Notification.builder()
                 .publisherType(publisherType)
                 .publisher(publisher)
                 .publisherName(publisher != null ? publisher.getNickname() : null)
-                .receiver(receiver)
                 .device(device)
                 .schedule(schedule)
                 .notifyAt(notifyAt)
