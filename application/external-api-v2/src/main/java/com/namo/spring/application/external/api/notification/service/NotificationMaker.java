@@ -34,7 +34,7 @@ public class NotificationMaker {
                 .flatMap(device -> reminderTimes.stream()
                         .map(reminderTime -> {
                             try {
-                                String title = notificationMessageGenerator.getScheduleReminderTemplate(schedule.getTitle(), ReminderTimeUtils.convertToString(reminderTime));
+                                String title = notificationMessageGenerator.getScheduleReminderTemplate(ReminderTimeUtils.convertToString(schedule.getPeriod().getStartDate()), schedule.getTitle());
                                 String body = "";
                                 String message = makeFcmMessage(device, title, body);
                                 return toScheduleReminderNotification(message, device, schedule, reminderTime);
