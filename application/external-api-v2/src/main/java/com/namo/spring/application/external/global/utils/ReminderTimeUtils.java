@@ -34,7 +34,7 @@ public class ReminderTimeUtils {
      */
     public static int toMinutes(String trigger) {
         if (trigger == null || trigger.length() < 2) {
-            throw new IllegalArgumentException("유효하지 않은 값 입니다.");
+            throw new IllegalArgumentException("길이가 너무 짧아 형식에 맞지 않습니다.");
         }
 
         char unit = trigger.charAt(0);
@@ -44,7 +44,7 @@ public class ReminderTimeUtils {
             case 'M' -> value;
             case 'H' -> value * 60;
             case 'D' -> value * 24 * 60;
-            default -> throw new IllegalArgumentException("에러 발생");
+            default -> throw new IllegalArgumentException("유효하지 않은 시간 단위입니다. 'M', 'H', 'D' 중 하나여야 합니다");
         };
     }
 
@@ -59,7 +59,9 @@ public class ReminderTimeUtils {
         if (reminderTime.isEqual(baseTime)) {
             return SCHEDULED_TIME_TRIGGER;
         }
-
+        if (reminderTime.isAfter(baseTime)) {
+            throw new IllegalArgumentException("알림 시간이 일정 시작 시간보다 이후입니다.");
+        }
         long minutes = ChronoUnit.MINUTES.between(reminderTime, baseTime);
 
         if (minutes < 60) {
