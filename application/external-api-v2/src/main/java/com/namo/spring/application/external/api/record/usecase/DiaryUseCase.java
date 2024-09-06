@@ -1,7 +1,11 @@
 package com.namo.spring.application.external.api.record.usecase;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,12 +49,28 @@ public class DiaryUseCase {
 	}
 
 	@Transactional(readOnly = true)
-	public List<DiaryResponse.DiaryArchiveDto> getDiaryArchiveDto(Long memberId, int page, String filterType,
+	public List<DiaryResponse.DiaryArchiveDto> getDiaryArchive(Long memberId, int page, String filterType,
 		String keyword) {
-		List<Participant> allMyParticipant = participantManageService.getMyParticipationForArchive(memberId, page,
+		Pageable pageable = PageRequest.of(page - 1, 5);
+		List<Participant> allMyParticipant = participantManageService.getMyParticipationForDiary(memberId, pageable,
 			filterType, keyword);
 		return allMyParticipant.stream()
 			.map(DiaryResponseConverter::toDiaryArchiveDto)
+			.toList();
+	}
+
+	@Transactional(readOnly = true)
+	public DiaryResponse.DiaryExistDateDto getExistDiaryDate(Long memberId, YearMonth yearMonth) {
+		List<Participant> participants = participantManageService.getMyParticipantByMonthForDiary(memberId, yearMonth
+		);
+		return DiaryResponseConverter.toDiaryExistDateDto(participants, yearMonth);
+	}
+
+	@Transactional(readOnly = true)
+	public List<DiaryResponse.DayOfDiaryDto> getDayDiaryList(Long memberId, LocalDate localDate) {
+		List<Participant> participants = participantManageService.getMyParticipantByDayForDiary(memberId, localDate);
+		return participants.stream()
+			.map(DiaryResponseConverter::toDayOfDiaryDto)
 			.toList();
 	}
 }
