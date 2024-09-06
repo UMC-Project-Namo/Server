@@ -45,7 +45,7 @@ public class PersonalScheduleResponseConverter {
                 .locationInfo(participant.getSchedule().getLocation() != null ? toLocationDto(participant.getSchedule().getLocation()) : null)
                 .isMeetingSchedule(getIsMeetingSchedule(participant.getSchedule().getScheduleType()))
                 .hasDiary(participant.isHasDiary())
-                .notification(notifications != null ? toNotificationDtos(notifications, participant.getSchedule().getPeriod().getStartDate()) : null);
+                .notificationInfo(notifications != null ? toNotificationDtos(notifications, participant.getSchedule().getPeriod().getStartDate()) : null);
         if (getIsMeetingSchedule(participant.getSchedule().getScheduleType())) {
             return builder
                     .meetingInfo(toMeetingInfoDto(participant.getIsOwner(), participant.getSchedule()))

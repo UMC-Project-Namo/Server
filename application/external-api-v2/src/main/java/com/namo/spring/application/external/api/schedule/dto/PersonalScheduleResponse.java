@@ -37,8 +37,8 @@ public class PersonalScheduleResponse {
         private Boolean isMeetingSchedule = false;
         @Schema(description = "모임 일정 정보, 모임 일정이 아닐 시에는 null")
         private MeetingInfoDto meetingInfo;
-        @Schema(description = "알림 일시, 없을 시 null")
-        private List<NotificationDto> notification;
+        @Schema(description = "알림 일시, 알림 트리거, 정시 -> 'ST', 일-> 'D{1-59 까지의 정수}', 시-> 'H{1-36 까지의 정수}', 분-> 'M{1-7 까지의 정수}")
+        private List<NotificationDto> notificationInfo;
     }
 
     @AllArgsConstructor
@@ -87,7 +87,7 @@ public class PersonalScheduleResponse {
     public static class NotificationDto {
         @Schema(description = "알림 ID")
         private Long notificationId;
-        @Schema(description = "알림 트리거, unix 타임스탬프 형식")
+        @Schema(description = "알림 트리거, 정시 -> 'ST', 일-> 'D{1-59 까지의 정수}', 시-> 'H{1-36 까지의 정수}', 분-> 'M{1-7 까지의 정수}")
         private String trigger;
     }
 
