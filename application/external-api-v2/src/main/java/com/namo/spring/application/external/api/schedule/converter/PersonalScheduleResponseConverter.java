@@ -1,6 +1,7 @@
 package com.namo.spring.application.external.api.schedule.converter;
 
 import com.namo.spring.application.external.api.schedule.dto.PersonalScheduleResponse;
+import com.namo.spring.application.external.global.utils.ReminderTimeUtils;
 import com.namo.spring.core.common.utils.DateUtil;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
 import com.namo.spring.db.mysql.domains.notification.dto.ScheduleNotificationQuery;
@@ -9,6 +10,7 @@ import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.type.Location;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +45,7 @@ public class PersonalScheduleResponseConverter {
                 .location(participant.getSchedule().getLocation() != null ? toLocationDto(participant.getSchedule().getLocation()) : null)
                 .isMeetingSchedule(getIsMeetingSchedule(participant.getSchedule().getScheduleType()))
                 .hasDiary(participant.isHasDiary())
-                .notification(notifications != null ? toNotificationDtos(notifications) : null);
+                .notification(notifications != null ? toNotificationDtos(notifications, participant.getSchedule().getPeriod().getStartDate()) : null);
         if (getIsMeetingSchedule(participant.getSchedule().getScheduleType())) {
             return builder
                     .meetingInfo(toMeetingInfoDto(participant.getIsOwner(), participant.getSchedule()))
@@ -77,17 +79,17 @@ public class PersonalScheduleResponseConverter {
                 .build();
     }
 
-    private static List<PersonalScheduleResponse.NotificationDto> toNotificationDtos(List<ScheduleNotificationQuery> notifications) {
+    private static List<PersonalScheduleResponse.NotificationDto> toNotificationDtos(List<ScheduleNotificationQuery> notifications, LocalDateTime startDate) {
         return notifications.stream()
                 .sorted(Comparator.comparing(ScheduleNotificationQuery::getNotifyAt).reversed())
-                .map(PersonalScheduleResponseConverter::toNotificationDto)
+                .map(notificaiton -> toNotificationDto(notificaiton, startDate))
                 .collect(Collectors.toList());
     }
 
-    private static PersonalScheduleResponse.NotificationDto toNotificationDto(ScheduleNotificationQuery notification) {
+    private static PersonalScheduleResponse.NotificationDto toNotificationDto(ScheduleNotificationQuery notification, LocalDateTime startDate) {
         return PersonalScheduleResponse.NotificationDto.builder()
                 .notificationId(notification.getNotificationId())
-                .notifyDate(DateUtil.toSeconds(notification.getNotifyAt()))
+                .trigger(ReminderTimeUtils.toReminderTrigger(notification.getNotifyAt(), startDate))
                 .build();
     }
 

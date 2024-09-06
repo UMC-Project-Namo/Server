@@ -1,6 +1,7 @@
 package com.namo.spring.application.external.global.utils;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +46,31 @@ public class ReminderTimeUtils {
             case 'D' -> value * 24 * 60;
             default -> throw new IllegalArgumentException("에러 발생");
         };
+    }
+
+    /**
+     * LocalDateTime을 'D5', 'M1', 'ST' 등의 문자열로 변환합니다.
+     *
+     * @param reminderTime 변환할 LocalDateTime
+     * @param baseTime     기준이 되는 LocalDateTime (일정 시작 시간)
+     * @return 변환된 문자열 ('D5', 'M1', 'ST' 등)
+     */
+    public static String toReminderTrigger(LocalDateTime reminderTime, LocalDateTime baseTime) {
+        if (reminderTime.isEqual(baseTime)) {
+            return SCHEDULED_TIME_TRIGGER;
+        }
+
+        long minutes = ChronoUnit.MINUTES.between(reminderTime, baseTime);
+
+        if (minutes < 60) {
+            return "M" + minutes;
+        } else if (minutes < 24 * 60) {
+            long hours = minutes / 60;
+            return "H" + hours;
+        } else {
+            long days = minutes / (24 * 60);
+            return "D" + days;
+        }
     }
 
     /**

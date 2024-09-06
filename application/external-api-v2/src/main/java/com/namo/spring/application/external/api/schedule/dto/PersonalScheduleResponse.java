@@ -87,8 +87,7 @@ public class PersonalScheduleResponse {
     public static class NotificationDto {
         @Schema(description = "알림 ID")
         private Long notificationId;
-        @Schema(description = "알림 일시, unix 타임스탬프 형식")
-        private Long notifyDate;
+        @Schema(description = "알림 트리거, unix 타임스탬프 형식")
         private String trigger;
     }
 
