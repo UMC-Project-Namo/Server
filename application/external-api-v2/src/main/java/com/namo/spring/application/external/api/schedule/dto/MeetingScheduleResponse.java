@@ -49,7 +49,7 @@ public class MeetingScheduleResponse {
         @Schema(description = "시작일과 종료일 차이")
         private Long interval;
         @Schema(description = "위치 정보, 없을 시에는 null")
-        private LocationDto location;
+        private LocationDto locationInfo;
         @Schema(description = "일정 참여자 목록")
         private List<UserParticipantDetailDto> participants;
     }
