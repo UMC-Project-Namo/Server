@@ -115,6 +115,6 @@ public class DiaryResponse {
 		@Schema(description = "카테고리 이름", example = "개인 일정")
 		private String name;
 		@Schema(description = "카테고리 색상", example = "1")
-		private int color;
+		private Long colorId;
 	}
 }
