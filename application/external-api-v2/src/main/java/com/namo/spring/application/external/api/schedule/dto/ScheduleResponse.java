@@ -24,7 +24,8 @@ public class ScheduleResponse {
 		private String scheduleTitle;
 		@Schema(description = "스케줄 시작날짜입니다.")
 		private LocalDateTime scheduleStartDate;
-		private LocationInfoDto location;
+		private LocationInfoDto locationInfo;
+		private CategoryInfoDto categoryInfo;
 	}
 
 	@Getter
@@ -35,6 +36,17 @@ public class ScheduleResponse {
 		private String kakaoLocationId;
 		@Schema(description = "장소 이름입니다.", example = "탐앤탐스 탐스커버리 건대점")
 		private String locationName;
+	}
+
+	@Builder
+	@Getter
+	@AllArgsConstructor
+	@Schema(description = "카테고리 정보 DTO")
+	public static class CategoryInfoDto {
+		@Schema(description = "카테고리 이름", example = "개인 일정")
+		private String name;
+		@Schema(description = "카테고리 색상", example = "1")
+		private int color;
 	}
 
 }

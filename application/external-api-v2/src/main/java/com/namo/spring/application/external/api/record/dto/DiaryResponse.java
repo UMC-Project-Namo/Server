@@ -114,7 +114,7 @@ public class DiaryResponse {
 	public static class CategoryInfoDto {
 		@Schema(description = "카테고리 이름", example = "개인 일정")
 		private String name;
-		@Schema(description = "카테고리 색상", example = "2131034735")
+		@Schema(description = "카테고리 색상", example = "1")
 		private int color;
 	}
 }
