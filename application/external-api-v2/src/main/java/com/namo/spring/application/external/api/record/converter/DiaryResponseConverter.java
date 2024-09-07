@@ -48,7 +48,7 @@ public class DiaryResponseConverter {
 	private static DiaryResponse.CategoryInfoDto toCategoryInfoDto(Category category) {
 		return DiaryResponse.CategoryInfoDto.builder()
 			.name(category.getName())
-			.color(category.getPalette().getColor())
+			.colorId(category.getPalette().getId())
 			.build();
 	}
 

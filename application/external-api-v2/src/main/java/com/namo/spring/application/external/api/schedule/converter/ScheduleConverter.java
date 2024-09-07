@@ -2,6 +2,8 @@ package com.namo.spring.application.external.api.schedule.converter;
 
 import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.ScheduleResponse;
+import com.namo.spring.db.mysql.domains.category.entity.Category;
+import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.type.Period;
 
@@ -23,12 +25,21 @@ public class ScheduleConverter {
 			.build();
 	}
 
-	public static ScheduleResponse.ScheduleSummaryDto toScheduleSummaryDto(Schedule schedule) {
+	public static ScheduleResponse.ScheduleSummaryDto toScheduleSummaryDto(Participant participant) {
+		Schedule schedule = participant.getSchedule();
 		return ScheduleResponse.ScheduleSummaryDto.builder()
 			.scheduleId(schedule.getId())
 			.scheduleTitle(schedule.getTitle())
 			.scheduleStartDate(schedule.getPeriod().getStartDate())
-			.location(LocationConverter.toLocationInfoDto(schedule.getLocation()))
+			.locationInfo(LocationConverter.toLocationInfoDto(schedule.getLocation()))
+			.categoryInfo(toCategoryInfoDto(participant.getCategory()))
+			.build();
+	}
+
+	private static ScheduleResponse.CategoryInfoDto toCategoryInfoDto(Category category) {
+		return ScheduleResponse.CategoryInfoDto.builder()
+			.name(category.getName())
+			.colorId(category.getPalette().getId())
 			.build();
 	}
 
