@@ -170,4 +170,17 @@ public class ParticipantManageService {
 		return participantService.readParticipantHasDiaryByDateRange(memberId, startDateTime, endDateTime);
 	}
 
+	/**
+	 * 나의 참여 정보를 찾아서 반환하는 메서드 입니다.
+	 * !! 스케줄의 존재여부, 스케줄의 참여여부를 검증합니다.
+	 *
+	 * @param memberId
+	 * @param scheduleId
+	 * @return Schedule
+	 */
+	public Participant getMyParticipant(Long memberId, Long scheduleId) {
+		return participantService.readParticipant(memberId, scheduleId)
+			.orElseThrow(() -> new ScheduleException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
+	}
+
 }
