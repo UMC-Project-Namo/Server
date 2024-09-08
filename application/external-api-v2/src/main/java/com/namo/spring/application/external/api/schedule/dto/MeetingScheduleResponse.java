@@ -49,7 +49,7 @@ public class MeetingScheduleResponse {
         @Schema(description = "시작일과 종료일 차이")
         private Long interval;
         @Schema(description = "위치 정보, 없을 시에는 null")
-        private LocationDto location;
+        private LocationDto locationInfo;
         @Schema(description = "일정 참여자 목록")
         private List<UserParticipantDetailDto> participants;
     }
@@ -117,14 +117,12 @@ public class MeetingScheduleResponse {
         private Long userId;
         @Schema(description = "닉네임")
         private String nickname;
-        @Schema(description = "색상 ID")
-        private Long colorId;
     }
 
     @AllArgsConstructor
     @Getter
     @Builder
-    @Schema(title = "모임 일정 조회 - 일정의 참여자 목록, 유저 제외")
+    @Schema(title = "모임 일정 조회 - 일정의 참여자 목록")
     public static class UserParticipantDto {
         @Schema(description = "참여자 ID")
         private Long participantId;

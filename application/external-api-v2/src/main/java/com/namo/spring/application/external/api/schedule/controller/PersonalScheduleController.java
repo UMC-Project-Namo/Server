@@ -1,5 +1,6 @@
 package com.namo.spring.application.external.api.schedule.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.namo.spring.application.external.api.schedule.api.PersonalScheduleApi;
 import com.namo.spring.application.external.api.schedule.dto.PersonalScheduleResponse;
 import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
@@ -27,18 +28,16 @@ public class PersonalScheduleController implements PersonalScheduleApi {
     /**
      * 일정 생성 API
      */
-
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDto<Long> createPersonalSchedule(
             @Valid @RequestBody ScheduleRequest.PostPersonalScheduleDto dto,
-            @AuthenticationPrincipal SecurityUserDetails member) {
+            @AuthenticationPrincipal SecurityUserDetails member) throws JsonProcessingException {
         return ResponseDto.onSuccess(personalScheduleUsecase.createPersonalSchedule(dto, member));
     }
 
     /**
      * 내 월간 일정 조회 API
      */
-
     @GetMapping("/calendar")
     public ResponseDto<List<PersonalScheduleResponse.GetMonthlyScheduleDto>> getMyMonthlySchedules(
             @RequestParam Integer year,
@@ -50,7 +49,6 @@ public class PersonalScheduleController implements PersonalScheduleApi {
     /**
      * 친구 월간 일정 조회 API
      */
-
     @GetMapping("/calendar/friends")
     public ResponseDto<List<PersonalScheduleResponse.GetFriendMonthlyScheduleDto>> getFriendMonthlySchedules(
             @RequestParam Integer year,
@@ -58,5 +56,27 @@ public class PersonalScheduleController implements PersonalScheduleApi {
             @RequestParam Long memberId,
             @AuthenticationPrincipal SecurityUserDetails member) {
         return ResponseDto.onSuccess(personalScheduleUsecase.getFriendMonthlySchedules(year, month, memberId, member));
+    }
+
+    /**
+     * 개인 일정 수정 API
+     */
+    @PatchMapping("/{scheduleId}")
+    public ResponseDto<String> updatePersonalSchedules(@PathVariable Long scheduleId,
+                                                       @Valid @RequestBody ScheduleRequest.PatchPersonalScheduleDto dto,
+                                                       @AuthenticationPrincipal SecurityUserDetails member) {
+        personalScheduleUsecase.updatePersonalSchedule(dto, scheduleId, member);
+        return ResponseDto.onSuccess("일정 수정 성공");
+    }
+
+    /**
+     * 일정 예정 알림 수정 API
+     */
+    @PutMapping("/{scheduleId}/notifications")
+    public ResponseDto<String> updateScheduleReminder(@PathVariable Long scheduleId,
+                                                      @Valid @RequestBody ScheduleRequest.PutScheduleReminderDto dto,
+                                                      @AuthenticationPrincipal SecurityUserDetails member) {
+        personalScheduleUsecase.updateOrCreateScheduleReminder(dto, scheduleId, member);
+        return ResponseDto.onSuccess("알림 수정 성공");
     }
 }
