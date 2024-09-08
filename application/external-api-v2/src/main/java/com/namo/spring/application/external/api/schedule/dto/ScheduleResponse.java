@@ -26,6 +26,7 @@ public class ScheduleResponse {
 		private LocalDateTime scheduleStartDate;
 		private LocationInfoDto locationInfo;
 		private CategoryInfoDto categoryInfo;
+		private boolean hasDiary;
 	}
 
 	@Getter
