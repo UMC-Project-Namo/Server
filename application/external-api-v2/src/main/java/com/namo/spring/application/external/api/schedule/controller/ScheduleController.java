@@ -29,8 +29,8 @@ public class ScheduleController {
 	public ResponseDto<ScheduleResponse.ScheduleSummaryDto> getScheduleSummary(
 		@AuthenticationPrincipal SecurityUserDetails member,
 		@PathVariable Long scheduleId) {
-		return ResponseDto.onSuccess(scheduleUsecase.getScheduleSummary(scheduleId,
-			member.getUserId()));
+		return ResponseDto.onSuccess(scheduleUsecase.getScheduleSummary(
+			member.getUserId(), scheduleId));
 	}
 
 }
