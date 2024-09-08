@@ -135,7 +135,7 @@ public class MeetingScheduleResponseConverter {
                 .startDate(DateUtil.toSeconds(schedule.getPeriod().getStartDate()))
                 .endDate(DateUtil.toSeconds(schedule.getPeriod().getEndDate()))
                 .interval(schedule.getPeriod().getDayInterval())
-                .location(schedule.getLocation() != null ? toLocationDto(schedule.getLocation()) : null)
+                .locationInfo(schedule.getLocation() != null ? toLocationDto(schedule.getLocation()) : null)
                 .participants(toUserParticipantDetailDtos(participants))
                 .build();
     }

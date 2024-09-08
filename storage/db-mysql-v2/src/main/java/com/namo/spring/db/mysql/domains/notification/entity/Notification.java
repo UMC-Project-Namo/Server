@@ -17,6 +17,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 @Entity
@@ -34,16 +35,12 @@ public class Notification extends BaseTimeEntity {
     private PublisherType publisherType;
 
     @JdbcTypeCode(SqlTypes.VARCHAR)
-    @Column(nullable = false, length = 20)
+    @Column(length = 20)
     private String publisherName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publisher_id")
     private Member publisher;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "receiver_id", nullable = false)
-    private Member receiver;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "device_id", nullable = false)
@@ -72,17 +69,31 @@ public class Notification extends BaseTimeEntity {
     private boolean isDeleted;
 
     @Builder
-    public Notification(PublisherType publisherType, String publisherName, Member receiver,
+    public Notification(PublisherType publisherType, String publisherName, Member publisher, Member receiver,
                         Device device, Schedule schedule, LocalDateTime notifyAt, NotificationType notificationType, String notificationJson) {
-        this.publisherType = publisherType;
+        this.publisherType = Objects.requireNonNull(publisherType, "publisherType은 null일 수 없습니다.");
         this.publisherName = publisherName;
-        this.receiver = receiver;
-        this.device = device;
+        this.publisher = publisher;
+        this.device = Objects.requireNonNull(device, "device는 null일 수 없습니다.");
         this.schedule = schedule;
-        this.notificationType = notificationType;
-        this.notificationJson = notificationJson;
+        this.notificationType = Objects.requireNonNull(notificationType, "notificationType은 null일 수 없습니다.");
+        this.notificationJson = Objects.requireNonNull(notificationJson, "notificationJson은 null일 수 없습니다.");
         this.notifyAt = notifyAt;
         this.isRead = false;
         this.isDeleted = false;
+    }
+
+    public static Notification of(PublisherType publisherType, Member publisher,
+                                  Device device, Schedule schedule, LocalDateTime notifyAt, NotificationType notificationType, String notificationJson) {
+        return Notification.builder()
+                .publisherType(publisherType)
+                .publisher(publisher)
+                .publisherName(publisher != null ? publisher.getNickname() : null)
+                .device(device)
+                .schedule(schedule)
+                .notifyAt(notifyAt)
+                .notificationType(notificationType)
+                .notificationJson(notificationJson)
+                .build();
     }
 }
