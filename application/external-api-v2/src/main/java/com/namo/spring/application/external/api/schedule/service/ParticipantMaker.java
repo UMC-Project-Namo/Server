@@ -16,6 +16,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static com.namo.spring.application.external.api.schedule.converter.ParticipantConverter.toParticipant;
 
 @Slf4j
@@ -39,15 +42,21 @@ public class ParticipantMaker {
         participantService.createParticipant(participant);
     }
 
-    public void makeMeetingScheduleParticipant(Schedule schedule, User user) {
+    public void makeMeetingScheduleParticipants(Schedule schedule, List<Member> members) {
+        List<Participant> participants = members.stream()
+                .map(member -> toMeetingScheduleParticipant(schedule, member))
+                .collect(Collectors.toList());
+        participantService.createParticipants(participants);
+    }
+
+    public Participant toMeetingScheduleParticipant(Schedule schedule, User user) {
         Participant participant = null;
         if (user instanceof Member) {
             participant = toParticipant(user, ParticipantRole.NON_OWNER, schedule, ParticipantStatus.INACTIVE, null, null);
         } else if (user instanceof Anonymous) {
             participant = toParticipant(user, ParticipantRole.NON_OWNER, schedule, ParticipantStatus.ACTIVE, null, null);
-            schedule.addActiveParticipant(participant.getMember().getNickname());
         }
-        participantService.createParticipant(participant);
+        return participant;
     }
 
 }

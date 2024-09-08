@@ -4,7 +4,6 @@ import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -12,7 +11,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Component
 @RequiredArgsConstructor
 public class MeetingParticipantValidationUtils {
     private static final int MIN_PARTICIPANTS = 1;
