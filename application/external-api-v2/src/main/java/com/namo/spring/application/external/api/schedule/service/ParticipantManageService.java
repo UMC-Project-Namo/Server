@@ -18,13 +18,14 @@ import com.namo.spring.db.mysql.domains.user.entity.Friendship;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.exception.MemberException;
 import com.namo.spring.db.mysql.domains.user.service.FriendshipService;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -114,60 +115,60 @@ public class ParticipantManageService {
                 .orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_PARTICIPANT_FAILURE));
     }
 
-	/**
-	 * 필터에 따라 검색하여 일기가 존재하는 참여 정보 목록을 입력된 페이지 객체 만큼 반환하는 메서드입니다. 필터가 없다면 기본 조회됩니다.
-	 *
-	 * @param memberId   사용자 ID
-	 * @param pageable   페이징 할 양
-	 * @param filterType (ScheduleName, DiaryContent, MemberNickname) 필터
-	 * @param keyword    키워드
-	 * @return 일기가 작성된 참여 정보 목록 (필터에 따라 다름)
-	 */
-	public List<Participant> getMyParticipationForDiary(Long memberId, Pageable pageable, String filterType,
-		String keyword) {
-		if (filterType == null || filterType.isEmpty())
-			return participantService.readParticipantsHasDiary(memberId, pageable);
+    /**
+     * 필터에 따라 검색하여 일기가 존재하는 참여 정보 목록을 입력된 페이지 객체 만큼 반환하는 메서드입니다. 필터가 없다면 기본 조회됩니다.
+     *
+     * @param memberId   사용자 ID
+     * @param pageable   페이징 할 양
+     * @param filterType (ScheduleName, DiaryContent, MemberNickname) 필터
+     * @param keyword    키워드
+     * @return 일기가 작성된 참여 정보 목록 (필터에 따라 다름)
+     */
+    public List<Participant> getMyParticipationForDiary(Long memberId, Pageable pageable, String filterType,
+                                                        String keyword) {
+        if (filterType == null || filterType.isEmpty())
+            return participantService.readParticipantsForDiary(memberId, pageable);
 
-		switch (filterType) {
-			case "ScheduleName" -> {
-				return participantService.readParticipantHasDiaryByScheduleName(memberId, pageable, keyword);
-			}
-			case "DiaryContent" -> {
-				return participantService.readParticipantHasDiaryByDiaryContent(memberId, pageable, keyword);
-			}
-			case "MemberNickname" -> {
-				return participantService.readParticipantHasDiaryByMember(memberId, pageable, keyword);
-			}
-			default -> {
-				throw new DiaryException(ErrorStatus.NOT_FILTERTYPE_OF_ARCHIVE);
-			}
-		}
-	}
+        switch (filterType) {
+            case "ScheduleName" -> {
+                return participantService.readParticipantHasDiaryByScheduleName(memberId, pageable, keyword);
+            }
+            case "DiaryContent" -> {
+                return participantService.readParticipantHasDiaryByDiaryContent(memberId, pageable, keyword);
+            }
+            case "MemberNickname" -> {
+                return participantService.readParticipantHasDiaryByMember(memberId, pageable, keyword);
+            }
+            default -> {
+                throw new DiaryException(ErrorStatus.NOT_FILTERTYPE_OF_ARCHIVE);
+            }
+        }
+    }
 
-	/**
-	 * 해당 월의 00:00:00 부터 해당 월의 마지막날 23:59:59 까지 스케줄에 대하여 작성된 일기가 있는 참여정보 목록을 가져오는 메서드 입니다.
-	 *
-	 * @param memberId  사용자 ID
-	 * @param yearMonth 년:월
-	 * @return 일기가 작성된 참여 정보 목록
-	 */
-	public List<Participant> getMyParticipantByMonthForDiary(Long memberId, YearMonth yearMonth) {
-		LocalDateTime startDateTime = yearMonth.atDay(1).atStartOfDay();
-		LocalDateTime endDateTime = yearMonth.atEndOfMonth().atTime(23, 59, 59);
-		return participantService.readParticipantHasDiaryByDateRange(memberId, startDateTime, endDateTime);
-	}
+    /**
+     * 해당 월의 00:00:00 부터 해당 월의 마지막날 23:59:59 까지 스케줄에 대하여 작성된 일기가 있는 참여정보 목록을 가져오는 메서드 입니다.
+     *
+     * @param memberId  사용자 ID
+     * @param yearMonth 년:월
+     * @return 일기가 작성된 참여 정보 목록
+     */
+    public List<Participant> getMyParticipantByMonthForDiary(Long memberId, YearMonth yearMonth) {
+        LocalDateTime startDateTime = yearMonth.atDay(1).atStartOfDay();
+        LocalDateTime endDateTime = yearMonth.atEndOfMonth().atTime(23, 59, 59);
+        return participantService.readParticipantHasDiaryByDateRange(memberId, startDateTime, endDateTime);
+    }
 
-	/**
-	 * 해당 날짜의 시작 시각 00:00:00 부터 끝 시각 23:59:59 사이의 스케줄에 대하여 작성된 일기 정보가 있는 참여정보 목록을 가져오는 메서드입니다.
-	 *
-	 * @param memberId  사용자 ID
-	 * @param localDate 년:월:일
-	 * @return 일기가 작성된 참여 정보 목록
-	 */
-	public List<Participant> getMyParticipantByDayForDiary(Long memberId, LocalDate localDate) {
-		LocalDateTime startDateTime = localDate.atStartOfDay(); // 해당 날 00:00:00
-		LocalDateTime endDateTime = localDate.atTime(23, 59, 59); // 해당 날 23:59:59
-		return participantService.readParticipantHasDiaryByDateRange(memberId, startDateTime, endDateTime);
-	}
+    /**
+     * 해당 날짜의 시작 시각 00:00:00 부터 끝 시각 23:59:59 사이의 스케줄에 대하여 작성된 일기 정보가 있는 참여정보 목록을 가져오는 메서드입니다.
+     *
+     * @param memberId  사용자 ID
+     * @param localDate 년:월:일
+     * @return 일기가 작성된 참여 정보 목록
+     */
+    public List<Participant> getMyParticipantByDayForDiary(Long memberId, LocalDate localDate) {
+        LocalDateTime startDateTime = localDate.atStartOfDay(); // 해당 날 00:00:00
+        LocalDateTime endDateTime = localDate.atTime(23, 59, 59); // 해당 날 23:59:59
+        return participantService.readParticipantHasDiaryByDateRange(memberId, startDateTime, endDateTime);
+    }
 
 }
