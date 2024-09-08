@@ -35,20 +35,6 @@ public class ScheduleManageService {
     private final ParticipantService participantService;
     private final FriendshipService friendshipService;
 
-    /**
-     * 나의 스케줄을 찾아서 반환하는 메서드 입니다.
-     * !! 스케줄의 존재여부, 스케줄의 참여여부를 검증합니다.
-     *
-     * @param memberId
-     * @param scheduleId
-     * @return Schedule
-     */
-    public Schedule getMySchedule(Long memberId, Long scheduleId) {
-        Participant participant = participantService.readParticipant(memberId, scheduleId)
-                .orElseThrow(() -> new ScheduleException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
-        return participant.getSchedule();
-    }
-
     public Schedule getSchedule(Long scheduleId) {
         return scheduleService.readSchedule(scheduleId).orElseThrow(() -> new ScheduleException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
     }
