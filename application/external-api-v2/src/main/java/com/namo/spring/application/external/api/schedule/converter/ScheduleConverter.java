@@ -33,6 +33,7 @@ public class ScheduleConverter {
 			.scheduleStartDate(schedule.getPeriod().getStartDate())
 			.locationInfo(LocationConverter.toLocationInfoDto(schedule.getLocation()))
 			.categoryInfo(toCategoryInfoDto(participant.getCategory()))
+			.hasDiary(participant.isHasDiary())
 			.build();
 	}
 
