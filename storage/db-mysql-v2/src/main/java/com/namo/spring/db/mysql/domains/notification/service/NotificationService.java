@@ -33,7 +33,7 @@ public class NotificationService {
 
     @Transactional(readOnly = true)
     public List<ScheduleNotificationQuery> readNotificationsByReceiverIdAndScheduleIds(Long memberId, List<Long> scheduleIds) {
-        return notificationRepository.findNotificationsByReceiverIdAndScheduleIds(memberId, scheduleIds);
+        return notificationRepository.findReminderNotificationsByReceiverIdAndScheduleIds(memberId, scheduleIds);
     }
 
     @Transactional
