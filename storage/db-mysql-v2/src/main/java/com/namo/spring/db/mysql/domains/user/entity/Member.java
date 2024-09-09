@@ -3,6 +3,7 @@ package com.namo.spring.db.mysql.domains.user.entity;
 import com.namo.spring.db.mysql.common.converter.MemberStatusConverter;
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
+import com.namo.spring.db.mysql.domains.category.entity.Palette;
 import com.namo.spring.db.mysql.domains.notification.entity.Device;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.user.type.MemberRole;
@@ -86,6 +87,10 @@ public class Member extends BaseTimeEntity implements User {
     @ColumnDefault("NULL")
     private LocalDateTime deletedAt;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "palette_id", nullable = false)
+    private Palette palette;
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Friendship> friendships = new HashSet<>();
 
@@ -122,6 +127,7 @@ public class Member extends BaseTimeEntity implements User {
                 ", email='" + email + '\'' +
                 ", birthday='" + birthday + '\'' +
                 ", userRole='" + memberRole + '\'' +
+                ", palette_id='" + palette.getId() + '\'' +
                 ", status='" + status + '\'' +
                 ", deletedAt='" + deletedAt + '\'' +
                 ']';
@@ -143,12 +149,13 @@ public class Member extends BaseTimeEntity implements User {
         return !status.equals(MemberStatus.PENDING);
     }
 
-    public void signUpComplete(String name, String nickname, String birthday, String bio, String tag) {
+    public void signUpComplete(String name, String nickname, String birthday, String bio, String tag, Palette palette) {
         this.name = name;
         this.nickname = nickname;
         this.birthday = birthday;
         this.bio = bio;
         this.tag = tag;
+        this.palette = palette;
         this.status = MemberStatus.ACTIVE;
     }
 }
