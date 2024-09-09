@@ -53,12 +53,6 @@ public class PersonalScheduleUsecase {
         scheduleManageService.updatePersonalSchedule(patchPersonalScheduleDto, schedule, memberInfo.getUserId());
     }
 
-    @Transactional
-    public void updateOrCreateScheduleReminder(ScheduleRequest.PutScheduleReminderDto dto, Long scheduleId, SecurityUserDetails memberInfo) {
-        Member member = memberManageService.getMember(memberInfo.getUserId());
-        notificationManageService.updateOrCreateScheduleReminderNotification(scheduleId, member, dto.getReminderTrigger());
-    }
-
     @Transactional(readOnly = true)
     public List<PersonalScheduleResponse.GetFriendMonthlyScheduleDto> getFriendMonthlySchedules(int year, int month, Long targetMemberId, SecurityUserDetails memberInfo) {
         Member targetMember = memberManageService.getMember(targetMemberId);

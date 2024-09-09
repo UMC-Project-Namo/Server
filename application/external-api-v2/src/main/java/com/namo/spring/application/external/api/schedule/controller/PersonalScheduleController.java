@@ -68,15 +68,4 @@ public class PersonalScheduleController implements PersonalScheduleApi {
         personalScheduleUsecase.updatePersonalSchedule(dto, scheduleId, member);
         return ResponseDto.onSuccess("일정 수정 성공");
     }
-
-    /**
-     * 일정 예정 알림 수정 API
-     */
-    @PutMapping("/{scheduleId}/notifications")
-    public ResponseDto<String> updateScheduleReminder(@PathVariable Long scheduleId,
-                                                      @Valid @RequestBody ScheduleRequest.PutScheduleReminderDto dto,
-                                                      @AuthenticationPrincipal SecurityUserDetails member) {
-        personalScheduleUsecase.updateOrCreateScheduleReminder(dto, scheduleId, member);
-        return ResponseDto.onSuccess("알림 수정 성공");
-    }
 }
