@@ -1,7 +1,8 @@
 package com.namo.spring.application.external.api.schedule.service;
 
 import com.namo.spring.application.external.api.schedule.converter.LocationConverter;
-import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
+import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
+import com.namo.spring.application.external.api.schedule.dto.PersonalScheduleRequest;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
@@ -56,14 +57,14 @@ public class ScheduleManageService {
         return schedule;
     }
 
-    public Schedule createPersonalSchedule(ScheduleRequest.PostPersonalScheduleDto dto, Member member) {
+    public Schedule createPersonalSchedule(PersonalScheduleRequest.PostPersonalScheduleDto dto, Member member) {
         Period period = getValidatedPeriod(dto.getPeriod().getStartDate(), dto.getPeriod().getEndDate());
         Schedule schedule = scheduleMaker.createPersonalSchedule(dto, period, member.getNickname());
         participantManageService.createPersonalScheduleParticipant(member, schedule, dto.getCategoryId());
         return schedule;
     }
 
-    public Schedule createMeetingSchedule(ScheduleRequest.PostMeetingScheduleDto dto, Member owner,
+    public Schedule createMeetingSchedule(MeetingScheduleRequest.PostMeetingScheduleDto dto, Member owner,
                                           MultipartFile image) {
         validateParticipantCount(dto.getParticipants().size());
         List<Member> participants = participantManageService.getFriendshipValidatedParticipants(owner.getId(),
@@ -141,12 +142,12 @@ public class ScheduleManageService {
         return participantService.readParticipantsByScheduleIdAndStatusAndType(schedule.getId(), ScheduleType.MEETING, null);
     }
 
-    public void updatePersonalSchedule(ScheduleRequest.PatchPersonalScheduleDto dto, Schedule schedule, Long memberId) {
+    public void updatePersonalSchedule(PersonalScheduleRequest.PatchPersonalScheduleDto dto, Schedule schedule, Long memberId) {
         participantManageService.validateScheduleOwner(schedule, memberId);
         updateScheduleContent(dto.getTitle(), dto.getLocation(), dto.getPeriod(), schedule);
     }
 
-    public void updateMeetingSchedule(ScheduleRequest.PatchMeetingScheduleDto dto, Schedule schedule, Long memberId) {
+    public void updateMeetingSchedule(MeetingScheduleRequest.PatchMeetingScheduleDto dto, Schedule schedule, Long memberId) {
         participantManageService.validateScheduleOwner(schedule, memberId);
         updateScheduleContent(dto.getTitle(), dto.getLocation(), dto.getPeriod(), schedule);
         // 기존의 인원과, 초대될 & 삭제될 member  검증
@@ -162,8 +163,8 @@ public class ScheduleManageService {
         }
     }
 
-    private void updateScheduleContent(String title, ScheduleRequest.LocationDto locationDto,
-                                       ScheduleRequest.PeriodDto periodDto, Schedule schedule) {
+    private void updateScheduleContent(String title, MeetingScheduleRequest.LocationDto locationDto,
+                                       MeetingScheduleRequest.PeriodDto periodDto, Schedule schedule) {
         Period period = getValidatedPeriod(periodDto.getStartDate(), periodDto.getEndDate());
         Location location = locationDto != null ? LocationConverter.toLocation(locationDto) : null;
         schedule.updateContent(title, period, location);

@@ -1,8 +1,8 @@
 package com.namo.spring.application.external.api.schedule.controller;
 
 import com.namo.spring.application.external.api.schedule.api.MeetingScheduleApi;
+import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
-import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
 import com.namo.spring.application.external.api.schedule.usecase.MeetingScheduleUsecase;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.core.common.response.ResponseDto;
@@ -30,7 +30,7 @@ public class MeetingScheduleController implements MeetingScheduleApi {
      */
     @PostMapping(path = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDto<Long> createMeetingSchedule(
-            @Valid @RequestPart ScheduleRequest.PostMeetingScheduleDto dto,
+            @Valid @RequestPart MeetingScheduleRequest.PostMeetingScheduleDto dto,
             @RequestPart(required = false) MultipartFile image,
             @AuthenticationPrincipal SecurityUserDetails memberInfo) {
         return ResponseDto.onSuccess(meetingScheduleUsecase.createMeetingSchedule(dto, image, memberInfo));
@@ -84,7 +84,7 @@ public class MeetingScheduleController implements MeetingScheduleApi {
     @PatchMapping(path = "/{meetingScheduleId}")
     public ResponseDto<String> updateMeetingSchedule(
             @PathVariable Long meetingScheduleId,
-            @RequestBody @Valid ScheduleRequest.PatchMeetingScheduleDto dto,
+            @RequestBody @Valid MeetingScheduleRequest.PatchMeetingScheduleDto dto,
             @AuthenticationPrincipal SecurityUserDetails memberInfo) {
         meetingScheduleUsecase.updateMeetingSchedule(dto, meetingScheduleId, memberInfo);
         return ResponseDto.onSuccess("모임 일정 수정 성공");

@@ -1,7 +1,7 @@
 package com.namo.spring.application.external.api.schedule.usecase;
 
+import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
-import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
 import com.namo.spring.application.external.api.schedule.service.ScheduleManageService;
 import com.namo.spring.application.external.api.user.service.MemberManageService;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
@@ -32,7 +32,7 @@ public class MeetingScheduleUsecase {
     private final MemberManageService memberManageService;
 
     @Transactional
-    public Long createMeetingSchedule(ScheduleRequest.PostMeetingScheduleDto dto, MultipartFile image, SecurityUserDetails memberInfo) {
+    public Long createMeetingSchedule(MeetingScheduleRequest.PostMeetingScheduleDto dto, MultipartFile image, SecurityUserDetails memberInfo) {
         validateUniqueParticipantIds(memberInfo.getUserId(), dto.getParticipants());
         Member owner = memberManageService.getMember(memberInfo.getUserId());
         Schedule schedule = scheduleManageService.createMeetingSchedule(dto, owner, image);
@@ -70,7 +70,7 @@ public class MeetingScheduleUsecase {
     }
 
     @Transactional
-    public void updateMeetingSchedule(ScheduleRequest.PatchMeetingScheduleDto dto, Long scheduleId, SecurityUserDetails memberInfo) {
+    public void updateMeetingSchedule(MeetingScheduleRequest.PatchMeetingScheduleDto dto, Long scheduleId, SecurityUserDetails memberInfo) {
         validateUniqueParticipantIds(memberInfo.getUserId(), dto);
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
         scheduleManageService.updateMeetingSchedule(dto, schedule, memberInfo.getUserId());

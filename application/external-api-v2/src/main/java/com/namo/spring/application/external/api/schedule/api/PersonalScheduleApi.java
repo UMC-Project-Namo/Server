@@ -1,8 +1,8 @@
 package com.namo.spring.application.external.api.schedule.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.namo.spring.application.external.api.schedule.dto.PersonalScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.PersonalScheduleResponse;
-import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.core.common.code.status.ErrorStatus;
@@ -46,7 +46,7 @@ public interface PersonalScheduleApi {
             	"message": "카테고리를 찾을 수 없습니다."
             }
             """)}))
-    ResponseDto<Long> createPersonalSchedule(@Parameter(description = "개인 일정 생성 요청 dto") @Valid @RequestBody ScheduleRequest.PostPersonalScheduleDto dto,
+    ResponseDto<Long> createPersonalSchedule(@Parameter(description = "개인 일정 생성 요청 dto") @Valid @RequestBody PersonalScheduleRequest.PostPersonalScheduleDto dto,
                                              @AuthenticationPrincipal SecurityUserDetails member) throws JsonProcessingException;
 
     @Operation(summary = "개인 월간 일정 조회", description = "개인 월간 일정을 조회합니다.")
@@ -97,6 +97,6 @@ public interface PersonalScheduleApi {
             """)
     }))
     ResponseDto<String> updatePersonalSchedules(@Parameter(description = "일정 ID") @PathVariable Long scheduleId,
-                                                @Parameter(description = "일정 내용 수정 요청 dto") @Valid @RequestBody ScheduleRequest.PatchPersonalScheduleDto dto,
+                                                @Parameter(description = "일정 내용 수정 요청 dto") @Valid @RequestBody PersonalScheduleRequest.PatchPersonalScheduleDto dto,
                                                 @AuthenticationPrincipal SecurityUserDetails member);
 }
