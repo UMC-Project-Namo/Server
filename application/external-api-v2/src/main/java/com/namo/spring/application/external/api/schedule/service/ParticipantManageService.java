@@ -1,6 +1,7 @@
 package com.namo.spring.application.external.api.schedule.service;
 
-import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
+import com.namo.spring.application.external.api.schedule.dto.GuestParticipantRequest;
+import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.category.entity.Palette;
 import com.namo.spring.db.mysql.domains.category.exception.PaletteException;
@@ -14,9 +15,11 @@ import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
 import com.namo.spring.db.mysql.domains.schedule.type.ParticipantRole;
 import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
+import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
 import com.namo.spring.db.mysql.domains.user.entity.Friendship;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.exception.MemberException;
+import com.namo.spring.db.mysql.domains.user.service.AnonymousService;
 import com.namo.spring.db.mysql.domains.user.service.FriendshipService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +43,7 @@ public class ParticipantManageService {
     private final ParticipationActionManager participationActionManager;
     private final FriendshipService friendshipService;
     private final ParticipantService participantService;
+    private final AnonymousService anonymousService;
 
     public void createPersonalScheduleParticipant(Member member, Schedule schedule, Long categoryId) {
         participantMaker.makeScheduleOwner(schedule, member, categoryId, null);
@@ -75,10 +79,24 @@ public class ParticipantManageService {
 
     public void activateParticipant(Long memberId, Long scheduleId) {
         Participant participant = getValidatedParticipantWithSchedule(scheduleId, memberId);
-        Long paletteId = selectPaletteColorId(scheduleId);
-        participationActionManager.activateParticipant(participant.getSchedule(), participant, paletteId);
+        participationActionManager.activateParticipant(participant.getSchedule(), participant);
     }
 
+    public void deleteParticipant(Long memberId, Long scheduleId) {
+        Participant participant = getValidatedParticipantWithSchedule(scheduleId, memberId);
+        participationActionManager.removeParticipant(participant.getSchedule(), participant);
+    }
+
+    public void createGuestParticipant(Schedule schedule, GuestParticipantRequest.PostGuestParticipantDto dto, String tag) {
+        Anonymous anonymous = Anonymous.of(null, null, tag, dto.getNickname(), dto.getPassword());
+        Anonymous savedAnonymous = anonymousService.createAnonymous(anonymous);
+        Long paletteId = selectPaletteColorId(schedule.getId());
+        participantMaker.makeGuestParticipant(schedule, savedAnonymous, paletteId);
+    }
+
+    /**
+     * 게스트 유저가 모임 일정에 참여하게 됐을 경우, 고유 색상을 부여합니다.
+     */
     private Long selectPaletteColorId(Long scheduleId) {
         List<Long> participantsColors = getMeetingScheduleParticipants(scheduleId, ParticipantStatus.ACTIVE)
                 .stream().map(Participant::getPalette).map(Palette::getId).collect(Collectors.toList());
@@ -88,7 +106,7 @@ public class ParticipantManageService {
                 .orElseThrow(() -> new PaletteException(ErrorStatus.NOT_FOUND_COLOR));
     }
 
-    public void updateMeetingScheduleParticipants(Long ownerId, Schedule schedule, ScheduleRequest.PatchMeetingScheduleDto dto) {
+    public void updateMeetingScheduleParticipants(Long ownerId, Schedule schedule, MeetingScheduleRequest.PatchMeetingScheduleDto dto) {
         if (!dto.getParticipantsToAdd().isEmpty()) {
             List<Member> participantsToAdd = getFriendshipValidatedParticipants(ownerId, dto.getParticipantsToAdd());
             participantMaker.makeMeetingScheduleParticipants(schedule, participantsToAdd);
@@ -171,17 +189,17 @@ public class ParticipantManageService {
         return participantService.readParticipantHasDiaryByDateRange(memberId, startDateTime, endDateTime);
     }
 
-	/**
-	 * 나의 참여 정보를 찾아서 반환하는 메서드 입니다.
-	 * !! 스케줄의 존재여부, 스케줄의 참여여부를 검증합니다.
-	 *
-	 * @param memberId
-	 * @param scheduleId
-	 * @return Schedule
-	 */
-	public Participant getMyParticipant(Long memberId, Long scheduleId) {
-		return participantService.readParticipant(memberId, scheduleId)
-			.orElseThrow(() -> new ScheduleException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
-	}
+    /**
+     * 나의 참여 정보를 찾아서 반환하는 메서드 입니다.
+     * !! 스케줄의 존재여부, 스케줄의 참여여부를 검증합니다.
+     *
+     * @param memberId
+     * @param scheduleId
+     * @return Schedule
+     */
+    public Participant getMyParticipant(Long memberId, Long scheduleId) {
+        return participantService.readParticipant(memberId, scheduleId)
+                .orElseThrow(() -> new ScheduleException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
+    }
 
 }
