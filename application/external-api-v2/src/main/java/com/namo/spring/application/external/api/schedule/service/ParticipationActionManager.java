@@ -23,11 +23,22 @@ public class ParticipationActionManager {
     private final PaletteService paletteService;
     private final ParticipantService participantService;
 
-    public void activateParticipant(Schedule schedule, Participant participant, Long paletteId) {
+    /**
+     * 모임 요청을 수락했을 시, participant를 활성화
+     */
+    public void activateParticipant(Schedule schedule, Participant participant) {
         Category category = categoryService.readMeetingCategoryByMember(participant.getMember());
-        Palette palette = paletteService.getPalette(paletteId);
+        Palette palette = participant.getMember().getPalette();
         schedule.addActiveParticipant(participant.getMember().getNickname());
         participant.activateStatus(category, palette);
+    }
+
+    /**
+     * 모임 요청을 거절했을 시, participant를 삭제
+     */
+    public void removeParticipant(Schedule schedule, Participant participant) {
+        schedule.removeParticipant(participant.getMember().getNickname());
+        participantService.deleteParticipant(participant.getId());
     }
 
     public void removeParticipants(Schedule schedule, List<Participant> participants) {
