@@ -74,6 +74,8 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
 
     Optional<Participant> findParticipantByMemberIdAndScheduleId(Long memberId, Long scheduleId);
 
+    Optional<Participant> findParticipantByAnonymousIdAndScheduleId(Long anonymousId, Long scheduleId);
+
     @Query("SELECT p "
             + "FROM Participant p "
             + "WHERE p.hasDiary = true and p.member.id = :memberId "

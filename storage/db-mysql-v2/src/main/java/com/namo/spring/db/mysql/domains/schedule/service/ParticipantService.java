@@ -30,7 +30,7 @@ public class ParticipantService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Participant> readParticipant(Long id) {
+    public Optional<Participant> readMemberParticipant(Long id) {
         return participantRepository.findById(id);
     }
 
@@ -81,28 +81,32 @@ public class ParticipantService {
         participantRepository.deleteByIdIn(Ids);
     }
 
-	public Optional<Participant> readParticipant(Long memberId, Long scheduleId) {
-		return participantRepository.findParticipantByMemberIdAndScheduleId(memberId, scheduleId);
-	}
+    public Optional<Participant> readMemberParticipant(Long memberId, Long scheduleId) {
+        return participantRepository.findParticipantByMemberIdAndScheduleId(memberId, scheduleId);
+    }
+
+    public Optional<Participant> readAnonymousParticipant(Long anonymousId, Long scheduleId) {
+        return participantRepository.findParticipantByAnonymousIdAndScheduleId(anonymousId, scheduleId);
+    }
 
     public List<Participant> readParticipantsForDiary(Long memberId, Pageable pageable) {
         return participantRepository.findAllByMemberIdAndHasDiary(memberId, pageable);
     }
 
-	public List<Participant> readParticipantHasDiaryByScheduleName(Long memberId, Pageable pageable, String keyword) {
-		return participantRepository.findAllByScheduleTitleAndHasDiary(memberId, keyword, pageable);
-	}
+    public List<Participant> readParticipantHasDiaryByScheduleName(Long memberId, Pageable pageable, String keyword) {
+        return participantRepository.findAllByScheduleTitleAndHasDiary(memberId, keyword, pageable);
+    }
 
-	public List<Participant> readParticipantHasDiaryByDiaryContent(Long memberId, Pageable pageable, String keyword) {
-		return participantRepository.findAllByDiaryContentAndHasDiary(memberId, keyword, pageable);
-	}
+    public List<Participant> readParticipantHasDiaryByDiaryContent(Long memberId, Pageable pageable, String keyword) {
+        return participantRepository.findAllByDiaryContentAndHasDiary(memberId, keyword, pageable);
+    }
 
-	public List<Participant> readParticipantHasDiaryByMember(Long memberId, Pageable pageable, String keyword) {
-		return participantRepository.findAllByMemberAndHasDiary(memberId, keyword, pageable);
-	}
+    public List<Participant> readParticipantHasDiaryByMember(Long memberId, Pageable pageable, String keyword) {
+        return participantRepository.findAllByMemberAndHasDiary(memberId, keyword, pageable);
+    }
 
-	public List<Participant> readParticipantHasDiaryByDateRange(Long memberId, LocalDateTime startDate,
-		LocalDateTime endDate) {
-		return participantRepository.findAllByDateRangeAndHasDiary(memberId, startDate, endDate);
-	}
+    public List<Participant> readParticipantHasDiaryByDateRange(Long memberId, LocalDateTime startDate,
+                                                                LocalDateTime endDate) {
+        return participantRepository.findAllByDateRangeAndHasDiary(memberId, startDate, endDate);
+    }
 }
