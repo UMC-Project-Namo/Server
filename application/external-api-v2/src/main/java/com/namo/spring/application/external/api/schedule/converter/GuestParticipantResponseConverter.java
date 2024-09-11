@@ -7,7 +7,7 @@ public class GuestParticipantResponseConverter {
 
     public static GuestParticipantResponse.PostGuestParticipantDto toPostGuestParticipantDto(Participant participant) {
         return GuestParticipantResponse.PostGuestParticipantDto.builder()
-                .userId(participant.getAnonymous().getId())
+                .nickname(participant.getAnonymous().getNickname())
                 .tag(participant.getAnonymous().getTag())
                 .participantId(participant.getId())
                 .scheduleId(participant.getSchedule().getId())

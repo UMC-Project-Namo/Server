@@ -114,7 +114,7 @@ public class MemberManageService {
     public List<String> getUserTagsByNicname(String nickname) {
         List<String> tags = new ArrayList<>();
         tags.addAll(getMemberTagsByNickname(nickname));
-        tags.addAll(anonymousService.findAnonymousNickname(nickname).stream()
+        tags.addAll(anonymousService.readAnonymousNickname(nickname).stream()
                 .map(Anonymous::getTag)
                 .toList());
         return tags;
