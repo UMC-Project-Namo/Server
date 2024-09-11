@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 import static com.namo.spring.application.external.api.schedule.converter.MeetingScheduleResponseConverter.*;
+import static com.namo.spring.application.external.global.utils.MeetingParticipantValidationUtils.validateParticipantCount;
 import static com.namo.spring.application.external.global.utils.MeetingParticipantValidationUtils.validateUniqueParticipantIds;
 import static com.namo.spring.application.external.global.utils.SchedulePeriodValidationUtils.getExtendedPeriod;
 import static com.namo.spring.application.external.global.utils.SchedulePeriodValidationUtils.validateYearMonth;
@@ -82,6 +83,7 @@ public class MeetingScheduleUsecase {
     public String getGuestInviteCode(Long scheduleId, SecurityUserDetails memberInfo) {
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
         scheduleManageService.validateScheduleOwner(schedule, memberInfo.getUserId());
+        validateParticipantCount(scheduleManageService.getScheduleParticipantIds(schedule.getId()).size());
         return guestManageService.generateInviteCode(scheduleId);
     }
 }
