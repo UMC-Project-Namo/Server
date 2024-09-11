@@ -9,9 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.namo.spring.application.external.api.record.dto.ActivityResponse;
+import com.namo.spring.application.external.api.record.usecase.ActivityUseCase;
+import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
+import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.response.ResponseDto;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.RequiredArgsConstructor;
@@ -22,11 +27,19 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/v2/activities")
 public class ActivityController {
 
+	private final ActivityUseCase activityUseCase;
+
+	@Operation(summary = "모임 기록 - 활동 조회", description = "모임 스케줄에 대한 활동 목록이 조회됩니다.")
+	@ApiErrorCodes(value = {
+		ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE,
+	})
 	@GetMapping("/{scheduleId}")
 	public ResponseDto<List<ActivityResponse.ActivityInfoDto>> getActivity(
 		@AuthenticationPrincipal SecurityUserDetails memberInfo,
-		@PathVariable String scheduleId) {
-		return null;
-	}
+		@Parameter(description = "활동을 조회할 스케줄 ID 입니다..", example = "1")
+		@PathVariable Long scheduleId) {
 
+		return ResponseDto.onSuccess(activityUseCase
+			.getActivities(memberInfo.getUserId(), scheduleId));
+	}
 }
