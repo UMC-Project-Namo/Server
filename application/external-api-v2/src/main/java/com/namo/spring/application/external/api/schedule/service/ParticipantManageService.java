@@ -1,25 +1,18 @@
 package com.namo.spring.application.external.api.schedule.service;
 
-import com.namo.spring.application.external.api.schedule.dto.GuestParticipantRequest;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
+import com.namo.spring.application.external.api.user.service.TagGenerator;
 import com.namo.spring.core.common.code.status.ErrorStatus;
-import com.namo.spring.db.mysql.domains.category.entity.Palette;
-import com.namo.spring.db.mysql.domains.category.exception.PaletteException;
 import com.namo.spring.db.mysql.domains.category.type.ColorChip;
-import com.namo.spring.db.mysql.domains.category.type.PaletteEnum;
 import com.namo.spring.db.mysql.domains.record.exception.DiaryException;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
 import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
-import com.namo.spring.db.mysql.domains.schedule.type.ParticipantRole;
 import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
-import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
-import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
 import com.namo.spring.db.mysql.domains.user.entity.Friendship;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.exception.MemberException;
-import com.namo.spring.db.mysql.domains.user.service.AnonymousService;
 import com.namo.spring.db.mysql.domains.user.service.FriendshipService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +22,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,12 +30,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ParticipantManageService {
     private static final Long MEETING_SCHEDULE_OWNER_PALETTE_ID = ColorChip.getMeetingScheduleOwnerPaletteId();
-    private static final long[] PALETTE_IDS = PaletteEnum.getPaletteColorIds();
     private final ParticipantMaker participantMaker;
     private final ParticipationActionManager participationActionManager;
     private final FriendshipService friendshipService;
     private final ParticipantService participantService;
-    private final AnonymousService anonymousService;
+    private final GuestManageService guestManageService;
+    private final TagGenerator tagGenerator;
 
     public void createPersonalScheduleParticipant(Member member, Schedule schedule, Long categoryId) {
         participantMaker.makeScheduleOwner(schedule, member, categoryId, null);
@@ -65,13 +57,6 @@ public class ParticipantManageService {
         return friends;
     }
 
-    public void validateScheduleOwner(Schedule schedule, Long memberId) {
-        Participant participant = getValidatedParticipantWithSchedule(memberId, schedule.getId());
-        if (participant.getIsOwner() != ParticipantRole.OWNER.getValue()) {
-            throw new ScheduleException(ErrorStatus.NOT_SCHEDULE_OWNER);
-        }
-    }
-
     public Participant getValidatedParticipantWithSchedule(Long memberId, Long scheduleId) {
         return participantService.readParticipantByScheduleIdAndMemberId(scheduleId, memberId).orElseThrow(
                 () -> new ScheduleException(ErrorStatus.NOT_SCHEDULE_PARTICIPANT));
@@ -87,24 +72,6 @@ public class ParticipantManageService {
         participationActionManager.removeParticipant(participant.getSchedule(), participant);
     }
 
-    public void createGuestParticipant(Schedule schedule, GuestParticipantRequest.PostGuestParticipantDto dto, String tag) {
-        Anonymous anonymous = Anonymous.of(null, null, tag, dto.getNickname(), dto.getPassword());
-        Anonymous savedAnonymous = anonymousService.createAnonymous(anonymous);
-        Long paletteId = selectPaletteColorId(schedule.getId());
-        participantMaker.makeGuestParticipant(schedule, savedAnonymous, paletteId);
-    }
-
-    /**
-     * 게스트 유저가 모임 일정에 참여하게 됐을 경우, 고유 색상을 부여합니다.
-     */
-    private Long selectPaletteColorId(Long scheduleId) {
-        List<Long> participantsColors = getMeetingScheduleParticipants(scheduleId, ParticipantStatus.ACTIVE)
-                .stream().map(Participant::getPalette).map(Palette::getId).collect(Collectors.toList());
-        return Arrays.stream(PALETTE_IDS)
-                .filter((color) -> !participantsColors.contains(color))
-                .findFirst()
-                .orElseThrow(() -> new PaletteException(ErrorStatus.NOT_FOUND_COLOR));
-    }
 
     public void updateMeetingScheduleParticipants(Long ownerId, Schedule schedule, MeetingScheduleRequest.PatchMeetingScheduleDto dto) {
         if (!dto.getParticipantsToAdd().isEmpty()) {
@@ -121,15 +88,8 @@ public class ParticipantManageService {
         }
     }
 
-    public List<Participant> getMeetingScheduleParticipants(Long scheduleId, ParticipantStatus status) {
-        List<Participant> participants = participantService.readParticipantsByScheduleIdAndStatusAndType(scheduleId, ScheduleType.MEETING, status);
-        if (participants.isEmpty()) {
-            throw new ScheduleException(ErrorStatus.SCHEDULE_PARTICIPANT_IS_EMPTY_ERROR);
-        } else return participants;
-    }
-
     public Participant getScheduleParticipant(Long memberId, Long scheduleId) {
-        return participantService.readParticipant(memberId, scheduleId)
+        return participantService.readMemberParticipant(memberId, scheduleId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_PARTICIPANT_FAILURE));
     }
 
@@ -198,7 +158,7 @@ public class ParticipantManageService {
      * @return Schedule
      */
     public Participant getMyParticipant(Long memberId, Long scheduleId) {
-        return participantService.readParticipant(memberId, scheduleId)
+        return participantService.readMemberParticipant(memberId, scheduleId)
                 .orElseThrow(() -> new ScheduleException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
     }
 

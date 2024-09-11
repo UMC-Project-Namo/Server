@@ -44,11 +44,12 @@ public class ParticipantMaker {
         participantService.createParticipants(participants);
     }
 
-    public void makeGuestParticipant(Schedule schedule, Anonymous anonymous, Long paletteId) {
+    public Participant makeGuestParticipant(Schedule schedule, Anonymous anonymous, Long paletteId) {
         Palette palette = paletteService.getPalette(paletteId);
-        Participant guest = Participant.of(ParticipantRole.NON_OWNER.getValue(), anonymous, schedule, ParticipantStatus.ACTIVE, null, palette);
-        participantService.createParticipant(guest);
+        Participant participant = Participant.of(ParticipantRole.NON_OWNER.getValue(), anonymous, schedule, ParticipantStatus.ACTIVE, null, palette);
+        Participant savedParticipant = participantService.createParticipant(participant);
         schedule.addActiveParticipant(anonymous.getNickname());
+        return savedParticipant;
     }
 
 }
