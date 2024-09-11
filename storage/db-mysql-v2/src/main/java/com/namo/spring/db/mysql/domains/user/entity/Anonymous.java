@@ -39,9 +39,11 @@ public class Anonymous extends BaseTimeEntity implements User {
     @Embedded
     private Password password;
 
+    private String inviteCode;
+
     @Builder
     public Anonymous(String name, Boolean nameVisible, String tag,
-                     String nickname, String password) {
+                     String nickname, String password, String inviteCode) {
         if (!StringUtils.hasText(nickname))
             throw new IllegalArgumentException("nickname은 null이거나 빈 문자열일 수 없습니다.");
         if (!StringUtils.hasText(tag))
@@ -51,17 +53,18 @@ public class Anonymous extends BaseTimeEntity implements User {
         this.tag = tag;
         this.nickname = nickname;
         this.password = Password.encrypt(password);
+        this.inviteCode = inviteCode;
     }
 
     public static Anonymous of(String name, Boolean nameVisible, String tag,
-                               String nickname, String password) {
+                               String nickname, String password, String inviteCode) {
         return Anonymous.builder()
                 .nickname(nickname)
                 .name(name)
                 .nameVisible(nameVisible)
                 .tag(tag)
                 .password(password)
+                .inviteCode(inviteCode)
                 .build();
     }
-
 }

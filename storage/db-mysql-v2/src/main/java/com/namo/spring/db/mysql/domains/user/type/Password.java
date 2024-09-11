@@ -27,6 +27,10 @@ public class Password {
         return new Password(hashPassword(value));
     }
 
+    public boolean isSamePassword(String password) {
+        return this.value.equals(hashPassword(password));
+    }
+
     private static String hashPassword(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
