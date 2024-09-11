@@ -54,6 +54,11 @@ public class GuestManageService {
                 .orElseThrow(() -> new ParticipantException(ErrorStatus.NOT_FOUND_PARTICIPANT_FAILURE));
     }
 
+    public Anonymous getAnonymousByTagAndNickname(String tag, String nickname) {
+        return anonymousService.readAnonymousByTagAndNickname(tag, nickname)
+                .orElseThrow(() -> new AnonymousException(ErrorStatus.NOT_FOUND_USER_FAILURE));
+    }
+
     /**
      * 게스트 유저가 모임 일정에서 표시될 고유 색상을 부여합니다.
      */
@@ -78,7 +83,7 @@ public class GuestManageService {
      * 해당 비회원에 대한 Participant를 반환합니다.
      */
     public Participant createOrValidateGuest(GuestParticipantRequest.PostGuestParticipantDto dto, Schedule schedule, String code) {
-        return anonymousService.findAnonymousByInviteCode(code)
+        return anonymousService.readAnonymousByInviteCode(code)
                 .map(anonymous -> getValidatedGuest(anonymous, dto, schedule.getId()))
                 .orElseGet(() -> createGuest(dto, schedule, code));
     }
@@ -90,7 +95,7 @@ public class GuestManageService {
      * @return 참여 코드
      */
     public String generateInviteCode(Long scheduleId) {
-        List<String> existCodes = anonymousService.findAllInviteCodes().stream().map(AnonymousInviteCodeQuery::getCode).toList();
+        List<String> existCodes = anonymousService.readAllInviteCodes().stream().map(AnonymousInviteCodeQuery::getCode).toList();
         String inviteCode;
         do {
             String uuidPart = UUID.randomUUID().toString().substring(0, 8);

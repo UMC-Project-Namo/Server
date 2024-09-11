@@ -5,6 +5,7 @@ import com.namo.spring.db.mysql.domains.user.dto.AnonymousInviteCodeQuery;
 import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
 import com.namo.spring.db.mysql.domains.user.repository.AnonymousRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,19 +15,28 @@ import java.util.Optional;
 public class AnonymousService {
     private final AnonymousRepository anonymousRepository;
 
+    @Transactional
     public Anonymous createAnonymous(Anonymous anonymous) {
         return anonymousRepository.save(anonymous);
     }
 
-    public List<Anonymous> findAnonymousNickname(String nickname) {
+    @Transactional(readOnly = true)
+    public List<Anonymous> readAnonymousNickname(String nickname) {
         return anonymousRepository.findAnonymousByNickname(nickname);
     }
 
-    public Optional<Anonymous> findAnonymousByInviteCode(String code) {
+    @Transactional(readOnly = true)
+    public Optional<Anonymous> readAnonymousByInviteCode(String code) {
         return anonymousRepository.findAnonymousByInviteCode(code);
     }
 
-    public List<AnonymousInviteCodeQuery> findAllInviteCodes() {
+    @Transactional(readOnly = true)
+    public Optional<Anonymous> readAnonymousByTagAndNickname(String tag, String nickname) {
+        return anonymousRepository.findAnonymousByTagAndNickname(tag, nickname);
+    }
+
+    @Transactional(readOnly = true)
+    public List<AnonymousInviteCodeQuery> readAllInviteCodes() {
         return anonymousRepository.findAllInviteCodes();
     }
 }

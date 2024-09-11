@@ -14,6 +14,8 @@ public interface AnonymousRepository extends JpaRepository<Anonymous, Long> {
 
     Optional<Anonymous> findAnonymousByInviteCode(String inviteCode);
 
+    Optional<Anonymous> findAnonymousByTagAndNickname(String tag, String nickname);
+
     @Query("SELECT new com.namo.spring.db.mysql.domains.user.dto.AnonymousInviteCodeQuery(a.inviteCode) FROM Anonymous a")
     List<AnonymousInviteCodeQuery> findAllInviteCodes();
 }
