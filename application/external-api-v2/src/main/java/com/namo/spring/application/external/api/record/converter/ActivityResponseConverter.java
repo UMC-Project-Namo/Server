@@ -11,6 +11,7 @@ public class ActivityResponseConverter {
 
 	public static ActivityResponse.ActivityInfoDto toActivityInfoDto(Activity activity) {
 		return ActivityResponse.ActivityInfoDto.builder()
+			.activityId(activity.getId())
 			.activityTitle(activity.getTitle())
 			.activityParticipants(
 				activity.getParticipants().stream()

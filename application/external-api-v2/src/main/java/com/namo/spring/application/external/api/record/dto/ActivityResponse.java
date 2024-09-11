@@ -17,6 +17,7 @@ public class ActivityResponse {
 	@AllArgsConstructor
 	@Schema(description = "활동 조회 DTO")
 	public static class ActivityInfoDto {
+		private Long activityId;
 		private String activityTitle;
 		private List<ActivityParticipantDto> activityParticipants;
 		private LocalDateTime activityStartDate;
@@ -47,7 +48,7 @@ public class ActivityResponse {
 	@Builder
 	@Getter
 	@AllArgsConstructor
-	public static class ActivityAdjustmentInfo {
+	public static class ActivitySettlementInfoDto {
 		private BigDecimal totalAmount;
 		private int divisionCount;
 		private BigDecimal amountPerPerson;

@@ -42,4 +42,12 @@ public class ActivityController {
 		return ResponseDto.onSuccess(activityUseCase
 			.getActivities(memberInfo.getUserId(), scheduleId));
 	}
+
+	@GetMapping("/settlement/{activityId}")
+	public ResponseDto<ActivityResponse.ActivitySettlementInfoDto> getActivitySettlement(
+		@AuthenticationPrincipal SecurityUserDetails memberInfo,
+		@PathVariable String activityId) {
+
+		return null;
+	}
 }
