@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,6 +19,7 @@ import org.hibernate.type.SqlTypes;
 import org.springframework.util.StringUtils;
 
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
+import com.namo.spring.db.mysql.domains.record.entity.Activity;
 import com.namo.spring.db.mysql.domains.schedule.type.Location;
 import com.namo.spring.db.mysql.domains.schedule.type.Period;
 
@@ -61,8 +62,11 @@ public class Schedule extends BaseTimeEntity {
 
 	private String invitationUrl;
 
-	@OneToMany(mappedBy = "schedule", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "schedule")
 	private List<Participant> participantList = new ArrayList<>();
+
+	@OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Activity> activityList;
 
 	@Builder
 	public Schedule(String title, Period period, Location location, int scheduleType, String imageUrl,
