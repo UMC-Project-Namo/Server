@@ -43,11 +43,12 @@ public class ActivityController {
 			.getActivities(memberInfo.getUserId(), scheduleId));
 	}
 
+	@Operation(summary = "모임 기록 활동에 대한 정산 팝업 조회", description = "모임 활동의 정산 내역을 조회합니다. (팝업 내용에 해당합니다)")
 	@GetMapping("/settlement/{activityId}")
 	public ResponseDto<ActivityResponse.ActivitySettlementInfoDto> getActivitySettlement(
 		@AuthenticationPrincipal SecurityUserDetails memberInfo,
-		@PathVariable String activityId) {
-
-		return null;
+		@Parameter(description = "정산할 활동(activity) ID 입니다.", example = "1")
+		@PathVariable Long activityId) {
+		return ResponseDto.onSuccess(activityUseCase.getSettlement(memberInfo.getUserId(), activityId));
 	}
 }
