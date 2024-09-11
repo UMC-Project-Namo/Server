@@ -28,7 +28,7 @@ public class ActivityResponseConverter {
 	public static ActivityResponse.ActivityParticipantDto toActivityParticipantDto(ActivityParticipant participant) {
 		return ActivityResponse.ActivityParticipantDto.builder()
 			.participantMemberId(participant.getParticipant().getMember().getId())
-			.participantName(participant.getParticipant().getMember().getName())
+			.participantNickname(participant.getParticipant().getMember().getNickname())
 			.build();
 	}
 

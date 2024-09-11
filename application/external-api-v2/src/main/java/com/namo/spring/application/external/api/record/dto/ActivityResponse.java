@@ -32,7 +32,7 @@ public class ActivityResponse {
 	@Schema(description = "활동 참여자 DTO")
 	public static class ActivityParticipantDto {
 		private Long participantMemberId;
-		private String participantName;
+		private String participantNickname;
 	}
 
 	@Builder
@@ -42,5 +42,22 @@ public class ActivityResponse {
 	public static class ActivityLocationDto {
 		private String kakaoLocationId;
 		private String locationName;
+	}
+
+	@Builder
+	@Getter
+	@AllArgsConstructor
+	public static class ActivityAdjustmentInfo {
+		private BigDecimal totalAmount;
+		private int divisionCount;
+		private BigDecimal amountPerPerson;
+		private List<ActivitySettlementParticipant> participants;
+
+	}
+
+	private static class ActivitySettlementParticipant {
+		private Long participantMemberId;
+		private String participantNickname;
+		private boolean isIncludedInSettlement;
 	}
 }
