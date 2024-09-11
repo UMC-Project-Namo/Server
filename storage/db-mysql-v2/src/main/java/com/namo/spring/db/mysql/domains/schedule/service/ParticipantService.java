@@ -59,6 +59,11 @@ public class ParticipantService {
     }
 
     @Transactional(readOnly = true)
+    public boolean existsByScheduleIdAndAnonymousId(Long scheduleId, Long anonymousId) {
+        return participantRepository.existsByScheduleIdAndAnonymousId(scheduleId, anonymousId);
+    }
+
+    @Transactional(readOnly = true)
     public List<Participant> readParticipantsWithScheduleAndCategoryByPeriod(Long memberId, Boolean isShared, LocalDateTime startDate, LocalDateTime endDate) {
         return participantRepository.findParticipantsWithScheduleAndCategoryByPeriod(memberId, isShared, startDate, endDate);
     }

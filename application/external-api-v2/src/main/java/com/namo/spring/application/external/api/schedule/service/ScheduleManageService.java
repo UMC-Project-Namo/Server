@@ -115,30 +115,49 @@ public class ScheduleManageService {
                 .collect(Collectors.toList());
     }
 
-    public List<ScheduleParticipantQuery> getMonthlyMeetingParticipantSchedules(Schedule schedule, Period period, Long memberId) {
-        checkParticipantExists(schedule, memberId);
+    public List<ScheduleParticipantQuery> getMonthlyMeetingParticipantSchedules(Schedule schedule, Period period, Long memberId, Long anonymousId) {
+        checkParticipantExists(schedule, memberId, null);
         List<Participant> participants = participantService.readParticipantsByScheduleIdAndStatusAndType(schedule.getId(), ScheduleType.MEETING, ParticipantStatus.ACTIVE);
         List<Long> members = participants.stream().map(Participant::getUser).map(User::getId).collect(Collectors.toList());
 
         return participantService.readParticipantsWithUserAndScheduleByPeriod(members, period.getStartDate(), period.getEndDate())
                 .stream()
                 // 다른 유저의 일정일 경우 공유 여부로 필터링
-                .filter(participant -> {
-                    boolean isSharedSchedule = true;
-                    if (!participant.getMemberId().equals(memberId)) isSharedSchedule = participant.getIsShared();
-                    return isSharedSchedule;
-                })
+                .filter(participant -> isSharedOrOwnSchedule(participant, memberId, anonymousId))
                 .collect(Collectors.toList());
     }
 
-    private void checkParticipantExists(Schedule schedule, Long memberId) {
-        if (!participantService.existsByScheduleIdAndMemberId(schedule.getId(), memberId)) {
+    /**
+     * 게스트 유저가 조회할 경우 공유된 일정만을,
+     * 회원 유저가 조회할 경우 조회하는 회원의 비공개 일정까지 조회되도록
+     * 필터링 합니다.
+     *
+     * @param participant
+     * @param memberId
+     * @param anonymousId
+     * @return 조회하는 회원의 비공개 일정 조회 여부
+     */
+    private boolean isSharedOrOwnSchedule(ScheduleParticipantQuery participant, Long memberId, Long anonymousId) {
+        if (anonymousId != null) {
+            return true;
+        }
+        // memberId가 있는 경우
+        return participant.getMemberId().equals(memberId) || participant.getIsShared();
+    }
+
+
+    private void checkParticipantExists(Schedule schedule, Long memberId, Long anonymousId) {
+        boolean isParticipant;
+        if (memberId != null)
+            isParticipant = participantService.existsByScheduleIdAndMemberId(schedule.getId(), memberId);
+        else isParticipant = participantService.existsByScheduleIdAndAnonymousId(schedule.getId(), anonymousId);
+        if (!isParticipant) {
             throw new ScheduleException(ErrorStatus.NOT_SCHEDULE_PARTICIPANT);
         }
     }
 
-    public List<Participant> getMeetingScheduleParticipants(Schedule schedule, Long memberId) {
-        checkParticipantExists(schedule, memberId);
+    public List<Participant> getMeetingScheduleParticipants(Schedule schedule, Long memberId, Long anonymousId) {
+        checkParticipantExists(schedule, memberId, anonymousId);
         return participantService.readParticipantsByScheduleIdAndStatusAndType(schedule.getId(), ScheduleType.MEETING, null);
     }
 

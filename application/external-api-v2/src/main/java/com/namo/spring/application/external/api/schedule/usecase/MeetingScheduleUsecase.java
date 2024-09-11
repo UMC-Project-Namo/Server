@@ -60,14 +60,14 @@ public class MeetingScheduleUsecase {
         validateYearMonth(year, month);
 
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
-        List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyMeetingParticipantSchedules(schedule, getExtendedPeriod(year, month), memberInfo.getUserId());
-        return toGetMonthlyMeetingParticipantScheduleDtos(participantsWithSchedule, schedule, memberInfo.getUserId());
+        List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyMeetingParticipantSchedules(schedule, getExtendedPeriod(year, month), memberInfo.getUserId(), null);
+        return toGetMonthlyMeetingParticipantScheduleDtos(participantsWithSchedule, schedule);
     }
 
     @Transactional(readOnly = true)
     public MeetingScheduleResponse.GetMeetingScheduleDto getMeetingSchedule(Long scheduleId, SecurityUserDetails memberInfo) {
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
-        List<Participant> participants = scheduleManageService.getMeetingScheduleParticipants(schedule, memberInfo.getUserId());
+        List<Participant> participants = scheduleManageService.getMeetingScheduleParticipants(schedule, memberInfo.getUserId(), null);
         return toGetMeetingScheduleDto(schedule, participants);
     }
 

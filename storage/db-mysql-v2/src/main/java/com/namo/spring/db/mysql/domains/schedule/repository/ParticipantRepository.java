@@ -21,6 +21,8 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
 
     boolean existsByScheduleIdAndMemberId(Long scheduleId, Long memberId);
 
+    boolean existsByScheduleIdAndAnonymousId(Long scheduleId, Long anonymousId);
+
     @Query("SELECT p FROM Participant p JOIN FETCH p.schedule s LEFT JOIN FETCH p.palette " +
             "WHERE s.id = :scheduleId AND s.scheduleType = :scheduleType " +
             "AND (:status IS NULL OR p.status = :status)")
