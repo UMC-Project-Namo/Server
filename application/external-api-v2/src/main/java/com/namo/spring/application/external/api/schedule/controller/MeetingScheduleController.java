@@ -90,4 +90,15 @@ public class MeetingScheduleController implements MeetingScheduleApi {
         return ResponseDto.onSuccess("모임 일정 수정 성공");
     }
 
+    /**
+     * 게스트 초대용 링크 조회 API
+     */
+    @PostMapping(path = "/{meetingScheduleId}/invitations")
+    public ResponseDto<String> getGuestInviteCode(
+            @PathVariable Long meetingScheduleId,
+            @AuthenticationPrincipal SecurityUserDetails memberInfo
+    ) {
+        return ResponseDto.onSuccess(meetingScheduleUsecase.getGuestInviteCode(meetingScheduleId, memberInfo));
+    }
+
 }

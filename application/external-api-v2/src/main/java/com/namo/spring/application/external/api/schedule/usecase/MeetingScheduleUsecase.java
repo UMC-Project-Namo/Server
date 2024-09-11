@@ -2,6 +2,7 @@ package com.namo.spring.application.external.api.schedule.usecase;
 
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
+import com.namo.spring.application.external.api.schedule.service.GuestManageService;
 import com.namo.spring.application.external.api.schedule.service.ScheduleManageService;
 import com.namo.spring.application.external.api.user.service.MemberManageService;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
@@ -30,6 +31,7 @@ import static com.namo.spring.application.external.global.utils.SchedulePeriodVa
 public class MeetingScheduleUsecase {
     private final ScheduleManageService scheduleManageService;
     private final MemberManageService memberManageService;
+    private final GuestManageService guestManageService;
 
     @Transactional
     public Long createMeetingSchedule(MeetingScheduleRequest.PostMeetingScheduleDto dto, MultipartFile image, SecurityUserDetails memberInfo) {
@@ -74,5 +76,12 @@ public class MeetingScheduleUsecase {
         validateUniqueParticipantIds(memberInfo.getUserId(), dto);
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
         scheduleManageService.updateMeetingSchedule(dto, schedule, memberInfo.getUserId());
+    }
+
+    @Transactional
+    public String getGuestInviteCode(Long scheduleId, SecurityUserDetails memberInfo) {
+        Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
+        scheduleManageService.validateScheduleOwner(schedule, memberInfo.getUserId());
+        return guestManageService.generateInviteCode(scheduleId);
     }
 }
