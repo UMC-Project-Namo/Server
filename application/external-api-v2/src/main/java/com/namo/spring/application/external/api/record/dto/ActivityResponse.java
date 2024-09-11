@@ -56,8 +56,11 @@ public class ActivityResponse {
 
 	}
 
-	private static class ActivitySettlementParticipant {
-		private Long participantMemberId;
+	@Builder
+	@Getter
+	@AllArgsConstructor
+	public static class ActivitySettlementParticipant {
+		private Long activityParticipantId;
 		private String participantNickname;
 		private boolean isIncludedInSettlement;
 	}

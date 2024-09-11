@@ -1,5 +1,7 @@
 package com.namo.spring.application.external.api.record.converter;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.stream.Collectors;
 
 import com.namo.spring.application.external.api.record.dto.ActivityResponse;
@@ -37,6 +39,32 @@ public class ActivityResponseConverter {
 		return ActivityResponse.ActivityLocationDto.builder()
 			.kakaoLocationId(location.getKakaoLocationId())
 			.locationName(location.getName())
+			.build();
+	}
+
+	public static ActivityResponse.ActivitySettlementInfoDto toActivitySettlementInfoDto(Activity activity) {
+		long divisionCount = activity.getParticipants().stream()
+			.filter(ActivityParticipant::isIncludedInSettlement)
+			.count();
+		BigDecimal amountPerPerson = activity.getTotalAmount()
+			.divide(BigDecimal.valueOf(divisionCount), RoundingMode.HALF_UP);
+
+		return ActivityResponse.ActivitySettlementInfoDto.builder()
+			.totalAmount(activity.getTotalAmount())
+			.divisionCount((int)divisionCount)
+			.amountPerPerson(amountPerPerson)
+			.participants(activity.getParticipants().stream()
+				.map(ActivityResponseConverter::toActivitySettlementParticipant)
+				.toList())
+			.build();
+	}
+
+	public static ActivityResponse.ActivitySettlementParticipant toActivitySettlementParticipant(
+		ActivityParticipant activityParticipant) {
+		return ActivityResponse.ActivitySettlementParticipant.builder()
+			.activityParticipantId(activityParticipant.getParticipant().getId())
+			.participantNickname(activityParticipant.getParticipant().getMember().getNickname())
+			.isIncludedInSettlement(activityParticipant.isIncludedInSettlement())
 			.build();
 	}
 
