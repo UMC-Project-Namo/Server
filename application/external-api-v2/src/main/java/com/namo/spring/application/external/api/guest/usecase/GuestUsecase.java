@@ -25,7 +25,7 @@ import static com.namo.spring.application.external.global.utils.SchedulePeriodVa
 @Service
 @RequiredArgsConstructor
 @Component
-public class GuestMeetingUsecase {
+public class GuestUsecase {
     private final ScheduleManageService scheduleManageService;
     private final GuestManageService guestManageService;
 

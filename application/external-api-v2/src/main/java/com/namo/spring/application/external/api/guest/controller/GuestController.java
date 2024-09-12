@@ -3,7 +3,7 @@ package com.namo.spring.application.external.api.guest.controller;
 import com.namo.spring.application.external.api.guest.dto.GuestMeetingResponse;
 import com.namo.spring.application.external.api.guest.dto.GuestParticipantRequest;
 import com.namo.spring.application.external.api.guest.dto.GuestParticipantResponse;
-import com.namo.spring.application.external.api.guest.usecase.GuestMeetingUsecase;
+import com.namo.spring.application.external.api.guest.usecase.GuestUsecase;
 import com.namo.spring.core.common.response.ResponseDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -21,7 +21,7 @@ import java.util.List;
 @RequestMapping("/api/v2/guests")
 @PreAuthorize("isAnonymous()")
 public class GuestController {
-    private final GuestMeetingUsecase guestMeetingUsecase;
+    private final GuestUsecase guestUsecase;
 
     /**
      * 게스트 로그인 / 모임 가입 API
@@ -30,13 +30,13 @@ public class GuestController {
     public ResponseDto<GuestParticipantResponse.PostGuestParticipantDto> guestMeetingAccess(
             @RequestParam String code,
             @Valid @RequestBody GuestParticipantRequest.PostGuestParticipantDto dto) {
-        return ResponseDto.onSuccess(guestMeetingUsecase.createOrValidateGuest(dto, code));
+        return ResponseDto.onSuccess(guestUsecase.createOrValidateGuest(dto, code));
     }
 
     /**
      * 게스트 모임 일정 월간 조회 API
      */
-    @GetMapping(path = "/meeting/{meetingScheduleId}")
+    @GetMapping(path = "/meeting/{meetingScheduleId}/calendar")
     public ResponseDto<List<GuestMeetingResponse.GetMonthlyMeetingParticipantScheduleDto>> getMonthlyMeetingParticipantSchedules(
             @PathVariable Long meetingScheduleId,
             @RequestParam Integer year,
@@ -44,7 +44,7 @@ public class GuestController {
             @RequestParam String tag,
             @RequestParam String nickname
     ) {
-        return ResponseDto.onSuccess(guestMeetingUsecase.getMonthlyMeetingParticipantSchedules(meetingScheduleId, year, month, tag, nickname));
+        return ResponseDto.onSuccess(guestUsecase.getMonthlyMeetingParticipantSchedules(meetingScheduleId, year, month, tag, nickname));
     }
 
 }
