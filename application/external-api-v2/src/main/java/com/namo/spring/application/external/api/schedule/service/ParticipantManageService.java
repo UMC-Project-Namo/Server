@@ -1,5 +1,6 @@
 package com.namo.spring.application.external.api.schedule.service;
 
+import com.namo.spring.application.external.api.guest.service.GuestManageService;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.user.service.TagGenerator;
 import com.namo.spring.core.common.code.status.ErrorStatus;

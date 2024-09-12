@@ -1,9 +1,9 @@
-package com.namo.spring.application.external.api.schedule.usecase;
+package com.namo.spring.application.external.api.guest.usecase;
 
-import com.namo.spring.application.external.api.schedule.dto.GuestMeetingResponse;
-import com.namo.spring.application.external.api.schedule.dto.GuestParticipantRequest;
-import com.namo.spring.application.external.api.schedule.dto.GuestParticipantResponse;
-import com.namo.spring.application.external.api.schedule.service.GuestManageService;
+import com.namo.spring.application.external.api.guest.dto.GuestMeetingResponse;
+import com.namo.spring.application.external.api.guest.dto.GuestParticipantRequest;
+import com.namo.spring.application.external.api.guest.dto.GuestParticipantResponse;
+import com.namo.spring.application.external.api.guest.service.GuestManageService;
 import com.namo.spring.application.external.api.schedule.service.ScheduleManageService;
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
@@ -16,8 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.namo.spring.application.external.api.schedule.converter.GuestMeetingResponseConverter.toGetMonthlyMeetingParticipantScheduleDtos;
-import static com.namo.spring.application.external.api.schedule.converter.GuestParticipantResponseConverter.toPostGuestParticipantDto;
+import static com.namo.spring.application.external.api.guest.converter.GuestMeetingResponseConverter.toGetMonthlyMeetingParticipantScheduleDtos;
+import static com.namo.spring.application.external.api.guest.converter.GuestParticipantResponseConverter.toPostGuestParticipantDto;
 import static com.namo.spring.application.external.global.utils.SchedulePeriodValidationUtils.getExtendedPeriod;
 import static com.namo.spring.application.external.global.utils.SchedulePeriodValidationUtils.validateYearMonth;
 

@@ -1,8 +1,8 @@
 package com.namo.spring.application.external.api.schedule.usecase;
 
+import com.namo.spring.application.external.api.guest.service.GuestManageService;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
-import com.namo.spring.application.external.api.schedule.service.GuestManageService;
 import com.namo.spring.application.external.api.schedule.service.ScheduleManageService;
 import com.namo.spring.application.external.api.user.service.MemberManageService;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;

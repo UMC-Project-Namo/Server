@@ -1,4 +1,4 @@
-package com.namo.spring.application.external.api.schedule.dto;
+package com.namo.spring.application.external.api.guest.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

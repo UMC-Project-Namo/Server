@@ -1,9 +1,9 @@
-package com.namo.spring.application.external.api.schedule.controller;
+package com.namo.spring.application.external.api.guest.controller;
 
-import com.namo.spring.application.external.api.schedule.dto.GuestMeetingResponse;
-import com.namo.spring.application.external.api.schedule.dto.GuestParticipantRequest;
-import com.namo.spring.application.external.api.schedule.dto.GuestParticipantResponse;
-import com.namo.spring.application.external.api.schedule.usecase.GuestMeetingUsecase;
+import com.namo.spring.application.external.api.guest.dto.GuestMeetingResponse;
+import com.namo.spring.application.external.api.guest.dto.GuestParticipantRequest;
+import com.namo.spring.application.external.api.guest.dto.GuestParticipantResponse;
+import com.namo.spring.application.external.api.guest.usecase.GuestMeetingUsecase;
 import com.namo.spring.core.common.response.ResponseDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

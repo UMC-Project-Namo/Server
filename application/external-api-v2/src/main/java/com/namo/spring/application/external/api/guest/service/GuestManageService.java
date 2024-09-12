@@ -1,6 +1,7 @@
-package com.namo.spring.application.external.api.schedule.service;
+package com.namo.spring.application.external.api.guest.service;
 
-import com.namo.spring.application.external.api.schedule.dto.GuestParticipantRequest;
+import com.namo.spring.application.external.api.guest.dto.GuestParticipantRequest;
+import com.namo.spring.application.external.api.schedule.service.ParticipantMaker;
 import com.namo.spring.application.external.api.user.service.TagGenerator;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.category.entity.Palette;

@@ -1,6 +1,6 @@
-package com.namo.spring.application.external.api.schedule.converter;
+package com.namo.spring.application.external.api.guest.converter;
 
-import com.namo.spring.application.external.api.schedule.dto.GuestParticipantResponse;
+import com.namo.spring.application.external.api.guest.dto.GuestParticipantResponse;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 
 public class GuestParticipantResponseConverter {
