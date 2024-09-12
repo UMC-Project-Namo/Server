@@ -15,15 +15,15 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @RequiredArgsConstructor
 public class SecurityAdapterConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
-	private final DaoAuthenticationProvider daoAuthenticationProvider;
+    private final DaoAuthenticationProvider daoAuthenticationProvider;
 
-	private final JwtAuthenticationFilter jwtAuthenticationFilter;
-	private final JwtExceptionFilter jwtExceptionFilter;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtExceptionFilter jwtExceptionFilter;
 
-	@Override
-	public void configure(HttpSecurity builder) throws Exception {
-		builder.authenticationProvider(daoAuthenticationProvider);
-		builder.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-		builder.addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class);
-	}
+    @Override
+    public void configure(HttpSecurity builder) throws Exception {
+        builder.authenticationProvider(daoAuthenticationProvider);
+        builder.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        builder.addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class);
+    }
 }

@@ -1,13 +1,14 @@
 package com.namo.spring.application.external.api.notification.service;
 
-import com.namo.spring.db.mysql.domains.notification.type.NotificationType;
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.InjectMocks;
 
-import static org.junit.jupiter.api.Assertions.*;
+import com.namo.spring.db.mysql.domains.notification.type.NotificationType;
 
 class NotificationMessageGeneratorTest {
 

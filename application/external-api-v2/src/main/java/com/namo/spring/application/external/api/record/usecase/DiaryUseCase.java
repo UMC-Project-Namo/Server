@@ -24,53 +24,53 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DiaryUseCase {
 
-	private final DiaryManageService diaryManageService;
-	private final ParticipantManageService participantManageService;
+    private final DiaryManageService diaryManageService;
+    private final ParticipantManageService participantManageService;
 
-	@Transactional
-	public void createDiary(SecurityUserDetails memberInfo, DiaryRequest.CreateDiaryDto request) {
-		Participant participant = participantManageService.getScheduleParticipant(memberInfo.getUserId(),
-			request.getScheduleId());
-		diaryManageService.makeDiary(request, participant);
-	}
+    @Transactional
+    public void createDiary(SecurityUserDetails memberInfo, DiaryRequest.CreateDiaryDto request) {
+        Participant participant = participantManageService.getScheduleParticipant(memberInfo.getUserId(),
+                request.getScheduleId());
+        diaryManageService.makeDiary(request, participant);
+    }
 
-	@Transactional
-	public void updateDiary(Long diaryId, SecurityUserDetails memberInfo, DiaryRequest.UpdateDiaryDto request) {
-		Diary diary = diaryManageService.getMyDiary(diaryId, memberInfo.getUserId());
-		diaryManageService.updateDiary(diary, request);
-	}
+    @Transactional
+    public void updateDiary(Long diaryId, SecurityUserDetails memberInfo, DiaryRequest.UpdateDiaryDto request) {
+        Diary diary = diaryManageService.getMyDiary(diaryId, memberInfo.getUserId());
+        diaryManageService.updateDiary(diary, request);
+    }
 
-	@Transactional(readOnly = true)
-	public DiaryResponse.DiaryDto getScheduleDiary(Long scheduleId, SecurityUserDetails memberInfo) {
-		Participant participant = participantManageService.getScheduleParticipant(memberInfo.getUserId(),
-			scheduleId);
-		Diary diary = diaryManageService.getParticipantDiary(participant);
-		return DiaryResponseConverter.toDiaryDto(diary);
-	}
+    @Transactional(readOnly = true)
+    public DiaryResponse.DiaryDto getScheduleDiary(Long scheduleId, SecurityUserDetails memberInfo) {
+        Participant participant = participantManageService.getScheduleParticipant(memberInfo.getUserId(),
+                scheduleId);
+        Diary diary = diaryManageService.getParticipantDiary(participant);
+        return DiaryResponseConverter.toDiaryDto(diary);
+    }
 
-	@Transactional(readOnly = true)
-	public List<DiaryResponse.DiaryArchiveDto> getDiaryArchive(Long memberId, int page, String filterType,
-		String keyword) {
-		Pageable pageable = PageRequest.of(page - 1, 5);
-		List<Participant> allMyParticipant = participantManageService.getMyParticipationForDiary(memberId, pageable,
-			filterType, keyword);
-		return allMyParticipant.stream()
-			.map(DiaryResponseConverter::toDiaryArchiveDto)
-			.toList();
-	}
+    @Transactional(readOnly = true)
+    public List<DiaryResponse.DiaryArchiveDto> getDiaryArchive(Long memberId, int page, String filterType,
+            String keyword) {
+        Pageable pageable = PageRequest.of(page - 1, 5);
+        List<Participant> allMyParticipant = participantManageService.getMyParticipationForDiary(memberId, pageable,
+                filterType, keyword);
+        return allMyParticipant.stream()
+                .map(DiaryResponseConverter::toDiaryArchiveDto)
+                .toList();
+    }
 
-	@Transactional(readOnly = true)
-	public DiaryResponse.DiaryExistDateDto getExistDiaryDate(Long memberId, YearMonth yearMonth) {
-		List<Participant> participants = participantManageService.getMyParticipantByMonthForDiary(memberId, yearMonth
-		);
-		return DiaryResponseConverter.toDiaryExistDateDto(participants, yearMonth);
-	}
+    @Transactional(readOnly = true)
+    public DiaryResponse.DiaryExistDateDto getExistDiaryDate(Long memberId, YearMonth yearMonth) {
+        List<Participant> participants = participantManageService.getMyParticipantByMonthForDiary(memberId, yearMonth
+        );
+        return DiaryResponseConverter.toDiaryExistDateDto(participants, yearMonth);
+    }
 
-	@Transactional(readOnly = true)
-	public List<DiaryResponse.DayOfDiaryDto> getDayDiaryList(Long memberId, LocalDate localDate) {
-		List<Participant> participants = participantManageService.getMyParticipantByDayForDiary(memberId, localDate);
-		return participants.stream()
-			.map(DiaryResponseConverter::toDayOfDiaryDto)
-			.toList();
-	}
+    @Transactional(readOnly = true)
+    public List<DiaryResponse.DayOfDiaryDto> getDayDiaryList(Long memberId, LocalDate localDate) {
+        List<Participant> participants = participantManageService.getMyParticipantByDayForDiary(memberId, localDate);
+        return participants.stream()
+                .map(DiaryResponseConverter::toDayOfDiaryDto)
+                .toList();
+    }
 }

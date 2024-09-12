@@ -1,16 +1,26 @@
 package com.namo.spring.db.mysql.domains.record.entity;
 
+import java.math.BigDecimal;
+import java.util.Objects;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+
+import org.hibernate.annotations.DynamicInsert;
+
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
-import jakarta.persistence.*;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicInsert;
-
-import java.math.BigDecimal;
-import java.util.Objects;
 
 @Getter
 @Entity
@@ -32,6 +42,8 @@ public class ActivityParticipant extends BaseTimeEntity {
 
     @Column(nullable = false)
     private BigDecimal amount;
+
+    private boolean isIncludedInSettlement;
 
     @Builder
     public ActivityParticipant(Participant participant, Activity activity, BigDecimal amount) {

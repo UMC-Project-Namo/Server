@@ -1,9 +1,9 @@
 package com.namo.spring.application.external.api.notification.dto;
 
+import java.util.Map;
+
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.Map;
 
 public class FcmNotificationRequest {
     private FcmNotificationRequest() {
@@ -48,7 +48,8 @@ public class FcmNotificationRequest {
         }
     }
 
-    public static AndroidFcmMessageDto toAndroidFcmMessageDto(String token, String title, String body, Map<String, String> data) {
+    public static AndroidFcmMessageDto toAndroidFcmMessageDto(String token, String title, String body,
+            Map<String, String> data) {
         return AndroidFcmMessageDto.builder()
                 .token(token)
                 .notification(toNotification(title, body))
@@ -56,7 +57,6 @@ public class FcmNotificationRequest {
                 .data(data)
                 .build();
     }
-
 
     @Getter
     @Builder
@@ -88,7 +88,8 @@ public class FcmNotificationRequest {
         }
     }
 
-    public static IosFcmMessageDto toIosFcmMessageDto(String token, String title, String body, Map<String, String> data) {
+    public static IosFcmMessageDto toIosFcmMessageDto(String token, String title, String body,
+            Map<String, String> data) {
         return IosFcmMessageDto.builder()
                 .token(token)
                 .notification(toNotification(title, body))

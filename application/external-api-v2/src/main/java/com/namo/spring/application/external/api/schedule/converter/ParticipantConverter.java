@@ -14,7 +14,8 @@ public class ParticipantConverter {
         throw new IllegalStateException("Util Class");
     }
 
-    public static Participant toParticipant(User user, ParticipantRole role, Schedule schedule, ParticipantStatus status, Category category, Palette palette) {
+    public static Participant toParticipant(User user, ParticipantRole role, Schedule schedule,
+            ParticipantStatus status, Category category, Palette palette) {
         return Participant.builder()
                 .isOwner(role.getValue())
                 .user(user)

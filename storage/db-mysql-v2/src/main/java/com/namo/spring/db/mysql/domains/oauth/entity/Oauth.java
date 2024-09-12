@@ -35,51 +35,51 @@ import lombok.NoArgsConstructor;
 @DynamicInsert
 public class Oauth extends BaseTimeEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(nullable = false)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "member_id", nullable = false)
-	private Member member;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
-	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Convert(converter = ProviderConverter.class)
-	@Column(nullable = false, length = 50)
-	private Provider provider;
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Convert(converter = ProviderConverter.class)
+    @Column(nullable = false, length = 50)
+    private Provider provider;
 
-	@Column(nullable = false)
-	private String providerId;
+    @Column(nullable = false)
+    private String providerId;
 
-	@Column(nullable = false)
-	private String loginId;
+    @Column(nullable = false)
+    private String loginId;
 
-	private String socialRefreshToken;
+    private String socialRefreshToken;
 
-	@Builder
-	public Oauth(Provider provider, String providerId, String loginId, String socialRefreshToken, Member member) {
-		if (!StringUtils.hasText(providerId))
-			throw new IllegalArgumentException("providerId은 null이거나 빈 문자열일 수 없습니다.");
-		else if (!StringUtils.hasText(loginId))
-			throw new IllegalArgumentException("loginId은 null이거나 빈 문자열일 수 없습니다.");
+    @Builder
+    public Oauth(Provider provider, String providerId, String loginId, String socialRefreshToken, Member member) {
+        if (!StringUtils.hasText(providerId))
+            throw new IllegalArgumentException("providerId은 null이거나 빈 문자열일 수 없습니다.");
+        else if (!StringUtils.hasText(loginId))
+            throw new IllegalArgumentException("loginId은 null이거나 빈 문자열일 수 없습니다.");
 
-		this.provider = Objects.requireNonNull(provider, "provider은 null일 수 없습니다.");
-		this.providerId = providerId;
-		this.loginId = loginId;
-		this.socialRefreshToken = socialRefreshToken;
-		this.member = Objects.requireNonNull(member, "user은 null일 수 없습니다.");
-	}
+        this.provider = Objects.requireNonNull(provider, "provider은 null일 수 없습니다.");
+        this.providerId = providerId;
+        this.loginId = loginId;
+        this.socialRefreshToken = socialRefreshToken;
+        this.member = Objects.requireNonNull(member, "user은 null일 수 없습니다.");
+    }
 
-	@Override
-	public String toString() {
-		return "Oauth ["
-			+ "id='" + id + "', "
-			+ "provider='" + provider + "', "
-			+ "providerId='" + providerId + "', "
-			+ "loginId='" + loginId + "', "
-			+ "socialRefreshToken='" + socialRefreshToken + "', "
-			+ "member='" + member + "'"
-			+ "]";
-	}
+    @Override
+    public String toString() {
+        return "Oauth ["
+                + "id='" + id + "', "
+                + "provider='" + provider + "', "
+                + "providerId='" + providerId + "', "
+                + "loginId='" + loginId + "', "
+                + "socialRefreshToken='" + socialRefreshToken + "', "
+                + "member='" + member + "'"
+                + "]";
+    }
 }

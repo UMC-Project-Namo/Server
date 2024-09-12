@@ -10,18 +10,18 @@ import org.springframework.jdbc.core.JdbcTemplate;
 @SpringBootTest
 public class MysqlContainerTest extends MysqlTestContainerConfig {
 
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
-	@Test
-	void contextLoads() {
-		assertThat(jdbcTemplate).isNotNull();
-	}
+    @Test
+    void contextLoads() {
+        assertThat(jdbcTemplate).isNotNull();
+    }
 
-	@Test
-	void testDatabaseConnection() {
-		Integer result = jdbcTemplate.queryForObject("SELECT 1", Integer.class);
-		assertThat(result).isEqualTo(1);
-	}
+    @Test
+    void testDatabaseConnection() {
+        Integer result = jdbcTemplate.queryForObject("SELECT 1", Integer.class);
+        assertThat(result).isEqualTo(1);
+    }
 }
 

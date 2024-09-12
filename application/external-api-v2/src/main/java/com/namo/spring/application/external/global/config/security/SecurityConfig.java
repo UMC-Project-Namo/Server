@@ -1,6 +1,7 @@
 package com.namo.spring.application.external.global.config.security;
 
-import lombok.RequiredArgsConstructor;
+import static com.namo.spring.application.external.global.config.security.WebSecurityUrl.*;
+
 import org.springframework.boot.autoconfigure.security.ConditionalOnDefaultWebSecurity;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -21,7 +22,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-import static com.namo.spring.application.external.global.config.security.WebSecurityUrl.*;
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity

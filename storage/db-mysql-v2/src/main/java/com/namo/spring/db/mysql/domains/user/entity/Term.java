@@ -30,42 +30,42 @@ import lombok.NoArgsConstructor;
 @DynamicInsert
 public class Term extends BaseTimeEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(nullable = false)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "member_id", nullable = false)
-	private Member member;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
-	@Enumerated(EnumType.STRING)
-	private Content content;
+    @Enumerated(EnumType.STRING)
+    private Content content;
 
-	@Column(nullable = false)
-	private boolean agree;
+    @Column(nullable = false)
+    private boolean agree;
 
-	private LocalDateTime agreeAt;
+    private LocalDateTime agreeAt;
 
-	@Builder
-	public Term(Member user, Content content, boolean agree) {
-		this.member = Objects.requireNonNull(user, "member은 null일 수 없습니다.");
-		this.content = content;
-		this.agree = Objects.requireNonNull(agree, "agree은 null일 수 없습니다.");
-		this.agreeAt = LocalDateTime.now();
-	}
+    @Builder
+    public Term(Member user, Content content, boolean agree) {
+        this.member = Objects.requireNonNull(user, "member은 null일 수 없습니다.");
+        this.content = content;
+        this.agree = Objects.requireNonNull(agree, "agree은 null일 수 없습니다.");
+        this.agreeAt = LocalDateTime.now();
+    }
 
-	public void checkAgree() {
-		this.agree = true;
-		this.agreeAt = LocalDateTime.now();
-	}
+    public void checkAgree() {
+        this.agree = true;
+        this.agreeAt = LocalDateTime.now();
+    }
 
-	public void checkDisagree() {
-		this.agree = false;
-		this.agreeAt = null;
-	}
+    public void checkDisagree() {
+        this.agree = false;
+        this.agreeAt = null;
+    }
 
-	public void update() {
-		this.updatedAt = LocalDateTime.now();
-	}
+    public void update() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }

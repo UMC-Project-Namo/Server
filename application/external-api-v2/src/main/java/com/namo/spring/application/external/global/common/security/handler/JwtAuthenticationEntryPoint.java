@@ -19,19 +19,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
-	private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
-	@Override
-	public void commence(
-		HttpServletRequest request,
-		HttpServletResponse response,
-		AuthenticationException authException
-	) throws IOException, ServletException {
-		ErrorStatus status = ErrorStatus.UNAUTHORIZED;
+    @Override
+    public void commence(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            AuthenticationException authException
+    ) throws IOException, ServletException {
+        ErrorStatus status = ErrorStatus.UNAUTHORIZED;
 
-		response.setContentType("application/json;charset=UTF-8");
-		response.setStatus(status.getCode());
-		ResponseDto<Object> body = ResponseDto.onFailure(status.getCode(), status.getMessage(), null);
-		objectMapper.writeValue(response.getWriter(), body);
-	}
+        response.setContentType("application/json;charset=UTF-8");
+        response.setStatus(status.getCode());
+        ResponseDto<Object> body = ResponseDto.onFailure(status.getCode(), status.getMessage(), null);
+        objectMapper.writeValue(response.getWriter(), body);
+    }
 }

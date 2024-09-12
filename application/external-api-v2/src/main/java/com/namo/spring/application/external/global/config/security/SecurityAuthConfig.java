@@ -21,34 +21,34 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class SecurityAuthConfig {
-	private final SecurityUserDetailsService userDetailsService;
-	private final ObjectMapper objectMapper;
+    private final SecurityUserDetailsService userDetailsService;
+    private final ObjectMapper objectMapper;
 
-	@Bean
-	public PasswordEncoder bCryptPasswordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    public PasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	@Bean
-	public AccessDeniedHandler accessDeniedHandler() {
-		return new JwtAccessDeniedHandler(objectMapper);
-	}
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new JwtAccessDeniedHandler(objectMapper);
+    }
 
-	@Bean
-	public AuthenticationEntryPoint authenticationEntryPoint() {
-		return new JwtAuthenticationEntryPoint(objectMapper);
-	}
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        return new JwtAuthenticationEntryPoint(objectMapper);
+    }
 
-	@Bean
-	public DaoAuthenticationProvider daoAuthenticationProvider() {
-		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-		daoAuthenticationProvider.setUserDetailsService(userDetailsService);
-		daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder());
-		return daoAuthenticationProvider;
-	}
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
+        daoAuthenticationProvider.setPasswordEncoder(bCryptPasswordEncoder());
+        return daoAuthenticationProvider;
+    }
 
-	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-		return configuration.getAuthenticationManager();
-	}
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
 }

@@ -16,27 +16,27 @@ import lombok.RequiredArgsConstructor;
 @DomainService
 @RequiredArgsConstructor
 public class PaletteService {
-	private final PaletteRepository paletteRepository;
+    private final PaletteRepository paletteRepository;
 
-	@Transactional
-	public Palette createPalette(Palette palette) {
-		return paletteRepository.save(palette);
-	}
+    @Transactional
+    public Palette createPalette(Palette palette) {
+        return paletteRepository.save(palette);
+    }
 
-	@Transactional(readOnly = true)
-	public Optional<Palette> readPalette(Long paletteId) {
-		return paletteRepository.findById(paletteId);
-	}
+    @Transactional(readOnly = true)
+    public Optional<Palette> readPalette(Long paletteId) {
+        return paletteRepository.findById(paletteId);
+    }
 
-	@Transactional(readOnly = true)
-	public Palette getPalette(Long paletteId) {
-		return paletteRepository.findById(paletteId)
-			.orElseThrow(() -> new PaletteException(ErrorStatus.NOT_FOUND_PALETTE_FAILURE));
-	}
+    @Transactional(readOnly = true)
+    public Palette getPalette(Long paletteId) {
+        return paletteRepository.findById(paletteId)
+                .orElseThrow(() -> new PaletteException(ErrorStatus.NOT_FOUND_PALETTE_FAILURE));
+    }
 
-	@Transactional(readOnly = true)
-	public List<Palette> readPaletteList(List<Long> paletteIds) {
-		return paletteRepository.findByIdIn(paletteIds);
-	}
+    @Transactional(readOnly = true)
+    public List<Palette> readPaletteList(List<Long> paletteIds) {
+        return paletteRepository.findByIdIn(paletteIds);
+    }
 
 }

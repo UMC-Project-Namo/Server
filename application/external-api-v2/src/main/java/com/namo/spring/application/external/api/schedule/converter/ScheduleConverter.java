@@ -12,8 +12,9 @@ public class ScheduleConverter {
         throw new IllegalStateException("Util Class");
     }
 
-    public static Schedule toSchedule(String title, Period period, MeetingScheduleRequest.LocationDto location, int type,
-                                      String imageUrl, Integer participantCount, String participantNames) {
+    public static Schedule toSchedule(String title, Period period, MeetingScheduleRequest.LocationDto location,
+            int type,
+            String imageUrl, Integer participantCount, String participantNames) {
         return Schedule.builder()
                 .title(title)
                 .period(period)
@@ -43,5 +44,4 @@ public class ScheduleConverter {
                 .colorId(category.getPalette().getId())
                 .build();
     }
-
 }

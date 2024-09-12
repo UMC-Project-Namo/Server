@@ -1,22 +1,32 @@
 package com.namo.spring.db.mysql.domains.schedule.entity;
 
-import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
-import com.namo.spring.db.mysql.domains.schedule.type.Location;
-import com.namo.spring.db.mysql.domains.schedule.type.Period;
-import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
+import com.namo.spring.db.mysql.domains.record.entity.Activity;
+import com.namo.spring.db.mysql.domains.schedule.type.Location;
+import com.namo.spring.db.mysql.domains.schedule.type.Period;
+
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
@@ -50,34 +60,38 @@ public class Schedule extends BaseTimeEntity {
 
     private String participantNicknames;
 
-    @OneToMany(mappedBy = "schedule", fetch = FetchType.LAZY)
+    private String invitationUrl;
+
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Activity> activityList;
+
+    @OneToMany(mappedBy = "schedule")
     private List<Participant> participantList = new ArrayList<>();
 
     @Builder
     public Schedule(String title, Period period, Location location, int scheduleType, String imageUrl,
-                    Integer participantCount, String participantNicknames) {
+            Integer participantCount, String participantNicknames) {
         if (!StringUtils.hasText(title))
             throw new IllegalArgumentException("title은 null이거나 빈 문자열일 수 없습니다.");
-        this.title = Objects.requireNonNull(title, "title은 null일 수 없습니다.");
-        ;
-        this.period = Objects.requireNonNull(period, "period는 null일 수 없습니다.");
-        ;
+        this.title = title;
+        this.period = period;
         this.location = location;
-        this.scheduleType = Objects.requireNonNull(scheduleType, "scheduleType은 null일 수 없습니다.");
-        ;
-        this.imageUrl = Objects.requireNonNull(imageUrl, "imageUrl은 null일 수 없습니다.");
-        ;
+        this.scheduleType = scheduleType;
+        this.imageUrl = imageUrl;
         this.participantCount = participantCount;
         this.participantNicknames = participantNicknames;
     }
 
-    public static Schedule of(String title, Period period, Location location, int scheduleType, String imageUrl) {
+    public static Schedule of(String title, Period period, Location location, int scheduleType, String imageUrl,
+            Integer participantCount, String participantNicknames) {
         return Schedule.builder()
                 .title(title)
                 .period(period)
                 .location(location)
                 .scheduleType(scheduleType)
                 .imageUrl(imageUrl)
+                .participantCount(participantCount)
+                .participantNicknames(participantNicknames)
                 .build();
     }
 
@@ -92,7 +106,7 @@ public class Schedule extends BaseTimeEntity {
     public void addActiveParticipant(String nickname) {
         if (!StringUtils.hasText(nickname))
             throw new IllegalArgumentException("nickname은 null이거나 빈 문자열일 수 없습니다.");
-        if (this.participantNicknames == null || this.participantNicknames == "") {
+        if (this.participantNicknames == null || this.participantNicknames.equals("")) {
             this.participantNicknames = nickname;
         } else {
             this.participantNicknames += ", " + nickname;
@@ -117,7 +131,6 @@ public class Schedule extends BaseTimeEntity {
         }
     }
 
-    // 단일 참가자 제거
     public void removeParticipant(String nicknameToRemove) {
         if (nicknameToRemove == null || nicknameToRemove.isEmpty()) {
             throw new IllegalArgumentException("삭제할 닉네임이 비어있거나 null일 수 없습니다.");
@@ -137,7 +150,7 @@ public class Schedule extends BaseTimeEntity {
         List<String> currentNicknames = new ArrayList<>(Arrays.asList(this.participantNicknames.split(", ")));
 
         for (String nicknameToRemove : nicknamesToRemove) {
-            currentNicknames.remove(nicknameToRemove); // 첫 번째 일치하는 닉네임만 제거
+            currentNicknames.remove(nicknameToRemove);
         }
 
         updateParticipants(currentNicknames);
@@ -148,4 +161,7 @@ public class Schedule extends BaseTimeEntity {
         this.participantCount = updatedNicknames.size();
     }
 
+    public void updateInvitationUrl(String invitationUrl) {
+        this.invitationUrl = invitationUrl;
+    }
 }

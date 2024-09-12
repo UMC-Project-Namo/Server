@@ -11,44 +11,44 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CustomGrantedAuthority implements GrantedAuthority, Serializable {
-	@Serial
-	private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 1L;
 
-	private final String role;
+    private final String role;
 
-	@JsonCreator
-	public CustomGrantedAuthority(
-		@JsonProperty("authority") @NotNull
-		String role
-	) {
-		this.role = role;
-	}
+    @JsonCreator
+    public CustomGrantedAuthority(
+            @JsonProperty("authority") @NotNull
+            String role
+    ) {
+        this.role = role;
+    }
 
-	@Override
-	public String getAuthority() {
-		return role;
-	}
+    @Override
+    public String getAuthority() {
+        return role;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
 
-		if (obj instanceof CustomGrantedAuthority cga) {
-			return this.role.equals(cga.getAuthority());
-		}
+        if (obj instanceof CustomGrantedAuthority cga) {
+            return this.role.equals(cga.getAuthority());
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	public int hashCode() {
-		return this.role.hashCode();
-	}
+    @Override
+    public int hashCode() {
+        return this.role.hashCode();
+    }
 
-	@Override
-	public String toString() {
-		return this.role;
-	}
+    @Override
+    public String toString() {
+        return this.role;
+    }
 }

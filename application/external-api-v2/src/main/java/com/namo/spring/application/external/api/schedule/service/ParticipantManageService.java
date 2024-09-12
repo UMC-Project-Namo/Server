@@ -1,5 +1,14 @@
 package com.namo.spring.application.external.api.schedule.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
 import com.namo.spring.application.external.api.guest.service.GuestManageService;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.user.service.TagGenerator;
@@ -15,16 +24,9 @@ import com.namo.spring.db.mysql.domains.user.entity.Friendship;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.exception.MemberException;
 import com.namo.spring.db.mysql.domains.user.service.FriendshipService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.YearMonth;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -73,15 +75,16 @@ public class ParticipantManageService {
         participationActionManager.removeParticipant(participant.getSchedule(), participant);
     }
 
-
-    public void updateMeetingScheduleParticipants(Long ownerId, Schedule schedule, MeetingScheduleRequest.PatchMeetingScheduleDto dto) {
+    public void updateMeetingScheduleParticipants(Long ownerId, Schedule schedule,
+            MeetingScheduleRequest.PatchMeetingScheduleDto dto) {
         if (!dto.getParticipantsToAdd().isEmpty()) {
             List<Member> participantsToAdd = getFriendshipValidatedParticipants(ownerId, dto.getParticipantsToAdd());
             participantMaker.makeMeetingScheduleParticipants(schedule, participantsToAdd);
         }
 
         if (!dto.getParticipantsToRemove().isEmpty()) {
-            List<Participant> participantsToRemove = participantService.readParticipantsByIdAndScheduleId(dto.getParticipantsToRemove(), schedule.getId(), ParticipantStatus.ACTIVE);
+            List<Participant> participantsToRemove = participantService.readParticipantsByIdAndScheduleId(
+                    dto.getParticipantsToRemove(), schedule.getId(), ParticipantStatus.ACTIVE);
             if (participantsToRemove.isEmpty()) {
                 throw new ScheduleException(ErrorStatus.NOT_FOUND_PARTICIPANT_FAILURE);
             }
@@ -104,7 +107,7 @@ public class ParticipantManageService {
      * @return 일기가 작성된 참여 정보 목록 (필터에 따라 다름)
      */
     public List<Participant> getMyParticipationForDiary(Long memberId, Pageable pageable, String filterType,
-                                                        String keyword) {
+            String keyword) {
         if (filterType == null || filterType.isEmpty())
             return participantService.readParticipantsForDiary(memberId, pageable);
 

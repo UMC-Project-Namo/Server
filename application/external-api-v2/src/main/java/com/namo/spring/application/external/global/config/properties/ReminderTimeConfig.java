@@ -1,11 +1,11 @@
 package com.namo.spring.application.external.global.config.properties;
 
+import java.time.format.DateTimeFormatter;
+import java.util.regex.Pattern;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.format.DateTimeFormatter;
-import java.util.regex.Pattern;
 
 /**
  * 일정 예정 알림 시간 설정에 관련된 상수들을 정의하는 설정 클래스입니다.
@@ -33,5 +33,6 @@ public class ReminderTimeConfig {
      * - H1 ~ H36: 1시간에서 36시간 전
      * - D1 ~ D7: 1일에서 7일 전
      */
-    public static final Pattern REMINDER_TRIGGER_PATTERN = Pattern.compile("^(M[1-9]|M[1-5][0-9]|H([1-9]|[1-2][0-9]|3[0-6])|D[1-7])$");
+    public static final Pattern REMINDER_TRIGGER_PATTERN = Pattern.compile(
+            "^(M[1-9]|M[1-5][0-9]|H([1-9]|[1-2][0-9]|3[0-6])|D[1-7])$");
 }

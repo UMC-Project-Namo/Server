@@ -1,17 +1,20 @@
 package com.namo.spring.db.mysql.domains.schedule.type;
 
-import com.namo.spring.core.common.utils.DateUtil;
+import java.time.LocalDateTime;
+import java.util.Objects;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
+import com.namo.spring.core.common.utils.DateUtil;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-
-import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Getter
 @Embeddable

@@ -35,53 +35,53 @@ import lombok.NoArgsConstructor;
 @DynamicInsert
 public class Diary extends BaseTimeEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(nullable = false)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    private Long id;
 
-	@OneToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "participant_id", nullable = false)
-	private Participant participant;
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "participant_id", nullable = false)
+    private Participant participant;
 
-	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Column(nullable = false, length = 250)
-	private String content;
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(nullable = false, length = 250)
+    private String content;
 
-	@OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<DiaryImage> images;
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DiaryImage> images;
 
-	private double enjoyRating;
+    private double enjoyRating;
 
-	@Builder
-	public Diary(Participant participant, String memo, double enjoyRating) {
-		this.participant = Objects.requireNonNull(participant, "participant은 null일 수 없습니다.");
-		if (!StringUtils.hasText(memo))
-			throw new IllegalArgumentException("memo은 null이거나 빈 문자열일 수 없습니다.");
-		this.content = memo;
-		this.enjoyRating = enjoyRating;
-	}
+    @Builder
+    public Diary(Participant participant, String memo, double enjoyRating) {
+        this.participant = Objects.requireNonNull(participant, "participant은 null일 수 없습니다.");
+        if (!StringUtils.hasText(memo))
+            throw new IllegalArgumentException("memo은 null이거나 빈 문자열일 수 없습니다.");
+        this.content = memo;
+        this.enjoyRating = enjoyRating;
+    }
 
-	public static Diary of(Participant participant, String memo, double enjoyRating) {
-		return Diary.builder()
-			.participant(participant)
-			.memo(memo)
-			.enjoyRating(enjoyRating)
-			.build();
-	}
+    public static Diary of(Participant participant, String memo, double enjoyRating) {
+        return Diary.builder()
+                .participant(participant)
+                .memo(memo)
+                .enjoyRating(enjoyRating)
+                .build();
+    }
 
-	@PostPersist
-	public void postPersist() {
-		participant.diaryCreated();
-	}
+    @PostPersist
+    public void postPersist() {
+        participant.diaryCreated();
+    }
 
-	@PostRemove
-	public void PostRemove() {
-		participant.diaryDeleted();
-	}
+    @PostRemove
+    public void PostRemove() {
+        participant.diaryDeleted();
+    }
 
-	public void update(String content, double enjoyRating) {
-		this.content = content;
-		this.enjoyRating = enjoyRating;
-	}
+    public void update(String content, double enjoyRating) {
+        this.content = content;
+        this.enjoyRating = enjoyRating;
+    }
 }

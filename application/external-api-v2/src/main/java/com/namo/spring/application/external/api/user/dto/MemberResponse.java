@@ -1,9 +1,9 @@
 package com.namo.spring.application.external.api.user.dto;
 
+import java.util.List;
+
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.List;
 
 public class MemberResponse {
 

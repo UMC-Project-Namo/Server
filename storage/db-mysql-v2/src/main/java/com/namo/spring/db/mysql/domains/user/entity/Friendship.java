@@ -26,37 +26,37 @@ import lombok.NoArgsConstructor;
 @DynamicInsert
 public class Friendship extends BaseTimeEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member_id", nullable = false)
-	private Member member;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "friend_id", nullable = false)
-	private Member friend;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "friend_id", nullable = false)
+    private Member friend;
 
-	private boolean isFavorite;
+    private boolean isFavorite;
 
-	@Enumerated(EnumType.STRING)
-	private FriendshipStatus status;
+    @Enumerated(EnumType.STRING)
+    private FriendshipStatus status;
 
-	@Builder
-	public Friendship(Member member, Member friend, FriendshipStatus status) {
-		this.member = member;
-		this.friend = friend;
-		this.status = status;
-		this.isFavorite = false;
-	}
+    @Builder
+    public Friendship(Member member, Member friend, FriendshipStatus status) {
+        this.member = member;
+        this.friend = friend;
+        this.status = status;
+        this.isFavorite = false;
+    }
 
-	public void setFavorite() {
-		this.isFavorite = true;
-	}
+    public void setFavorite() {
+        this.isFavorite = true;
+    }
 
-	public void setUnFavorite() {
-		this.isFavorite = false;
-	}
+    public void setUnFavorite() {
+        this.isFavorite = false;
+    }
 
 }

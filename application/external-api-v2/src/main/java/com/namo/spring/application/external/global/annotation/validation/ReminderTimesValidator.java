@@ -1,12 +1,11 @@
 package com.namo.spring.application.external.global.annotation.validation;
 
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
+import static com.namo.spring.application.external.global.config.properties.ReminderTimeConfig.*;
 
 import java.util.List;
 
-import static com.namo.spring.application.external.global.config.properties.ReminderTimeConfig.REMINDER_TRIGGER_PATTERN;
-import static com.namo.spring.application.external.global.config.properties.ReminderTimeConfig.SCHEDULED_TIME_TRIGGER;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class ReminderTimesValidator implements ConstraintValidator<ValidReminderTimes, List<String>> {
 
@@ -17,7 +16,6 @@ public class ReminderTimesValidator implements ConstraintValidator<ValidReminder
      * 시간 -> 'H{1-36 까지의 숫자}'
      * 일 -> 'D{1-7까지의 숫자}'
      */
-
     @Override
     public boolean isValid(List<String> reminderTimes, ConstraintValidatorContext context) {
         if (reminderTimes == null || reminderTimes.isEmpty()) {
@@ -25,7 +23,8 @@ public class ReminderTimesValidator implements ConstraintValidator<ValidReminder
         }
         for (String reminderTime : reminderTimes) {
             boolean isValid;
-            if (!reminderTime.equals(SCHEDULED_TIME_TRIGGER) && !REMINDER_TRIGGER_PATTERN.matcher(reminderTime).matches()) {
+            if (!reminderTime.equals(SCHEDULED_TIME_TRIGGER) && !REMINDER_TRIGGER_PATTERN.matcher(reminderTime)
+                    .matches()) {
                 return false;
             }
         }

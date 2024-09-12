@@ -10,13 +10,13 @@ import lombok.Getter;
 @AllArgsConstructor
 public class GeneralException extends RuntimeException {
 
-	private final BaseErrorCode code;
+    private final BaseErrorCode code;
 
-	public ResponseDto.ErrorReasonDto getErrorReason() {
-		return this.code.getReason();
-	}
+    public ResponseDto.ErrorReasonDto getErrorReason() {
+        return this.code.getReason();
+    }
 
-	public ResponseDto.ErrorReasonDto getErrorReasonHttpStatus() {
-		return this.code.getReasonHttpStatus();
-	}
+    public ResponseDto.ErrorReasonDto getErrorReasonHttpStatus() {
+        return this.code.getReasonHttpStatus();
+    }
 }

@@ -1,5 +1,30 @@
 package com.namo.spring.db.mysql.domains.user.entity;
 
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.type.SqlTypes;
+
 import com.namo.spring.db.mysql.common.converter.MemberStatusConverter;
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
@@ -9,21 +34,11 @@ import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.user.type.MemberRole;
 import com.namo.spring.db.mysql.domains.user.type.MemberStatus;
 import com.namo.spring.db.mysql.domains.user.type.SocialType;
-import jakarta.persistence.*;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.type.SqlTypes;
-
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Getter
 @Entity
@@ -105,7 +120,7 @@ public class Member extends BaseTimeEntity implements User {
 
     @Builder
     public Member(String name, String tag, String birthday, String authId, String email,
-                  SocialType socialType, String socialRefreshToken) {
+            SocialType socialType, String socialRefreshToken) {
         this.name = name;
         this.nameVisible = true;
         this.tag = tag;

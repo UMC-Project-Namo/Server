@@ -1,15 +1,17 @@
 package com.namo.spring.db.mysql.domains.category.service;
 
+import java.util.Optional;
+
+import org.springframework.transaction.annotation.Transactional;
+
 import com.namo.spring.core.common.annotation.DomainService;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
 import com.namo.spring.db.mysql.domains.category.exception.CategoryException;
 import com.namo.spring.db.mysql.domains.category.repository.CategoryRepository;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
-import lombok.RequiredArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 
 @DomainService
 @RequiredArgsConstructor
@@ -25,7 +27,6 @@ public class CategoryService {
     public Optional<Category> readCategory(Long categoryId) {
         return categoryRepository.findById(categoryId);
     }
-
 
     @Transactional(readOnly = true)
     public Category readCategoryByMemberAndId(Long categoryId, Member member) {

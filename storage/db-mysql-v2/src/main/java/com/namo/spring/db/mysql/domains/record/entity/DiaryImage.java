@@ -27,49 +27,49 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DiaryImage extends BaseTimeEntity implements Image {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(nullable = false)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "diary_id", nullable = false)
-	private Diary diary;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "diary_id", nullable = false)
+    private Diary diary;
 
-	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Column(nullable = false)
-	private String imageUrl;
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(nullable = false)
+    private String imageUrl;
 
-	@Column(nullable = false)
-	private Integer imageOrder;
+    @Column(nullable = false)
+    private Integer imageOrder;
 
-	@Builder
-	public DiaryImage(Diary diary, String imageUrl, Integer imageOrder) {
-		if (!StringUtils.hasText(imageUrl))
-			throw new IllegalArgumentException("imageUrl은 null이거나 빈 문자열일 수 없습니다.");
+    @Builder
+    public DiaryImage(Diary diary, String imageUrl, Integer imageOrder) {
+        if (!StringUtils.hasText(imageUrl))
+            throw new IllegalArgumentException("imageUrl은 null이거나 빈 문자열일 수 없습니다.");
 
-		this.diary = Objects.requireNonNull(diary, "diary은 null일 수 없습니다.");
-		this.imageUrl = imageUrl;
-		this.imageOrder = Objects.requireNonNull(imageOrder, "imageOrder은 null일 수 없습니다.");
-	}
+        this.diary = Objects.requireNonNull(diary, "diary은 null일 수 없습니다.");
+        this.imageUrl = imageUrl;
+        this.imageOrder = Objects.requireNonNull(imageOrder, "imageOrder은 null일 수 없습니다.");
+    }
 
-	public static DiaryImage of(Diary diary, String imageUrl, Integer imageOrder) {
-		return DiaryImage.builder()
-			.diary(diary)
-			.imageUrl(imageUrl)
-			.imageOrder(imageOrder)
-			.build();
-	}
+    public static DiaryImage of(Diary diary, String imageUrl, Integer imageOrder) {
+        return DiaryImage.builder()
+                .diary(diary)
+                .imageUrl(imageUrl)
+                .imageOrder(imageOrder)
+                .build();
+    }
 
-	@Override
-	public void updateImageOrder(Integer imageOrder) {
-		this.imageOrder = Objects.requireNonNull(imageOrder, "imageOrder은 null일 수 없습니다.");
-	}
+    @Override
+    public void updateImageOrder(Integer imageOrder) {
+        this.imageOrder = Objects.requireNonNull(imageOrder, "imageOrder은 null일 수 없습니다.");
+    }
 
-	@Override
-	public void updateImageUrl(String imageUrl) {
-		if (!StringUtils.hasText(imageUrl))
-			throw new IllegalArgumentException("imageUrl은 null이거나 빈 문자열일 수 없습니다.");
-		this.imageUrl = imageUrl;
-	}
+    @Override
+    public void updateImageUrl(String imageUrl) {
+        if (!StringUtils.hasText(imageUrl))
+            throw new IllegalArgumentException("imageUrl은 null이거나 빈 문자열일 수 없습니다.");
+        this.imageUrl = imageUrl;
+    }
 }

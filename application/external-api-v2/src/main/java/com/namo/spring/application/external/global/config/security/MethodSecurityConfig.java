@@ -9,8 +9,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
 public class MethodSecurityConfig {
-	@Bean
-	protected MethodSecurityExpressionHandler createExpressionHandler() {
-		return new DefaultMethodSecurityExpressionHandler();
-	}
+    @Bean
+    protected MethodSecurityExpressionHandler createExpressionHandler() {
+        return new DefaultMethodSecurityExpressionHandler();
+    }
 }

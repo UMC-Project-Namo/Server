@@ -1,5 +1,16 @@
 package com.namo.spring.application.external.api.schedule.usecase;
 
+import static com.namo.spring.application.external.api.schedule.converter.MeetingScheduleResponseConverter.*;
+import static com.namo.spring.application.external.global.utils.MeetingParticipantValidationUtils.*;
+import static com.namo.spring.application.external.global.utils.SchedulePeriodValidationUtils.*;
+
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.namo.spring.application.external.api.guest.service.GuestManageService;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
@@ -10,20 +21,9 @@ import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
-
-import static com.namo.spring.application.external.api.schedule.converter.MeetingScheduleResponseConverter.*;
-import static com.namo.spring.application.external.global.utils.MeetingParticipantValidationUtils.validateParticipantCount;
-import static com.namo.spring.application.external.global.utils.MeetingParticipantValidationUtils.validateUniqueParticipantIds;
-import static com.namo.spring.application.external.global.utils.SchedulePeriodValidationUtils.getExtendedPeriod;
-import static com.namo.spring.application.external.global.utils.SchedulePeriodValidationUtils.validateYearMonth;
 
 @Slf4j
 @Service
@@ -35,7 +35,8 @@ public class MeetingScheduleUsecase {
     private final GuestManageService guestManageService;
 
     @Transactional
-    public Long createMeetingSchedule(MeetingScheduleRequest.PostMeetingScheduleDto dto, MultipartFile image, SecurityUserDetails memberInfo) {
+    public Long createMeetingSchedule(MeetingScheduleRequest.PostMeetingScheduleDto dto, MultipartFile image,
+            SecurityUserDetails memberInfo) {
         validateUniqueParticipantIds(memberInfo.getUserId(), dto.getParticipants());
         Member owner = memberManageService.getMember(memberInfo.getUserId());
         Schedule schedule = scheduleManageService.createMeetingSchedule(dto, owner, image);
@@ -48,32 +49,39 @@ public class MeetingScheduleUsecase {
     }
 
     @Transactional(readOnly = true)
-    public List<MeetingScheduleResponse.GetMonthlyMembersScheduleDto> getMonthlyMemberSchedules(List<Long> memberIds, int year, int month, SecurityUserDetails memberInfo) {
+    public List<MeetingScheduleResponse.GetMonthlyMembersScheduleDto> getMonthlyMemberSchedules(List<Long> memberIds,
+            int year, int month, SecurityUserDetails memberInfo) {
         validateYearMonth(year, month);
         validateUniqueParticipantIds(memberInfo.getUserId(), memberIds);
 
-        List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyMembersSchedules(memberIds, getExtendedPeriod(year, month), memberInfo.getUserId());
+        List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyMembersSchedules(
+                memberIds, getExtendedPeriod(year, month), memberInfo.getUserId());
         return toGetMonthlyParticipantScheduleDtos(participantsWithSchedule, memberIds, memberInfo.getUserId());
     }
 
     @Transactional(readOnly = true)
-    public List<MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto> getMonthlyMeetingParticipantSchedules(Long scheduleId, int year, int month, SecurityUserDetails memberInfo) {
+    public List<MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto> getMonthlyMeetingParticipantSchedules(
+            Long scheduleId, int year, int month, SecurityUserDetails memberInfo) {
         validateYearMonth(year, month);
 
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
-        List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyMeetingParticipantSchedules(schedule, getExtendedPeriod(year, month), memberInfo.getUserId(), null);
+        List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyMeetingParticipantSchedules(
+                schedule, getExtendedPeriod(year, month), memberInfo.getUserId(), null);
         return toGetMonthlyMeetingParticipantScheduleDtos(participantsWithSchedule, schedule);
     }
 
     @Transactional(readOnly = true)
-    public MeetingScheduleResponse.GetMeetingScheduleDto getMeetingSchedule(Long scheduleId, SecurityUserDetails memberInfo) {
+    public MeetingScheduleResponse.GetMeetingScheduleDto getMeetingSchedule(Long scheduleId,
+            SecurityUserDetails memberInfo) {
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
-        List<Participant> participants = scheduleManageService.getMeetingScheduleParticipants(schedule, memberInfo.getUserId(), null);
+        List<Participant> participants = scheduleManageService.getMeetingScheduleParticipants(schedule,
+                memberInfo.getUserId(), null);
         return toGetMeetingScheduleDto(schedule, participants);
     }
 
     @Transactional
-    public void updateMeetingSchedule(MeetingScheduleRequest.PatchMeetingScheduleDto dto, Long scheduleId, SecurityUserDetails memberInfo) {
+    public void updateMeetingSchedule(MeetingScheduleRequest.PatchMeetingScheduleDto dto, Long scheduleId,
+            SecurityUserDetails memberInfo) {
         validateUniqueParticipantIds(memberInfo.getUserId(), dto);
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
         scheduleManageService.updateMeetingSchedule(dto, schedule, memberInfo.getUserId());

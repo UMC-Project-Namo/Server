@@ -1,5 +1,8 @@
 package com.namo.spring.application.external.api.schedule.usecase;
 
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.namo.spring.application.external.api.notification.service.NotificationManageService;
 import com.namo.spring.application.external.api.schedule.converter.ScheduleConverter;
 import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
@@ -9,9 +12,8 @@ import com.namo.spring.application.external.api.user.service.MemberManageService
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -27,8 +29,10 @@ public class ScheduleUsecase {
     }
 
     @Transactional
-    public void updateOrCreateScheduleReminder(ScheduleRequest.PutScheduleReminderDto dto, Long scheduleId, SecurityUserDetails memberInfo) {
+    public void updateOrCreateScheduleReminder(ScheduleRequest.PutScheduleReminderDto dto, Long scheduleId,
+            SecurityUserDetails memberInfo) {
         Member member = memberManageService.getMember(memberInfo.getUserId());
-        notificationManageService.updateOrCreateScheduleReminderNotification(scheduleId, member, dto.getReminderTrigger());
+        notificationManageService.updateOrCreateScheduleReminderNotification(scheduleId, member,
+                dto.getReminderTrigger());
     }
 }

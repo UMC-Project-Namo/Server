@@ -1,5 +1,13 @@
 package com.namo.spring.application.external.api.notification.service;
 
+import static com.namo.spring.application.external.api.notification.converter.NotificationConverter.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Component;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.namo.spring.application.external.global.utils.ReminderTimeUtils;
 import com.namo.spring.core.common.code.status.ErrorStatus;
@@ -11,15 +19,9 @@ import com.namo.spring.db.mysql.domains.notification.type.NotificationType;
 import com.namo.spring.db.mysql.domains.notification.type.ReceiverDeviceType;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static com.namo.spring.application.external.api.notification.converter.NotificationConverter.*;
 
 @Slf4j
 @Component
@@ -29,12 +31,15 @@ public class NotificationMaker {
     private final FcmJsonMessageBuilder fcmJsonMessageBuilder;
     private final NotificationMessageGenerator notificationMessageGenerator;
 
-    public void makeScheduleReminderNotifications(Schedule schedule, List<Device> devices, List<LocalDateTime> reminderTimes) {
+    public void makeScheduleReminderNotifications(Schedule schedule, List<Device> devices,
+            List<LocalDateTime> reminderTimes) {
         List<Notification> newNotifications = devices.stream()
                 .flatMap(device -> reminderTimes.stream()
                         .map(reminderTime -> {
                             try {
-                                String title = notificationMessageGenerator.getScheduleReminderTemplate(ReminderTimeUtils.convertToString(schedule.getPeriod().getStartDate()), schedule.getTitle());
+                                String title = notificationMessageGenerator.getScheduleReminderTemplate(
+                                        ReminderTimeUtils.convertToString(schedule.getPeriod().getStartDate()),
+                                        schedule.getTitle());
                                 String body = "";
                                 String message = makeFcmMessage(device, title, body);
                                 return toScheduleReminderNotification(message, device, schedule, reminderTime);
@@ -62,7 +67,8 @@ public class NotificationMaker {
         notificationService.createNotifications(newNotifications);
     }
 
-    public void makeFriendshipNotification(NotificationType type, Member publisher, List<Device> recieverDevices) throws JsonProcessingException {
+    public void makeFriendshipNotification(NotificationType type, Member publisher, List<Device> recieverDevices) throws
+            JsonProcessingException {
         String message = notificationMessageGenerator.getFriendshipTemplate(type, publisher.getName());
         List<Notification> newNotifications = recieverDevices.stream()
                 .map(device -> toFriendshipNotification(message, type, publisher, device))
@@ -75,7 +81,8 @@ public class NotificationMaker {
             return fcmJsonMessageBuilder.buildAndroidFcmMessage(device.getReceiverDeviceToken(), title, body, null);
         } else if (device.getReceiverDeviceType().equals(ReceiverDeviceType.IOS)) {
             return fcmJsonMessageBuilder.buildIOSFcmMessage(device.getReceiverDeviceToken(), title, body, null, 0);
-        } else throw new NotificationException(ErrorStatus.NOT_SUPPORTED_DEVICE_TYPE);
+        } else
+            throw new NotificationException(ErrorStatus.NOT_SUPPORTED_DEVICE_TYPE);
     }
 
 }

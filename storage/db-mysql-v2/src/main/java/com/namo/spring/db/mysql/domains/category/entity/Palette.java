@@ -20,14 +20,14 @@ import lombok.NoArgsConstructor;
 @DynamicInsert
 public class Palette {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(nullable = false)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    private Long id;
 
-	@Column(nullable = false)
-	private String belong;
+    @Column(nullable = false)
+    private String belong;
 
-	@Column(nullable = false)
-	private int color;
+    @Column(nullable = false)
+    private int color;
 }

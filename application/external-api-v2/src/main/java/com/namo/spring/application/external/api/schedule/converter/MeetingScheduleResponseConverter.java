@@ -1,5 +1,9 @@
 package com.namo.spring.application.external.api.schedule.converter;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
 import com.namo.spring.core.common.utils.DateUtil;
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
@@ -9,10 +13,6 @@ import com.namo.spring.db.mysql.domains.schedule.type.Location;
 import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
-
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class MeetingScheduleResponseConverter {
     private MeetingScheduleResponseConverter() {
@@ -26,7 +26,8 @@ public class MeetingScheduleResponseConverter {
                 .collect(Collectors.toList());
     }
 
-    public static MeetingScheduleResponse.GetMeetingScheduleSummaryDto toGetMeetingScheduleSummaryDto(Schedule schedule) {
+    public static MeetingScheduleResponse.GetMeetingScheduleSummaryDto toGetMeetingScheduleSummaryDto(
+            Schedule schedule) {
         return MeetingScheduleResponse.GetMeetingScheduleSummaryDto.builder()
                 .meetingScheduleId(schedule.getId())
                 .title(schedule.getTitle())
@@ -35,6 +36,7 @@ public class MeetingScheduleResponseConverter {
                 .participantCount(schedule.getParticipantCount())
                 .participantNicknames(schedule.getParticipantNicknames())
                 .build();
+
     }
 
     public static List<MeetingScheduleResponse.GetMonthlyMembersScheduleDto> toGetMonthlyParticipantScheduleDtos(
@@ -44,12 +46,14 @@ public class MeetingScheduleResponseConverter {
                 // 다른 유저의 일정일 경우 공유 여부로 필터링
                 .filter(participant -> {
                     boolean isSharedSchedule = true;
-                    if (!participant.getMemberId().equals(ownerId)) isSharedSchedule = participant.getIsShared();
+                    if (!participant.getMemberId().equals(ownerId))
+                        isSharedSchedule = participant.getIsShared();
                     return isSharedSchedule;
                 })
                 .collect(Collectors.groupingBy(participant -> participant.getSchedule().getId()));
         return scheduleIdAndParticipant.entrySet().stream()
-                .map(entry -> toGetMonthlyParticipantScheduleDto(entry.getValue().get(0).getSchedule(), entry.getValue()))
+                .map(entry -> toGetMonthlyParticipantScheduleDto(entry.getValue().get(0).getSchedule(),
+                        entry.getValue()))
                 .collect(Collectors.toList());
     }
 
@@ -72,7 +76,8 @@ public class MeetingScheduleResponseConverter {
                 .collect(Collectors.toList());
     }
 
-    private static MeetingScheduleResponse.MemberParticipantDto toMemberParticipantDto(ScheduleParticipantQuery participant) {
+    private static MeetingScheduleResponse.MemberParticipantDto toMemberParticipantDto(
+            ScheduleParticipantQuery participant) {
         return MeetingScheduleResponse.MemberParticipantDto.builder()
                 .userId(participant.getMemberId())
                 .nickname(participant.getNickname())
@@ -112,7 +117,7 @@ public class MeetingScheduleResponseConverter {
     }
 
     private static MeetingScheduleResponse.UserParticipantDto toUserParticipantDto(ScheduleParticipantQuery
-                                                                                           participant) {
+            participant) {
         return MeetingScheduleResponse.UserParticipantDto.builder()
                 .participantId(participant.getParticipantId())
                 .userId(participant.getMemberId())
@@ -122,7 +127,7 @@ public class MeetingScheduleResponseConverter {
     }
 
     public static MeetingScheduleResponse.GetMeetingScheduleDto toGetMeetingScheduleDto(Schedule
-                                                                                                schedule, List<Participant> participants) {
+            schedule, List<Participant> participants) {
         return MeetingScheduleResponse.GetMeetingScheduleDto.builder()
                 .scheduleId(schedule.getId())
                 .name(schedule.getTitle())
@@ -152,7 +157,7 @@ public class MeetingScheduleResponseConverter {
     }
 
     private static MeetingScheduleResponse.UserParticipantDetailDto toUserParticipantDetailDto(Participant
-                                                                                                       participant) {
+            participant) {
         return MeetingScheduleResponse.UserParticipantDetailDto.builder()
                 .participantId(participant.getId())
                 .userId(participant.getUser().getId())

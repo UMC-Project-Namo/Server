@@ -1,5 +1,20 @@
 package com.namo.spring.application.external.api.schedule.controller;
 
+import java.util.List;
+
+import jakarta.validation.Valid;
+
+import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.namo.spring.application.external.api.schedule.api.PersonalScheduleApi;
 import com.namo.spring.application.external.api.schedule.dto.PersonalScheduleRequest;
@@ -7,15 +22,11 @@ import com.namo.spring.application.external.api.schedule.dto.PersonalScheduleRes
 import com.namo.spring.application.external.api.schedule.usecase.PersonalScheduleUsecase;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.core.common.response.ResponseDto;
+
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Tag(name = "개인 일정", description = "개인 일정 API")
 @Slf4j
@@ -63,8 +74,8 @@ public class PersonalScheduleController implements PersonalScheduleApi {
      */
     @PatchMapping("/{scheduleId}")
     public ResponseDto<String> updatePersonalSchedules(@PathVariable Long scheduleId,
-                                                       @Valid @RequestBody PersonalScheduleRequest.PatchPersonalScheduleDto dto,
-                                                       @AuthenticationPrincipal SecurityUserDetails member) {
+            @Valid @RequestBody PersonalScheduleRequest.PatchPersonalScheduleDto dto,
+            @AuthenticationPrincipal SecurityUserDetails member) {
         personalScheduleUsecase.updatePersonalSchedule(dto, scheduleId, member);
         return ResponseDto.onSuccess("일정 수정 성공");
     }

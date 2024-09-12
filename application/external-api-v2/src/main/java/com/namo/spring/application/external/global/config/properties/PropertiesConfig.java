@@ -7,7 +7,7 @@ import com.namo.spring.core.infra.common.properties.ServerDomainProperties;
 
 @Configuration
 @EnableConfigurationProperties({
-	ServerDomainProperties.class
+        ServerDomainProperties.class
 })
 public class PropertiesConfig {
 }

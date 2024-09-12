@@ -1,17 +1,17 @@
 package com.namo.spring.db.mysql.domain.schedule.entity;
 
-import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
-import com.namo.spring.db.mysql.domains.schedule.type.Period;
-import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
+import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.MockitoAnnotations;
+
+import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
+import com.namo.spring.db.mysql.domains.schedule.type.Period;
+import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 
 public class ScheduleParticipantsUpdateTest {
     private Schedule schedule;

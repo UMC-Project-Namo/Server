@@ -1,5 +1,14 @@
 package com.namo.spring.application.external.api.schedule.usecase;
 
+import static com.namo.spring.application.external.api.schedule.converter.PersonalScheduleResponseConverter.*;
+import static com.namo.spring.application.external.global.utils.SchedulePeriodValidationUtils.*;
+
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.namo.spring.application.external.api.notification.service.NotificationManageService;
 import com.namo.spring.application.external.api.schedule.dto.PersonalScheduleRequest;
@@ -11,16 +20,8 @@ import com.namo.spring.db.mysql.domains.notification.dto.ScheduleNotificationQue
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-
-import static com.namo.spring.application.external.api.schedule.converter.PersonalScheduleResponseConverter.toGetFriendMonthlyScheduleDtos;
-import static com.namo.spring.application.external.api.schedule.converter.PersonalScheduleResponseConverter.toGetMonthlyScheduleDtos;
-import static com.namo.spring.application.external.global.utils.SchedulePeriodValidationUtils.getExtendedPeriod;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +32,8 @@ public class PersonalScheduleUsecase {
     private final NotificationManageService notificationManageService;
 
     @Transactional
-    public Long createPersonalSchedule(PersonalScheduleRequest.PostPersonalScheduleDto dto, SecurityUserDetails memberInfo) throws JsonProcessingException {
+    public Long createPersonalSchedule(PersonalScheduleRequest.PostPersonalScheduleDto dto,
+            SecurityUserDetails memberInfo) throws JsonProcessingException {
         Member member = memberManageService.getMember(memberInfo.getUserId());
         Schedule schedule = scheduleManageService.createPersonalSchedule(dto, member);
         if (!dto.getReminderTrigger().isEmpty()) {
@@ -41,21 +43,28 @@ public class PersonalScheduleUsecase {
     }
 
     @Transactional(readOnly = true)
-    public List<PersonalScheduleResponse.GetMonthlyScheduleDto> getMyMonthlySchedules(int year, int month, SecurityUserDetails memberInfo) {
-        List<Participant> scheduleInfo = scheduleManageService.getMyMonthlySchedules(memberInfo.getUserId(), getExtendedPeriod(year, month));
-        List<ScheduleNotificationQuery> scheduleNotifications = notificationManageService.getScheduleNotifications(memberInfo.getUserId(), scheduleInfo);
+    public List<PersonalScheduleResponse.GetMonthlyScheduleDto> getMyMonthlySchedules(int year, int month,
+            SecurityUserDetails memberInfo) {
+        List<Participant> scheduleInfo = scheduleManageService.getMyMonthlySchedules(memberInfo.getUserId(),
+                getExtendedPeriod(year, month));
+        List<ScheduleNotificationQuery> scheduleNotifications = notificationManageService.getScheduleNotifications(
+                memberInfo.getUserId(), scheduleInfo);
         return toGetMonthlyScheduleDtos(scheduleInfo, scheduleNotifications);
     }
 
     @Transactional
-    public void updatePersonalSchedule(PersonalScheduleRequest.PatchPersonalScheduleDto patchPersonalScheduleDto, Long scheduleId, SecurityUserDetails memberInfo) {
+    public void updatePersonalSchedule(PersonalScheduleRequest.PatchPersonalScheduleDto patchPersonalScheduleDto,
+            Long scheduleId, SecurityUserDetails memberInfo) {
         Schedule schedule = scheduleManageService.getPersonalSchedule(scheduleId);
         scheduleManageService.updatePersonalSchedule(patchPersonalScheduleDto, schedule, memberInfo.getUserId());
     }
 
     @Transactional(readOnly = true)
-    public List<PersonalScheduleResponse.GetFriendMonthlyScheduleDto> getFriendMonthlySchedules(int year, int month, Long targetMemberId, SecurityUserDetails memberInfo) {
+    public List<PersonalScheduleResponse.GetFriendMonthlyScheduleDto> getFriendMonthlySchedules(int year, int month,
+            Long targetMemberId, SecurityUserDetails memberInfo) {
         Member targetMember = memberManageService.getMember(targetMemberId);
-        return toGetFriendMonthlyScheduleDtos(scheduleManageService.getMemberMonthlySchedules(targetMember.getId(), memberInfo.getUserId(), getExtendedPeriod(year, month)));
+        return toGetFriendMonthlyScheduleDtos(
+                scheduleManageService.getMemberMonthlySchedules(targetMember.getId(), memberInfo.getUserId(),
+                        getExtendedPeriod(year, month)));
     }
 }

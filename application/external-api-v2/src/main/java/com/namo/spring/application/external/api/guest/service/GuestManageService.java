@@ -1,5 +1,14 @@
 package com.namo.spring.application.external.api.guest.service;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+
 import com.namo.spring.application.external.api.guest.dto.GuestParticipantRequest;
 import com.namo.spring.application.external.api.schedule.service.ParticipantMaker;
 import com.namo.spring.application.external.api.user.service.TagGenerator;
@@ -17,16 +26,9 @@ import com.namo.spring.db.mysql.domains.user.dto.AnonymousInviteCodeQuery;
 import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
 import com.namo.spring.db.mysql.domains.user.exception.AnonymousException;
 import com.namo.spring.db.mysql.domains.user.service.AnonymousService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -38,12 +40,14 @@ public class GuestManageService {
     private final ParticipantMaker participantMaker;
     private final TagGenerator tagGenerator;
 
-    public Anonymous createAnonymous(GuestParticipantRequest.PostGuestParticipantDto dto, Schedule schedule, String code, String tag) {
+    public Anonymous createAnonymous(GuestParticipantRequest.PostGuestParticipantDto dto, Schedule schedule,
+            String code, String tag) {
         Anonymous anonymous = Anonymous.of(null, null, tag, dto.getNickname(), dto.getPassword(), code);
         return anonymousService.createAnonymous(anonymous);
     }
 
-    private Participant createGuest(GuestParticipantRequest.PostGuestParticipantDto dto, Schedule schedule, String code) {
+    private Participant createGuest(GuestParticipantRequest.PostGuestParticipantDto dto, Schedule schedule,
+            String code) {
         String tag = tagGenerator.generateTag(dto.getNickname());
         Anonymous anonymous = createAnonymous(dto, schedule, code, tag);
         Long paletteId = selectPaletteColorId(schedule.getId());
@@ -64,7 +68,8 @@ public class GuestManageService {
      * 게스트 유저가 모임 일정에서 표시될 고유 색상을 부여합니다.
      */
     private Long selectPaletteColorId(Long scheduleId) {
-        List<Long> participantsColors = participantService.readParticipantsByScheduleIdAndStatusAndType(scheduleId, ScheduleType.MEETING, ParticipantStatus.ACTIVE)
+        List<Long> participantsColors = participantService.readParticipantsByScheduleIdAndStatusAndType(scheduleId,
+                        ScheduleType.MEETING, ParticipantStatus.ACTIVE)
                 .stream().map(Participant::getPalette).map(Palette::getId).collect(Collectors.toList());
         return Arrays.stream(PALETTE_IDS)
                 .filter((color) -> !participantsColors.contains(color))
@@ -72,10 +77,13 @@ public class GuestManageService {
                 .orElseThrow(() -> new PaletteException(ErrorStatus.NOT_FOUND_COLOR));
     }
 
-    private Participant getValidatedGuest(Anonymous anonymous, GuestParticipantRequest.PostGuestParticipantDto dto, Long scheduleId) {
-        if (anonymous.getNickname().equals(dto.getNickname()) && anonymous.getPassword().isSamePassword(dto.getPassword())) {
+    private Participant getValidatedGuest(Anonymous anonymous, GuestParticipantRequest.PostGuestParticipantDto dto,
+            Long scheduleId) {
+        if (anonymous.getNickname().equals(dto.getNickname()) && anonymous.getPassword()
+                .isSamePassword(dto.getPassword())) {
             return getAnonymousParticipant(anonymous.getId(), scheduleId);
-        } else throw new AnonymousException(ErrorStatus.ANONYMOUS_LOGIN_FAILURE);
+        } else
+            throw new AnonymousException(ErrorStatus.ANONYMOUS_LOGIN_FAILURE);
     }
 
     /**
@@ -83,7 +91,8 @@ public class GuestManageService {
      * 없을 시에는 비회원 정보를 저장하여
      * 해당 비회원에 대한 Participant를 반환합니다.
      */
-    public Participant createOrValidateGuest(GuestParticipantRequest.PostGuestParticipantDto dto, Schedule schedule, String code) {
+    public Participant createOrValidateGuest(GuestParticipantRequest.PostGuestParticipantDto dto, Schedule schedule,
+            String code) {
         return anonymousService.readAnonymousByInviteCode(code)
                 .map(anonymous -> getValidatedGuest(anonymous, dto, schedule.getId()))
                 .orElseGet(() -> createGuest(dto, schedule, code));
@@ -96,7 +105,10 @@ public class GuestManageService {
      * @return 참여 코드
      */
     public String generateInviteCode(Long scheduleId) {
-        List<String> existCodes = anonymousService.readAllInviteCodes().stream().map(AnonymousInviteCodeQuery::getCode).toList();
+        List<String> existCodes = anonymousService.readAllInviteCodes()
+                .stream()
+                .map(AnonymousInviteCodeQuery::getCode)
+                .toList();
         String inviteCode;
         do {
             String uuidPart = UUID.randomUUID().toString().substring(0, 8);

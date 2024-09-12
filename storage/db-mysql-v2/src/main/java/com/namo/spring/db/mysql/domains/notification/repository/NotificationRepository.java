@@ -1,12 +1,13 @@
 package com.namo.spring.db.mysql.domains.notification.repository;
 
-import com.namo.spring.db.mysql.domains.notification.dto.ScheduleNotificationQuery;
-import com.namo.spring.db.mysql.domains.notification.entity.Notification;
-import com.namo.spring.db.mysql.domains.notification.type.NotificationType;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.List;
+import com.namo.spring.db.mysql.domains.notification.dto.ScheduleNotificationQuery;
+import com.namo.spring.db.mysql.domains.notification.entity.Notification;
+import com.namo.spring.db.mysql.domains.notification.type.NotificationType;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
@@ -15,7 +16,9 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
             "WHERE n.schedule.id IN :scheduleIds " +
             "AND n.notificationType = '7' " +
             "AND n.device.member.id = :memberId")
-    List<ScheduleNotificationQuery> findReminderNotificationsByReceiverIdAndScheduleIds(Long memberId, List<Long> scheduleIds);
+    List<ScheduleNotificationQuery> findReminderNotificationsByReceiverIdAndScheduleIds(Long memberId,
+            List<Long> scheduleIds);
 
-    void deleteAllByScheduleIdAndDevice_MemberIdAndNotificationType(Long scheduleId, Long receiverId, NotificationType notificationType);
+    void deleteAllByScheduleIdAndDevice_MemberIdAndNotificationType(Long scheduleId, Long receiverId,
+            NotificationType notificationType);
 }

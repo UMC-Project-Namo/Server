@@ -11,5 +11,5 @@ import com.namo.spring.core.common.code.status.ErrorStatus;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ApiErrorCodes {
 
-	ErrorStatus[] value();
+    ErrorStatus[] value();
 }

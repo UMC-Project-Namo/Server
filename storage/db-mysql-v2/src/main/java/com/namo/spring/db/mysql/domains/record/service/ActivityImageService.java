@@ -13,20 +13,20 @@ import lombok.RequiredArgsConstructor;
 @DomainService
 @RequiredArgsConstructor
 public class ActivityImageService {
-	private final ActivityImageRepository activityImageRepository;
+    private final ActivityImageRepository activityImageRepository;
 
-	@Transactional
-	public ActivityImage createActivityImage(ActivityImage activityImage) {
-		return activityImageRepository.save(activityImage);
-	}
+    @Transactional
+    public ActivityImage createActivityImage(ActivityImage activityImage) {
+        return activityImageRepository.save(activityImage);
+    }
 
-	@Transactional(readOnly = true)
-	public Optional<ActivityImage> readActivityImage(Long activityImageId) {
-		return activityImageRepository.findById(activityImageId);
-	}
+    @Transactional(readOnly = true)
+    public Optional<ActivityImage> readActivityImage(Long activityImageId) {
+        return activityImageRepository.findById(activityImageId);
+    }
 
-	@Transactional
-	public void deleteActivityImage(Long activityImageId) {
-		activityImageRepository.deleteById(activityImageId);
-	}
+    @Transactional
+    public void deleteActivityImage(Long activityImageId) {
+        activityImageRepository.deleteById(activityImageId);
+    }
 }

@@ -1,5 +1,12 @@
 package com.namo.spring.application.external.api.user.service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
 import com.namo.spring.application.external.api.category.service.CategoryMaker;
 import com.namo.spring.application.external.api.user.converter.MemberConverter;
 import com.namo.spring.application.external.api.user.dto.MemberDto;
@@ -14,14 +21,9 @@ import com.namo.spring.db.mysql.domains.user.service.AnonymousService;
 import com.namo.spring.db.mysql.domains.user.service.MemberService;
 import com.namo.spring.db.mysql.domains.user.type.MemberStatus;
 import com.namo.spring.db.mysql.domains.user.type.SocialType;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service

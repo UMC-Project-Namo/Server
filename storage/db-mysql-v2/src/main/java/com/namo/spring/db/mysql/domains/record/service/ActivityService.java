@@ -14,25 +14,25 @@ import lombok.RequiredArgsConstructor;
 @DomainService
 @RequiredArgsConstructor
 public class ActivityService {
-	private final ActivityRepository activityRepository;
+    private final ActivityRepository activityRepository;
 
-	@Transactional
-	public Activity createActivity(Activity activity) {
-		return activityRepository.save(activity);
-	}
+    @Transactional
+    public Activity createActivity(Activity activity) {
+        return activityRepository.save(activity);
+    }
 
-	@Transactional(readOnly = true)
-	public Optional<Activity> readActivity(Long activityId) {
-		return activityRepository.findById(activityId);
-	}
+    @Transactional(readOnly = true)
+    public Optional<Activity> readActivity(Long activityId) {
+        return activityRepository.findById(activityId);
+    }
 
-	@Transactional(readOnly = true)
-	public List<Activity> raedActivityListByMeetingScheduleId(Long meetingScheduleId) {
-		return null;
-	}
+    @Transactional(readOnly = true)
+    public List<Activity> raedActivityListByMeetingScheduleId(Long meetingScheduleId) {
+        return null;
+    }
 
-	@Transactional
-	public void deleteActivity(Long activityId) {
-		activityRepository.deleteById(activityId);
-	}
+    @Transactional
+    public void deleteActivity(Long activityId) {
+        activityRepository.deleteById(activityId);
+    }
 }

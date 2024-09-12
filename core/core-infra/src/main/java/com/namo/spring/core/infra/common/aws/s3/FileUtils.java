@@ -28,89 +28,89 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @RequiredArgsConstructor
 public class FileUtils {
-	private final S3Uploader s3Uploader;
-	private static final int TARGET_HEIGHT = 800;
+    private final S3Uploader s3Uploader;
+    private static final int TARGET_HEIGHT = 800;
 
-	private String createFileName(String originalFileName, FilePath filePath) {
-		return filePath.getPath() + UUID.randomUUID().toString().concat(getFileExtension(originalFileName));
-	}
+    private String createFileName(String originalFileName, FilePath filePath) {
+        return filePath.getPath() + UUID.randomUUID().toString().concat(getFileExtension(originalFileName));
+    }
 
-	private String getFileExtension(String fileName) {
-		try {
-			return fileName.substring(fileName.lastIndexOf("."));
-		} catch (StringIndexOutOfBoundsException e) {
-			throw new UtilsException(ErrorStatus.FILE_NAME_EXCEPTION);
-		}
-	}
+    private String getFileExtension(String fileName) {
+        try {
+            return fileName.substring(fileName.lastIndexOf("."));
+        } catch (StringIndexOutOfBoundsException e) {
+            throw new UtilsException(ErrorStatus.FILE_NAME_EXCEPTION);
+        }
+    }
 
-	public List<String> uploadImages(List<MultipartFile> files, FilePath filePath) {
-		List<String> urls = new ArrayList<>();
-		for (MultipartFile file : files) {
-			if (Optional.ofNullable(file).isPresent()) {
-				urls.add(uploadImage(file, filePath));
-			}
-		}
-		return urls;
-	}
+    public List<String> uploadImages(List<MultipartFile> files, FilePath filePath) {
+        List<String> urls = new ArrayList<>();
+        for (MultipartFile file : files) {
+            if (Optional.ofNullable(file).isPresent()) {
+                urls.add(uploadImage(file, filePath));
+            }
+        }
+        return urls;
+    }
 
-	public String uploadImage(MultipartFile file, FilePath filePath) {
-		String fileName = createFileName(file.getOriginalFilename(), filePath);
-		ObjectMetadata objectMetadata = new ObjectMetadata();
+    public String uploadImage(MultipartFile file, FilePath filePath) {
+        String fileName = createFileName(file.getOriginalFilename(), filePath);
+        ObjectMetadata objectMetadata = new ObjectMetadata();
 
-		try {
-			BufferedImage resizedImage = resizeImage(file);
-			ByteArrayInputStream byteArrayInputStream = convertImage(resizedImage, file.getContentType(),
-				getFileExtension(file.getOriginalFilename()), objectMetadata);
-			s3Uploader.uploadFile(byteArrayInputStream, objectMetadata, fileName);
-		} catch (IOException e) {
-			throw new UtilsException(ErrorStatus.S3_UPLOAD_FAILURE);
-		}
+        try {
+            BufferedImage resizedImage = resizeImage(file);
+            ByteArrayInputStream byteArrayInputStream = convertImage(resizedImage, file.getContentType(),
+                    getFileExtension(file.getOriginalFilename()), objectMetadata);
+            s3Uploader.uploadFile(byteArrayInputStream, objectMetadata, fileName);
+        } catch (IOException e) {
+            throw new UtilsException(ErrorStatus.S3_UPLOAD_FAILURE);
+        }
 
-		return s3Uploader.getFileUrl(fileName);
-	}
+        return s3Uploader.getFileUrl(fileName);
+    }
 
-	private BufferedImage resizeImage(MultipartFile multipartFile) throws IOException {
-		BufferedImage sourceImage = ImageIO.read(multipartFile.getInputStream());
+    private BufferedImage resizeImage(MultipartFile multipartFile) throws IOException {
+        BufferedImage sourceImage = ImageIO.read(multipartFile.getInputStream());
 
-		if (sourceImage.getHeight() <= TARGET_HEIGHT) {
-			return sourceImage;
-		}
+        if (sourceImage.getHeight() <= TARGET_HEIGHT) {
+            return sourceImage;
+        }
 
-		double sourceImageRatio = (double)sourceImage.getWidth() / sourceImage.getHeight();
-		int newWidth = (int)(TARGET_HEIGHT * sourceImageRatio);
+        double sourceImageRatio = (double)sourceImage.getWidth() / sourceImage.getHeight();
+        int newWidth = (int)(TARGET_HEIGHT * sourceImageRatio);
 
-		return Scalr.resize(sourceImage, Scalr.Method.QUALITY, Scalr.Mode.FIT_TO_HEIGHT, newWidth, TARGET_HEIGHT);
-	}
+        return Scalr.resize(sourceImage, Scalr.Method.QUALITY, Scalr.Mode.FIT_TO_HEIGHT, newWidth, TARGET_HEIGHT);
+    }
 
-	private ByteArrayInputStream convertImage(BufferedImage croppedImage, String contentType, String fileFormat,
-		ObjectMetadata objectMetadata) throws IOException {
-		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		ImageIO.write(croppedImage, fileFormat.replace(".", ""), byteArrayOutputStream);
+    private ByteArrayInputStream convertImage(BufferedImage croppedImage, String contentType, String fileFormat,
+            ObjectMetadata objectMetadata) throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ImageIO.write(croppedImage, fileFormat.replace(".", ""), byteArrayOutputStream);
 
-		objectMetadata.setContentType(contentType);
-		objectMetadata.setContentLength(byteArrayOutputStream.size());
+        objectMetadata.setContentType(contentType);
+        objectMetadata.setContentLength(byteArrayOutputStream.size());
 
-		return new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
-	}
+        return new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+    }
 
-	public void deleteImages(List<String> urls, FilePath filePath) {
-		try {
-			for (String url : urls) {
-				delete(url, filePath);
-			}
-		} catch (SdkClientException e) {
-			throw new UtilsException(ErrorStatus.S3_DELETE_FAILURE);
-		}
-	}
+    public void deleteImages(List<String> urls, FilePath filePath) {
+        try {
+            for (String url : urls) {
+                delete(url, filePath);
+            }
+        } catch (SdkClientException e) {
+            throw new UtilsException(ErrorStatus.S3_DELETE_FAILURE);
+        }
+    }
 
-	public void delete(String url, FilePath filePath) {
-		try {
-			String key = url.substring(url.lastIndexOf(filePath.getPath()));
-			if (!key.isEmpty()) {
-				s3Uploader.delete(key);
-			}
-		} catch (SdkClientException e) {
-			throw new UtilsException(ErrorStatus.S3_DELETE_FAILURE);
-		}
-	}
+    public void delete(String url, FilePath filePath) {
+        try {
+            String key = url.substring(url.lastIndexOf(filePath.getPath()));
+            if (!key.isEmpty()) {
+                s3Uploader.delete(key);
+            }
+        } catch (SdkClientException e) {
+            throw new UtilsException(ErrorStatus.S3_DELETE_FAILURE);
+        }
+    }
 }

@@ -1,10 +1,12 @@
 package com.namo.spring.core.common.code.status;
 
+import org.springframework.http.HttpStatus;
+
 import com.namo.spring.core.common.code.BaseErrorCode;
 import com.namo.spring.core.common.response.ResponseDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
@@ -48,51 +50,85 @@ public enum ErrorStatus implements BaseErrorCode {
     APPLE_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "애플 authorization code가 잘못되었습니다."),
     FORBIDDEN_ACCESS_TOKEN(HttpStatus.FORBIDDEN, "해당 토큰에는 엑세스 권한이 없습니다."),
     EXPIRED_TOKEN(HttpStatus.FORBIDDEN, "사용기간이 만료된 토큰입니다."),
-    ANONYMOUS_LOGIN_FAILURE(HttpStatus.UNAUTHORIZED, "게스트 로그인에 실패하였습니다."),
+    ANONYMOUS_LOGIN_FAILURE(HttpStatus.UNAUTHORIZED, "익명 사용자의 로그인에 실패했습니다."),
 
     /**
      * 403 : local Access Token 오류
      */
     EMPTY_ACCESS_KEY(HttpStatus.FORBIDDEN, "AccessToken 이 비어있습니다."),
+
     LOGOUT_ERROR(HttpStatus.FORBIDDEN, "로그 아웃된 사용자입니다."),
+
     EXPIRATION_TOKEN(HttpStatus.FORBIDDEN, "Token 이 만료되었습니다."),
+
     TAKEN_AWAY_TOKEN(HttpStatus.FORBIDDEN, "탈취당한 토큰입니다. 다시 로그인 해주세요."),
+
     WITHOUT_OWNER_REFRESH_TOKEN(HttpStatus.FORBIDDEN, "소유자가 아닌 RefreshToken 입니다."),
+
     EXPIRATION_ACCESS_TOKEN(HttpStatus.FORBIDDEN, "Access token 이 만료되었습니다."),
+
     EXPIRATION_REFRESH_TOKEN(HttpStatus.FORBIDDEN, "RefreshToken 이 만료되었습니다."),
+
     KAKAO_FORBIDDEN(HttpStatus.FORBIDDEN, "카카오 권한 오류"),
+
     NAVER_FORBIDDEN(HttpStatus.FORBIDDEN, "네이버 권한 오류"),
+
     MALFORMED_TOKEN(HttpStatus.UNAUTHORIZED, "비정상적인 토큰입니다."),
+
     TAMPERED_TOKEN(HttpStatus.UNAUTHORIZED, "서명이 조작된 토큰입니다."),
+
     UNSUPPORTED_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "지원하지 않는 코튼입니다."),
 
     /**
      * 403 : 리소스 접근 권한 오류
      */
     NOT_FRIENDSHIP_MEMBER(HttpStatus.BAD_REQUEST, "요청한 회원과 친구가 아닙니다."),
+
     NOT_SCHEDULE_OWNER(HttpStatus.FORBIDDEN, "해당 일정의 생성자가 아닙니다."),
+
     NOT_SCHEDULE_PARTICIPANT(HttpStatus.FORBIDDEN, "해당 일정의 참여자가 아닙니다."),
+
+    NOT_ACTIVITY_PARTICIPANT(HttpStatus.FORBIDDEN, "해당 활동의 참여자가 아닙니다."),
 
     /**
      * 404 : NOT FOUND 오류
      */
     NOT_FOUND_USER_FAILURE(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
+
     NOT_FOUND_SCHEDULE_FAILURE(HttpStatus.NOT_FOUND, "일정을 찾을 수 없습니다."),
+
     NOT_FOUND_PARTICIPANT_FAILURE(HttpStatus.NOT_FOUND, "일정의 참여자를 찾을 수 없습니다."),
+
     NOT_FOUND_CATEGORY_FAILURE(HttpStatus.NOT_FOUND, "카테고리를 찾을 수 없습니다."),
+
     NOT_FOUND_PALETTE_FAILURE(HttpStatus.NOT_FOUND, "팔레트를 찾을 수 없습니다."),
+
     NOT_FOUND_DIARY_FAILURE(HttpStatus.NOT_FOUND, "다이어리를 찾을 수 없습니다."),
+
     NOT_FOUND_GROUP_DIARY_FAILURE(HttpStatus.NOT_FOUND, "모임 메모 장소를 찾을 수 없습니다."),
+
     NOT_FOUND_GROUP_FAILURE(HttpStatus.NOT_FOUND, "그룹을 찾을 수 없습니다."),
+
     NOT_FOUND_GROUP_AND_USER_FAILURE(HttpStatus.NOT_FOUND, "모임 일정의 참여자가 아닙니다."),
+
     NOT_FOUND_GROUP_SCHEDULE_AND_USER_FAILURE(HttpStatus.NOT_FOUND, "그룹 스케줄 구성원이 아닙니다."),
+
     NOT_FOUND_GROUP_MEMO_FAILURE(HttpStatus.NOT_FOUND, "모임 메모를 찾을 수 없습니다."),
+
     NOT_FOUND_GROUP_MEMO_LOCATION_FAILURE(HttpStatus.NOT_FOUND, "모임 활동을 찾을 수 없습니다."),
+
+    NOT_FOUND_GROUP_ACTIVITY_FAILURE(HttpStatus.NOT_FOUND, "모임 활동을 찾을 수 없습니다."),
+
     NOT_FOUND_ACTIVITY_IMG_FAILURE(HttpStatus.NOT_FOUND, "모임 활동 이미지를 찾을 수 없습니다."),
+
     NOT_FOUND_COLOR(HttpStatus.NOT_FOUND, "색깔을 찾을 수 없습니다."),
+
     NOT_FOUND_IMAGE(HttpStatus.NOT_FOUND, "이미지를 찾을 수 없습니다."),
+
     NOT_FOUND_FRIENDSHIP_FAILURE(HttpStatus.NOT_FOUND, "친구인 유저를 찾을 수 없습니다."),
+
     NOT_FOUND_MOBILE_DEVICE_FAILURE(HttpStatus.NOT_FOUND, "유저의 모바일 기기 정보를 찾을 수 없습니다."),
+
     NOT_FOUND_DEVICE_FAILURE(HttpStatus.NOT_FOUND, "유저의 기기 정보를 찾을 수 없습니다."),
 
     /**
@@ -121,7 +157,6 @@ public enum ErrorStatus implements BaseErrorCode {
     SCHEDULE_PARTICIPANT_IS_EMPTY_ERROR(HttpStatus.NOT_FOUND, "모임 일정의 참여자가 없습니다."),
 
     NOT_SUPPORTED_DEVICE_TYPE(HttpStatus.NOT_FOUND, "푸쉬 알림 전송이 지원되지 않는 기기입니다."),
-
 
     /**
      * 404 : 중복 에러

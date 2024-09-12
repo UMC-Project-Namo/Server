@@ -4,7 +4,7 @@ import com.namo.spring.core.common.response.ResponseDto;
 
 public interface BaseCode {
 
-	public ResponseDto.ReasonDto getReason();
+    public ResponseDto.ReasonDto getReason();
 
-	public ResponseDto.ReasonDto getReasonHttpStatus();
+    public ResponseDto.ReasonDto getReasonHttpStatus();
 }

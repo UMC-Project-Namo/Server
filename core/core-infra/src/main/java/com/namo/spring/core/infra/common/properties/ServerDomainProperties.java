@@ -9,6 +9,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @ConfigurationProperties(prefix = "server.domain")
 public class ServerDomainProperties {
-	private final String local;
-	private final String service;
+    private final String local;
+    private final String service;
 }

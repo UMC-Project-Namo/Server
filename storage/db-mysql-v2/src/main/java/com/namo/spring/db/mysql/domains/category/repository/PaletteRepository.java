@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.namo.spring.db.mysql.domains.category.entity.Palette;
 
 public interface PaletteRepository extends JpaRepository<Palette, Long> {
-	List<Palette> findByIdIn(List<Long> paletteIds);
+    List<Palette> findByIdIn(List<Long> paletteIds);
 }

@@ -4,7 +4,7 @@ import com.namo.spring.core.common.code.BaseErrorCode;
 import com.namo.spring.core.common.exception.GeneralException;
 
 public class CategoryException extends GeneralException {
-	public CategoryException(BaseErrorCode code) {
-		super(code);
-	}
+    public CategoryException(BaseErrorCode code) {
+        super(code);
+    }
 }

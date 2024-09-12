@@ -3,6 +3,7 @@ package com.namo.spring.db.mysql.domains.notification.type;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.namo.spring.db.mysql.common.converter.CodedEnum;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

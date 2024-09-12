@@ -1,12 +1,14 @@
 package com.namo.spring.db.mysql.domains.notification.service;
 
+import java.util.List;
+
+import org.springframework.transaction.annotation.Transactional;
+
 import com.namo.spring.core.common.annotation.DomainService;
 import com.namo.spring.db.mysql.domains.notification.entity.Device;
 import com.namo.spring.db.mysql.domains.notification.repository.DeviceRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @DomainService
 @RequiredArgsConstructor

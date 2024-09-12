@@ -18,7 +18,7 @@ public enum ColorChip {
     COLOR_12(12L, "2131034716"),
     COLOR_13(13L, "2131034717"),
     COLOR_14(14L, "2131034709");
-
+    
     private final Long id;
     private final String colorCode;
 

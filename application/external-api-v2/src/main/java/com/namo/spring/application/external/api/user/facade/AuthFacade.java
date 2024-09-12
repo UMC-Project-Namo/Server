@@ -1,5 +1,12 @@
 package com.namo.spring.application.external.api.user.facade;
 
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.namo.spring.application.external.api.user.converter.MemberConverter;
 import com.namo.spring.application.external.api.user.converter.MemberResponseConverter;
 import com.namo.spring.application.external.api.user.converter.TermConverter;
@@ -15,14 +22,9 @@ import com.namo.spring.db.mysql.domains.category.entity.Palette;
 import com.namo.spring.db.mysql.domains.category.service.PaletteService;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.type.SocialType;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Component
@@ -48,7 +50,7 @@ public class AuthFacade {
     }
 
     private MemberResponse.SignUpDto processSocialSignup(MemberRequest.SocialSignUpDto signUpDto, SocialType socialType,
-                                                         Map<String, String> socialUserInfo) {
+            Map<String, String> socialUserInfo) {
         Member member = MemberConverter.toMember(socialUserInfo, signUpDto.getSocialRefreshToken(), socialType);
         MemberDto.MemberCreationRecord memberInfo = processOrRetrieveMember(member, socialType,
                 signUpDto.getSocialRefreshToken());
@@ -56,13 +58,13 @@ public class AuthFacade {
     }
 
     private MemberResponse.SignUpDto processAppleSignup(MemberRequest.AppleSignUpDto req, String authId,
-                                                        String appleRefreshToken) {
+            String appleRefreshToken) {
         MemberDto.MemberCreationRecord memberInfo = processOrRetrieveAppleMember(req, appleRefreshToken, authId);
         return createSignUpResponse(memberInfo.member(), memberInfo.isNewUser());
     }
 
     private MemberDto.MemberCreationRecord processOrRetrieveAppleMember(MemberRequest.AppleSignUpDto req,
-                                                                        String appleRefreshToken, String authId) {
+            String appleRefreshToken, String authId) {
         return memberManageService.getMemberByEmailAndSocialType(authId, SocialType.APPLE)
                 .map(existingMember -> new MemberDto.MemberCreationRecord(
                         memberManageService.updateExistingAppleMember(existingMember, appleRefreshToken),
@@ -73,7 +75,7 @@ public class AuthFacade {
     }
 
     private MemberDto.MemberCreationRecord processOrRetrieveMember(Member member, SocialType socialType,
-                                                                   String socialRefreshToken) {
+            String socialRefreshToken) {
         return memberManageService.getMemberByEmailAndSocialType(member.getEmail(), socialType)
                 .map(existingMember -> memberManageService.updateExistingMember(existingMember, socialRefreshToken))
                 .orElseGet(() -> memberManageService.createNewMember(member));

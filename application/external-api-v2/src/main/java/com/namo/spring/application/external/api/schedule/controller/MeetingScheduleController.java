@@ -1,21 +1,33 @@
 package com.namo.spring.application.external.api.schedule.controller;
 
+import java.util.List;
+
+import jakarta.validation.Valid;
+
+import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.namo.spring.application.external.api.schedule.api.MeetingScheduleApi;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
 import com.namo.spring.application.external.api.schedule.usecase.MeetingScheduleUsecase;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.core.common.response.ResponseDto;
+
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Tag(name = "모임 일정", description = "모임 일정 관련 API")
 @Slf4j
@@ -40,7 +52,8 @@ public class MeetingScheduleController implements MeetingScheduleApi {
      * 모임 일정 목록 조회 API
      */
     @GetMapping("")
-    public ResponseDto<List<MeetingScheduleResponse.GetMeetingScheduleSummaryDto>> getMyMeetingSchedules(@AuthenticationPrincipal SecurityUserDetails memberInfo) {
+    public ResponseDto<List<MeetingScheduleResponse.GetMeetingScheduleSummaryDto>> getMyMeetingSchedules(
+            @AuthenticationPrincipal SecurityUserDetails memberInfo) {
         return ResponseDto.onSuccess(meetingScheduleUsecase.getMeetingSchedules(memberInfo));
     }
 
@@ -53,7 +66,8 @@ public class MeetingScheduleController implements MeetingScheduleApi {
             @RequestParam Integer month,
             @RequestParam List<Long> participantIds,
             @AuthenticationPrincipal SecurityUserDetails memberInfo) {
-        return ResponseDto.onSuccess(meetingScheduleUsecase.getMonthlyMemberSchedules(participantIds, year, month, memberInfo));
+        return ResponseDto.onSuccess(
+                meetingScheduleUsecase.getMonthlyMemberSchedules(participantIds, year, month, memberInfo));
     }
 
     /**
@@ -65,7 +79,9 @@ public class MeetingScheduleController implements MeetingScheduleApi {
             @RequestParam Integer year,
             @RequestParam Integer month,
             @AuthenticationPrincipal SecurityUserDetails memberInfo) {
-        return ResponseDto.onSuccess(meetingScheduleUsecase.getMonthlyMeetingParticipantSchedules(meetingScheduleId, year, month, memberInfo));
+        return ResponseDto.onSuccess(
+                meetingScheduleUsecase.getMonthlyMeetingParticipantSchedules(meetingScheduleId, year, month,
+                        memberInfo));
     }
 
     /**
