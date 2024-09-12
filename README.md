@@ -86,8 +86,9 @@
 ### 캐슬/이호성
 
 - [여러 이미지가 포함된 데이터를 수정하기 : 나모의 이미지 기능 수정 과정 1편](https://namo-log.vercel.app/server-editing-image)
-- [Presigned URL 도입기 : 나모의 이미지 기능 수정 과정 2편](https://tech.namong.shop/server-editing-image-2)
-- [AWS Lambda를 활용한 서버리스 이미지 리사이징 도입기 : 나모의 이미기 기능 수정 과정 3편](https://tech.namong.shop/server-editing-image-3)
+- [Presigned URL 도입기 : 나모의 이미지 기능 수정 과정 2편](https://namo-log.vercel.app/server-editing-image-2)
+- [AWS Lambda를 활용한 서버리스 이미지 리사이징 도입기 : 나모의 이미기 기능 수정 과정 3편](https://namo-log.vercel.app/server-editing-image-3)
+- [CloudFront를 활용한 CDN 도입 : 나모의 이미지 기능 수정과정 4편](https://namo-log.vercel.app/server-editing-image-4)
 
 ### 다나/서주원
 
