@@ -6,6 +6,7 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -135,5 +136,14 @@ public class DiaryController {
         } catch (DateTimeParseException e) {
             throw new DiaryException(ErrorStatus.INVALID_FORMAT_FAILURE);
         }
+    }
+
+    @DeleteMapping("/{diaryId}")
+    public ResponseDto<String> deleteDiary(
+            @AuthenticationPrincipal SecurityUserDetails memberInfo,
+            @Parameter(description = "삭제할 일기 ID 입니다.", example = "1")
+            @PathVariable Long diaryId
+    ){
+        return ResponseDto.onSuccess("일기 삭제에 성공했습니다.");
     }
 }
