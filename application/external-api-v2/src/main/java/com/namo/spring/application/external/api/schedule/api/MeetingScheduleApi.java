@@ -1,7 +1,7 @@
 package com.namo.spring.application.external.api.schedule.api;
 
+import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
-import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.core.common.code.status.ErrorStatus;
@@ -77,7 +77,7 @@ public interface MeetingScheduleApi {
                     }
                     """)
     }))
-    ResponseDto<Long> createMeetingSchedule(@Parameter(description = "생성 요청 dto") @Valid @RequestPart ScheduleRequest.PostMeetingScheduleDto dto,
+    ResponseDto<Long> createMeetingSchedule(@Parameter(description = "생성 요청 dto") @Valid @RequestPart MeetingScheduleRequest.PostMeetingScheduleDto dto,
                                             @Parameter(description = "모임 일정 프로필 이미지") @RequestPart(required = false) MultipartFile image,
                                             @AuthenticationPrincipal SecurityUserDetails member);
 
@@ -235,7 +235,7 @@ public interface MeetingScheduleApi {
     }))
     ResponseDto<String> updateMeetingSchedule(
             @Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
-            @Parameter(description = "수정 요청 dto") @RequestBody @Valid ScheduleRequest.PatchMeetingScheduleDto dto,
+            @Parameter(description = "수정 요청 dto") @RequestBody @Valid MeetingScheduleRequest.PatchMeetingScheduleDto dto,
             @AuthenticationPrincipal SecurityUserDetails memberInfo);
 
     @Operation(summary = "모임 상세 조회", description = "모임 일정을 상세 조회합니다.")
