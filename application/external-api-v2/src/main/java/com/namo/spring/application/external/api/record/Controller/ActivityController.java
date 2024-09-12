@@ -27,28 +27,28 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/v2/activities")
 public class ActivityController {
 
-	private final ActivityUseCase activityUseCase;
+    private final ActivityUseCase activityUseCase;
 
-	@Operation(summary = "모임 기록 - 활동 조회", description = "모임 스케줄에 대한 활동 목록이 조회됩니다.")
-	@ApiErrorCodes(value = {
-		ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE,
-	})
-	@GetMapping("/{scheduleId}")
-	public ResponseDto<List<ActivityResponse.ActivityInfoDto>> getActivity(
-		@AuthenticationPrincipal SecurityUserDetails memberInfo,
-		@Parameter(description = "활동을 조회할 스케줄 ID 입니다..", example = "1")
-		@PathVariable Long scheduleId) {
+    @Operation(summary = "모임 기록 - 활동 조회", description = "모임 스케줄에 대한 활동 목록이 조회됩니다.")
+    @ApiErrorCodes(value = {
+        ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE,
+    })
+    @GetMapping("/{scheduleId}")
+    public ResponseDto<List<ActivityResponse.ActivityInfoDto>> getActivity(
+        @AuthenticationPrincipal SecurityUserDetails memberInfo,
+        @Parameter(description = "활동을 조회할 스케줄 ID 입니다..", example = "1")
+        @PathVariable Long scheduleId) {
 
-		return ResponseDto.onSuccess(activityUseCase
-			.getActivities(memberInfo.getUserId(), scheduleId));
-	}
+        return ResponseDto.onSuccess(activityUseCase
+            .getActivities(memberInfo.getUserId(), scheduleId));
+    }
 
-	@Operation(summary = "모임 기록 활동에 대한 정산 팝업 조회", description = "모임 활동의 정산 내역을 조회합니다. (팝업 내용에 해당합니다)")
-	@GetMapping("/settlement/{activityId}")
-	public ResponseDto<ActivityResponse.ActivitySettlementInfoDto> getActivitySettlement(
-		@AuthenticationPrincipal SecurityUserDetails memberInfo,
-		@Parameter(description = "정산할 활동(activity) ID 입니다.", example = "1")
-		@PathVariable Long activityId) {
-		return ResponseDto.onSuccess(activityUseCase.getSettlement(memberInfo.getUserId(), activityId));
-	}
+    @Operation(summary = "모임 기록 활동에 대한 정산 팝업 조회", description = "모임 활동의 정산 내역을 조회합니다. (팝업 내용에 해당합니다)")
+    @GetMapping("/settlement/{activityId}")
+    public ResponseDto<ActivityResponse.ActivitySettlementInfoDto> getActivitySettlement(
+        @AuthenticationPrincipal SecurityUserDetails memberInfo,
+        @Parameter(description = "정산할 활동(activity) ID 입니다.", example = "1")
+        @PathVariable Long activityId) {
+        return ResponseDto.onSuccess(activityUseCase.getSettlement(memberInfo.getUserId(), activityId));
+    }
 }
