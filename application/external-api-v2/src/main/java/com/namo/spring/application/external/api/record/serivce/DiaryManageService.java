@@ -74,4 +74,14 @@ public class DiaryManageService {
         diary.update(request.getContent(), request.getEnjoyRating());
         diaryImageManageService.updateDiaryImage(diary, request);
     }
+
+    /**
+     * 다이어리를 삭제하는 메서드입니다.
+     * !! 내 일기인지 검증합니다.
+     * @param memberId
+     * @param diaryId
+     */
+    public void deleteDiary(Long memberId, Long diaryId) {
+        diaryService.deleteDiary(getMyDiary(diaryId, memberId).getId());
+    }
 }
