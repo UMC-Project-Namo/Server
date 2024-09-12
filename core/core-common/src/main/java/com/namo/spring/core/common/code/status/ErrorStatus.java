@@ -48,6 +48,7 @@ public enum ErrorStatus implements BaseErrorCode {
     APPLE_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "애플 authorization code가 잘못되었습니다."),
     FORBIDDEN_ACCESS_TOKEN(HttpStatus.FORBIDDEN, "해당 토큰에는 엑세스 권한이 없습니다."),
     EXPIRED_TOKEN(HttpStatus.FORBIDDEN, "사용기간이 만료된 토큰입니다."),
+    ANONYMOUS_LOGIN_FAILURE(HttpStatus.UNAUTHORIZED, "게스트 로그인에 실패하였습니다."),
 
     /**
      * 403 : local Access Token 오류
@@ -98,16 +99,27 @@ public enum ErrorStatus implements BaseErrorCode {
      * 404 : 예외 상황 에러
      */
     NOT_DELETE_BASE_CATEGORY_FAILURE(HttpStatus.NOT_FOUND, "일정 및 모임 카테고리는 삭제 될 수 없습니다."),
+
     NOT_CHANGE_SPECIFIED_NAME_FAILURE(HttpStatus.NOT_FOUND, "일정 및 모임은 기본 카테고리로 지정된 이름입니다."),
+
     NOT_INCLUDE_OWNER_IN_REQUEST(HttpStatus.NOT_FOUND, "모임 생성자는 참가자 목록에 포함될 수 없습니다."),
+
     NOT_CHECK_TERM_ERROR(HttpStatus.NOT_FOUND, "약관에 무조건 동의 해야합니다."),
+
     GROUP_MEMO_IS_FULL_ERROR(HttpStatus.NOT_FOUND, "모임 메모가 가득 차 있습니다."),
+
     NOT_INCLUDE_GROUP_USER(HttpStatus.NOT_FOUND, "모임 안에 포함되어 있지 않은 유저입니다."),
+
     EMPTY_USERS_FAILURE(HttpStatus.NOT_FOUND, "모임 일정에 참여글 유저가 없습니다."),
+
     NOT_HAS_GROUP_CATEGORIES_USERS(HttpStatus.NOT_FOUND, "유저들에 대한 모임의 카테고리가 없습니다."),
+
     INVALID_DATE(HttpStatus.NOT_FOUND, "시작 날짜가 종료 날짜 이전 이어야 합니다."),
+
     INVALID_ALARM(HttpStatus.NOT_FOUND, "알림 시간이 유효하지 않습니다."),
+
     SCHEDULE_PARTICIPANT_IS_EMPTY_ERROR(HttpStatus.NOT_FOUND, "모임 일정의 참여자가 없습니다."),
+
     NOT_SUPPORTED_DEVICE_TYPE(HttpStatus.NOT_FOUND, "푸쉬 알림 전송이 지원되지 않는 기기입니다."),
 
 
@@ -115,24 +127,33 @@ public enum ErrorStatus implements BaseErrorCode {
      * 404 : 중복 에러
      */
     DIARY_EXISTS_FAILURE(HttpStatus.NOT_FOUND, "이미 존재하는 다이어리 입니다."),
+
     DUPLICATE_PARTICIPATE_FAILURE(HttpStatus.NOT_FOUND, "이미 가입한 그룹입니다."),
+
     DUPLICATE_GROUP_MEMO_FAILURE(HttpStatus.NOT_FOUND, "이미 모임 메모가 생성되어 있습니다."),
+
     DUPLICATE_EMAIL_FAILURE(HttpStatus.NOT_FOUND, "이미 해당 소셜 이메일이 가입되어 있습니다."),
 
     /**
      * 404 : 오용 오류
      */
     NOT_USERS_CATEGORY(HttpStatus.NOT_FOUND, "해당 유저의 카테고리가 아닙니다."),
+
     NOT_USERS_IN_GROUP(HttpStatus.NOT_FOUND, "유저가 그룹에 포함되어 있지 않습니다."),
+
     NOT_IMAGE_IN_DIARY(HttpStatus.NOT_FOUND, "이미지가 다이어리에 포함되어 있지 않습니다."),
+
     NOT_FILTERTYPE_OF_ARCHIVE(HttpStatus.NOT_FOUND, "올바른 필터 타입이 아닙니다"),
 
     /**
      * 404 : 인프라 에러
      */
     FILE_NAME_EXCEPTION(HttpStatus.NOT_FOUND, "파일 확장자가 잘못되었습니다."),
+
     S3_UPLOAD_FAILURE(HttpStatus.NOT_FOUND, "파일 업로드 과정에서 오류가 발생하였습니다."),
+
     S3_DELETE_FAILURE(HttpStatus.NOT_FOUND, "파일 삭제 과정에서 오류가 발생하였습니다."),
+
     NAVER_NOT_FOUND(HttpStatus.NOT_FOUND, "[네이버] 검색 결과가 없습니다"),
 
     /**
@@ -144,10 +165,15 @@ public enum ErrorStatus implements BaseErrorCode {
      * 404 : 서버 에러
      */
     INTERNET_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류"),
+
     JPA_FAILURE(HttpStatus.INTERNAL_SERVER_ERROR, "jpa, sql 상에서 오류가 발생했습니다."),
+
     KAKAO_INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "카카오 서버 오류"),
+
     KAKAO_BAD_GATEWAY(HttpStatus.INTERNAL_SERVER_ERROR, "카카오 시스템 오류"),
+
     KAKAO_SERVICE_UNAVAILABLE(HttpStatus.INTERNAL_SERVER_ERROR, "카카오 서비스 점검 중"),
+
     FEIGN_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "feign 서버 에러");
 
     private final HttpStatus code;

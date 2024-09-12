@@ -4,11 +4,13 @@ import com.namo.spring.application.external.api.category.service.CategoryMaker;
 import com.namo.spring.application.external.api.user.converter.MemberConverter;
 import com.namo.spring.application.external.api.user.dto.MemberDto;
 import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.entity.Term;
 import com.namo.spring.db.mysql.domains.user.exception.MemberException;
 import com.namo.spring.db.mysql.domains.user.repository.MemberRepository;
 import com.namo.spring.db.mysql.domains.user.repository.TermRepository;
+import com.namo.spring.db.mysql.domains.user.service.AnonymousService;
 import com.namo.spring.db.mysql.domains.user.service.MemberService;
 import com.namo.spring.db.mysql.domains.user.type.MemberStatus;
 import com.namo.spring.db.mysql.domains.user.type.SocialType;
@@ -17,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +32,7 @@ public class MemberManageService {
     private final TermRepository termRepository;
     private final MemberService memberService;
     private final CategoryMaker categoryMaker;
+    private final AnonymousService anonymousService;
 
     public List<Term> getTerms(Member member) {
         return termRepository.findTermsByMember(member);
@@ -105,6 +109,15 @@ public class MemberManageService {
         return members.stream()
                 .map(Member::getTag)
                 .toList();
+    }
+
+    public List<String> getUserTagsByNicname(String nickname) {
+        List<String> tags = new ArrayList<>();
+        tags.addAll(getMemberTagsByNickname(nickname));
+        tags.addAll(anonymousService.readAnonymousNickname(nickname).stream()
+                .map(Anonymous::getTag)
+                .toList());
+        return tags;
     }
 
     public void validateEmail(SocialType socialType, String email) {

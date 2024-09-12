@@ -2,8 +2,8 @@ package com.namo.spring.application.external.api.schedule.usecase;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.namo.spring.application.external.api.notification.service.NotificationManageService;
+import com.namo.spring.application.external.api.schedule.dto.PersonalScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.PersonalScheduleResponse;
-import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
 import com.namo.spring.application.external.api.schedule.service.ScheduleManageService;
 import com.namo.spring.application.external.api.user.service.MemberManageService;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
@@ -31,7 +31,7 @@ public class PersonalScheduleUsecase {
     private final NotificationManageService notificationManageService;
 
     @Transactional
-    public Long createPersonalSchedule(ScheduleRequest.PostPersonalScheduleDto dto, SecurityUserDetails memberInfo) throws JsonProcessingException {
+    public Long createPersonalSchedule(PersonalScheduleRequest.PostPersonalScheduleDto dto, SecurityUserDetails memberInfo) throws JsonProcessingException {
         Member member = memberManageService.getMember(memberInfo.getUserId());
         Schedule schedule = scheduleManageService.createPersonalSchedule(dto, member);
         if (!dto.getReminderTrigger().isEmpty()) {
@@ -48,15 +48,9 @@ public class PersonalScheduleUsecase {
     }
 
     @Transactional
-    public void updatePersonalSchedule(ScheduleRequest.PatchPersonalScheduleDto patchPersonalScheduleDto, Long scheduleId, SecurityUserDetails memberInfo) {
+    public void updatePersonalSchedule(PersonalScheduleRequest.PatchPersonalScheduleDto patchPersonalScheduleDto, Long scheduleId, SecurityUserDetails memberInfo) {
         Schedule schedule = scheduleManageService.getPersonalSchedule(scheduleId);
         scheduleManageService.updatePersonalSchedule(patchPersonalScheduleDto, schedule, memberInfo.getUserId());
-    }
-
-    @Transactional
-    public void updateOrCreateScheduleReminder(ScheduleRequest.PutScheduleReminderDto dto, Long scheduleId, SecurityUserDetails memberInfo) {
-        Member member = memberManageService.getMember(memberInfo.getUserId());
-        notificationManageService.updateOrCreateScheduleReminderNotification(scheduleId, member, dto.getReminderTrigger());
     }
 
     @Transactional(readOnly = true)

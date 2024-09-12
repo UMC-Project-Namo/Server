@@ -1,6 +1,6 @@
 package com.namo.spring.application.external.global.utils;
 
-import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
+import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
 import lombok.RequiredArgsConstructor;
@@ -57,7 +57,7 @@ public class MeetingParticipantValidationUtils {
      * @param ownerId 모임 일정 생정자 ID
      * @param dto     참석자 ID 배열
      */
-    public static void validateUniqueParticipantIds(Long ownerId, ScheduleRequest.PatchMeetingScheduleDto dto) {
+    public static void validateUniqueParticipantIds(Long ownerId, MeetingScheduleRequest.PatchMeetingScheduleDto dto) {
         List<Long> participantIds = new ArrayList<>();
         participantIds.addAll(dto.getParticipantsToAdd());
         participantIds.addAll(dto.getParticipantsToRemove());

@@ -2,8 +2,8 @@ package com.namo.spring.application.external.api.schedule.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.namo.spring.application.external.api.schedule.api.PersonalScheduleApi;
+import com.namo.spring.application.external.api.schedule.dto.PersonalScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.PersonalScheduleResponse;
-import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
 import com.namo.spring.application.external.api.schedule.usecase.PersonalScheduleUsecase;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.core.common.response.ResponseDto;
@@ -30,7 +30,7 @@ public class PersonalScheduleController implements PersonalScheduleApi {
      */
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDto<Long> createPersonalSchedule(
-            @Valid @RequestBody ScheduleRequest.PostPersonalScheduleDto dto,
+            @Valid @RequestBody PersonalScheduleRequest.PostPersonalScheduleDto dto,
             @AuthenticationPrincipal SecurityUserDetails member) throws JsonProcessingException {
         return ResponseDto.onSuccess(personalScheduleUsecase.createPersonalSchedule(dto, member));
     }
@@ -63,20 +63,9 @@ public class PersonalScheduleController implements PersonalScheduleApi {
      */
     @PatchMapping("/{scheduleId}")
     public ResponseDto<String> updatePersonalSchedules(@PathVariable Long scheduleId,
-                                                       @Valid @RequestBody ScheduleRequest.PatchPersonalScheduleDto dto,
+                                                       @Valid @RequestBody PersonalScheduleRequest.PatchPersonalScheduleDto dto,
                                                        @AuthenticationPrincipal SecurityUserDetails member) {
         personalScheduleUsecase.updatePersonalSchedule(dto, scheduleId, member);
         return ResponseDto.onSuccess("일정 수정 성공");
-    }
-
-    /**
-     * 일정 예정 알림 수정 API
-     */
-    @PutMapping("/{scheduleId}/notifications")
-    public ResponseDto<String> updateScheduleReminder(@PathVariable Long scheduleId,
-                                                      @Valid @RequestBody ScheduleRequest.PutScheduleReminderDto dto,
-                                                      @AuthenticationPrincipal SecurityUserDetails member) {
-        personalScheduleUsecase.updateOrCreateScheduleReminder(dto, scheduleId, member);
-        return ResponseDto.onSuccess("알림 수정 성공");
     }
 }

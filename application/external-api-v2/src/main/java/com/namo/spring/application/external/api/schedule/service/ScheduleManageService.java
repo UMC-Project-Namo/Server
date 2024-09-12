@@ -1,7 +1,8 @@
 package com.namo.spring.application.external.api.schedule.service;
 
 import com.namo.spring.application.external.api.schedule.converter.LocationConverter;
-import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
+import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
+import com.namo.spring.application.external.api.schedule.dto.PersonalScheduleRequest;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
@@ -56,14 +57,14 @@ public class ScheduleManageService {
         return schedule;
     }
 
-    public Schedule createPersonalSchedule(ScheduleRequest.PostPersonalScheduleDto dto, Member member) {
+    public Schedule createPersonalSchedule(PersonalScheduleRequest.PostPersonalScheduleDto dto, Member member) {
         Period period = getValidatedPeriod(dto.getPeriod().getStartDate(), dto.getPeriod().getEndDate());
         Schedule schedule = scheduleMaker.createPersonalSchedule(dto, period, member.getNickname());
         participantManageService.createPersonalScheduleParticipant(member, schedule, dto.getCategoryId());
         return schedule;
     }
 
-    public Schedule createMeetingSchedule(ScheduleRequest.PostMeetingScheduleDto dto, Member owner,
+    public Schedule createMeetingSchedule(MeetingScheduleRequest.PostMeetingScheduleDto dto, Member owner,
                                           MultipartFile image) {
         validateParticipantCount(dto.getParticipants().size());
         List<Member> participants = participantManageService.getFriendshipValidatedParticipants(owner.getId(),
@@ -114,64 +115,98 @@ public class ScheduleManageService {
                 .collect(Collectors.toList());
     }
 
-    public List<ScheduleParticipantQuery> getMonthlyMeetingParticipantSchedules(Schedule schedule, Period period, Long memberId) {
-        checkParticipantExists(schedule, memberId);
-        List<Participant> participants = participantManageService.getMeetingScheduleParticipants(schedule.getId(), ParticipantStatus.ACTIVE);
+    public List<ScheduleParticipantQuery> getMonthlyMeetingParticipantSchedules(Schedule schedule, Period period, Long memberId, Long anonymousId) {
+        checkParticipantExists(schedule, memberId, null);
+        List<Participant> participants = participantService.readParticipantsByScheduleIdAndStatusAndType(schedule.getId(), ScheduleType.MEETING, ParticipantStatus.ACTIVE);
         List<Long> members = participants.stream().map(Participant::getUser).map(User::getId).collect(Collectors.toList());
 
         return participantService.readParticipantsWithUserAndScheduleByPeriod(members, period.getStartDate(), period.getEndDate())
                 .stream()
                 // 다른 유저의 일정일 경우 공유 여부로 필터링
-                .filter(participant -> {
-                    boolean isSharedSchedule = true;
-                    if (!participant.getMemberId().equals(memberId)) isSharedSchedule = participant.getIsShared();
-                    return isSharedSchedule;
-                })
+                .filter(participant -> isSharedOrOwnSchedule(participant, memberId, anonymousId))
                 .collect(Collectors.toList());
     }
 
-    private void checkParticipantExists(Schedule schedule, Long memberId) {
-        if (!participantService.existsByScheduleIdAndMemberId(schedule.getId(), memberId)) {
+    /**
+     * 게스트 유저가 조회할 경우 공유된 일정만을,
+     * 회원 유저가 조회할 경우 조회하는 회원의 비공개 일정까지 조회되도록
+     * 필터링 합니다.
+     *
+     * @param participant
+     * @param memberId
+     * @param anonymousId
+     * @return 조회하는 회원의 비공개 일정 조회 여부
+     */
+    private boolean isSharedOrOwnSchedule(ScheduleParticipantQuery participant, Long memberId, Long anonymousId) {
+        if (anonymousId != null) {
+            return true;
+        }
+        // memberId가 있는 경우
+        return participant.getMemberId().equals(memberId) || participant.getIsShared();
+    }
+
+
+    private void checkParticipantExists(Schedule schedule, Long memberId, Long anonymousId) {
+        boolean isParticipant;
+        if (memberId != null)
+            isParticipant = participantService.existsByScheduleIdAndMemberId(schedule.getId(), memberId);
+        else isParticipant = participantService.existsByScheduleIdAndAnonymousId(schedule.getId(), anonymousId);
+        if (!isParticipant) {
             throw new ScheduleException(ErrorStatus.NOT_SCHEDULE_PARTICIPANT);
         }
     }
 
-    public List<Participant> getMeetingScheduleParticipants(Schedule schedule, Long memberId) {
-        checkParticipantExists(schedule, memberId);
+    public List<Participant> getMeetingScheduleParticipants(Schedule schedule, Long memberId, Long anonymousId) {
+        checkParticipantExists(schedule, memberId, anonymousId);
         return participantService.readParticipantsByScheduleIdAndStatusAndType(schedule.getId(), ScheduleType.MEETING, null);
     }
 
-    public void updatePersonalSchedule(ScheduleRequest.PatchPersonalScheduleDto dto, Schedule schedule, Long memberId) {
-        participantManageService.validateScheduleOwner(schedule, memberId);
+    public void updatePersonalSchedule(PersonalScheduleRequest.PatchPersonalScheduleDto dto, Schedule schedule, Long memberId) {
+        validateScheduleOwner(schedule, memberId);
         updateScheduleContent(dto.getTitle(), dto.getLocation(), dto.getPeriod(), schedule);
     }
 
-    public void updateMeetingSchedule(ScheduleRequest.PatchMeetingScheduleDto dto, Schedule schedule, Long memberId) {
-        participantManageService.validateScheduleOwner(schedule, memberId);
+    public void updateMeetingSchedule(MeetingScheduleRequest.PatchMeetingScheduleDto dto, Schedule schedule, Long memberId) {
+        validateScheduleOwner(schedule, memberId);
         updateScheduleContent(dto.getTitle(), dto.getLocation(), dto.getPeriod(), schedule);
         // 기존의 인원과, 초대될 & 삭제될 member  검증
         if (!dto.getParticipantsToAdd().isEmpty() || !dto.getParticipantsToRemove().isEmpty()) {
-            List<Long> participantIds = participantService.readParticipantsByScheduleId(schedule.getId()).stream()
-                    .filter(participant -> participant.getIsOwner() == ParticipantRole.NON_OWNER.getValue())
-                    .map(Participant::getMember)
-                    .map(Member::getId)
-                    .collect(Collectors.toList());
+            List<Long> participantIds = getScheduleParticipantIds(schedule.getId());
             validateParticipantCount(participantIds.size() + dto.getParticipantsToAdd().size() - dto.getParticipantsToRemove().size());
             validateExistingAndNewParticipantIds(participantIds, dto.getParticipantsToAdd());
             participantManageService.updateMeetingScheduleParticipants(memberId, schedule, dto);
         }
     }
 
-    private void updateScheduleContent(String title, ScheduleRequest.LocationDto locationDto,
-                                       ScheduleRequest.PeriodDto periodDto, Schedule schedule) {
+    /**
+     * 모임 일정에 대한 모든 참여자의 ID를 반환합니다,
+     * 반환 값에는 활성, 비활성 모든 상태의 참여자가 포함됩니다.
+     * 모임 일정 초대 인원 수를 검증하기 위해 사용합니다.
+     *
+     * @param scheduleId
+     * @return 모임 일정에 대한 모든 참여자의 ID 배열
+     */
+    public List<Long> getScheduleParticipantIds(Long scheduleId) {
+        List<Long> participantIds = participantService.readParticipantsByScheduleId(scheduleId).stream()
+                .filter(participant -> participant.getIsOwner() == ParticipantRole.NON_OWNER.getValue())
+                .map(Participant::getMember)
+                .map(Member::getId)
+                .collect(Collectors.toList());
+        return participantIds;
+    }
+
+    private void updateScheduleContent(String title, MeetingScheduleRequest.LocationDto locationDto,
+                                       MeetingScheduleRequest.PeriodDto periodDto, Schedule schedule) {
         Period period = getValidatedPeriod(periodDto.getStartDate(), periodDto.getEndDate());
         Location location = locationDto != null ? LocationConverter.toLocation(locationDto) : null;
         schedule.updateContent(title, period, location);
     }
 
-    private void checkParticipantIsOwner(Participant participant) {
+    public void validateScheduleOwner(Schedule schedule, Long memberId) {
+        Participant participant = participantManageService.getValidatedParticipantWithSchedule(memberId, schedule.getId());
         if (participant.getIsOwner() != ParticipantRole.OWNER.getValue()) {
             throw new ScheduleException(ErrorStatus.NOT_SCHEDULE_OWNER);
         }
     }
+
 }
