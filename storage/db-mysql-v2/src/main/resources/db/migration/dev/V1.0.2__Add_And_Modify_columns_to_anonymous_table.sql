@@ -14,4 +14,4 @@ ALTER TABLE anonymous
 
 -- invite_code 추가
 ALTER TABLE anonymous
-    ADD COLUMN invite_code VARCHAR(50) NULL;
+    ADD COLUMN invite_code VARCHAR(50) NOT NULL;
