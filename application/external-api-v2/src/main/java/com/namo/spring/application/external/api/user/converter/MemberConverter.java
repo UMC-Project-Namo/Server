@@ -1,10 +1,10 @@
 package com.namo.spring.application.external.api.user.converter;
 
+import java.util.Map;
+
 import com.namo.spring.application.external.api.user.dto.MemberResponse;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.type.SocialType;
-
-import java.util.Map;
 
 public class MemberConverter {
 
@@ -40,5 +40,4 @@ public class MemberConverter {
                 .colorId(member.getPalette().getId())
                 .build();
     }
-
 }

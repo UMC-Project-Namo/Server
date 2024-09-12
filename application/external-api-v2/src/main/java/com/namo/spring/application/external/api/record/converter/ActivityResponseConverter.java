@@ -11,61 +11,61 @@ import com.namo.spring.db.mysql.domains.schedule.type.Location;
 
 public class ActivityResponseConverter {
 
-	public static ActivityResponse.ActivityInfoDto toActivityInfoDto(Activity activity) {
-		return ActivityResponse.ActivityInfoDto.builder()
-			.activityId(activity.getId())
-			.activityTitle(activity.getTitle())
-			.activityParticipants(
-				activity.getParticipants().stream()
-					.map(ActivityResponseConverter::toActivityParticipantDto)
-					.collect(Collectors.toList())
-			)
-			.activityStartDate(activity.getSchedule().getPeriod().getStartDate())
-			.activityEndDate(activity.getSchedule().getPeriod().getEndDate())
-			.activityLocation(toActivityLocationDto(activity.getSchedule().getLocation()))
-			.totalAmount(activity.getTotalAmount())
-			.tag(activity.getCategoryTag())
-			.build();
-	}
+    public static ActivityResponse.ActivityInfoDto toActivityInfoDto(Activity activity) {
+        return ActivityResponse.ActivityInfoDto.builder()
+                .activityId(activity.getId())
+                .activityTitle(activity.getTitle())
+                .activityParticipants(
+                        activity.getParticipants().stream()
+                                .map(ActivityResponseConverter::toActivityParticipantDto)
+                                .collect(Collectors.toList())
+                )
+                .activityStartDate(activity.getSchedule().getPeriod().getStartDate())
+                .activityEndDate(activity.getSchedule().getPeriod().getEndDate())
+                .activityLocation(toActivityLocationDto(activity.getSchedule().getLocation()))
+                .totalAmount(activity.getTotalAmount())
+                .tag(activity.getCategoryTag())
+                .build();
+    }
 
-	public static ActivityResponse.ActivityParticipantDto toActivityParticipantDto(ActivityParticipant participant) {
-		return ActivityResponse.ActivityParticipantDto.builder()
-			.participantMemberId(participant.getParticipant().getMember().getId())
-			.participantNickname(participant.getParticipant().getMember().getNickname())
-			.build();
-	}
+    public static ActivityResponse.ActivityParticipantDto toActivityParticipantDto(ActivityParticipant participant) {
+        return ActivityResponse.ActivityParticipantDto.builder()
+                .participantMemberId(participant.getParticipant().getMember().getId())
+                .participantNickname(participant.getParticipant().getMember().getNickname())
+                .build();
+    }
 
-	public static ActivityResponse.ActivityLocationDto toActivityLocationDto(Location location) {
-		return ActivityResponse.ActivityLocationDto.builder()
-			.kakaoLocationId(location.getKakaoLocationId())
-			.locationName(location.getName())
-			.build();
-	}
+    public static ActivityResponse.ActivityLocationDto toActivityLocationDto(Location location) {
+        return ActivityResponse.ActivityLocationDto.builder()
+                .kakaoLocationId(location.getKakaoLocationId())
+                .locationName(location.getName())
+                .build();
+    }
 
-	public static ActivityResponse.ActivitySettlementInfoDto toActivitySettlementInfoDto(Activity activity) {
-		long divisionCount = activity.getParticipants().stream()
-			.filter(ActivityParticipant::isIncludedInSettlement)
-			.count();
-		BigDecimal amountPerPerson = activity.getTotalAmount()
-			.divide(BigDecimal.valueOf(divisionCount), RoundingMode.HALF_UP);
+    public static ActivityResponse.ActivitySettlementInfoDto toActivitySettlementInfoDto(Activity activity) {
+        long divisionCount = activity.getParticipants().stream()
+                .filter(ActivityParticipant::isIncludedInSettlement)
+                .count();
+        BigDecimal amountPerPerson = activity.getTotalAmount()
+                .divide(BigDecimal.valueOf(divisionCount), RoundingMode.HALF_UP);
 
-		return ActivityResponse.ActivitySettlementInfoDto.builder()
-			.totalAmount(activity.getTotalAmount())
-			.divisionCount((int)divisionCount)
-			.amountPerPerson(amountPerPerson)
-			.participants(activity.getParticipants().stream()
-				.map(ActivityResponseConverter::toActivitySettlementParticipant)
-				.toList())
-			.build();
-	}
+        return ActivityResponse.ActivitySettlementInfoDto.builder()
+                .totalAmount(activity.getTotalAmount())
+                .divisionCount((int)divisionCount)
+                .amountPerPerson(amountPerPerson)
+                .participants(activity.getParticipants().stream()
+                        .map(ActivityResponseConverter::toActivitySettlementParticipant)
+                        .toList())
+                .build();
+    }
 
-	public static ActivityResponse.ActivitySettlementParticipant toActivitySettlementParticipant(
-		ActivityParticipant activityParticipant) {
-		return ActivityResponse.ActivitySettlementParticipant.builder()
-			.activityParticipantId(activityParticipant.getParticipant().getId())
-			.participantNickname(activityParticipant.getParticipant().getMember().getNickname())
-			.isIncludedInSettlement(activityParticipant.isIncludedInSettlement())
-			.build();
-	}
+    public static ActivityResponse.ActivitySettlementParticipant toActivitySettlementParticipant(
+            ActivityParticipant activityParticipant) {
+        return ActivityResponse.ActivitySettlementParticipant.builder()
+                .activityParticipantId(activityParticipant.getParticipant().getId())
+                .participantNickname(activityParticipant.getParticipant().getMember().getNickname())
+                .isIncludedInSettlement(activityParticipant.isIncludedInSettlement())
+                .build();
+    }
 
 }

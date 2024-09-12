@@ -1,16 +1,17 @@
 package com.namo.spring.db.mysql.domains.schedule.repository;
 
-import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
-import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
-import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
+import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
+import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 
 public interface ParticipantRepository extends JpaRepository<Participant, Long> {
 
@@ -27,7 +28,7 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
             "WHERE s.id = :scheduleId AND s.scheduleType = :scheduleType " +
             "AND (:status IS NULL OR p.status = :status)")
     List<Participant> findParticipantsByScheduleIdAndStatusAndType(Long scheduleId, int scheduleType,
-                                                                   ParticipantStatus status);
+            ParticipantStatus status);
 
     @Query("SELECT p FROM Participant p JOIN FETCH p.member m JOIN FETCH p.schedule s WHERE s.id = :scheduleId AND m.id = :memberId")
     Optional<Participant> findParticipantByScheduleIdAndMemberId(Long scheduleId, Long memberId);
@@ -89,21 +90,21 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
             + "WHERE p.hasDiary = true AND p.member.id = :memberId AND p.schedule.title LIKE %:keyword% "
             + "ORDER BY p.schedule.period.startDate DESC")
     List<Participant> findAllByScheduleTitleAndHasDiary(@Param("memberId") Long memberId,
-                                                        @Param("keyword") String keyword, Pageable pageable);
+            @Param("keyword") String keyword, Pageable pageable);
 
     @Query("SELECT p "
             + "FROM Participant p "
             + "WHERE p.hasDiary = true AND p.member.id = :memberId AND p.diary.content LIKE %:keyword% "
             + "ORDER BY p.schedule.period.startDate DESC")
     List<Participant> findAllByDiaryContentAndHasDiary(@Param("memberId") Long memberId,
-                                                       @Param("keyword") String keyword, Pageable pageable);
+            @Param("keyword") String keyword, Pageable pageable);
 
     @Query("SELECT p "
             + "FROM Participant p "
             + "WHERE p.hasDiary = true AND p.member.id = :memberId AND p.schedule.participantNicknames LIKE %:keyword% "
             + "ORDER BY p.schedule.period.startDate DESC")
     List<Participant> findAllByMemberAndHasDiary(@Param("memberId") Long memberId, @Param("keyword") String keyword,
-                                                 Pageable pageable);
+            Pageable pageable);
 
     @Query("SELECT p "
             + "FROM Participant p "
@@ -111,7 +112,7 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
             + "AND p.member.id = :memberId "
             + "AND p.schedule.period.startDate BETWEEN :startDate AND :endDate")
     List<Participant> findAllByDateRangeAndHasDiary(@Param("memberId") Long memberId,
-                                                    @Param("startDate") LocalDateTime startDate,
-                                                    @Param("endDate") LocalDateTime endDate);
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate);
 }
 

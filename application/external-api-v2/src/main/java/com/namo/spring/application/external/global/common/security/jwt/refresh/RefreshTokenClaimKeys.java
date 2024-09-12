@@ -4,11 +4,11 @@ import lombok.Getter;
 
 @Getter
 public enum RefreshTokenClaimKeys {
-	USER_ID("id");
+    USER_ID("id");
 
-	private final String value;
+    private final String value;
 
-	RefreshTokenClaimKeys(String value) {
-		this.value = value;
-	}
+    RefreshTokenClaimKeys(String value) {
+        this.value = value;
+    }
 }

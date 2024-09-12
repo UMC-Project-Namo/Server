@@ -13,18 +13,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ActivityManageService {
 
-	private final ActivityService activityService;
+    private final ActivityService activityService;
 
-	/**
-	 * 활동을 찾는 메서드입니다.
-	 * !! 활동이 존재 하는지 검증합니다.
-	 *
-	 * @param memberId
-	 * @param activityId
-	 * @return
-	 */
-	public Activity getMyActivity(Long memberId, Long activityId) {
-		return activityService.readActivity(activityId)
-			.orElseThrow(() -> new ActivityException(ErrorStatus.NOT_FOUND_GROUP_ACTIVITY_FAILURE));
-	}
+    /**
+     * 활동을 찾는 메서드입니다.
+     * !! 활동이 존재 하는지 검증합니다.
+     *
+     * @param memberId
+     * @param activityId
+     * @return
+     */
+    public Activity getMyActivity(Long memberId, Long activityId) {
+        return activityService.readActivity(activityId)
+                .orElseThrow(() -> new ActivityException(ErrorStatus.NOT_FOUND_GROUP_ACTIVITY_FAILURE));
+    }
 }

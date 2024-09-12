@@ -1,5 +1,22 @@
 package com.namo.spring.db.mysql.domains.schedule.entity;
 
+import java.util.Objects;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+
+import org.hibernate.annotations.DynamicInsert;
+
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
 import com.namo.spring.db.mysql.domains.category.entity.Palette;
@@ -8,14 +25,11 @@ import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.entity.User;
-import jakarta.persistence.*;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicInsert;
-
-import java.util.Objects;
 
 @Getter
 @Entity
@@ -62,10 +76,10 @@ public class Participant extends BaseTimeEntity {
 
     @Builder
     public Participant(int isOwner, User user, Schedule schedule, ParticipantStatus status, Category category,
-                       Palette palette) {
+            Palette palette) {
         this.isOwner = Objects.requireNonNull(isOwner, "isOwner은 null일 수 없습니다.");
-        this.member = user instanceof Member ? (Member) user : null;
-        this.anonymous = user instanceof Anonymous ? (Anonymous) user : null;
+        this.member = user instanceof Member ? (Member)user : null;
+        this.anonymous = user instanceof Anonymous ? (Anonymous)user : null;
         this.schedule = Objects.requireNonNull(schedule, "schedule은 null일 수 없습니다.");
         this.status = Objects.requireNonNull(status, "status는 null일 수 없습니다.");
         this.category = category;
@@ -74,7 +88,7 @@ public class Participant extends BaseTimeEntity {
     }
 
     public static Participant of(int isOwner, User user, Schedule schedule, ParticipantStatus status, Category category,
-                                 Palette palette) {
+            Palette palette) {
         return Participant.builder()
                 .isOwner(isOwner)
                 .user(user)

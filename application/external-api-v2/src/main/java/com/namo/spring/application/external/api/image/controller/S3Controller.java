@@ -19,12 +19,12 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "3. Image", description = "S3 이미지 업로드 관련 API")
 public class S3Controller implements S3Api {
 
-	private final S3Uploader s3Service;
+    private final S3Uploader s3Service;
 
-	@GetMapping("/generate-presigned-url")
-	public ResponseDto<String> generatePresignedUrl(@RequestParam String prefix,
-		@RequestParam String fileName) {
-		String preSignedUrl = s3Service.getPreSignedUrl(prefix, fileName);
-		return ResponseDto.onSuccess(preSignedUrl);
-	}
+    @GetMapping("/generate-presigned-url")
+    public ResponseDto<String> generatePresignedUrl(@RequestParam String prefix,
+            @RequestParam String fileName) {
+        String preSignedUrl = s3Service.getPreSignedUrl(prefix, fileName);
+        return ResponseDto.onSuccess(preSignedUrl);
+    }
 }

@@ -5,20 +5,20 @@ import lombok.Getter;
 
 public class TestResponse {
 
-	private TestResponse() {
-		throw new IllegalStateException("Utility class");
-	}
+    private TestResponse() {
+        throw new IllegalStateException("Utility class");
+    }
 
-	@Getter
-	@Builder
-	public static class LogTestDto {
-		private String text;
-		private Integer number;
-	}
+    @Getter
+    @Builder
+    public static class LogTestDto {
+        private String text;
+        private Integer number;
+    }
 
-	@Getter
-	@Builder
-	public static class TestDto {
-		private String test;
-	}
+    @Getter
+    @Builder
+    public static class TestDto {
+        private String test;
+    }
 }

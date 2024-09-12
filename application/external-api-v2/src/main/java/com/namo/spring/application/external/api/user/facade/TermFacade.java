@@ -22,14 +22,14 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class TermFacade {
 
-	private final MemberService memberService;
-	private final TermManageService termManage;
+    private final MemberService memberService;
+    private final TermManageService termManage;
 
-	@Transactional(readOnly = false)
-	public void termAgreement(MemberRequest.TermDto termDto, Long memberId) {
-		Member member = memberService.readMember(memberId)
-			.orElseThrow(() -> new TermException(ErrorStatus.NOT_FOUND_USER_FAILURE));
-		List<Term> terms = TermConverter.toTerms(termDto, member);
-		termManage.createOrUpdateTerm(terms);
-	}
+    @Transactional(readOnly = false)
+    public void termAgreement(MemberRequest.TermDto termDto, Long memberId) {
+        Member member = memberService.readMember(memberId)
+                .orElseThrow(() -> new TermException(ErrorStatus.NOT_FOUND_USER_FAILURE));
+        List<Term> terms = TermConverter.toTerms(termDto, member);
+        termManage.createOrUpdateTerm(terms);
+    }
 }

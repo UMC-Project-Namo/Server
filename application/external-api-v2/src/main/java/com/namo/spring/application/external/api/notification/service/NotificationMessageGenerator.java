@@ -1,12 +1,15 @@
 package com.namo.spring.application.external.api.notification.service;
 
-import com.namo.spring.db.mysql.domains.notification.type.NotificationType;
-import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import jakarta.annotation.PostConstruct;
+
+import org.springframework.stereotype.Component;
+
+import com.namo.spring.db.mysql.domains.notification.type.NotificationType;
+
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor

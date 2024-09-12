@@ -1,10 +1,11 @@
 package com.namo.spring.db.mysql.domains.notification.repository;
 
-import com.namo.spring.db.mysql.domains.notification.entity.Device;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.namo.spring.db.mysql.domains.notification.entity.Device;
 
 public interface DeviceRepository extends JpaRepository<Device, Long> {
     Optional<Device> findByMemberId(Long memberId);
@@ -12,4 +13,5 @@ public interface DeviceRepository extends JpaRepository<Device, Long> {
     List<Device> findAllByMemberId(Long memberId);
 
     List<Device> findAllByMemberIdIn(List<Long> memberId);
+
 }

@@ -31,65 +31,65 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/v2/auths")
 public class AuthController implements AuthApi {
 
-	private final AuthFacade memberFacade;
+    private final AuthFacade memberFacade;
 
-	@PostMapping(value = "/signup/apple")
-	@PreAuthorize("isAnonymous()")
-	public ResponseDto<MemberResponse.SignUpDto> appleSignup(
-		@Valid @RequestBody MemberRequest.AppleSignUpDto dto
-	) {
-		MemberResponse.SignUpDto signupDto = memberFacade.signupApple(dto);
-		return ResponseDto.onSuccess(signupDto);
-	}
+    @PostMapping(value = "/signup/apple")
+    @PreAuthorize("isAnonymous()")
+    public ResponseDto<MemberResponse.SignUpDto> appleSignup(
+            @Valid @RequestBody MemberRequest.AppleSignUpDto dto
+    ) {
+        MemberResponse.SignUpDto signupDto = memberFacade.signupApple(dto);
+        return ResponseDto.onSuccess(signupDto);
+    }
 
-	@PostMapping(value = "/signup/{socialType}")
-	@PreAuthorize("isAnonymous()")
-	public ResponseDto<MemberResponse.SignUpDto> socialSignup(
-		@Valid @RequestBody MemberRequest.SocialSignUpDto dto,
-		@PathVariable(value = "socialType") SocialType socialType
-	) {
-		MemberResponse.SignUpDto signupDto = memberFacade.socialSignup(dto, socialType);
-		return ResponseDto.onSuccess(signupDto);
-	}
+    @PostMapping(value = "/signup/{socialType}")
+    @PreAuthorize("isAnonymous()")
+    public ResponseDto<MemberResponse.SignUpDto> socialSignup(
+            @Valid @RequestBody MemberRequest.SocialSignUpDto dto,
+            @PathVariable(value = "socialType") SocialType socialType
+    ) {
+        MemberResponse.SignUpDto signupDto = memberFacade.socialSignup(dto, socialType);
+        return ResponseDto.onSuccess(signupDto);
+    }
 
-	@PostMapping(value = "/signup/complete")
-	public ResponseDto<MemberResponse.SignUpDoneDto> completeSignup(
-		@Valid @RequestBody MemberRequest.CompleteSignUpDto dto,
-		@AuthenticationPrincipal SecurityUserDetails member
-	) {
-		Member target = memberFacade.completeSignup(dto, member.getUserId());
-		return ResponseDto.onSuccess(MemberConverter.toSignUpDoneDto(target));
-	}
+    @PostMapping(value = "/signup/complete")
+    public ResponseDto<MemberResponse.SignUpDoneDto> completeSignup(
+            @Valid @RequestBody MemberRequest.CompleteSignUpDto dto,
+            @AuthenticationPrincipal SecurityUserDetails member
+    ) {
+        Member target = memberFacade.completeSignup(dto, member.getUserId());
+        return ResponseDto.onSuccess(MemberConverter.toSignUpDoneDto(target));
+    }
 
-	@PostMapping(value = "/reissuance")
-	public ResponseDto<MemberResponse.ReissueDto> reissueAccessToken(
-		@RequestHeader(value = "refreshToken") String refreshToken
-	) {
-		return ResponseDto.onSuccess(memberFacade.reissueAccessToken(refreshToken));
-	}
+    @PostMapping(value = "/reissuance")
+    public ResponseDto<MemberResponse.ReissueDto> reissueAccessToken(
+            @RequestHeader(value = "refreshToken") String refreshToken
+    ) {
+        return ResponseDto.onSuccess(memberFacade.reissueAccessToken(refreshToken));
+    }
 
-	@PostMapping(value = "/logout")
-	@PreAuthorize("isAuthenticated()")
-	public ResponseDto<String> logout(
-		@RequestHeader(value = "Authorization") String authHeader,
-		@RequestHeader(value = "refreshToken") String refreshToken,
-		@AuthenticationPrincipal SecurityUserDetails member
-	) {
-		String accessToken = authHeader.split(" ")[1];
-		memberFacade.logout(member.getUserId(), accessToken, refreshToken);
-		return ResponseDto.onSuccess("로그아웃 되었습니다.");
-	}
+    @PostMapping(value = "/logout")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseDto<String> logout(
+            @RequestHeader(value = "Authorization") String authHeader,
+            @RequestHeader(value = "refreshToken") String refreshToken,
+            @AuthenticationPrincipal SecurityUserDetails member
+    ) {
+        String accessToken = authHeader.split(" ")[1];
+        memberFacade.logout(member.getUserId(), accessToken, refreshToken);
+        return ResponseDto.onSuccess("로그아웃 되었습니다.");
+    }
 
-	@PostMapping("/delete/{socialType}")
-	@PreAuthorize("isAuthenticated()")
-	public ResponseDto<String> removeAuthUser(
-		@RequestHeader(value = "Authorization") String authHeader,
-		@RequestHeader(value = "refreshToken") String refreshToken,
-		@AuthenticationPrincipal SecurityUserDetails member
-	) {
-		String accessToken = authHeader.split(" ")[1];
-		memberFacade.removeSocialMember(member.getUserId(), accessToken, refreshToken);
-		return ResponseDto.onSuccess("회원탈퇴가 완료되었습니다.");
-	}
+    @PostMapping("/delete/{socialType}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseDto<String> removeAuthUser(
+            @RequestHeader(value = "Authorization") String authHeader,
+            @RequestHeader(value = "refreshToken") String refreshToken,
+            @AuthenticationPrincipal SecurityUserDetails member
+    ) {
+        String accessToken = authHeader.split(" ")[1];
+        memberFacade.removeSocialMember(member.getUserId(), accessToken, refreshToken);
+        return ResponseDto.onSuccess("회원탈퇴가 완료되었습니다.");
+    }
 
 }

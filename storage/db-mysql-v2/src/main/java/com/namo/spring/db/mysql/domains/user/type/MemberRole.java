@@ -13,31 +13,31 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum MemberRole implements CodedEnum {
-	ADMIN("ROLE_ADMIN"),
-	USER("ROLE_USER");
+    ADMIN("ROLE_ADMIN"),
+    USER("ROLE_USER");
 
-	private static final Map<String, MemberRole> stringToEnum =
-		Stream.of(values()).collect(toMap(Object::toString, e -> e));
+    private static final Map<String, MemberRole> stringToEnum =
+            Stream.of(values()).collect(toMap(Object::toString, e -> e));
 
-	private final String type;
+    private final String type;
 
-	@JsonCreator
-	public static MemberRole fromString(String type) {
-		return stringToEnum.get(type.toUpperCase());
-	}
+    @JsonCreator
+    public static MemberRole fromString(String type) {
+        return stringToEnum.get(type.toUpperCase());
+    }
 
-	@JsonValue
-	public String getType() {
-		return this.type;
-	}
+    @JsonValue
+    public String getType() {
+        return this.type;
+    }
 
-	@Override
-	public String toString() {
-		return this.type;
-	}
+    @Override
+    public String toString() {
+        return this.type;
+    }
 
-	@Override
-	public String getCode() {
-		return null;
-	}
+    @Override
+    public String getCode() {
+        return null;
+    }
 }

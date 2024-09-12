@@ -28,27 +28,27 @@ import lombok.NoArgsConstructor;
 @DynamicInsert
 public class ActivityParticipant extends BaseTimeEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "participant_id", nullable = false)
-	private Participant participant;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "participant_id", nullable = false)
+    private Participant participant;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "activity_id", nullable = false)
-	private Activity activity;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "activity_id", nullable = false)
+    private Activity activity;
 
-	@Column(nullable = false)
-	private BigDecimal amount;
+    @Column(nullable = false)
+    private BigDecimal amount;
 
-	private boolean isIncludedInSettlement;
+    private boolean isIncludedInSettlement;
 
-	@Builder
-	public ActivityParticipant(Participant participant, Activity activity, BigDecimal amount) {
-		this.participant = Objects.requireNonNull(participant, "participant는 null일 수 없습니다.");
-		this.activity = Objects.requireNonNull(activity, "activity은 null일 수 없습니다.");
-		this.amount = Objects.requireNonNull(amount, "amount은 null일 수 없습니다.");
-	}
+    @Builder
+    public ActivityParticipant(Participant participant, Activity activity, BigDecimal amount) {
+        this.participant = Objects.requireNonNull(participant, "participant는 null일 수 없습니다.");
+        this.activity = Objects.requireNonNull(activity, "activity은 null일 수 없습니다.");
+        this.amount = Objects.requireNonNull(amount, "amount은 null일 수 없습니다.");
+    }
 }

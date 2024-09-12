@@ -1,15 +1,16 @@
 package com.namo.spring.application.external.global.utils;
 
-import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
-import com.namo.spring.core.common.code.status.ErrorStatus;
-import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
-import lombok.RequiredArgsConstructor;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
+import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
+
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class MeetingParticipantValidationUtils {
@@ -72,7 +73,8 @@ public class MeetingParticipantValidationUtils {
      * @param newParticipantIds      새로 초대할 참석자 ID 배열
      */
 
-    public static void validateExistingAndNewParticipantIds(List<Long> existingParticipantIds, List<Long> newParticipantIds) {
+    public static void validateExistingAndNewParticipantIds(List<Long> existingParticipantIds,
+            List<Long> newParticipantIds) {
         List<Long> duplicates = existingParticipantIds.stream()
                 .filter(newParticipantIds::contains)
                 .collect(Collectors.toList());

@@ -1,15 +1,17 @@
 package com.namo.spring.db.mysql.domains.notification.service;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.transaction.annotation.Transactional;
+
 import com.namo.spring.core.common.annotation.DomainService;
 import com.namo.spring.db.mysql.domains.notification.dto.ScheduleNotificationQuery;
 import com.namo.spring.db.mysql.domains.notification.entity.Notification;
 import com.namo.spring.db.mysql.domains.notification.repository.NotificationRepository;
 import com.namo.spring.db.mysql.domains.notification.type.NotificationType;
-import lombok.RequiredArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 
 @DomainService
 @RequiredArgsConstructor
@@ -32,7 +34,8 @@ public class NotificationService {
     }
 
     @Transactional(readOnly = true)
-    public List<ScheduleNotificationQuery> readNotificationsByReceiverIdAndScheduleIds(Long memberId, List<Long> scheduleIds) {
+    public List<ScheduleNotificationQuery> readNotificationsByReceiverIdAndScheduleIds(Long memberId,
+            List<Long> scheduleIds) {
         return notificationRepository.findReminderNotificationsByReceiverIdAndScheduleIds(memberId, scheduleIds);
     }
 
@@ -42,8 +45,10 @@ public class NotificationService {
     }
 
     @Transactional
-    public void deleteScheduleNotificationsByScheduleAndReceiver(Long scheduleId, Long receiverId, NotificationType notificationType) {
-        notificationRepository.deleteAllByScheduleIdAndDevice_MemberIdAndNotificationType(scheduleId, receiverId, notificationType);
+    public void deleteScheduleNotificationsByScheduleAndReceiver(Long scheduleId, Long receiverId,
+            NotificationType notificationType) {
+        notificationRepository.deleteAllByScheduleIdAndDevice_MemberIdAndNotificationType(scheduleId, receiverId,
+                notificationType);
     }
 
 }

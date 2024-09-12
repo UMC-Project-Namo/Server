@@ -22,15 +22,15 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/v2/schedules")
 public class ScheduleController {
 
-	private final ScheduleUsecase scheduleUsecase;
+    private final ScheduleUsecase scheduleUsecase;
 
-	@Operation(summary = "기록 상단부 스케줄 조회 API", description = "스케줄에 대한 제목, 날짜, 장소 정보를 반환합니다.")
-	@GetMapping("/{scheduleId}")
-	public ResponseDto<ScheduleResponse.ScheduleSummaryDto> getScheduleSummary(
-		@AuthenticationPrincipal SecurityUserDetails member,
-		@PathVariable Long scheduleId) {
-		return ResponseDto.onSuccess(scheduleUsecase.getScheduleSummary(
-			member.getUserId(), scheduleId));
-	}
+    @Operation(summary = "기록 상단부 스케줄 조회 API", description = "스케줄에 대한 제목, 날짜, 장소 정보를 반환합니다.")
+    @GetMapping("/{scheduleId}")
+    public ResponseDto<ScheduleResponse.ScheduleSummaryDto> getScheduleSummary(
+            @AuthenticationPrincipal SecurityUserDetails member,
+            @PathVariable Long scheduleId) {
+        return ResponseDto.onSuccess(scheduleUsecase.getScheduleSummary(
+                member.getUserId(), scheduleId));
+    }
 
 }

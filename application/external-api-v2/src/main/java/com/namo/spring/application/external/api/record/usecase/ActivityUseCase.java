@@ -18,22 +18,22 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ActivityUseCase {
 
-	private final ParticipantManageService participantManageService;
-	private final ActivityManageService activityManageService;
+    private final ParticipantManageService participantManageService;
+    private final ActivityManageService activityManageService;
 
-	@Transactional(readOnly = true)
-	public List<ActivityResponse.ActivityInfoDto> getActivities(Long memberId, Long scheduleId) {
-		Schedule schedule = participantManageService.getMyParticipant(memberId, scheduleId).getSchedule();
-		List<Activity> activities = schedule.getActivityList();
+    @Transactional(readOnly = true)
+    public List<ActivityResponse.ActivityInfoDto> getActivities(Long memberId, Long scheduleId) {
+        Schedule schedule = participantManageService.getMyParticipant(memberId, scheduleId).getSchedule();
+        List<Activity> activities = schedule.getActivityList();
 
-		return activities.stream()
-			.map(ActivityResponseConverter::toActivityInfoDto)
-			.toList();
-	}
+        return activities.stream()
+                .map(ActivityResponseConverter::toActivityInfoDto)
+                .toList();
+    }
 
-	@Transactional(readOnly = true)
-	public ActivityResponse.ActivitySettlementInfoDto getSettlement(Long memberId, Long activityId) {
-		Activity activity = activityManageService.getMyActivity(memberId, activityId);
-		return ActivityResponseConverter.toActivitySettlementInfoDto(activity);
-	}
+    @Transactional(readOnly = true)
+    public ActivityResponse.ActivitySettlementInfoDto getSettlement(Long memberId, Long activityId) {
+        Activity activity = activityManageService.getMyActivity(memberId, activityId);
+        return ActivityResponseConverter.toActivitySettlementInfoDto(activity);
+    }
 }

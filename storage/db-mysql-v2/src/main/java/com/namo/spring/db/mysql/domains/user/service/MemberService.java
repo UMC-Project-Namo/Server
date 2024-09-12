@@ -1,14 +1,16 @@
 package com.namo.spring.db.mysql.domains.user.service;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.transaction.annotation.Transactional;
+
 import com.namo.spring.core.common.annotation.DomainService;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.repository.MemberRepository;
 import com.namo.spring.db.mysql.domains.user.type.MemberStatus;
-import lombok.RequiredArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 
 @DomainService
 @RequiredArgsConstructor

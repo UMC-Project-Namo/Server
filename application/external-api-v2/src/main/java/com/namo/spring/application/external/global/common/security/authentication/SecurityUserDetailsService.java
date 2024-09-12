@@ -14,12 +14,12 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class SecurityUserDetailsService implements UserDetailsService {
-	private final MemberService userService;
+    private final MemberService userService;
 
-	@Override
-	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-		return userService.readMember(Long.parseLong(userId))
-			.map(SecurityUserDetails::from)
-			.orElseThrow(() -> new AuthException(ErrorStatus.NOT_FOUND_USER_FAILURE));
-	}
+    @Override
+    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+        return userService.readMember(Long.parseLong(userId))
+                .map(SecurityUserDetails::from)
+                .orElseThrow(() -> new AuthException(ErrorStatus.NOT_FOUND_USER_FAILURE));
+    }
 }

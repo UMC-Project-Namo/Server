@@ -14,35 +14,36 @@ import lombok.Getter;
 
 @Configuration
 public class AwsS3Config {
-	private final String accessKey;
-	private final String secretKey;
-	private final String region;
-	@Getter private final String bucketName;
+    private final String accessKey;
+    private final String secretKey;
+    private final String region;
+    @Getter
+    private final String bucketName;
 
-	public AwsS3Config(
-		@Value("${cloud.aws.credentials.access-key}") String accessKey,
-		@Value("${cloud.aws.credentials.secret-key}") String secretKey,
-		@Value("${cloud.aws.region.static}") String region,
-		@Value("${cloud.aws.s3.bucket}") String bucketName
-	) {
-		this.accessKey = accessKey;
-		this.secretKey = secretKey;
-		this.region = region;
-		this.bucketName = bucketName;
-	}
+    public AwsS3Config(
+            @Value("${cloud.aws.credentials.access-key}") String accessKey,
+            @Value("${cloud.aws.credentials.secret-key}") String secretKey,
+            @Value("${cloud.aws.region.static}") String region,
+            @Value("${cloud.aws.s3.bucket}") String bucketName
+    ) {
+        this.accessKey = accessKey;
+        this.secretKey = secretKey;
+        this.region = region;
+        this.bucketName = bucketName;
+    }
 
-	@Bean
-	public AWSCredentials awsS3Credentials() {
-		return new BasicAWSCredentials(accessKey, secretKey);
-	}
+    @Bean
+    public AWSCredentials awsS3Credentials() {
+        return new BasicAWSCredentials(accessKey, secretKey);
+    }
 
-	@Bean
-	public AmazonS3Client amazonS3Client() {
-		return (AmazonS3Client)AmazonS3ClientBuilder.standard()
-			.withRegion(region)
-			.withCredentials(new AWSStaticCredentialsProvider(awsS3Credentials()))
-			.build();
-	}
+    @Bean
+    public AmazonS3Client amazonS3Client() {
+        return (AmazonS3Client)AmazonS3ClientBuilder.standard()
+                .withRegion(region)
+                .withCredentials(new AWSStaticCredentialsProvider(awsS3Credentials()))
+                .build();
+    }
 }
 
 

@@ -22,12 +22,11 @@ import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import com.namo.spring.db.mysql.domains.record.entity.Activity;
 import com.namo.spring.db.mysql.domains.schedule.type.Location;
 import com.namo.spring.db.mysql.domains.schedule.type.Period;
-import jakarta.persistence.*;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import java.util.Objects;
 
 @Getter
 @Entity
@@ -71,7 +70,7 @@ public class Schedule extends BaseTimeEntity {
 
     @Builder
     public Schedule(String title, Period period, Location location, int scheduleType, String imageUrl,
-                    Integer participantCount, String participantNicknames) {
+            Integer participantCount, String participantNicknames) {
         if (!StringUtils.hasText(title))
             throw new IllegalArgumentException("title은 null이거나 빈 문자열일 수 없습니다.");
         this.title = title;
@@ -84,7 +83,7 @@ public class Schedule extends BaseTimeEntity {
     }
 
     public static Schedule of(String title, Period period, Location location, int scheduleType, String imageUrl,
-                              Integer participantCount, String participantNicknames) {
+            Integer participantCount, String participantNicknames) {
         return Schedule.builder()
                 .title(title)
                 .period(period)

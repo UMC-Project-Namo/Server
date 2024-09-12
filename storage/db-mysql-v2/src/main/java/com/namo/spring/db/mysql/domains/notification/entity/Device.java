@@ -1,19 +1,32 @@
 package com.namo.spring.db.mysql.domains.notification.entity;
 
-import com.namo.spring.db.mysql.common.converter.ReceiverDeviceTypeConverter;
-import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
-import com.namo.spring.db.mysql.domains.notification.type.ReceiverDeviceType;
-import com.namo.spring.db.mysql.domains.user.entity.Member;
-import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.util.List;
+import com.namo.spring.db.mysql.common.converter.ReceiverDeviceTypeConverter;
+import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
+import com.namo.spring.db.mysql.domains.notification.type.ReceiverDeviceType;
+import com.namo.spring.db.mysql.domains.user.entity.Member;
+
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
@@ -42,7 +55,8 @@ public class Device extends BaseTimeEntity {
     private List<Notification> notifications;
 
     @Builder
-    public Device(Member member, ReceiverDeviceType receiverDeviceType, String receiverDeviceToken, String receiverDeviceAgent) {
+    public Device(Member member, ReceiverDeviceType receiverDeviceType, String receiverDeviceToken,
+            String receiverDeviceAgent) {
         this.member = member;
         this.receiverDeviceType = receiverDeviceType;
         this.receiverDeviceToken = receiverDeviceToken;

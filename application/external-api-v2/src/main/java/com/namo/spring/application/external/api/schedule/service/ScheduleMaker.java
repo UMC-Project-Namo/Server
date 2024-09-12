@@ -1,5 +1,10 @@
 package com.namo.spring.application.external.api.schedule.service;
 
+import static com.namo.spring.application.external.api.schedule.converter.ScheduleConverter.*;
+
+import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.PersonalScheduleRequest;
 import com.namo.spring.core.infra.common.aws.s3.FileUtils;
@@ -9,11 +14,8 @@ import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.service.ScheduleService;
 import com.namo.spring.db.mysql.domains.schedule.type.Period;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
-import static com.namo.spring.application.external.api.schedule.converter.ScheduleConverter.toSchedule;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
@@ -26,14 +28,14 @@ public class ScheduleMaker {
     private final FileUtils fileUtils;
 
     public Schedule createPersonalSchedule(PersonalScheduleRequest.PostPersonalScheduleDto dto, Period period,
-                                           String nickname) {
+            String nickname) {
         Schedule schedule = toSchedule(dto.getTitle(), period, dto.getLocation(), PERSONAL_SCHEDULE_TYPE, null, 1,
                 nickname);
         return scheduleService.createSchedule(schedule);
     }
 
     public Schedule createMeetingSchedule(MeetingScheduleRequest.PostMeetingScheduleDto dto, Period period,
-                                          MultipartFile image) {
+            MultipartFile image) {
         String url = imageUrlProperties.getMeeting();
         if (image != null && !image.isEmpty()) {
             url = fileUtils.uploadImage(image, FilePath.MEETING_PROFILE_IMG);

@@ -4,7 +4,7 @@ import com.namo.spring.core.common.code.BaseErrorCode;
 import com.namo.spring.core.common.exception.GeneralException;
 
 public class PaletteException extends GeneralException {
-	public PaletteException(BaseErrorCode code) {
-		super(code);
-	}
+    public PaletteException(BaseErrorCode code) {
+        super(code);
+    }
 }

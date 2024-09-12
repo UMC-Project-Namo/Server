@@ -13,21 +13,21 @@ import lombok.RequiredArgsConstructor;
 @DomainService
 @RequiredArgsConstructor
 public class DiaryService {
-	private final DiaryRepository diaryRepository;
+    private final DiaryRepository diaryRepository;
 
-	@Transactional
-	public Diary createDiary(Diary diary) {
-		return diaryRepository.save(diary);
-	}
+    @Transactional
+    public Diary createDiary(Diary diary) {
+        return diaryRepository.save(diary);
+    }
 
-	@Transactional(readOnly = true)
-	public Optional<Diary> readDiary(Long diaryId) {
-		return diaryRepository.findById(diaryId);
-	}
+    @Transactional(readOnly = true)
+    public Optional<Diary> readDiary(Long diaryId) {
+        return diaryRepository.findById(diaryId);
+    }
 
-	@Transactional
-	public void deleteDiary(Long diaryId) {
-		diaryRepository.deleteById(diaryId);
-	}
+    @Transactional
+    public void deleteDiary(Long diaryId) {
+        diaryRepository.deleteById(diaryId);
+    }
 
 }

@@ -16,26 +16,26 @@ import lombok.RequiredArgsConstructor;
 @DomainService
 @RequiredArgsConstructor
 public class TermService {
-	private final TermRepository termRepository;
+    private final TermRepository termRepository;
 
-	@Transactional
-	public Term createTerm(Term term) {
-		return termRepository.save(term);
-	}
+    @Transactional
+    public Term createTerm(Term term) {
+        return termRepository.save(term);
+    }
 
-	@Transactional(readOnly = true)
-	public List<Term> readTermListByMemberId(Long memberId) {
-		return termRepository.findByMemberId(memberId);
-	}
+    @Transactional(readOnly = true)
+    public List<Term> readTermListByMemberId(Long memberId) {
+        return termRepository.findByMemberId(memberId);
+    }
 
-	@Transactional(readOnly = true)
-	public Optional<Term> readTerm(Content content, Member member) {
-		return termRepository.findTermByContentAndMember(content, member);
-	}
+    @Transactional(readOnly = true)
+    public Optional<Term> readTerm(Content content, Member member) {
+        return termRepository.findTermByContentAndMember(content, member);
+    }
 
-	@Transactional
-	public void deleteTerm(Long termId) {
-		termRepository.deleteById(termId);
-	}
+    @Transactional
+    public void deleteTerm(Long termId) {
+        termRepository.deleteById(termId);
+    }
 
 }

@@ -34,38 +34,38 @@ import lombok.NoArgsConstructor;
 @DynamicInsert
 public class Activity extends BaseTimeEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(nullable = false)
-	private Schedule schedule;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(nullable = false)
+    private Schedule schedule;
 
-	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Column(nullable = false, length = 50)
-	private String title;
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(nullable = false, length = 50)
+    private String title;
 
-	@Column(nullable = false)
-	private BigDecimal totalAmount;
+    @Column(nullable = false)
+    private BigDecimal totalAmount;
 
-	@JdbcTypeCode(SqlTypes.VARCHAR)
-	@Column(length = 50)
-	private String categoryTag;
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(length = 50)
+    private String categoryTag;
 
-	@OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<ActivityParticipant> participants;
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ActivityParticipant> participants;
 
-	@OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<ActivityImage> activityImages;
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ActivityImage> activityImages;
 
-	@Builder
-	public Activity(Schedule schedule, String title, BigDecimal totalAmount, String categoryTag) {
-		if (!StringUtils.hasText(title))
-			throw new IllegalArgumentException("title은 null이거나 빈 문자열일 수 없습니다.");
-		this.schedule = Objects.requireNonNull(schedule, "schedule은 null일 수 없습니다.");
-		this.title = title;
-		this.totalAmount = totalAmount;
-		this.categoryTag = categoryTag;
-	}
+    @Builder
+    public Activity(Schedule schedule, String title, BigDecimal totalAmount, String categoryTag) {
+        if (!StringUtils.hasText(title))
+            throw new IllegalArgumentException("title은 null이거나 빈 문자열일 수 없습니다.");
+        this.schedule = Objects.requireNonNull(schedule, "schedule은 null일 수 없습니다.");
+        this.title = title;
+        this.totalAmount = totalAmount;
+        this.categoryTag = categoryTag;
+    }
 }

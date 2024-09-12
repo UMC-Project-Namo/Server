@@ -1,5 +1,7 @@
 package com.namo.spring.application.external.api.category.service;
 
+import org.springframework.stereotype.Component;
+
 import com.namo.spring.db.mysql.domains.category.entity.Category;
 import com.namo.spring.db.mysql.domains.category.entity.Palette;
 import com.namo.spring.db.mysql.domains.category.service.CategoryService;
@@ -8,9 +10,8 @@ import com.namo.spring.db.mysql.domains.category.type.CategoryStatus;
 import com.namo.spring.db.mysql.domains.category.type.CategoryType;
 import com.namo.spring.db.mysql.domains.category.type.ColorChip;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
@@ -33,7 +34,6 @@ public class CategoryMaker {
                 .orderNumber(1)
                 .status(CategoryStatus.ACTIVE)
                 .build();
-
         categoryService.createCategory(target);
     }
 

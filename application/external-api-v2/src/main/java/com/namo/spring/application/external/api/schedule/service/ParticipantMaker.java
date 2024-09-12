@@ -1,5 +1,10 @@
 package com.namo.spring.application.external.api.schedule.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Component;
+
 import com.namo.spring.db.mysql.domains.category.entity.Category;
 import com.namo.spring.db.mysql.domains.category.entity.Palette;
 import com.namo.spring.db.mysql.domains.category.service.CategoryService;
@@ -11,12 +16,9 @@ import com.namo.spring.db.mysql.domains.schedule.type.ParticipantRole;
 import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -30,23 +32,27 @@ public class ParticipantMaker {
         Category category;
         if (categoryId != null) {
             category = categoryService.readCategoryByMemberAndId(categoryId, member);
-        } else category = categoryService.readMeetingCategoryByMember(member);
+        } else
+            category = categoryService.readMeetingCategoryByMember(member);
         Palette palette = paletteService.getPalette(paletteId);
 
-        Participant participant = Participant.of(ParticipantRole.OWNER.getValue(), member, schedule, ParticipantStatus.ACTIVE, category, palette);
+        Participant participant = Participant.of(ParticipantRole.OWNER.getValue(), member, schedule,
+                ParticipantStatus.ACTIVE, category, palette);
         participantService.createParticipant(participant);
     }
 
     public void makeMeetingScheduleParticipants(Schedule schedule, List<Member> members) {
         List<Participant> participants = members.stream()
-                .map(member -> Participant.of(ParticipantRole.NON_OWNER.getValue(), member, schedule, ParticipantStatus.INACTIVE, null, null))
+                .map(member -> Participant.of(ParticipantRole.NON_OWNER.getValue(), member, schedule,
+                        ParticipantStatus.INACTIVE, null, null))
                 .collect(Collectors.toList());
         participantService.createParticipants(participants);
     }
 
     public Participant makeGuestParticipant(Schedule schedule, Anonymous anonymous, Long paletteId) {
         Palette palette = paletteService.getPalette(paletteId);
-        Participant participant = Participant.of(ParticipantRole.NON_OWNER.getValue(), anonymous, schedule, ParticipantStatus.ACTIVE, null, palette);
+        Participant participant = Participant.of(ParticipantRole.NON_OWNER.getValue(), anonymous, schedule,
+                ParticipantStatus.ACTIVE, null, palette);
         Participant savedParticipant = participantService.createParticipant(participant);
         schedule.addActiveParticipant(anonymous.getNickname());
         return savedParticipant;

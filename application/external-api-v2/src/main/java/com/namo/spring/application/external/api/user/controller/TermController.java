@@ -26,20 +26,20 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/v2/terms")
 public class TermController {
 
-	private final TermFacade termFacade;
+    private final TermFacade termFacade;
 
-	@Operation(summary = "약관을 동의합니다. ", description = "약관 동의 API")
-	@PostMapping("")
-	@ApiErrorCodes(value = {
-		ErrorStatus.EMPTY_ACCESS_KEY,
-		ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-		ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-		ErrorStatus.INTERNET_SERVER_ERROR
-	})
-	public ResponseDto<String> createTerm(@Valid @RequestBody MemberRequest.TermDto termDto,
-		@AuthenticationPrincipal SecurityUserDetails member) {
-		termFacade.termAgreement(termDto, member.getUserId());
-		return ResponseDto.onSuccess("약관 동의 완료");
-	}
+    @Operation(summary = "약관을 동의합니다. ", description = "약관 동의 API")
+    @PostMapping("")
+    @ApiErrorCodes(value = {
+            ErrorStatus.EMPTY_ACCESS_KEY,
+            ErrorStatus.EXPIRATION_ACCESS_TOKEN,
+            ErrorStatus.EXPIRATION_REFRESH_TOKEN,
+            ErrorStatus.INTERNET_SERVER_ERROR
+    })
+    public ResponseDto<String> createTerm(@Valid @RequestBody MemberRequest.TermDto termDto,
+            @AuthenticationPrincipal SecurityUserDetails member) {
+        termFacade.termAgreement(termDto, member.getUserId());
+        return ResponseDto.onSuccess("약관 동의 완료");
+    }
 
 }

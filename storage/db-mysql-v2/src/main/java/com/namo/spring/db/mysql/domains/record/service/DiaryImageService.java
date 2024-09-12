@@ -14,24 +14,24 @@ import lombok.RequiredArgsConstructor;
 @DomainService
 @RequiredArgsConstructor
 public class DiaryImageService {
-	private final DiaryImageRepository diaryImageRepository;
+    private final DiaryImageRepository diaryImageRepository;
 
-	@Transactional
-	public DiaryImage createDiaryImage(DiaryImage diaryImage) {
-		return diaryImageRepository.save(diaryImage);
-	}
+    @Transactional
+    public DiaryImage createDiaryImage(DiaryImage diaryImage) {
+        return diaryImageRepository.save(diaryImage);
+    }
 
-	@Transactional(readOnly = true)
-	public Optional<DiaryImage> readDiaryImage(Long diaryImageId) {
-		return diaryImageRepository.findById(diaryImageId);
-	}
+    @Transactional(readOnly = true)
+    public Optional<DiaryImage> readDiaryImage(Long diaryImageId) {
+        return diaryImageRepository.findById(diaryImageId);
+    }
 
-	@Transactional
-	public void deleteDiaryImage(Long diaryImageId) {
-		diaryImageRepository.deleteById(diaryImageId);
-	}
+    @Transactional
+    public void deleteDiaryImage(Long diaryImageId) {
+        diaryImageRepository.deleteById(diaryImageId);
+    }
 
-	public void deleteAll(Diary diary) {
-		diaryImageRepository.deleteAllByDiary(diary);
-	}
+    public void deleteAll(Diary diary) {
+        diaryImageRepository.deleteAllByDiary(diary);
+    }
 }

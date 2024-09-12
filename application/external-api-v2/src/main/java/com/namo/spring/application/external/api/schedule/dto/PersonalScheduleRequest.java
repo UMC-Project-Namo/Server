@@ -1,14 +1,17 @@
 package com.namo.spring.application.external.api.schedule.dto;
 
-import com.namo.spring.application.external.global.annotation.validation.ValidReminderTimes;
-import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.List;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
+import com.namo.spring.application.external.global.annotation.validation.ValidReminderTimes;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 public class PersonalScheduleRequest {
 

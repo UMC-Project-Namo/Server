@@ -14,48 +14,48 @@ import org.mockito.MockitoAnnotations;
 
 public class TagGeneratorTest {
 
-	@Mock
-	private MemberManageService memberManageService;
+    @Mock
+    private MemberManageService memberManageService;
 
-	@InjectMocks
-	private TagGenerator tagGenerator;
+    @InjectMocks
+    private TagGenerator tagGenerator;
 
-	@BeforeEach
-	public void setUp() {
-		MockitoAnnotations.openMocks(this);
-	}
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
-	@Test
-	public void testGenerateTag_UniqueTagGenerated() {
-		// Given
-		String nickname = "testUser";
-		List<String> existingTags = Arrays.asList("0001", "0002", "0003", "9999");
+    @Test
+    public void testGenerateTag_UniqueTagGenerated() {
+        // Given
+        String nickname = "testUser";
+        List<String> existingTags = Arrays.asList("0001", "0002", "0003", "9999");
 
-		when(memberManageService.getMemberTagsByNickname(nickname)).thenReturn(existingTags);
+        when(memberManageService.getMemberTagsByNickname(nickname)).thenReturn(existingTags);
 
-		// When
-		String newTag = tagGenerator.generateTag(nickname);
+        // When
+        String newTag = tagGenerator.generateTag(nickname);
 
-		// Then
-		assertNotNull(newTag);
-		assertFalse(existingTags.contains(newTag), "The generated tag should not be in the existing tags");
-		assertEquals(4, newTag.length(), "The generated tag should be 4 characters long");
-	}
+        // Then
+        assertNotNull(newTag);
+        assertFalse(existingTags.contains(newTag), "The generated tag should not be in the existing tags");
+        assertEquals(4, newTag.length(), "The generated tag should be 4 characters long");
+    }
 
-	@Test
-	public void testGenerateTag_NoExistingTags() {
-		// Given
-		String nickname = "newUser";
-		List<String> existingTags = Arrays.asList();
+    @Test
+    public void testGenerateTag_NoExistingTags() {
+        // Given
+        String nickname = "newUser";
+        List<String> existingTags = Arrays.asList();
 
-		when(memberManageService.getMemberTagsByNickname(nickname)).thenReturn(existingTags);
+        when(memberManageService.getMemberTagsByNickname(nickname)).thenReturn(existingTags);
 
-		// When
-		String newTag = tagGenerator.generateTag(nickname);
+        // When
+        String newTag = tagGenerator.generateTag(nickname);
 
-		// Then
-		assertNotNull(newTag);
-		assertEquals(4, newTag.length(), "The generated tag should be 4 characters long");
-	}
-	
+        // Then
+        assertNotNull(newTag);
+        assertEquals(4, newTag.length(), "The generated tag should be 4 characters long");
+    }
+
 }

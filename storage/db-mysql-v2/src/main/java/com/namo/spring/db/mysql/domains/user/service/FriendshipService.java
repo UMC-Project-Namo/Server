@@ -1,11 +1,12 @@
 package com.namo.spring.db.mysql.domains.user.service;
 
+import java.util.List;
+
 import com.namo.spring.core.common.annotation.DomainService;
 import com.namo.spring.db.mysql.domains.user.entity.Friendship;
 import com.namo.spring.db.mysql.domains.user.repository.FriendshipRepository;
-import lombok.RequiredArgsConstructor;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @DomainService
 @RequiredArgsConstructor

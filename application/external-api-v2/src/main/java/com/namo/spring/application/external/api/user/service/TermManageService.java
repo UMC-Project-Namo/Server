@@ -15,22 +15,22 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TermManageService {
 
-	private final TermService termService;
+    private final TermService termService;
 
-	public void createOrUpdateTerm(List<Term> terms) {
-		for (Term term : terms) {
-			validateTermAgreement(term);
-			termService.readTerm(term.getContent(), term.getMember())
-				.ifPresentOrElse(
-					Term::update,
-					() -> termService.createTerm(term)
-				);
-		}
-	}
+    public void createOrUpdateTerm(List<Term> terms) {
+        for (Term term : terms) {
+            validateTermAgreement(term);
+            termService.readTerm(term.getContent(), term.getMember())
+                    .ifPresentOrElse(
+                            Term::update,
+                            () -> termService.createTerm(term)
+                    );
+        }
+    }
 
-	private void validateTermAgreement(Term term) {
-		if (!term.isAgree())
-			throw new MemberException(ErrorStatus.NOT_CHECK_TERM_ERROR);
-	}
+    private void validateTermAgreement(Term term) {
+        if (!term.isAgree())
+            throw new MemberException(ErrorStatus.NOT_CHECK_TERM_ERROR);
+    }
 
 }
