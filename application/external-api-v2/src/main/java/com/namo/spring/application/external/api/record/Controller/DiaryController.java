@@ -138,12 +138,14 @@ public class DiaryController {
         }
     }
 
+    @Operation(summary = "기록 삭제 API", description = "입력받은 기록 ID를 삭제합니다 (본인의 기록만 삭제할 수 있습니다)")
     @DeleteMapping("/{diaryId}")
     public ResponseDto<String> deleteDiary(
             @AuthenticationPrincipal SecurityUserDetails memberInfo,
-            @Parameter(description = "삭제할 일기 ID 입니다.", example = "1")
+            @Parameter(description = "삭제할 기록 ID 입니다.", example = "1")
             @PathVariable Long diaryId
     ){
-        return ResponseDto.onSuccess("일기 삭제에 성공했습니다.");
+        diaryUseCase.deleteDiary(memberInfo.getUserId(), diaryId);
+        return ResponseDto.onSuccess("기록 삭제에 성공했습니다.");
     }
 }
