@@ -117,6 +117,8 @@ public class MeetingScheduleResponse {
         private Long userId;
         @Schema(description = "닉네임")
         private String nickname;
+        @Schema(description = "색상 ID")
+        private Long colorId;
     }
 
     @AllArgsConstructor

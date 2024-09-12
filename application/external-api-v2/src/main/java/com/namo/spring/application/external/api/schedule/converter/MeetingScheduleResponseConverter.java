@@ -76,6 +76,7 @@ public class MeetingScheduleResponseConverter {
         return MeetingScheduleResponse.MemberParticipantDto.builder()
                 .userId(participant.getMemberId())
                 .nickname(participant.getNickname())
+                .colorId(participant.getParticipantPaletteId())
                 .build();
     }
 
