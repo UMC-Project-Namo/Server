@@ -93,8 +93,6 @@ public class Participant extends BaseTimeEntity {
         this.status = Objects.requireNonNull(status, "status는 null일 수 없습니다.");
         this.category = category;
         this.palette = palette;
-        this.customTitle = schedule.getTitle();
-        this.customImage = schedule.getImageUrl();
         this.hasDiary = false;
     }
 
@@ -123,6 +121,8 @@ public class Participant extends BaseTimeEntity {
         this.status = ParticipantStatus.ACTIVE;
         this.category = category;
         this.palette = palette;
+        this.customTitle = schedule.getTitle();
+        this.customImage = schedule.getImageUrl();
     }
 
     public void updateCustomScheduleInfo(String title, String imageUrl) {
