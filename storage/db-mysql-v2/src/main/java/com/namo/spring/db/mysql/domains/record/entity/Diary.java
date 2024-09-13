@@ -14,7 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PostPersist;
-import jakarta.persistence.PostRemove;
+import jakarta.persistence.PreRemove;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -75,8 +75,8 @@ public class Diary extends BaseTimeEntity {
         participant.diaryCreated();
     }
 
-    @PostRemove
-    public void PostRemove() {
+    @PreRemove
+    public void PreRemove() {
         participant.diaryDeleted();
     }
 
