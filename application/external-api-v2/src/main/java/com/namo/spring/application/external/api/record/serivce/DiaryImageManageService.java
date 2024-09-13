@@ -23,6 +23,7 @@ public class DiaryImageManageService {
 
     private final DiaryImageService diaryImageService;
     private final FileUtils fileUtils;
+    private final DiaryManageService diaryManageService;
 
     /**
      * 일기의 이미지를 업데이트하는 메서드입니다.
@@ -37,9 +38,8 @@ public class DiaryImageManageService {
         createDiaryImages(diary, request.getDiaryImages());
     }
 
-    public void deleteDiaryImage(Long imageId){
-        deleteFromCloud(imageId);
-        diaryImageService.deleteDiaryImage(imageId);
+    public void deleteDiaryImage(Diary diary){
+        diaryImageService.deleteAll(diary);
     }
 
     /**

@@ -78,14 +78,14 @@ public class DiaryManageService {
 
     /**
      * 다이어리를 삭제하는 메서드입니다.
-     * !! 내 일기인지 검증합니다.
-     * @param memberId
-     * @param diaryId
+     * !! 클라우드에서 이미지를 삭제후 일기를 삭제합니다.
+     *
+     * @param diary
      */
     @Transactional
-    public void deleteDiary(Long memberId, Long diaryId) {
-        Diary myDiary = getMyDiary(diaryId, memberId);
-        myDiary.getImages().forEach(image -> diaryImageManageService.deleteDiaryImage(image.getId()));
-        diaryService.deleteDiary(myDiary);
+    public void deleteDiary(Diary diary) {
+        diary.getImages().forEach(diaryImage -> diaryImageManageService.deleteFromCloud(diaryImage.getId()));
+        diaryImageManageService.deleteDiaryImage(diary);
+        diaryService.deleteDiary(diary);
     }
 }

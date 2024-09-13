@@ -76,6 +76,7 @@ public class DiaryUseCase {
 
     @Transactional
     public void deleteDiary(Long memberId, Long diaryId) {
-        diaryManageService.deleteDiary(memberId, diaryId);
+        Diary myDiary = diaryManageService.getMyDiary(diaryId, memberId);
+        diaryManageService.deleteDiary(myDiary);
     }
 }
