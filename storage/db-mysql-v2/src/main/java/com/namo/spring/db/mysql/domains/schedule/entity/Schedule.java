@@ -60,8 +60,6 @@ public class Schedule extends BaseTimeEntity {
 
     private String participantNicknames;
 
-    private String invitationUrl;
-
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Activity> activityList;
 
@@ -95,11 +93,14 @@ public class Schedule extends BaseTimeEntity {
                 .build();
     }
 
-    public void updateContent(String title, Period period, Location location) {
+    public void updateContent(String title, Period period, Location location, String imageUrl) {
         this.title = title;
         this.period = period;
         if (location != null) {
             this.location = location;
+        }
+        if (imageUrl != null) {
+            this.imageUrl = imageUrl;
         }
     }
 
@@ -159,9 +160,5 @@ public class Schedule extends BaseTimeEntity {
     private void updateParticipants(List<String> updatedNicknames) {
         this.participantNicknames = String.join(", ", updatedNicknames);
         this.participantCount = updatedNicknames.size();
-    }
-
-    public void updateInvitationUrl(String invitationUrl) {
-        this.invitationUrl = invitationUrl;
     }
 }
