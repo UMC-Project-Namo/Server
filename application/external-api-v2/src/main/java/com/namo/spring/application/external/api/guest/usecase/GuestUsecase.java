@@ -42,8 +42,8 @@ public class GuestUsecase {
     public List<GuestMeetingResponse.GetMonthlyMeetingParticipantScheduleDto> getMonthlyMeetingParticipantSchedules(
             Long scheduleId, int year, int month, String tag, String nickname) {
         validateYearMonth(year, month);
-        Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
         Anonymous anonymous = guestManageService.getAnonymousByTagAndNickname(tag, nickname);
+        Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
         List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyMeetingParticipantSchedules(
                 schedule, getExtendedPeriod(year, month), null, anonymous.getId());
         return toGetMonthlyMeetingParticipantScheduleDtos(participantsWithSchedule, schedule, null);
