@@ -40,9 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MeetingScheduleController implements MeetingScheduleApi {
     private final MeetingScheduleUsecase meetingScheduleUsecase;
 
-    /**
-     * 모임 일정 생성 API
-     */
+    @Operation(summary = "모임 일정 생성", description = "모임 일정을 생성합니다. 요청 성공 시 모임 일정 ID를 전송합니다.")
     @PostMapping(path = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDto<Long> createMeetingSchedule(
             @Valid @RequestPart MeetingScheduleRequest.PostMeetingScheduleDto dto,
