@@ -9,7 +9,6 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.namo.spring.application.external.api.guest.service.GuestManageService;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
@@ -35,11 +34,10 @@ public class MeetingScheduleUsecase {
     private final GuestManageService guestManageService;
 
     @Transactional
-    public Long createMeetingSchedule(MeetingScheduleRequest.PostMeetingScheduleDto dto, MultipartFile image,
-            SecurityUserDetails memberInfo) {
+    public Long createMeetingSchedule(MeetingScheduleRequest.PostMeetingScheduleDto dto, SecurityUserDetails memberInfo) {
         validateUniqueParticipantIds(memberInfo.getUserId(), dto.getParticipants());
         Member owner = memberManageService.getMember(memberInfo.getUserId());
-        Schedule schedule = scheduleManageService.createMeetingSchedule(dto, owner, image);
+        Schedule schedule = scheduleManageService.createMeetingSchedule(dto, owner);
         return schedule.getId();
     }
 
@@ -81,10 +79,17 @@ public class MeetingScheduleUsecase {
 
     @Transactional
     public void updateMeetingSchedule(MeetingScheduleRequest.PatchMeetingScheduleDto dto, Long scheduleId,
-            SecurityUserDetails memberInfo) {
+                                      SecurityUserDetails memberInfo) {
         validateUniqueParticipantIds(memberInfo.getUserId(), dto);
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
         scheduleManageService.updateMeetingSchedule(dto, schedule, memberInfo.getUserId());
+    }
+
+    @Transactional
+    public void updateMeetingScheduleProfile(MeetingScheduleRequest.PatchMeetingScheduleProfileDto dto, Long scheduleId,
+                                             SecurityUserDetails memberInfo){
+        Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
+        scheduleManageService.updateMeetingScheduleProfile(dto, schedule, memberInfo.getUserId());
     }
 
     @Transactional

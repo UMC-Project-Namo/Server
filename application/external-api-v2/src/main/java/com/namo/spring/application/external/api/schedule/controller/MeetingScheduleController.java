@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.namo.spring.application.external.api.schedule.api.MeetingScheduleApi;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
@@ -47,9 +46,8 @@ public class MeetingScheduleController implements MeetingScheduleApi {
     @PostMapping(path = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDto<Long> createMeetingSchedule(
             @Valid @RequestPart MeetingScheduleRequest.PostMeetingScheduleDto dto,
-            @RequestPart(required = false) MultipartFile image,
             @AuthenticationPrincipal SecurityUserDetails memberInfo) {
-        return ResponseDto.onSuccess(meetingScheduleUsecase.createMeetingSchedule(dto, image, memberInfo));
+        return ResponseDto.onSuccess(meetingScheduleUsecase.createMeetingSchedule(dto, memberInfo));
     }
 
     @Operation(summary = "모임 일정 목록 조회", description = "모임 일정 목록을 조회합니다.")
@@ -98,6 +96,16 @@ public class MeetingScheduleController implements MeetingScheduleApi {
             @AuthenticationPrincipal SecurityUserDetails memberInfo) {
         meetingScheduleUsecase.updateMeetingSchedule(dto, meetingScheduleId, memberInfo);
         return ResponseDto.onSuccess("모임 일정 수정 성공");
+    }
+
+    @Operation(summary = "모임 일정 프로필 수정", description = "모임 일정의 이미지와 제목을 커스텀합니다.")
+    @PatchMapping(path = "/{meetingScheduleId}/profile")
+    public ResponseDto<String> updateMeetingScheduleProfile(
+            @PathVariable Long meetingScheduleId,
+            @RequestBody @Valid MeetingScheduleRequest.PatchMeetingScheduleProfileDto dto,
+            @AuthenticationPrincipal SecurityUserDetails memberInfo) {
+        meetingScheduleUsecase.updateMeetingScheduleProfile(dto, meetingScheduleId, memberInfo);
+        return ResponseDto.onSuccess("모임 일정 프로필 수정 성공");
     }
 
     @Operation(summary = "게스트 초대용 링크 조회 API", description = "게스트 초대용 링크를 조회합니다. 초대 인원이 최대인 경우에 조회되지 않습니다.")

@@ -186,8 +186,11 @@ public class ScheduleManageService {
         updateScheduleContent(dto.getTitle(), dto.getLocation(), dto.getPeriod(), null, schedule);
     }
 
-    public void updateMeetingScheduleForOwner(MeetingScheduleRequest.PatchMeetingScheduleDto dto, Schedule schedule,
-                                              Long memberId) {
+    /**
+     * 모임 일정의 정보를 수정합니다.
+     */
+    public void updateMeetingSchedule(MeetingScheduleRequest.PatchMeetingScheduleDto dto, Schedule schedule,
+                                      Long memberId) {
         validateScheduleOwner(schedule, memberId);
         updateScheduleContent(dto.getTitle(), dto.getLocation(), dto.getPeriod(), dto.getImageUrl(), schedule);
         // 기존의 인원과, 초대될 & 삭제될 member  검증
@@ -200,8 +203,11 @@ public class ScheduleManageService {
         }
     }
 
-    public void updateMeetingScheduleForNonOwner(MeetingScheduleRequest.PatchMeetingScheduleProfileDto dto, Schedule schedule,
-                                                 Long memberId){
+    /**
+     * 모임 일정의 제목, 이미지를 커스텀 합니다.
+     */
+    public void updateMeetingScheduleProfile(MeetingScheduleRequest.PatchMeetingScheduleProfileDto dto, Schedule schedule,
+                                             Long memberId){
         Participant participant = participantManageService.getScheduleParticipant(memberId, schedule.getId());
         participant.updateCustomScheduleInfo(dto.getTitle(), dto.getImageUrl());
     }
