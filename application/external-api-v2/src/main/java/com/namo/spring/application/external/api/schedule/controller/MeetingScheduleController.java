@@ -52,18 +52,14 @@ public class MeetingScheduleController implements MeetingScheduleApi {
         return ResponseDto.onSuccess(meetingScheduleUsecase.createMeetingSchedule(dto, image, memberInfo));
     }
 
-    /**
-     * 모임 일정 목록 조회 API
-     */
+    @Operation(summary = "모임 일정 목록 조회", description = "모임 일정 목록을 조회합니다.")
     @GetMapping("")
     public ResponseDto<List<MeetingScheduleResponse.GetMeetingScheduleSummaryDto>> getMyMeetingSchedules(
             @AuthenticationPrincipal SecurityUserDetails memberInfo) {
         return ResponseDto.onSuccess(meetingScheduleUsecase.getMeetingSchedules(memberInfo));
     }
 
-    /**
-     * 모임 생성 전/ 초대자 월간 일정 조회 API
-     */
+    @Operation(summary = "모임 초대자 월간 일정 조회", description = "모임에 초대할 유저들의 월간 일정을 조회합니다.")
     @GetMapping(path = "/preview")
     public ResponseDto<List<MeetingScheduleResponse.GetMonthlyMembersScheduleDto>> getMonthlyParticipantSchedules(
             @RequestParam Integer year,
@@ -74,9 +70,7 @@ public class MeetingScheduleController implements MeetingScheduleApi {
                 meetingScheduleUsecase.getMonthlyMemberSchedules(participantIds, year, month, memberInfo));
     }
 
-    /**
-     * 모임 생성 후/ 참여자 월간 일정 조회 API
-     */
+    @Operation(summary = "모임 월간 일정 조회", description = "모임에 있는 유저들의 월간 일정을 조회합니다.")
     @GetMapping(path = "/{meetingScheduleId}/calender")
     public ResponseDto<List<MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto>> getMonthlyMeetingParticipantSchedules(
             @PathVariable Long meetingScheduleId,
@@ -88,9 +82,7 @@ public class MeetingScheduleController implements MeetingScheduleApi {
                         memberInfo));
     }
 
-    /**
-     * 모임 일정 상세보기 API
-     */
+    @Operation(summary = "모임 일정 상세 조회", description = "모임 일정을 상세 조회합니다.")
     @GetMapping(path = "/{meetingScheduleId}")
     public ResponseDto<MeetingScheduleResponse.GetMeetingScheduleDto> getMeetingSchedule(
             @PathVariable Long meetingScheduleId,
@@ -98,9 +90,7 @@ public class MeetingScheduleController implements MeetingScheduleApi {
         return ResponseDto.onSuccess(meetingScheduleUsecase.getMeetingSchedule(meetingScheduleId, memberInfo));
     }
 
-    /**
-     * 모임 일정 수정 API
-     */
+    @Operation(summary = "모임 일정 수정", description = "모임 일정을 수정합니다. 수정 권한은 모임의 방장에게만 있습니다.")
     @PatchMapping(path = "/{meetingScheduleId}")
     public ResponseDto<String> updateMeetingSchedule(
             @PathVariable Long meetingScheduleId,
