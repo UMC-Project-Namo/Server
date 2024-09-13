@@ -102,8 +102,8 @@ public class Member extends BaseTimeEntity implements User {
     @ColumnDefault("NULL")
     private LocalDateTime deletedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "palette_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "palette_id")
     private Palette palette;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
