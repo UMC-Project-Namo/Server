@@ -2,6 +2,8 @@ package com.namo.spring.application.external.api.schedule.controller;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 
 import org.springframework.http.MediaType;
@@ -109,9 +111,10 @@ public class MeetingScheduleController implements MeetingScheduleApi {
     /**
      * 게스트 초대용 링크 조회 API
      */
+    @Operation(summary = "게스트 초대용 링크 조회 API", description = "게스트 초대용 링크를 조회합니다. 초대 인원이 최대인 경우에 조회되지 않습니다.")
     @PostMapping(path = "/{meetingScheduleId}/invitations")
     public ResponseDto<String> getGuestInviteCode(
-            @PathVariable Long meetingScheduleId,
+            @Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
             @AuthenticationPrincipal SecurityUserDetails memberInfo
     ) {
         return ResponseDto.onSuccess(meetingScheduleUsecase.getGuestInviteCode(meetingScheduleId, memberInfo));
