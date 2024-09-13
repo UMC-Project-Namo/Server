@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.db.mysql.domains.schedule.exception.ParticipantException;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
 
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class MeetingParticipantValidationUtils {
      */
     public static void validateParticipantCount(int participantCount) {
         if (participantCount < MIN_PARTICIPANTS || participantCount > MAX_PARTICIPANTS) {
-            throw new ScheduleException(ErrorStatus.INVALID_MEETING_PARTICIPANT_COUNT);
+            throw new ParticipantException(ErrorStatus.INVALID_MEETING_PARTICIPANT_COUNT);
         }
     }
 
@@ -39,14 +40,14 @@ public class MeetingParticipantValidationUtils {
      */
     public static void validateUniqueParticipantIds(Long ownerId, List<Long> participantIds) {
         if (participantIds.contains(ownerId)) {
-            throw new ScheduleException(ErrorStatus.NOT_INCLUDE_OWNER_IN_REQUEST);
+            throw new ParticipantException(ErrorStatus.NOT_INCLUDE_OWNER_IN_REQUEST);
         }
         Set<Long> uniqueIds = new HashSet<>();
         Set<Long> duplicates = participantIds.stream()
                 .filter(id -> !uniqueIds.add(id))
                 .collect(Collectors.toSet());
         if (!duplicates.isEmpty()) {
-            throw new ScheduleException(ErrorStatus.DUPLICATE_MEETING_PARTICIPANT);
+            throw new ParticipantException(ErrorStatus.DUPLICATE_MEETING_PARTICIPANT);
         }
     }
 
@@ -79,7 +80,7 @@ public class MeetingParticipantValidationUtils {
                 .filter(newParticipantIds::contains)
                 .collect(Collectors.toList());
         if (!duplicates.isEmpty()) {
-            throw new ScheduleException(ErrorStatus.DUPLICATE_MEETING_PARTICIPANT);
+            throw new ParticipantException(ErrorStatus.DUPLICATE_MEETING_PARTICIPANT);
         }
     }
 }
