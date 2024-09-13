@@ -30,6 +30,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Getter
 @Entity
@@ -69,6 +71,13 @@ public class Participant extends BaseTimeEntity {
     @JoinColumn(name = "palette_id", nullable = true)
     private Palette palette;
 
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(length = 50)
+    private String customTitle;
+
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    private String customImage;
+
     private boolean hasDiary;
 
     @OneToOne(mappedBy = "participant", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -84,6 +93,8 @@ public class Participant extends BaseTimeEntity {
         this.status = Objects.requireNonNull(status, "status는 null일 수 없습니다.");
         this.category = category;
         this.palette = palette;
+        this.customTitle = schedule.getTitle();
+        this.customImage = schedule.getImageUrl();
         this.hasDiary = false;
     }
 
@@ -112,6 +123,11 @@ public class Participant extends BaseTimeEntity {
         this.status = ParticipantStatus.ACTIVE;
         this.category = category;
         this.palette = palette;
+    }
+
+    public void updateCustomScheduleInfo(String title, String imageUrl) {
+        this.customTitle = title;
+        this.customImage = imageUrl;
     }
 
     public void inactiveStatus() {
