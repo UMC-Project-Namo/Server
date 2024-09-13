@@ -71,7 +71,7 @@ public class Participant extends BaseTimeEntity {
 
     private boolean hasDiary;
 
-    @OneToOne(mappedBy = "participant", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "participant", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Diary diary;
 
     @Builder
