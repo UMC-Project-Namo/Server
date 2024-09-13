@@ -23,7 +23,6 @@ public class DiaryImageManageService {
 
     private final DiaryImageService diaryImageService;
     private final FileUtils fileUtils;
-    private final DiaryManageService diaryManageService;
 
     /**
      * 일기의 이미지를 업데이트하는 메서드입니다.
