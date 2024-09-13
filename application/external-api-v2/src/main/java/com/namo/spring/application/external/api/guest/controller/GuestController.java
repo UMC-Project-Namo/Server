@@ -39,8 +39,10 @@ public class GuestController {
 
     @Operation(summary = "게스트 로그인 / 모임 가입", description = "참여 코드에 대하여 게스트 접근을 허용합니다. 참여 코드와 닉네임이 존재할 시 게스트 로그인을, 존재 하지 않을 시에는 모임 가입을 진행합니다.")
     @ApiErrorCodes(value = {
+            ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE,
             ErrorStatus.NOT_MEETING_SCHEDULE,
             ErrorStatus.ANONYMOUS_LOGIN_FAILURE,
+            ErrorStatus.NOT_SCHEDULE_PARTICIPANT,
             ErrorStatus.NOT_FOUND_COLOR
     })
     @PostMapping(path = "/invitations")
@@ -53,7 +55,8 @@ public class GuestController {
     @Operation(summary = "모임 일정 월간 조회")
     @ApiErrorCodes(value = {
             ErrorStatus.NOT_MEETING_SCHEDULE,
-            ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE
+            ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE,
+            ErrorStatus.NOT_SCHEDULE_PARTICIPANT,
     })
     @GetMapping(path = "/meeting/{meetingScheduleId}/calendar")
     public ResponseDto<List<GuestMeetingResponse.GetMonthlyMeetingParticipantScheduleDto>> getMonthlyMeetingParticipantSchedules(
