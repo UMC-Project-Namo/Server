@@ -32,20 +32,17 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class ParticipantManageService {
-    private static final Long MEETING_SCHEDULE_OWNER_PALETTE_ID = ColorChip.getMeetingScheduleOwnerPaletteId();
     private final ParticipantMaker participantMaker;
     private final ParticipationActionManager participationActionManager;
     private final FriendshipService friendshipService;
     private final ParticipantService participantService;
-    private final GuestManageService guestManageService;
-    private final TagGenerator tagGenerator;
 
     public void createPersonalScheduleParticipant(Member member, Schedule schedule, Long categoryId) {
         participantMaker.makeScheduleOwner(schedule, member, categoryId, null);
     }
 
     public void createMeetingScheduleParticipants(Member owner, Schedule schedule, List<Member> participants) {
-        participantMaker.makeScheduleOwner(schedule, owner, null, MEETING_SCHEDULE_OWNER_PALETTE_ID);
+        participantMaker.makeScheduleOwner(schedule, owner, null, owner.getPalette().getId());
         schedule.addActiveParticipant(owner.getNickname());
         participantMaker.makeMeetingScheduleParticipants(schedule, participants);
     }

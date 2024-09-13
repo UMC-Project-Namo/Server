@@ -34,7 +34,7 @@ public class ParticipantMaker {
             category = categoryService.readCategoryByMemberAndId(categoryId, member);
         } else
             category = categoryService.readMeetingCategoryByMember(member);
-        Palette palette = paletteService.getPalette(paletteId);
+        Palette palette = paletteId != null ? paletteService.getPalette(paletteId) :  null;
 
         Participant participant = Participant.of(ParticipantRole.OWNER.getValue(), member, schedule,
                 ParticipantStatus.ACTIVE, category, palette);
