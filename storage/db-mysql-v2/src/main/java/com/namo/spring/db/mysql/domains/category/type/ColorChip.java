@@ -34,7 +34,4 @@ public enum ColorChip {
         return COLOR_4.id;
     }
 
-    public static Long getMeetingScheduleOwnerPaletteId() {
-        return COLOR_5.id;
-    }
 }
