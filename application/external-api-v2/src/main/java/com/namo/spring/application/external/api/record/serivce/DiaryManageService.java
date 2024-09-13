@@ -1,6 +1,7 @@
 package com.namo.spring.application.external.api.record.serivce;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.namo.spring.application.external.api.record.dto.DiaryRequest;
 import com.namo.spring.core.common.code.status.ErrorStatus;
@@ -81,7 +82,10 @@ public class DiaryManageService {
      * @param memberId
      * @param diaryId
      */
+    @Transactional
     public void deleteDiary(Long memberId, Long diaryId) {
-        diaryService.deleteDiary(getMyDiary(diaryId, memberId).getId());
+        Diary myDiary = getMyDiary(diaryId, memberId);
+        myDiary.getImages().forEach(image -> diaryImageManageService.deleteDiaryImage(image.getId()));
+        diaryService.deleteDiary(myDiary);
     }
 }

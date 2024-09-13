@@ -37,6 +37,11 @@ public class DiaryImageManageService {
         createDiaryImages(diary, request.getDiaryImages());
     }
 
+    public void deleteDiaryImage(Long imageId){
+        deleteFromCloud(imageId);
+        diaryImageService.deleteDiaryImage(imageId);
+    }
+
     /**
      * 클라우드(S3) 에서 이미지를 삭제하는 메서드입니다. (원본, 리사이징 본 모두 삭제)
      * !! 만약 이미지가 존재하지 않으면 로그만 남기고 Continue 됩니다.

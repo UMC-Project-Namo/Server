@@ -30,4 +30,8 @@ public class DiaryService {
         diaryRepository.deleteById(diaryId);
     }
 
+    public void deleteDiary(Diary diary){
+        diaryRepository.delete(diary);
+    }
+
 }
