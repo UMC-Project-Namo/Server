@@ -1,6 +1,7 @@
 package com.namo.spring.application.external.api.record.serivce;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.namo.spring.application.external.api.record.dto.DiaryRequest;
 import com.namo.spring.core.common.code.status.ErrorStatus;
@@ -73,5 +74,18 @@ public class DiaryManageService {
     public void updateDiary(Diary diary, DiaryRequest.UpdateDiaryDto request) {
         diary.update(request.getContent(), request.getEnjoyRating());
         diaryImageManageService.updateDiaryImage(diary, request);
+    }
+
+    /**
+     * 다이어리를 삭제하는 메서드입니다.
+     * !! 클라우드에서 이미지를 삭제후 일기를 삭제합니다.
+     *
+     * @param diary
+     */
+    @Transactional
+    public void deleteDiary(Diary diary) {
+        diary.getImages().forEach(diaryImage -> diaryImageManageService.deleteFromCloud(diaryImage.getId()));
+        diaryImageManageService.deleteDiaryImage(diary);
+        diaryService.deleteDiary(diary);
     }
 }

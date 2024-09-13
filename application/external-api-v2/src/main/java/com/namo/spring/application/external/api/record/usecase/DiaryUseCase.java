@@ -73,4 +73,10 @@ public class DiaryUseCase {
                 .map(DiaryResponseConverter::toDayOfDiaryDto)
                 .toList();
     }
+
+    @Transactional
+    public void deleteDiary(Long memberId, Long diaryId) {
+        Diary myDiary = diaryManageService.getMyDiary(diaryId, memberId);
+        diaryManageService.deleteDiary(myDiary);
+    }
 }
