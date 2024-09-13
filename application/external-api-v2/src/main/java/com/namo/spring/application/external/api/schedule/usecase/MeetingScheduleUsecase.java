@@ -43,7 +43,7 @@ public class MeetingScheduleUsecase {
 
     @Transactional(readOnly = true)
     public List<MeetingScheduleResponse.GetMeetingScheduleSummaryDto> getMeetingSchedules(SecurityUserDetails member) {
-        return toGetMeetingScheduleSummaryDtos(scheduleManageService.getMeetingScheduleItems(member.getUserId()));
+        return toGetMeetingScheduleSummaryDtos(scheduleManageService.getMeetingScheduleSummaries(member.getUserId()));
     }
 
     @Transactional(readOnly = true)
@@ -54,7 +54,7 @@ public class MeetingScheduleUsecase {
 
         List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyMembersSchedules(
                 memberIds, getExtendedPeriod(year, month), memberInfo.getUserId());
-        return toGetMonthlyParticipantScheduleDtos(participantsWithSchedule, memberIds, memberInfo.getUserId());
+        return toGetMonthlyMembersScheduleDtos(participantsWithSchedule,memberInfo.getUserId());
     }
 
     @Transactional(readOnly = true)
@@ -65,7 +65,7 @@ public class MeetingScheduleUsecase {
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
         List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyMeetingParticipantSchedules(
                 schedule, getExtendedPeriod(year, month), memberInfo.getUserId(), null);
-        return toGetMonthlyMeetingParticipantScheduleDtos(participantsWithSchedule, schedule);
+        return toGetMonthlyMeetingParticipantScheduleDtos(participantsWithSchedule, schedule, memberInfo.getUserId());
     }
 
     @Transactional(readOnly = true)
@@ -74,7 +74,7 @@ public class MeetingScheduleUsecase {
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
         List<Participant> participants = scheduleManageService.getMeetingScheduleParticipants(schedule,
                 memberInfo.getUserId(), null);
-        return toGetMeetingScheduleDto(schedule, participants);
+        return toGetMeetingScheduleDto(schedule, participants, memberInfo.getUserId());
     }
 
     @Transactional

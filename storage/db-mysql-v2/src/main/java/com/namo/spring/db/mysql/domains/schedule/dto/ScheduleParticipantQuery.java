@@ -17,5 +17,7 @@ public class ScheduleParticipantQuery {
     private Long memberId;
     private String nickname;
     private Schedule schedule;
+    private String customTitle;
+    private String customImage;
     private Boolean isShared;
 }

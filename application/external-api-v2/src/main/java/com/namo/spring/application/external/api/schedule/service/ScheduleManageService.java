@@ -79,7 +79,7 @@ public class ScheduleManageService {
         return schedule;
     }
 
-    public List<Schedule> getMeetingScheduleItems(Long memberId) {
+    public List<Schedule> getMeetingScheduleSummaries(Long memberId) {
         List<Long> scheduleIds = participantService.readScheduleParticipantSummaryByScheduleIds(memberId).stream()
                 .map(Participant::getSchedule)
                 .map(Schedule::getId)
