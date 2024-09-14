@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -160,5 +161,9 @@ public class Schedule extends BaseTimeEntity {
     private void updateParticipants(List<String> updatedNicknames) {
         this.participantNicknames = String.join(", ", updatedNicknames);
         this.participantCount = updatedNicknames.size();
+    }
+
+    public boolean getIsMeetingSchedule() {
+        return this.scheduleType == ScheduleType.MEETING.getValue();
     }
 }

@@ -6,6 +6,7 @@ import static com.namo.spring.application.external.global.utils.SchedulePeriodVa
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleSummaryQuery;
 import org.springframework.stereotype.Service;
 
 import com.namo.spring.application.external.api.schedule.converter.LocationConverter;
@@ -79,12 +80,8 @@ public class ScheduleManageService {
         return schedule;
     }
 
-    public List<Schedule> getMeetingScheduleSummaries(Long memberId) {
-        List<Long> scheduleIds = participantService.readScheduleParticipantSummaryByScheduleIds(memberId).stream()
-                .map(Participant::getSchedule)
-                .map(Schedule::getId)
-                .collect(Collectors.toList());
-        return scheduleService.readSchedulesById(scheduleIds);
+    public List<ScheduleSummaryQuery> getMeetingScheduleSummaries(Long memberId) {
+        return participantService.readScheduleParticipantSummaryByScheduleIds(memberId);
     }
 
     public List<Participant> getMyMonthlySchedules(Long memberId, Period period) {

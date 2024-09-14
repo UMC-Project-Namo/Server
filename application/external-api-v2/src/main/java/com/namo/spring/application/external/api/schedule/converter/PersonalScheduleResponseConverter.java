@@ -39,7 +39,7 @@ public class PersonalScheduleResponseConverter {
 
     public static PersonalScheduleResponse.GetMonthlyScheduleDto toGetMonthlyScheduleDto(Participant participant,
             List<ScheduleNotificationQuery> notifications) {
-        boolean isMeetingSchedule = getIsMeetingSchedule(participant.getSchedule().getScheduleType());
+        boolean isMeetingSchedule = participant.getSchedule().getIsMeetingSchedule();
         String title = isMeetingSchedule ? participant.getCustomTitle() : participant.getSchedule().getTitle();
         return PersonalScheduleResponse.GetMonthlyScheduleDto.builder()
                 .scheduleId(participant.getSchedule().getId())
@@ -118,10 +118,6 @@ public class PersonalScheduleResponseConverter {
                 .endDate(DateUtil.toSeconds(participant.getSchedule().getPeriod().getEndDate()))
                 .interval(participant.getSchedule().getPeriod().getDayInterval())
                 .build();
-    }
-
-    private static boolean getIsMeetingSchedule(int type) {
-        return type == ScheduleType.MEETING.getValue();
     }
 
     private static boolean getParticipantIsOwner(int isOwner) {

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleSummaryQuery;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,8 +18,11 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
 
     List<Participant> findAllByScheduleId(Long scheduleId);
 
-    @Query("SELECT p FROM Participant p JOIN p.schedule s JOIN p.member m WHERE p.member.id = :memberId AND p.status = 'ACTIVE' AND s.scheduleType = :scheduleType")
-    List<Participant> findParticipantsByMemberAndScheduleType(Long memberId, int scheduleType);
+    @Query("SELECT new com.namo.spring.db.mysql.domains.schedule.dto.ScheduleSummaryQuery(" +
+            "s.id, p.customTitle, s.period.startDate, p.customImage, s.participantCount, s.participantNicknames) " +
+            "FROM Participant p JOIN p.schedule s JOIN p.member m " +
+            "WHERE p.member.id = :memberId AND p.status = 'ACTIVE' AND s.scheduleType = :scheduleType")
+    List<ScheduleSummaryQuery> findScheduleSummaryByMemberAndScheduleType(Long memberId, int scheduleType);
 
     boolean existsByScheduleIdAndMemberId(Long scheduleId, Long memberId);
 

@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@Builder
 @AllArgsConstructor
 public class ScheduleParticipantQuery {
     private Long participantId;

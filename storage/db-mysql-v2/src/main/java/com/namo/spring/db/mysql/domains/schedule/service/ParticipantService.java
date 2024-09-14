@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleSummaryQuery;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,8 +53,8 @@ public class ParticipantService {
     }
 
     @Transactional(readOnly = true)
-    public List<Participant> readScheduleParticipantSummaryByScheduleIds(Long memberId) {
-        return participantRepository.findParticipantsByMemberAndScheduleType(memberId, ScheduleType.MEETING.getValue());
+    public List<ScheduleSummaryQuery> readScheduleParticipantSummaryByScheduleIds(Long memberId) {
+        return participantRepository.findScheduleSummaryByMemberAndScheduleType(memberId, ScheduleType.MEETING.getValue());
     }
 
     @Transactional(readOnly = true)
