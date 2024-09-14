@@ -17,6 +17,6 @@ public class CategoryResponse {
         private String categoryName;
         private Long paletteId;
         private boolean isBaseCategory;
-        private boolean isVisible;
+        private boolean isShared;
     }
 }
