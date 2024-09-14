@@ -40,10 +40,9 @@ public class PersonalScheduleResponseConverter {
     public static PersonalScheduleResponse.GetMonthlyScheduleDto toGetMonthlyScheduleDto(Participant participant,
             List<ScheduleNotificationQuery> notifications) {
         boolean isMeetingSchedule = participant.getSchedule().getIsMeetingSchedule();
-        String title = isMeetingSchedule ? participant.getCustomTitle() : participant.getSchedule().getTitle();
         return PersonalScheduleResponse.GetMonthlyScheduleDto.builder()
                 .scheduleId(participant.getSchedule().getId())
-                .title(title)
+                .title(participant.getScheduleTitle())
                 .categoryInfo(toCategoryDto(participant.getCategory()))
                 .startDate(DateUtil.toSeconds(participant.getSchedule().getPeriod().getStartDate()))
                 .endDate(DateUtil.toSeconds(participant.getSchedule().getPeriod().getEndDate()))

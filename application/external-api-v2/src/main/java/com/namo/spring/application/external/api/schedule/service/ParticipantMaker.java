@@ -30,7 +30,6 @@ public class ParticipantMaker {
 
     public void makeScheduleOwner(Schedule schedule, Member member, Long categoryId, Long paletteId) {
         Category category;
-
         if (categoryId != null) {
             category = categoryService.readCategoryByMemberAndId(categoryId, member);
         } else

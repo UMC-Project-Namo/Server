@@ -62,9 +62,9 @@ public class MeetingScheduleResponseConverter {
             Schedule schedule, List<ScheduleParticipantQuery> participants, Long curMemberId) {
         String title = participants.stream()
                 .filter(participant -> participant.getMemberId().equals(curMemberId))
-                .findFirst()
-                .map(ScheduleParticipantQuery::getCustomTitle)
-                .orElse(schedule.getTitle());
+                        .findFirst()
+                        .map(ScheduleParticipantQuery::getCustomTitle)
+                        .orElse(schedule.getTitle());
         return MeetingScheduleResponse.GetMonthlyMembersScheduleDto.builder()
                 .scheduleId(schedule.getId())
                 .title(title)
@@ -128,7 +128,7 @@ public class MeetingScheduleResponseConverter {
     }
 
     private static MeetingScheduleResponse.UserParticipantDto toUserParticipantDto(ScheduleParticipantQuery
-            participant) {
+                                                                                           participant) {
         return MeetingScheduleResponse.UserParticipantDto.builder()
                 .participantId(participant.getParticipantId())
                 .userId(participant.getMemberId())
@@ -137,8 +137,7 @@ public class MeetingScheduleResponseConverter {
                 .build();
     }
 
-    public static MeetingScheduleResponse.GetMeetingScheduleDto toGetMeetingScheduleDto(Schedule
-            schedule, List<Participant> participants, Long curMemberId) {
+    public static MeetingScheduleResponse.GetMeetingScheduleDto toGetMeetingScheduleDto(Schedule schedule, List<Participant> participants, Long curMemberId) {
         Participant customScheduleInfo = participants.stream()
                 .filter(participant -> participant.getMember().getId().equals(curMemberId))
                 .findFirst().get();
@@ -171,7 +170,7 @@ public class MeetingScheduleResponseConverter {
     }
 
     private static MeetingScheduleResponse.UserParticipantDetailDto toUserParticipantDetailDto(Participant
-            participant) {
+                                                                                                       participant) {
         return MeetingScheduleResponse.UserParticipantDetailDto.builder()
                 .participantId(participant.getId())
                 .userId(participant.getUser().getId())
