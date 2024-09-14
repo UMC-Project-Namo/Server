@@ -1,5 +1,6 @@
 package com.namo.spring.db.mysql.domains.category.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -55,6 +56,10 @@ public class CategoryService {
     @Transactional
     public void deleteCategory(Long categoryId) {
         categoryRepository.deleteById(categoryId);
+    }
+
+    public List<Category> readCategoriesByMemberId(Long memberId){
+        return categoryRepository.findCategoryByMemberId(memberId);
     }
 
 }
