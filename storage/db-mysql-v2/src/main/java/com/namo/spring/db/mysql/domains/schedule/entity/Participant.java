@@ -146,4 +146,12 @@ public class Participant extends BaseTimeEntity {
         this.hasDiary = false;
     }
 
+    public String getScheduleTitle(){
+        return schedule.getIsMeetingSchedule() ? this.getCustomTitle() : schedule.getTitle();
+    }
+
+    public String getScheduleImage(){
+        return schedule.getIsMeetingSchedule() ? this.getCustomImage() : schedule.getImageUrl();
+    }
+
 }
