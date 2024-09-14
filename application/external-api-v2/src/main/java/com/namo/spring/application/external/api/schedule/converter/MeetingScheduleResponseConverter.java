@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
 import com.namo.spring.core.common.utils.DateUtil;
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
+import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleSummaryQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.type.Location;
@@ -20,18 +21,18 @@ public class MeetingScheduleResponseConverter {
     }
 
     public static List<MeetingScheduleResponse.GetMeetingScheduleSummaryDto> toGetMeetingScheduleSummaryDtos(
-            List<Schedule> schedules) {
+            List<ScheduleSummaryQuery> schedules) {
         return schedules.stream()
                 .map(MeetingScheduleResponseConverter::toGetMeetingScheduleSummaryDto)
                 .collect(Collectors.toList());
     }
 
     public static MeetingScheduleResponse.GetMeetingScheduleSummaryDto toGetMeetingScheduleSummaryDto(
-            Schedule schedule) {
+            ScheduleSummaryQuery schedule) {
         return MeetingScheduleResponse.GetMeetingScheduleSummaryDto.builder()
-                .meetingScheduleId(schedule.getId())
+                .meetingScheduleId(schedule.getMeetingScheduleId())
                 .title(schedule.getTitle())
-                .startDate(DateUtil.toSeconds(schedule.getPeriod().getStartDate()))
+                .startDate(DateUtil.toSeconds(schedule.getStartDate()))
                 .imageUrl(schedule.getImageUrl())
                 .participantCount(schedule.getParticipantCount())
                 .participantNicknames(schedule.getParticipantNicknames())

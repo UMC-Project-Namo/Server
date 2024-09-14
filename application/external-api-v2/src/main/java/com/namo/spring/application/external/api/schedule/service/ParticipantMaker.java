@@ -30,14 +30,20 @@ public class ParticipantMaker {
 
     public void makeScheduleOwner(Schedule schedule, Member member, Long categoryId, Long paletteId) {
         Category category;
+
         if (categoryId != null) {
             category = categoryService.readCategoryByMemberAndId(categoryId, member);
         } else
             category = categoryService.readMeetingCategoryByMember(member);
         Palette palette = paletteId != null ? paletteService.getPalette(paletteId) :  null;
 
-        Participant participant = Participant.of(ParticipantRole.OWNER.getValue(), member, schedule,
-                ParticipantStatus.ACTIVE, category, palette, schedule.getTitle(), schedule.getImageUrl());
+        Participant participant;
+        if(schedule.getIsMeetingSchedule()){
+            participant = Participant.of(ParticipantRole.OWNER.getValue(), member, schedule,
+                    ParticipantStatus.ACTIVE, category, palette, schedule.getTitle(), schedule.getImageUrl());
+        } else participant = Participant.of(ParticipantRole.OWNER.getValue(), member, schedule,
+                ParticipantStatus.ACTIVE, category, palette, null, null);
+
         participantService.createParticipant(participant);
     }
 
