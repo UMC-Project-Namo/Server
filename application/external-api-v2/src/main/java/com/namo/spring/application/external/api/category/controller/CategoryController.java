@@ -40,13 +40,19 @@ public class CategoryController {
                 .getMyCategoryList(memberInfo.getUserId()));
     }
 
+    @Operation(summary = "나의 카테고리 수정", description = "나의 카테고리를 수정 합니다.")
+    @ApiErrorCodes(value = {
+            ErrorStatus.NOT_FOUND_CATEGORY_FAILURE,
+            ErrorStatus.NOT_USERS_CATEGORY,
+            ErrorStatus.NOT_FOUND_PALETTE_FAILURE
+    })
     @PatchMapping("/{categoryId}")
     public ResponseDto<String> updateCategory(
             @AuthenticationPrincipal SecurityUserDetails memberInfo,
             @PathVariable Long categoryId,
             @RequestBody CategoryRequest.CategoryUpdateDto request
-
     ){
+        categoryUseCase.updateCategory(memberInfo.getUserId(), categoryId, request);
         return ResponseDto.onSuccess("카테고리 수정 완료");
     }
 
