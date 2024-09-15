@@ -45,11 +45,11 @@ public class CategoryManageService {
     }
 
     public void createCategory(Member member, CategoryRequest.CategoryCreateDto request) {
-        categoryMaker.makeCategory(member, request.getCategoryName(), request.getPaletteId(), request.getIsShared());
+        categoryMaker.makeCategory(member, request.getCategoryName(), request.getColorId(), request.getIsShared());
     }
 
     public void updateCategory(Category category, CategoryRequest.CategoryUpdateDto updateDto) {
-        Palette palette = paletteService.readPalette(updateDto.getPaletteId())
+        Palette palette = paletteService.readPalette(updateDto.getColorId())
                 .orElseThrow(() -> new PaletteException(ErrorStatus.NOT_FOUND_PALETTE_FAILURE));
         category.update(updateDto.getCategoryName(), palette, updateDto.getIsShared());
     }

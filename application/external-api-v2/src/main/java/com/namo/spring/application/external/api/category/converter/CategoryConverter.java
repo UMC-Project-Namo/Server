@@ -13,7 +13,7 @@ public class CategoryConverter {
                 .categoryName(category.getName())
                 .isBaseCategory(!category.getType().equals(COMMON))
                 .isShared(category.isShared())
-                .paletteId(category.getPalette().getId())
+                .colorId(category.getPalette().getId())
                 .build();
     }
 }

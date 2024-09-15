@@ -11,7 +11,7 @@ public class CategoryRequest {
         @Schema(description = "생성할 카테고리 이름을 넣어주세요", example = "학교 공부")
         private String categoryName;
         @Schema(description = "카테고리에 지정할 팔레트 ID를 넣어주세요", example = "1")
-        private Long paletteId;
+        private Long colorId;
         @Schema(description = "카테고리 공개 여부를 지정해 주세요", example = "true")
         private Boolean isShared;
     }
@@ -21,7 +21,7 @@ public class CategoryRequest {
         @Schema(description = "수정할 카테고리 이름을 넣어주세요", example = "자기 계발")
         private String categoryName;
         @Schema(description = "카테고리에 지정할 팔레트 ID를 넣어주세요", example = "1")
-        private Long paletteId;
+        private Long colorId;
         @Schema(description = "카테고리 공개 여부를 지정해 주세요", example = "false")
         private Boolean isShared;
     }
