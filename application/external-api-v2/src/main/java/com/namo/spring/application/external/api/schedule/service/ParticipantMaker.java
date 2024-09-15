@@ -36,15 +36,20 @@ public class ParticipantMaker {
             category = categoryService.readMeetingCategoryByMember(member);
         Palette palette = paletteId != null ? paletteService.getPalette(paletteId) :  null;
 
-        Participant participant = Participant.of(ParticipantRole.OWNER.getValue(), member, schedule,
-                ParticipantStatus.ACTIVE, category, palette);
+        Participant participant;
+        if(schedule.getIsMeetingSchedule()){
+            participant = Participant.of(ParticipantRole.OWNER.getValue(), member, schedule,
+                    ParticipantStatus.ACTIVE, category, palette, schedule.getTitle(), schedule.getImageUrl());
+        } else participant = Participant.of(ParticipantRole.OWNER.getValue(), member, schedule,
+                ParticipantStatus.ACTIVE, category, palette, null, null);
+
         participantService.createParticipant(participant);
     }
 
     public void makeMeetingScheduleParticipants(Schedule schedule, List<Member> members) {
         List<Participant> participants = members.stream()
                 .map(member -> Participant.of(ParticipantRole.NON_OWNER.getValue(), member, schedule,
-                        ParticipantStatus.INACTIVE, null, null))
+                        ParticipantStatus.INACTIVE, null, null, null, null))
                 .collect(Collectors.toList());
         participantService.createParticipants(participants);
     }
@@ -52,7 +57,7 @@ public class ParticipantMaker {
     public Participant makeGuestParticipant(Schedule schedule, Anonymous anonymous, Long paletteId) {
         Palette palette = paletteService.getPalette(paletteId);
         Participant participant = Participant.of(ParticipantRole.NON_OWNER.getValue(), anonymous, schedule,
-                ParticipantStatus.ACTIVE, null, palette);
+                ParticipantStatus.ACTIVE, null, palette, schedule.getTitle(), schedule.getImageUrl());
         Participant savedParticipant = participantService.createParticipant(participant);
         schedule.addActiveParticipant(anonymous.getNickname());
         return savedParticipant;

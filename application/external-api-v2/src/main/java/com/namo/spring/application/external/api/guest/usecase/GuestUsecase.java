@@ -31,7 +31,7 @@ public class GuestUsecase {
     private final GuestManageService guestManageService;
 
     @Transactional
-    public GuestParticipantResponse.PostGuestParticipantDto createOrValidateGuest(
+    public GuestParticipantResponse.PostGuestParticipantInfoDto createOrValidateGuest(
             GuestParticipantRequest.PostGuestParticipantDto dto, String code) {
         Long scheduleId = guestManageService.decodeInviteCode(code);
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);

@@ -40,7 +40,7 @@ public class MeetingScheduleResponse {
         @Schema(description = "일정 ID")
         private Long scheduleId;
         @Schema(description = "일정 이름", example = "나모 정기 회의")
-        private String name;
+        private String title;
         @Schema(description = "모임 일정 이미지  url", example = "")
         private String imageUrl;
         @Schema(description = "일정 시작일, unix 타임스탬프 형식")
@@ -77,7 +77,7 @@ public class MeetingScheduleResponse {
         @Schema(description = "일정 ID")
         private Long scheduleId;
         @Schema(description = "일정 이름", example = "나모 정기 회의")
-        private String name;
+        private String title;
         @Schema(description = "일정 시작일, unix 타임스탬프 형식")
         private Long startDate;
         @Schema(description = "일정 종료일, unix 타임스탬프 형식")
@@ -96,7 +96,7 @@ public class MeetingScheduleResponse {
         @Schema(description = "일정 ID")
         private Long scheduleId;
         @Schema(description = "일정 이름", example = "나모 정기 회의")
-        private String name;
+        private String title;
         @Schema(description = "일정 시작일, unix 타임스탬프 형식")
         private Long startDate;
         @Schema(description = "일정 종료일, unix 타임스탬프 형식")

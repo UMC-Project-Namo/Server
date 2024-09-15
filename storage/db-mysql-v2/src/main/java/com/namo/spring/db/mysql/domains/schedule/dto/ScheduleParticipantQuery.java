@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@Builder
 @AllArgsConstructor
 public class ScheduleParticipantQuery {
     private Long participantId;
@@ -17,5 +16,7 @@ public class ScheduleParticipantQuery {
     private Long memberId;
     private String nickname;
     private Schedule schedule;
+    private String customTitle;
+    private String customImage;
     private Boolean isShared;
 }

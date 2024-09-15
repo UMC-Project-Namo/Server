@@ -12,7 +12,7 @@ public class GuestParticipantResponse {
     @Getter
     @Builder
     @Schema(title = "게스트 모임 가입/로그인 응답 DTO")
-    public static class PostGuestParticipantDto {
+    public static class PostGuestParticipantInfoDto {
         private String nickname;
         private String tag;
         private Long participantId;

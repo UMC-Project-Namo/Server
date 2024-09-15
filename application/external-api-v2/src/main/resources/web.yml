@@ -1,0 +1,2 @@
+url:
+  invitation: ${WEB_INVITATION_URL:http://localhost:3000/}

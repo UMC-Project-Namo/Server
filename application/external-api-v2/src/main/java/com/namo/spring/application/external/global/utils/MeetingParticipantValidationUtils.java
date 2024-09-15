@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.schedule.exception.ParticipantException;
-import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
 
 import lombok.RequiredArgsConstructor;
 

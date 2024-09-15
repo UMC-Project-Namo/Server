@@ -39,25 +39,23 @@ public class PersonalScheduleResponseConverter {
 
     public static PersonalScheduleResponse.GetMonthlyScheduleDto toGetMonthlyScheduleDto(Participant participant,
             List<ScheduleNotificationQuery> notifications) {
-        PersonalScheduleResponse.GetMonthlyScheduleDto.GetMonthlyScheduleDtoBuilder builder = PersonalScheduleResponse.GetMonthlyScheduleDto.builder()
+        boolean isMeetingSchedule = participant.getSchedule().getIsMeetingSchedule();
+        return PersonalScheduleResponse.GetMonthlyScheduleDto.builder()
                 .scheduleId(participant.getSchedule().getId())
-                .title(participant.getSchedule().getTitle())
+                .title(participant.getScheduleTitle())
                 .categoryInfo(toCategoryDto(participant.getCategory()))
                 .startDate(DateUtil.toSeconds(participant.getSchedule().getPeriod().getStartDate()))
                 .endDate(DateUtil.toSeconds(participant.getSchedule().getPeriod().getEndDate()))
                 .interval(participant.getSchedule().getPeriod().getDayInterval())
                 .locationInfo(participant.getSchedule().getLocation() != null ?
                         toLocationDto(participant.getSchedule().getLocation()) : null)
-                .isMeetingSchedule(getIsMeetingSchedule(participant.getSchedule().getScheduleType()))
+                .isMeetingSchedule(isMeetingSchedule)
                 .hasDiary(participant.isHasDiary())
                 .notificationInfo(notifications != null ?
-                        toNotificationDtos(notifications, participant.getSchedule().getPeriod().getStartDate()) : null);
-        if (getIsMeetingSchedule(participant.getSchedule().getScheduleType())) {
-            return builder
-                    .meetingInfo(toMeetingInfoDto(participant.getIsOwner(), participant.getSchedule()))
-                    .build();
-        } else
-            return builder.build();
+                        toNotificationDtos(notifications, participant.getSchedule().getPeriod().getStartDate()) : null)
+                .meetingInfo(isMeetingSchedule ?
+                        toMeetingInfoDto(participant.getIsOwner(), participant.getSchedule()) : null)
+                .build();
     }
 
     private static PersonalScheduleResponse.CategoryDto toCategoryDto(Category category) {
@@ -119,10 +117,6 @@ public class PersonalScheduleResponseConverter {
                 .endDate(DateUtil.toSeconds(participant.getSchedule().getPeriod().getEndDate()))
                 .interval(participant.getSchedule().getPeriod().getDayInterval())
                 .build();
-    }
-
-    private static boolean getIsMeetingSchedule(int type) {
-        return type == ScheduleType.MEETING.getValue();
     }
 
     private static boolean getParticipantIsOwner(int isOwner) {

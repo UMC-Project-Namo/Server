@@ -6,8 +6,8 @@ import static com.namo.spring.application.external.global.utils.SchedulePeriodVa
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleSummaryQuery;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.namo.spring.application.external.api.schedule.converter.LocationConverter;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
@@ -70,23 +70,18 @@ public class ScheduleManageService {
         return schedule;
     }
 
-    public Schedule createMeetingSchedule(MeetingScheduleRequest.PostMeetingScheduleDto dto, Member owner,
-            MultipartFile image) {
+    public Schedule createMeetingSchedule(MeetingScheduleRequest.PostMeetingScheduleDto dto, Member owner) {
         validateParticipantCount(dto.getParticipants().size());
         List<Member> participants = participantManageService.getFriendshipValidatedParticipants(owner.getId(),
                 dto.getParticipants());
         Period period = getValidatedPeriod(dto.getPeriod().getStartDate(), dto.getPeriod().getEndDate());
-        Schedule schedule = scheduleMaker.createMeetingSchedule(dto, period, image);
+        Schedule schedule = scheduleMaker.createMeetingSchedule(dto, period);
         participantManageService.createMeetingScheduleParticipants(owner, schedule, participants);
         return schedule;
     }
 
-    public List<Schedule> getMeetingScheduleItems(Long memberId) {
-        List<Long> scheduleIds = participantService.readScheduleParticipantSummaryByScheduleIds(memberId).stream()
-                .map(Participant::getSchedule)
-                .map(Schedule::getId)
-                .collect(Collectors.toList());
-        return scheduleService.readSchedulesById(scheduleIds);
+    public List<ScheduleSummaryQuery> getMeetingScheduleSummaries(Long memberId) {
+        return participantService.readScheduleParticipantSummaryByScheduleIds(memberId);
     }
 
     public List<Participant> getMyMonthlySchedules(Long memberId, Period period) {
@@ -131,7 +126,7 @@ public class ScheduleManageService {
 
     public List<ScheduleParticipantQuery> getMonthlyMeetingParticipantSchedules(Schedule schedule, Period period,
             Long memberId, Long anonymousId) {
-        checkParticipantExists(schedule, memberId, null);
+        checkUserIsParticipant(schedule, memberId, null);
         List<Participant> participants = participantService.readParticipantsByScheduleIdAndStatusAndType(
                 schedule.getId(), ScheduleType.MEETING, ParticipantStatus.ACTIVE);
         List<Long> members = participants.stream()
@@ -165,7 +160,7 @@ public class ScheduleManageService {
         return participant.getMemberId().equals(memberId) || participant.getIsShared();
     }
 
-    private void checkParticipantExists(Schedule schedule, Long memberId, Long anonymousId) {
+    private void checkUserIsParticipant(Schedule schedule, Long memberId, Long anonymousId) {
         boolean isParticipant;
         if (memberId != null)
             isParticipant = participantService.existsByScheduleIdAndMemberId(schedule.getId(), memberId);
@@ -177,7 +172,7 @@ public class ScheduleManageService {
     }
 
     public List<Participant> getMeetingScheduleParticipants(Schedule schedule, Long memberId, Long anonymousId) {
-        checkParticipantExists(schedule, memberId, anonymousId);
+        checkUserIsParticipant(schedule, memberId, anonymousId);
         return participantService.readParticipantsByScheduleIdAndStatusAndType(schedule.getId(), ScheduleType.MEETING,
                 null);
     }
@@ -185,13 +180,16 @@ public class ScheduleManageService {
     public void updatePersonalSchedule(PersonalScheduleRequest.PatchPersonalScheduleDto dto, Schedule schedule,
             Long memberId) {
         validateScheduleOwner(schedule, memberId);
-        updateScheduleContent(dto.getTitle(), dto.getLocation(), dto.getPeriod(), schedule);
+        updateScheduleContent(dto.getTitle(), dto.getLocation(), dto.getPeriod(), null, schedule);
     }
 
+    /**
+     * 모임 일정의 정보를 수정합니다.
+     */
     public void updateMeetingSchedule(MeetingScheduleRequest.PatchMeetingScheduleDto dto, Schedule schedule,
-            Long memberId) {
+                                      Long memberId) {
         validateScheduleOwner(schedule, memberId);
-        updateScheduleContent(dto.getTitle(), dto.getLocation(), dto.getPeriod(), schedule);
+        updateScheduleContent(dto.getTitle(), dto.getLocation(), dto.getPeriod(), dto.getImageUrl(), schedule);
         // 기존의 인원과, 초대될 & 삭제될 member  검증
         if (!dto.getParticipantsToAdd().isEmpty() || !dto.getParticipantsToRemove().isEmpty()) {
             List<Long> participantIds = getScheduleParticipantIds(schedule.getId());
@@ -200,6 +198,15 @@ public class ScheduleManageService {
             validateExistingAndNewParticipantIds(participantIds, dto.getParticipantsToAdd());
             participantManageService.updateMeetingScheduleParticipants(memberId, schedule, dto);
         }
+    }
+
+    /**
+     * 모임 일정의 제목, 이미지를 커스텀 합니다.
+     */
+    public void updateMeetingScheduleProfile(MeetingScheduleRequest.PatchMeetingScheduleProfileDto dto, Schedule schedule,
+                                             Long memberId){
+        Participant participant = participantManageService.getScheduleParticipant(memberId, schedule.getId());
+        participant.updateCustomScheduleInfo(dto.getTitle(), dto.getImageUrl());
     }
 
     /**
@@ -220,10 +227,10 @@ public class ScheduleManageService {
     }
 
     private void updateScheduleContent(String title, MeetingScheduleRequest.LocationDto locationDto,
-            MeetingScheduleRequest.PeriodDto periodDto, Schedule schedule) {
+            MeetingScheduleRequest.PeriodDto periodDto, String imageUrl, Schedule schedule) {
         Period period = getValidatedPeriod(periodDto.getStartDate(), periodDto.getEndDate());
         Location location = locationDto != null ? LocationConverter.toLocation(locationDto) : null;
-        schedule.updateContent(title, period, location);
+        schedule.updateContent(title, period, location, imageUrl);
     }
 
     public void validateScheduleOwner(Schedule schedule, Long memberId) {

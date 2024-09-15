@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.namo.spring.application.external.global.config.properties.WebUrlConfig;
 import org.springframework.stereotype.Service;
 
 import com.namo.spring.application.external.api.guest.dto.GuestParticipantRequest;
@@ -39,6 +40,7 @@ public class GuestManageService {
     private final ParticipantService participantService;
     private final ParticipantMaker participantMaker;
     private final TagGenerator tagGenerator;
+    private final WebUrlConfig webUrlConfig;
 
     public Anonymous createAnonymous(GuestParticipantRequest.PostGuestParticipantDto dto, Schedule schedule,
             String code, String tag) {
@@ -98,13 +100,17 @@ public class GuestManageService {
                 .orElseGet(() -> createGuest(dto, schedule, code));
     }
 
+    public String generateInvitationUrl(Long scheduleId){
+        return webUrlConfig.getInvitation()+generateInviteCode(scheduleId);
+    }
+
     /**
      * 일정 ID 값을 담은 참여 코드를 생성합니다.
      *
      * @param scheduleId
      * @return 참여 코드
      */
-    public String generateInviteCode(Long scheduleId) {
+    private String generateInviteCode(Long scheduleId) {
         List<String> existCodes = anonymousService.readAllInviteCodes()
                 .stream()
                 .map(AnonymousInviteCodeQuery::getCode)

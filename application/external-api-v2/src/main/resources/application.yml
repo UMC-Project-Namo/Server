@@ -10,6 +10,7 @@ spring:
       - redis.yml
       - mysql.yml
       - logging.yml
+      - web.yml
   web.resources.add-mappings: false
 
 server:

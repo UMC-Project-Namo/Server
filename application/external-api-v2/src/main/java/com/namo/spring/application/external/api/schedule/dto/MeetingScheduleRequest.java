@@ -25,6 +25,8 @@ public class MeetingScheduleRequest {
         @NotBlank(message = "일정 이름은 공백일 수 없습니다.")
         @Schema(description = "모임 일정 이름", example = "나모 정기 회의")
         private String title;
+        @Schema(description = "이미지 URL, null을 입력하면 기본 이미지가 생성됩니다.", example = "https://static.namong.shop/origin/diary/image.jpg")
+        private String imageUrl;
         @NotNull(message = "일정 시작일, 종료일 정보는 필수 입니다.")
         @Schema(description = "기간 정보")
         private PeriodDto period;
@@ -70,6 +72,9 @@ public class MeetingScheduleRequest {
         @NotBlank(message = "일정 이름 입력은 필수 입니다. 수정 사항이 없을 시 원본 값을 전송합니다.")
         @Schema(description = "모임 일정 이름, 수정 사항이 없을 시 원본 값을 전송합니다.")
         private String title;
+        @NotBlank(message = "이미지 url 입력은 필수 입니다. 수정 사항이 없을 시 원본 값을 전송합니다.")
+        @Schema(description = "이미지 URL", example = "https://static.namong.shop/origin/diary/image.jpg")
+        private String imageUrl;
         @NotNull(message = "기간 입력은 필수 입니다. 수정 사항이 없을 시 원본 값을 전송합니다.")
         @Schema(description = "기간, 수정 사항이 없을 시 원본 값을 전송합니다.")
         private PeriodDto period;
@@ -82,5 +87,18 @@ public class MeetingScheduleRequest {
         @NotNull(message = "삭제할 유저가 없을 시 empty array를 전송하세요.")
         @Schema(description = "스케줄에서 삭제할 참가자 ID(participantId), 삭제할 유저가 없을 시 empty array를 전송합니다.")
         private List<Long> participantsToRemove;
+    }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    @Schema(title = "모임 일정 프로필 수정 요청 DTO")
+    public static class PatchMeetingScheduleProfileDto {
+        @NotBlank(message = "일정 이름 입력은 필수 입니다. 수정 사항이 없을 시 원본 값을 전송합니다.")
+        @Schema(description = "모임 일정 이름, 수정 사항이 없을 시 원본 값을 전송합니다.")
+        private String title;
+        @NotBlank(message = "이미지 url 입력은 필수 입니다. 수정 사항이 없을 시 원본 값을 전송합니다.")
+        @Schema(description = "이미지 URL", example = "https://static.namong.shop/origin/diary/image.jpg")
+        private String imageUrl;
     }
 }

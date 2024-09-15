@@ -2,8 +2,6 @@ package com.namo.spring.application.external.api.schedule.controller;
 
 import java.util.List;
 
-import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
-import com.namo.spring.core.common.code.status.ErrorStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.namo.spring.application.external.api.schedule.api.MeetingScheduleApi;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
@@ -41,15 +38,12 @@ import lombok.extern.slf4j.Slf4j;
 public class MeetingScheduleController implements MeetingScheduleApi {
     private final MeetingScheduleUsecase meetingScheduleUsecase;
 
-    /**
-     * 모임 일정 생성 API
-     */
+    @Operation(summary = "모임 일정 생성", description = "모임 일정을 생성합니다. 요청 성공 시 모임 일정 ID를 전송합니다.")
     @PostMapping(path = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDto<Long> createMeetingSchedule(
             @Valid @RequestPart MeetingScheduleRequest.PostMeetingScheduleDto dto,
-            @RequestPart(required = false) MultipartFile image,
             @AuthenticationPrincipal SecurityUserDetails memberInfo) {
-        return ResponseDto.onSuccess(meetingScheduleUsecase.createMeetingSchedule(dto, image, memberInfo));
+        return ResponseDto.onSuccess(meetingScheduleUsecase.createMeetingSchedule(dto, memberInfo));
     }
 
     @Operation(summary = "모임 일정 목록 조회", description = "모임 일정 목록을 조회합니다.")
@@ -100,19 +94,22 @@ public class MeetingScheduleController implements MeetingScheduleApi {
         return ResponseDto.onSuccess("모임 일정 수정 성공");
     }
 
-    @Operation(summary = "게스트 초대용 링크 조회 API", description = "게스트 초대용 링크를 조회합니다. 초대 인원이 최대인 경우에 조회되지 않습니다.")
+    @Operation(summary = "모임 일정 프로필 수정", description = "모임 일정의 이미지와 제목을 커스텀합니다.")
+    @PatchMapping(path = "/{meetingScheduleId}/profile")
+    public ResponseDto<String> updateMeetingScheduleProfile(
+            @PathVariable Long meetingScheduleId,
+            @RequestBody @Valid MeetingScheduleRequest.PatchMeetingScheduleProfileDto dto,
+            @AuthenticationPrincipal SecurityUserDetails memberInfo) {
+        meetingScheduleUsecase.updateMeetingScheduleProfile(dto, meetingScheduleId, memberInfo);
+        return ResponseDto.onSuccess("모임 일정 프로필 수정 성공");
+    }
+
+    @Operation(summary = "게스트 초대용 링크 조회", description = "게스트 초대용 링크를 조회합니다. 초대 인원이 최대인 경우에 조회되지 않습니다.")
     @GetMapping(path = "/{meetingScheduleId}/invitations")
-    @ApiErrorCodes(value = {
-            ErrorStatus.NOT_SCHEDULE_OWNER,
-            ErrorStatus.NOT_SCHEDULE_PARTICIPANT,
-            ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE,
-            ErrorStatus.NOT_MEETING_SCHEDULE,
-            ErrorStatus.INVALID_MEETING_PARTICIPANT_COUNT
-    })
-    public ResponseDto<String> getGuestInviteCode(
-            @Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
+    public ResponseDto<String> getGuestInvitationUrl(
+            @PathVariable Long meetingScheduleId,
             @AuthenticationPrincipal SecurityUserDetails memberInfo
     ) {
-        return ResponseDto.onSuccess(meetingScheduleUsecase.getGuestInviteCode(meetingScheduleId, memberInfo));
+        return ResponseDto.onSuccess(meetingScheduleUsecase.getGuestInvitationUrl(meetingScheduleId, memberInfo));
     }
 }

@@ -30,6 +30,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Getter
 @Entity
@@ -69,6 +71,13 @@ public class Participant extends BaseTimeEntity {
     @JoinColumn(name = "palette_id", nullable = true)
     private Palette palette;
 
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(length = 50)
+    private String customTitle;
+
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    private String customImage;
+
     private boolean hasDiary;
 
     @OneToOne(mappedBy = "participant", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
@@ -76,7 +85,7 @@ public class Participant extends BaseTimeEntity {
 
     @Builder
     public Participant(int isOwner, User user, Schedule schedule, ParticipantStatus status, Category category,
-            Palette palette) {
+            Palette palette, String customTitle, String customImage) {
         this.isOwner = Objects.requireNonNull(isOwner, "isOwner은 null일 수 없습니다.");
         this.member = user instanceof Member ? (Member)user : null;
         this.anonymous = user instanceof Anonymous ? (Anonymous)user : null;
@@ -85,10 +94,12 @@ public class Participant extends BaseTimeEntity {
         this.category = category;
         this.palette = palette;
         this.hasDiary = false;
+        this.customTitle = customTitle;
+        this.customImage =customImage;
     }
 
     public static Participant of(int isOwner, User user, Schedule schedule, ParticipantStatus status, Category category,
-            Palette palette) {
+            Palette palette, String customTitle, String customImage) {
         return Participant.builder()
                 .isOwner(isOwner)
                 .user(user)
@@ -96,6 +107,8 @@ public class Participant extends BaseTimeEntity {
                 .status(status)
                 .category(category)
                 .palette(palette)
+                .customTitle(customTitle)
+                .customImage(customImage)
                 .build();
     }
 
@@ -112,6 +125,13 @@ public class Participant extends BaseTimeEntity {
         this.status = ParticipantStatus.ACTIVE;
         this.category = category;
         this.palette = palette;
+        this.customTitle = schedule.getTitle();
+        this.customImage = schedule.getImageUrl();
+    }
+
+    public void updateCustomScheduleInfo(String title, String imageUrl) {
+        this.customTitle = title;
+        this.customImage = imageUrl;
     }
 
     public void inactiveStatus() {
@@ -124,6 +144,14 @@ public class Participant extends BaseTimeEntity {
 
     public void diaryDeleted() {
         this.hasDiary = false;
+    }
+
+    public String getScheduleTitle(){
+        return schedule.getIsMeetingSchedule() ? this.getCustomTitle() : schedule.getTitle();
+    }
+
+    public String getScheduleImage(){
+        return schedule.getIsMeetingSchedule() ? this.getCustomImage() : schedule.getImageUrl();
     }
 
 }

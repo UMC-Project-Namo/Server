@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -60,8 +61,6 @@ public class Schedule extends BaseTimeEntity {
 
     private String participantNicknames;
 
-    private String invitationUrl;
-
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Activity> activityList;
 
@@ -95,11 +94,14 @@ public class Schedule extends BaseTimeEntity {
                 .build();
     }
 
-    public void updateContent(String title, Period period, Location location) {
+    public void updateContent(String title, Period period, Location location, String imageUrl) {
         this.title = title;
         this.period = period;
         if (location != null) {
             this.location = location;
+        }
+        if (imageUrl != null) {
+            this.imageUrl = imageUrl;
         }
     }
 
@@ -161,7 +163,7 @@ public class Schedule extends BaseTimeEntity {
         this.participantCount = updatedNicknames.size();
     }
 
-    public void updateInvitationUrl(String invitationUrl) {
-        this.invitationUrl = invitationUrl;
+    public boolean getIsMeetingSchedule() {
+        return this.scheduleType == ScheduleType.MEETING.getValue();
     }
 }

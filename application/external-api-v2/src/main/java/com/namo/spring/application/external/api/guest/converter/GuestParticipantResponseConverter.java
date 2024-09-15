@@ -5,8 +5,8 @@ import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 
 public class GuestParticipantResponseConverter {
 
-    public static GuestParticipantResponse.PostGuestParticipantDto toPostGuestParticipantDto(Participant participant) {
-        return GuestParticipantResponse.PostGuestParticipantDto.builder()
+    public static GuestParticipantResponse.PostGuestParticipantInfoDto toPostGuestParticipantDto(Participant participant) {
+        return GuestParticipantResponse.PostGuestParticipantInfoDto.builder()
                 .nickname(participant.getAnonymous().getNickname())
                 .tag(participant.getAnonymous().getTag())
                 .participantId(participant.getId())
