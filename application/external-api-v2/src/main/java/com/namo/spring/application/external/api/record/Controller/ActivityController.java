@@ -5,9 +5,12 @@ import java.util.List;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.namo.spring.application.external.api.record.dto.ActivityRequest;
 import com.namo.spring.application.external.api.record.dto.ActivityResponse;
 import com.namo.spring.application.external.api.record.usecase.ActivityUseCase;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
@@ -50,5 +53,15 @@ public class ActivityController {
             @Parameter(description = "정산할 활동(activity) ID 입니다.", example = "1")
             @PathVariable Long activityId) {
         return ResponseDto.onSuccess(activityUseCase.getSettlement(memberInfo.getUserId(), activityId));
+    }
+
+    @PostMapping("/{scheduleId}")
+    public ResponseDto<String> createActivity(
+            @AuthenticationPrincipal SecurityUserDetails memberInfo,
+            @Parameter(description = "활동을 생성할 스케줄 ID 입니다..", example = "1")
+            @PathVariable Long scheduleId,
+            @RequestBody ActivityRequest.CreateActivityDto request
+    ){
+        return ResponseDto.onSuccess("활동 생성 완료");
     }
 }

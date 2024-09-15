@@ -37,6 +37,8 @@ public class ActivityResponseConverter {
 
     public static ActivityResponse.ActivityLocationDto toActivityLocationDto(Location location) {
         return ActivityResponse.ActivityLocationDto.builder()
+                .longitude(location.getLongitude())
+                .latitude(location.getLatitude())
                 .kakaoLocationId(location.getKakaoLocationId())
                 .locationName(location.getName())
                 .build();
