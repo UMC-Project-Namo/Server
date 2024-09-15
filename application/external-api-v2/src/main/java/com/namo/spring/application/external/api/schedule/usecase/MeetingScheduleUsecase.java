@@ -97,6 +97,6 @@ public class MeetingScheduleUsecase {
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
         scheduleManageService.validateScheduleOwner(schedule, memberInfo.getUserId());
         validateParticipantCount(scheduleManageService.getScheduleParticipantIds(schedule.getId()).size());
-        return guestManageService.generateInviteCode(scheduleId);
+        return guestManageService.generateInvitationUrl(scheduleId);
     }
 }
