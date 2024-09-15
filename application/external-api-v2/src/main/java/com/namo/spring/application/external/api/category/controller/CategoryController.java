@@ -1,5 +1,7 @@
 package com.namo.spring.application.external.api.category.controller;
 
+import static com.namo.spring.core.common.code.status.ErrorStatus.*;
+
 import java.util.List;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -36,7 +38,7 @@ public class CategoryController {
 
     @Operation(summary = "나의 카테고리 목록 조회", description = "나의 카테고리 목록이 조회됩니다. 이후 뎁스의 내용도 포함됩니다.")
     @ApiErrorCodes(value = {
-            ErrorStatus.NOT_FOUND_USER_FAILURE,
+            NOT_FOUND_USER_FAILURE,
     })
     @GetMapping("")
     public ResponseDto<List<CategoryResponse.MyCategoryInfoDto>> getCategories(
@@ -48,9 +50,9 @@ public class CategoryController {
 
     @Operation(summary = "나의 카테고리 생성", description = "나의 일반 카테고리를 생성 합니다.")
     @ApiErrorCodes(value = {
-            ErrorStatus.NOT_FOUND_USER_FAILURE,
-            ErrorStatus.NOT_FOUND_CATEGORY_FAILURE,
-            ErrorStatus.NOT_FOUND_PALETTE_FAILURE
+            NOT_FOUND_USER_FAILURE,
+            NOT_FOUND_CATEGORY_FAILURE,
+            NOT_FOUND_PALETTE_FAILURE
     })
     @PostMapping("")
     public ResponseDto<String> createCategory(
@@ -63,10 +65,10 @@ public class CategoryController {
 
     @Operation(summary = "나의 카테고리 수정", description = "나의 카테고리를 수정 합니다.")
     @ApiErrorCodes(value = {
-            ErrorStatus.NOT_FOUND_USER_FAILURE,
-            ErrorStatus.NOT_FOUND_CATEGORY_FAILURE,
-            ErrorStatus.NOT_USERS_CATEGORY,
-            ErrorStatus.NOT_FOUND_PALETTE_FAILURE
+            NOT_FOUND_USER_FAILURE,
+            NOT_FOUND_CATEGORY_FAILURE,
+            NOT_USERS_CATEGORY,
+            NOT_FOUND_PALETTE_FAILURE
     })
     @PatchMapping("/{categoryId}")
     public ResponseDto<String> updateCategory(
@@ -80,11 +82,19 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{categoryId}")
+    @ApiErrorCodes(value = {
+            NOT_FOUND_CATEGORY_FAILURE,
+            NOT_USERS_CATEGORY,
+            NOT_FOUND_PALETTE_FAILURE,
+            NOT_DELETE_BASE_CATEGORY_FAILURE,
+            CATEGORY_IN_USE_FAILURE
+    })
     public ResponseDto<String> deleteCategory(
             @AuthenticationPrincipal SecurityUserDetails memberInfo,
             @Parameter(description = "삭제할 카테고리 ID 입니다.", example = "3")
             @PathVariable Long categoryId
     ){
+        categoryUseCase.deleteCategory(memberInfo.getUserId(), categoryId);
         return ResponseDto.onSuccess("카테고리 삭제 완료");
     }
 }
