@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,6 +36,14 @@ public class CategoryController {
     ){
         return ResponseDto.onSuccess(categoryUseCase
                 .getMyCategoryList(memberInfo.getUserId()));
+    }
+
+    @PatchMapping("/{categoryId}")
+    public ResponseDto<String> updateCategory(
+            @AuthenticationPrincipal SecurityUserDetails memberInfo,
+            @PathVariable Long categoryId
+    ){
+        return ResponseDto.onSuccess("카테고리 수정 완료");
     }
 
 }
