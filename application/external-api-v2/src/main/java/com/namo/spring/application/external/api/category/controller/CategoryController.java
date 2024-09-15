@@ -6,6 +6,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,6 +39,14 @@ public class CategoryController {
     ){
         return ResponseDto.onSuccess(categoryUseCase
                 .getMyCategoryList(memberInfo.getUserId()));
+    }
+
+    @PostMapping("")
+    public ResponseDto<String> createCategory(
+            @AuthenticationPrincipal SecurityUserDetails memberInfo,
+            @RequestBody CategoryRequest CategoryCreateDto
+    ){
+        return ResponseDto.onSuccess("카테고리 생성 완료");
     }
 
     @Operation(summary = "나의 카테고리 수정", description = "나의 카테고리를 수정 합니다.")
