@@ -46,7 +46,7 @@ public class GuestController {
             ErrorStatus.NOT_FOUND_COLOR
     })
     @PostMapping(path = "/invitations")
-    public ResponseDto<GuestParticipantResponse.PostGuestParticipantDto> guestMeetingAccess(
+    public ResponseDto<GuestParticipantResponse.PostGuestParticipantInfoDto> guestMeetingAccess(
             @Parameter(description = "참여 코드, 웹 링크의 code 파라미터를 입력합니다.") @RequestParam String code,
             @Valid @RequestBody GuestParticipantRequest.PostGuestParticipantDto dto) {
         return ResponseDto.onSuccess(guestUsecase.createOrValidateGuest(dto, code));

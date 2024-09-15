@@ -106,15 +106,8 @@ public class MeetingScheduleController implements MeetingScheduleApi {
         return ResponseDto.onSuccess("모임 일정 프로필 수정 성공");
     }
 
-    @Operation(summary = "게스트 초대용 링크 조회 API", description = "게스트 초대용 링크를 조회합니다. 초대 인원이 최대인 경우에 조회되지 않습니다.")
+    @Operation(summary = "게스트 초대용 링크 조회", description = "게스트 초대용 링크를 조회합니다. 초대 인원이 최대인 경우에 조회되지 않습니다.")
     @GetMapping(path = "/{meetingScheduleId}/invitations")
-    @ApiErrorCodes(value = {
-            ErrorStatus.NOT_SCHEDULE_OWNER,
-            ErrorStatus.NOT_SCHEDULE_PARTICIPANT,
-            ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE,
-            ErrorStatus.NOT_MEETING_SCHEDULE,
-            ErrorStatus.INVALID_MEETING_PARTICIPANT_COUNT
-    })
     public ResponseDto<String> getGuestInviteCode(
             @Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
             @AuthenticationPrincipal SecurityUserDetails memberInfo

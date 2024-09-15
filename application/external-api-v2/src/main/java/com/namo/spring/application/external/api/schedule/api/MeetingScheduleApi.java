@@ -5,10 +5,7 @@ import java.util.List;
 import jakarta.validation.Valid;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.*;
 
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
@@ -86,7 +83,7 @@ public interface MeetingScheduleApi {
             @Parameter(description = "수정 요청 dto") @RequestBody @Valid MeetingScheduleRequest.PatchMeetingScheduleDto dto,
             @AuthenticationPrincipal SecurityUserDetails memberInfo);
 
-    @Operation(summary = "모임 일정 수정", description = "모임 일정을 수정합니다. 수정 권한은 모임의 방장에게만 있습니다.")
+    @Operation(summary = "모임 일정 프로필 수정", description = "모임 일정의 이미지와 제목을 커스텀합니다.")
     ResponseDto<String> updateMeetingScheduleProfile(
             @Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
             @Parameter(description = "수정 요청 dto") @RequestBody @Valid MeetingScheduleRequest.PatchMeetingScheduleProfileDto dto,
@@ -101,4 +98,17 @@ public interface MeetingScheduleApi {
     ResponseDto<MeetingScheduleResponse.GetMeetingScheduleDto> getMeetingSchedule(
             @Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
             @AuthenticationPrincipal SecurityUserDetails memberInfo);
+
+    @Operation(summary = "게스트 초대용 링크 조회", description = "게스트 초대용 링크를 조회합니다. 초대 인원이 최대인 경우에 조회되지 않습니다.")
+    @ApiErrorCodes(value = {
+            ErrorStatus.NOT_SCHEDULE_OWNER,
+            ErrorStatus.NOT_SCHEDULE_PARTICIPANT,
+            ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE,
+            ErrorStatus.NOT_MEETING_SCHEDULE,
+            ErrorStatus.INVALID_MEETING_PARTICIPANT_COUNT
+    })
+    ResponseDto<String> getGuestInviteCode(
+            @Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
+            @AuthenticationPrincipal SecurityUserDetails memberInfo
+    );
 }
