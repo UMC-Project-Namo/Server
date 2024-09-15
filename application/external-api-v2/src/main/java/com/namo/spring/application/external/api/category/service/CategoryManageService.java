@@ -2,7 +2,6 @@ package com.namo.spring.application.external.api.category.service;
 
 import java.util.List;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.namo.spring.application.external.api.category.dto.CategoryRequest;

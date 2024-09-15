@@ -19,7 +19,6 @@ import com.namo.spring.application.external.api.category.dto.CategoryResponse;
 import com.namo.spring.application.external.api.category.usecase.CategoryUseCase;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
-import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.response.ResponseDto;
 
 import io.swagger.v3.oas.annotations.Operation;
