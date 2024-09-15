@@ -3,6 +3,7 @@ package com.namo.spring.application.external.api.category.controller;
 import java.util.List;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,7 +71,7 @@ public class CategoryController {
     @PatchMapping("/{categoryId}")
     public ResponseDto<String> updateCategory(
             @AuthenticationPrincipal SecurityUserDetails memberInfo,
-            @Parameter(description = "수정할 카테고리 ID 입니다.", example = "1")
+            @Parameter(description = "수정할 카테고리 ID 입니다.", example = "3")
             @PathVariable Long categoryId,
             @RequestBody CategoryRequest.CategoryUpdateDto request
     ){
@@ -78,4 +79,12 @@ public class CategoryController {
         return ResponseDto.onSuccess("카테고리 수정 완료");
     }
 
+    @DeleteMapping("/{categoryId}")
+    public ResponseDto<String> deleteCategory(
+            @AuthenticationPrincipal SecurityUserDetails memberInfo,
+            @Parameter(description = "삭제할 카테고리 ID 입니다.", example = "3")
+            @PathVariable Long categoryId
+    ){
+        return ResponseDto.onSuccess("카테고리 삭제 완료");
+    }
 }
