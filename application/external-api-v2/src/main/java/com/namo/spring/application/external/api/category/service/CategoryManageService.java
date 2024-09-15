@@ -1,7 +1,6 @@
 package com.namo.spring.application.external.api.category.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -13,6 +12,7 @@ import com.namo.spring.db.mysql.domains.category.exception.CategoryException;
 import com.namo.spring.db.mysql.domains.category.exception.PaletteException;
 import com.namo.spring.db.mysql.domains.category.service.CategoryService;
 import com.namo.spring.db.mysql.domains.category.service.PaletteService;
+import com.namo.spring.db.mysql.domains.user.entity.Member;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CategoryManageService {
 
+    private final CategoryMaker categoryMaker;
     private final CategoryService categoryService;
     private final PaletteService paletteService;
 
@@ -40,6 +41,10 @@ public class CategoryManageService {
 
     public List<Category> getMyCategories(Long memberId){
         return categoryService.readCategoriesByMemberId(memberId);
+    }
+
+    public void createCategory(Member member, CategoryRequest.CategoryCreateDto request) {
+        categoryMaker.makeCategory(member, request.getCategoryName(), request.getPaletteId(), request.getIsShared());
     }
 
     public void updateCategory(Category category, CategoryRequest.CategoryUpdateDto updateDto) {
