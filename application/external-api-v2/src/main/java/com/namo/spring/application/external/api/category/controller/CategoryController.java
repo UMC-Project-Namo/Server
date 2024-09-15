@@ -20,6 +20,7 @@ import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.response.ResponseDto;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,9 @@ public class CategoryController {
     private final CategoryUseCase categoryUseCase;
 
     @Operation(summary = "나의 카테고리 목록 조회", description = "나의 카테고리 목록이 조회됩니다. 이후 뎁스의 내용도 포함됩니다.")
+    @ApiErrorCodes(value = {
+            ErrorStatus.NOT_FOUND_USER_FAILURE,
+    })
     @GetMapping("")
     public ResponseDto<List<CategoryResponse.MyCategoryInfoDto>> getCategories(
             @AuthenticationPrincipal SecurityUserDetails memberInfo
@@ -41,16 +45,24 @@ public class CategoryController {
                 .getMyCategoryList(memberInfo.getUserId()));
     }
 
+    @Operation(summary = "나의 카테고리 생성", description = "나의 일반 카테고리를 생성 합니다.")
+    @ApiErrorCodes(value = {
+            ErrorStatus.NOT_FOUND_USER_FAILURE,
+            ErrorStatus.NOT_FOUND_CATEGORY_FAILURE,
+            ErrorStatus.NOT_FOUND_PALETTE_FAILURE
+    })
     @PostMapping("")
     public ResponseDto<String> createCategory(
             @AuthenticationPrincipal SecurityUserDetails memberInfo,
-            @RequestBody CategoryRequest CategoryCreateDto
+            @RequestBody CategoryRequest.CategoryCreateDto request
     ){
+        categoryUseCase.createCategory(memberInfo.getUserId(), request);
         return ResponseDto.onSuccess("카테고리 생성 완료");
     }
 
     @Operation(summary = "나의 카테고리 수정", description = "나의 카테고리를 수정 합니다.")
     @ApiErrorCodes(value = {
+            ErrorStatus.NOT_FOUND_USER_FAILURE,
             ErrorStatus.NOT_FOUND_CATEGORY_FAILURE,
             ErrorStatus.NOT_USERS_CATEGORY,
             ErrorStatus.NOT_FOUND_PALETTE_FAILURE
@@ -58,6 +70,7 @@ public class CategoryController {
     @PatchMapping("/{categoryId}")
     public ResponseDto<String> updateCategory(
             @AuthenticationPrincipal SecurityUserDetails memberInfo,
+            @Parameter(description = "수정할 카테고리 ID 입니다.", example = "1")
             @PathVariable Long categoryId,
             @RequestBody CategoryRequest.CategoryUpdateDto request
     ){
