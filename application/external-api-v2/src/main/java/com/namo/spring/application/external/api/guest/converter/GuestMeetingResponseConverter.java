@@ -26,7 +26,7 @@ public class GuestMeetingResponseConverter {
             Schedule schedule, List<ScheduleParticipantQuery> participant, Schedule curSchedule) {
         return GuestMeetingResponse.GetMonthlyMeetingParticipantScheduleDto.builder()
                 .scheduleId(schedule.getId())
-                .name(schedule.getTitle())
+                .title(schedule.getTitle())
                 .startDate(DateUtil.toSeconds(schedule.getPeriod().getStartDate()))
                 .endDate(DateUtil.toSeconds(schedule.getPeriod().getEndDate()))
                 .interval(schedule.getPeriod().getDayInterval())
@@ -35,16 +35,16 @@ public class GuestMeetingResponseConverter {
                 .build();
     }
 
-    private static List<GuestMeetingResponse.UserParticipantDto> toUserParticipantDtos(
+    private static List<GuestMeetingResponse.ParticipantDto> toUserParticipantDtos(
             List<ScheduleParticipantQuery> participant) {
         return participant.stream()
                 .map(GuestMeetingResponseConverter::toUserParticipantDto)
                 .collect(Collectors.toList());
     }
 
-    private static GuestMeetingResponse.UserParticipantDto toUserParticipantDto(ScheduleParticipantQuery
+    private static GuestMeetingResponse.ParticipantDto toUserParticipantDto(ScheduleParticipantQuery
             participant) {
-        return GuestMeetingResponse.UserParticipantDto.builder()
+        return GuestMeetingResponse.ParticipantDto.builder()
                 .participantId(participant.getParticipantId())
                 .nickname(participant.getNickname())
                 .colorId(participant.getParticipantPaletteId())

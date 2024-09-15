@@ -99,7 +99,7 @@ public interface MeetingScheduleApi {
             @Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
             @AuthenticationPrincipal SecurityUserDetails memberInfo);
 
-    @Operation(summary = "게스트 초대용 링크 조회", description = "게스트 초대용 링크를 조회합니다. 초대 인원이 최대인 경우에 조회되지 않습니다.")
+    @Operation(summary = "게스트 초대용 링크 조회", description = "게스트 초대용 링크를 조회합니다. 초대된 인원이 최대인 경우에 조회되지 않습니다.")
     @ApiErrorCodes(value = {
             ErrorStatus.NOT_SCHEDULE_OWNER,
             ErrorStatus.NOT_SCHEDULE_PARTICIPANT,
@@ -107,7 +107,7 @@ public interface MeetingScheduleApi {
             ErrorStatus.NOT_MEETING_SCHEDULE,
             ErrorStatus.INVALID_MEETING_PARTICIPANT_COUNT
     })
-    ResponseDto<String> getGuestInviteCode(
+    ResponseDto<String> getGuestInvitationUrl(
             @Parameter(description = "모임 일정 ID") @PathVariable Long meetingScheduleId,
             @AuthenticationPrincipal SecurityUserDetails memberInfo
     );

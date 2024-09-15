@@ -93,7 +93,7 @@ public class MeetingScheduleUsecase {
     }
 
     @Transactional
-    public String getGuestInviteCode(Long scheduleId, SecurityUserDetails memberInfo) {
+    public String getGuestInvitationUrl(Long scheduleId, SecurityUserDetails memberInfo) {
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
         scheduleManageService.validateScheduleOwner(schedule, memberInfo.getUserId());
         validateParticipantCount(scheduleManageService.getScheduleParticipantIds(schedule.getId()).size());
