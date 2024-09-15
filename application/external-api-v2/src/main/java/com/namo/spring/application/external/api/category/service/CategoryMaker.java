@@ -33,6 +33,7 @@ public class CategoryMaker {
                 .type(CategoryType.BASE_SCHEDULE)
                 .orderNumber(1)
                 .status(CategoryStatus.ACTIVE)
+                .isShared(true)
                 .build();
         categoryService.createCategory(target);
     }
@@ -47,9 +48,25 @@ public class CategoryMaker {
                 .type(CategoryType.BASE_MEETING)
                 .orderNumber(2)
                 .status(CategoryStatus.ACTIVE)
+                .isShared(true)
                 .build();
 
         categoryService.createCategory(target);
     }
 
+    public void makeCategory(Member member, String categoryName, Long paletteId, Boolean isShared) {
+        Palette palette = paletteService.getPalette(paletteId);
+
+        Category target = Category.builder()
+                .member(member)
+                .palette(palette)
+                .name(categoryName)
+                .type(CategoryType.COMMON)
+                .orderNumber(3)
+                .status(CategoryStatus.ACTIVE)
+                .isShared(isShared)
+                .build();
+
+        categoryService.createCategory(target);
+    }
 }
