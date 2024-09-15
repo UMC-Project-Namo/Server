@@ -15,7 +15,7 @@ public class CategoryResponse {
     public static class MyCategoryInfoDto{
         private Long categoryId;
         private String categoryName;
-        private Long paletteId;
+        private Long colorId;
         private boolean isBaseCategory;
         private boolean isShared;
     }

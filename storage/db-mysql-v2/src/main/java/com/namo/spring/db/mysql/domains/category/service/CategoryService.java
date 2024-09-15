@@ -10,6 +10,7 @@ import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
 import com.namo.spring.db.mysql.domains.category.exception.CategoryException;
 import com.namo.spring.db.mysql.domains.category.repository.CategoryRepository;
+import com.namo.spring.db.mysql.domains.schedule.repository.ParticipantRepository;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
+    private final ParticipantRepository participantRepository;
 
     @Transactional
     public Category createCategory(Category category) {
@@ -62,4 +64,7 @@ public class CategoryService {
         return categoryRepository.findCategoryByMemberId(memberId);
     }
 
+    public boolean isCategoryInUse(Category category) {
+        return participantRepository.existsByCategory(category);
+    }
 }

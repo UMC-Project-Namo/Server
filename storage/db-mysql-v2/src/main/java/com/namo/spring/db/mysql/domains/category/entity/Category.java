@@ -81,4 +81,10 @@ public class Category extends BaseTimeEntity {
         this.orderNumber = Objects.requireNonNull(orderNumber, "orderNumber는 null일 수 없습니다.");
         this.isShared = isShared;
     }
+
+    public void update(String categoryName, Palette palette, boolean isShared){
+        this.name = categoryName;
+        this.palette = palette;
+        this.isShared = isShared;
+    }
 }
