@@ -6,9 +6,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.namo.spring.application.external.api.category.dto.CategoryRequest;
 import com.namo.spring.application.external.api.category.dto.CategoryResponse;
 import com.namo.spring.application.external.api.category.usecase.CategoryUseCase;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
@@ -41,7 +43,9 @@ public class CategoryController {
     @PatchMapping("/{categoryId}")
     public ResponseDto<String> updateCategory(
             @AuthenticationPrincipal SecurityUserDetails memberInfo,
-            @PathVariable Long categoryId
+            @PathVariable Long categoryId,
+            @RequestBody CategoryRequest.CategoryUpdateDto request
+
     ){
         return ResponseDto.onSuccess("카테고리 수정 완료");
     }
