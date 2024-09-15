@@ -42,4 +42,10 @@ public class CategoryUseCase {
         categoryManageService.updateCategory(category, request);
     }
 
+    @Transactional
+    public void deleteCategory(Long memberId, Long categoryId){
+        Category category = categoryManageService.getMyCategory(memberId, categoryId);
+        categoryManageService.deleteCategory(category);
+    }
+
 }

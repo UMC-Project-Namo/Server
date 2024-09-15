@@ -2,6 +2,7 @@ package com.namo.spring.application.external.api.category.service;
 
 import java.util.List;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.namo.spring.application.external.api.category.dto.CategoryRequest;
@@ -12,6 +13,7 @@ import com.namo.spring.db.mysql.domains.category.exception.CategoryException;
 import com.namo.spring.db.mysql.domains.category.exception.PaletteException;
 import com.namo.spring.db.mysql.domains.category.service.CategoryService;
 import com.namo.spring.db.mysql.domains.category.service.PaletteService;
+import com.namo.spring.db.mysql.domains.category.type.CategoryType;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 
 import lombok.RequiredArgsConstructor;
@@ -51,5 +53,20 @@ public class CategoryManageService {
         Palette palette = paletteService.readPalette(updateDto.getPaletteId())
                 .orElseThrow(() -> new PaletteException(ErrorStatus.NOT_FOUND_PALETTE_FAILURE));
         category.update(updateDto.getCategoryName(), palette, updateDto.getIsShared());
+    }
+
+    /**
+     * 카테고리를 삭제하는 메서드입니다.
+     * !! 기본 제공 카테고리, 사용중인 카테고리는 삭제가 불가능합니다.
+     * @param category
+     */
+    public void deleteCategory(Category category) {
+        if(!category.getType().equals(CategoryType.COMMON))
+            throw new CategoryException(ErrorStatus.NOT_DELETE_BASE_CATEGORY_FAILURE);
+        if (categoryService.isCategoryInUse(category)) {
+            throw new CategoryException(ErrorStatus.CATEGORY_IN_USE_FAILURE);
+        }
+        categoryService.deleteCategory(category);
+
     }
 }
