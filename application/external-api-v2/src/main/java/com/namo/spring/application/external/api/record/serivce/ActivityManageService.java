@@ -46,10 +46,10 @@ public class ActivityManageService {
      */
     public Activity createActivity(Long memberId, Long scheduleId, ActivityRequest.CreateActivityDto request) {
         Participant myParticipant = participantManageService.getMyParticipant(memberId, scheduleId);
-        Activity activity = ActivityConverter.toActivity(myParticipant.getSchedule(), request);
+        Activity activity = activityService.createActivity(ActivityConverter.toActivity(myParticipant.getSchedule(), request));
         if (request.getImageList() != null && !request.getImageList().isEmpty()){
             request.getImageList().forEach(image-> activityImageManageService.createActiveImage(activity, image));
         }
-        return activityService.createActivity(activity);
+        return activity;
     }
 }

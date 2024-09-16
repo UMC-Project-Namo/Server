@@ -16,7 +16,7 @@ public class ActivityResponseConverter {
                 .activityId(activity.getId())
                 .activityTitle(activity.getTitle())
                 .activityParticipants(
-                        activity.getParticipants().stream()
+                        activity.getActivityParticipants().stream()
                                 .map(ActivityResponseConverter::toActivityParticipantDto)
                                 .collect(Collectors.toList())
                 )
@@ -45,7 +45,7 @@ public class ActivityResponseConverter {
     }
 
     public static ActivityResponse.ActivitySettlementInfoDto toActivitySettlementInfoDto(Activity activity) {
-        long divisionCount = activity.getParticipants().stream()
+        long divisionCount = activity.getActivityParticipants().stream()
                 .filter(ActivityParticipant::isIncludedInSettlement)
                 .count();
         BigDecimal amountPerPerson = activity.getTotalAmount()
@@ -55,7 +55,7 @@ public class ActivityResponseConverter {
                 .totalAmount(activity.getTotalAmount())
                 .divisionCount((int)divisionCount)
                 .amountPerPerson(amountPerPerson)
-                .participants(activity.getParticipants().stream()
+                .participants(activity.getActivityParticipants().stream()
                         .map(ActivityResponseConverter::toActivitySettlementParticipant)
                         .toList())
                 .build();

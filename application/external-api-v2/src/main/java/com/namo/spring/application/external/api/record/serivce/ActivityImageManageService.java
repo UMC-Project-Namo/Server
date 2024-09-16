@@ -18,6 +18,7 @@ public class ActivityImageManageService {
         ActivityImage activityImage = ActivityImage.builder()
                 .activity(activity)
                 .imageUrl(image)
+                .imageOrder(0)
                 .build();
         activityImageService.createActivityImage(activityImage);
     }
