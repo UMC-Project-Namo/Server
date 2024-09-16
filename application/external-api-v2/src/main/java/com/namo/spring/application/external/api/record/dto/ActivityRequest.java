@@ -12,8 +12,10 @@ public class ActivityRequest {
 
     @Getter
     public static class CreateActivityDto{
+        @Schema(description = "활동 제목", example = "보드게임 밥디")
+        private String title;
         @Schema(description = "활동에 참여할 participantId 를 넣어주세요", example = "[1, 2, 3]")
-        private List<Long> participantId;
+        private List<Long> participantIdList;
         @Schema(description = "활동 시작 시간", example = "2024-09-15 17:29:54")
         private LocalDateTime activityStartDate;
         @Schema(description = "활동 종료 시간", example = "2024-09-15 18:29:54")
@@ -48,7 +50,7 @@ public class ActivityRequest {
         @Schema(description = "인당 금액", example = "300000.00")
         private BigDecimal amountPerPerson;
         @Schema(description = "정산에 참여 할 participantId 넣어주세요.", example = "[1, 2, 3]" )
-        private List<Long> participantId;
+        private List<Long> participantIdList;
     }
 
 }
