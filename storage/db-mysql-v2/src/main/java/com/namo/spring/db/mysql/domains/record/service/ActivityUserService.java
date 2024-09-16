@@ -1,10 +1,12 @@
 package com.namo.spring.db.mysql.domains.record.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.transaction.annotation.Transactional;
 
 import com.namo.spring.core.common.annotation.DomainService;
+import com.namo.spring.db.mysql.domains.record.entity.Activity;
 import com.namo.spring.db.mysql.domains.record.entity.ActivityParticipant;
 import com.namo.spring.db.mysql.domains.record.repository.ActivityParticipantRepository;
 
@@ -28,5 +30,9 @@ public class ActivityUserService {
     @Transactional
     public void deleteActivityParticipant(Long activityParticipantId) {
         activityUserRepository.deleteById(activityParticipantId);
+    }
+
+    public List<ActivityParticipant> createActivityParticipants(List<ActivityParticipant> activityParticipants){
+        return activityUserRepository.saveAll(activityParticipants);
     }
 }
