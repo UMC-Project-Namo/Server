@@ -21,6 +21,13 @@ public class ActivityParticipantManageService {
     private final ActivityUserService activityUserService;
     private final ParticipantManageService participantManageService;
 
+    /**
+     * 활동 참여자를 생성하는 메서드입니다.
+     * 스케줄의 참여자 정보를 찾아 활동 참여 정보를 생성합니다.
+     * @param activity
+     * @param participantIdList
+     * @return
+     */
     public List<ActivityParticipant> createActivityParticipant(Activity activity, List<Long> participantIdList) {
         List<Participant> participants = participantIdList.stream()
                 .map(participantManageService::getParticipant)
@@ -32,6 +39,12 @@ public class ActivityParticipantManageService {
         return activityUserService.createActivityParticipants(activityParticipants);
     }
 
+    /**
+     * 정산 정보를 추가하는 메서드입니다.
+     * 활동 참여자들 중 정산에 참여하는 사람에게 정산 참여 여부를 갱신하고 인당 금액을 추가합니다.
+     * @param settlement
+     * @param activityParticipants
+     */
     public void addSettlement(ActivityRequest.ActivitySettlementDto settlement, List<ActivityParticipant> activityParticipants) {
         activityParticipants.stream()
                 .filter(activityParticipant ->
