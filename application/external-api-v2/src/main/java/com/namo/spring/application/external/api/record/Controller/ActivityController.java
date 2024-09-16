@@ -55,13 +55,15 @@ public class ActivityController {
         return ResponseDto.onSuccess(activityUseCase.getSettlement(memberInfo.getUserId(), activityId));
     }
 
+    @Operation(summary = "모임 기록 활동 생성", description = "모임 활동을 생성합니다.")
     @PostMapping("/{scheduleId}")
     public ResponseDto<String> createActivity(
             @AuthenticationPrincipal SecurityUserDetails memberInfo,
-            @Parameter(description = "활동을 생성할 스케줄 ID 입니다..", example = "1")
+            @Parameter(description = "활동을 생성할 스케줄 ID 입니다.", example = "1")
             @PathVariable Long scheduleId,
             @RequestBody ActivityRequest.CreateActivityDto request
     ){
+        activityUseCase.createActivity(memberInfo.getUserId(), scheduleId, request);
         return ResponseDto.onSuccess("활동 생성 완료");
     }
 }
