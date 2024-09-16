@@ -14,6 +14,7 @@ import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.record.exception.DiaryException;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
+import com.namo.spring.db.mysql.domains.schedule.exception.ParticipantException;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
 import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
 import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
@@ -160,4 +161,8 @@ public class ParticipantManageService {
                 .orElseThrow(() -> new ScheduleException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
     }
 
+    public Participant getParticipant(Long participantId) {
+        return participantService.readParticipant(participantId)
+                .orElseThrow(() -> new ParticipantException(ErrorStatus.NOT_FOUND_PARTICIPANT_FAILURE));
+    }
 }

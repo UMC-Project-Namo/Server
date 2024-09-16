@@ -33,7 +33,7 @@ public class ParticipantService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Participant> readMemberParticipant(Long id) {
+    public Optional<Participant> readParticipant(Long id) {
         return participantRepository.findById(id);
     }
 
