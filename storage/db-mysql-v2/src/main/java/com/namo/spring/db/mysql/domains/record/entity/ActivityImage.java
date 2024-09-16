@@ -52,7 +52,7 @@ public class ActivityImage extends BaseTimeEntity implements Image {
         this.imageOrder = Objects.requireNonNull(imageOrder, "imageOrder은 null일 수 없습니다.");
     }
 
-    public ActivityImage of(Diary diary, Activity activity, String imageUrl, Integer imageOrder) {
+    public ActivityImage of(Activity activity, String imageUrl, Integer imageOrder) {
         return ActivityImage.builder()
                 .activity(activity)
                 .imageUrl(imageUrl)

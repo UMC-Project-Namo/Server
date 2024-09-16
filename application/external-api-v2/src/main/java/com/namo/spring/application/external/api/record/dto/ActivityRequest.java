@@ -26,7 +26,8 @@ public class ActivityRequest {
         private ActivitySettlementDto settlement;
         @Schema(description = "활동 태그", example = "술")
         private String tag;
-
+        @Schema(description = "활동 이미지 URL List")
+        private List<String> imageList;
     }
 
     @Getter
