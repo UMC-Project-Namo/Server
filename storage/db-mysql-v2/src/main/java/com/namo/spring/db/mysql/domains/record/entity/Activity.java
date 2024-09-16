@@ -59,18 +59,23 @@ public class Activity extends BaseTimeEntity {
     private Location location;
 
     @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ActivityParticipant> participants;
+    private List<ActivityParticipant> activityParticipants;
 
     @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ActivityImage> activityImages;
 
     @Builder
-    public Activity(Schedule schedule, String title, BigDecimal totalAmount, String categoryTag) {
+    public Activity(Schedule schedule, String title, BigDecimal totalAmount, String categoryTag, Location location) {
         if (!StringUtils.hasText(title))
             throw new IllegalArgumentException("title은 null이거나 빈 문자열일 수 없습니다.");
         this.schedule = Objects.requireNonNull(schedule, "schedule은 null일 수 없습니다.");
         this.title = title;
-        this.totalAmount = totalAmount;
+        this.totalAmount = BigDecimal.ZERO;
         this.categoryTag = categoryTag;
+        this.location = location;
+    }
+
+    public void setSettlementInfo(BigDecimal totalAmount){
+        this.totalAmount = totalAmount;
     }
 }
