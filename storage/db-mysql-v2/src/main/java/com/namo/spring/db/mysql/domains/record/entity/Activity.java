@@ -1,6 +1,7 @@
 package com.namo.spring.db.mysql.domains.record.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -58,6 +59,9 @@ public class Activity extends BaseTimeEntity {
     @Embedded
     private Location location;
 
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+
     @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ActivityParticipant> activityParticipants;
 
@@ -65,7 +69,7 @@ public class Activity extends BaseTimeEntity {
     private List<ActivityImage> activityImages;
 
     @Builder
-    public Activity(Schedule schedule, String title, BigDecimal totalAmount, String categoryTag, Location location) {
+    public Activity(Schedule schedule, String title, String categoryTag, Location location, LocalDateTime startDate, LocalDateTime endDate) {
         if (!StringUtils.hasText(title))
             throw new IllegalArgumentException("title은 null이거나 빈 문자열일 수 없습니다.");
         this.schedule = Objects.requireNonNull(schedule, "schedule은 null일 수 없습니다.");
@@ -73,6 +77,8 @@ public class Activity extends BaseTimeEntity {
         this.totalAmount = BigDecimal.ZERO;
         this.categoryTag = categoryTag;
         this.location = location;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     public void setSettlementInfo(BigDecimal totalAmount){
