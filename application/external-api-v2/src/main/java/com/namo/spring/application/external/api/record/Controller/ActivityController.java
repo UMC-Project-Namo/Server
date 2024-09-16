@@ -1,5 +1,7 @@
 package com.namo.spring.application.external.api.record.Controller;
 
+import static com.namo.spring.core.common.code.status.ErrorStatus.*;
+
 import java.util.List;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -34,7 +36,7 @@ public class ActivityController {
 
     @Operation(summary = "모임 기록 - 활동 조회", description = "모임 스케줄에 대한 활동 목록이 조회됩니다.")
     @ApiErrorCodes(value = {
-            ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE,
+            NOT_FOUND_SCHEDULE_FAILURE,
     })
     @GetMapping("/{scheduleId}")
     public ResponseDto<List<ActivityResponse.ActivityInfoDto>> getActivity(
@@ -47,6 +49,9 @@ public class ActivityController {
     }
 
     @Operation(summary = "모임 기록 활동에 대한 정산 팝업 조회", description = "모임 활동의 정산 내역을 조회합니다. (팝업 내용에 해당합니다)")
+    @ApiErrorCodes(value = {
+            NOT_FOUND_GROUP_ACTIVITY_FAILURE,
+    })
     @GetMapping("/settlement/{activityId}")
     public ResponseDto<ActivityResponse.ActivitySettlementInfoDto> getActivitySettlement(
             @AuthenticationPrincipal SecurityUserDetails memberInfo,
@@ -56,6 +61,9 @@ public class ActivityController {
     }
 
     @Operation(summary = "모임 기록 활동 생성", description = "모임 활동을 생성합니다.")
+    @ApiErrorCodes(value = {
+            NOT_FOUND_SCHEDULE_FAILURE,
+    })
     @PostMapping("/{scheduleId}")
     public ResponseDto<String> createActivity(
             @AuthenticationPrincipal SecurityUserDetails memberInfo,

@@ -26,7 +26,7 @@ public class ActivityRequest {
         private ActivitySettlementDto settlement;
         @Schema(description = "활동 태그", example = "술")
         private String tag;
-        @Schema(description = "활동 이미지 URL List")
+        @Schema(description = "활동 이미지 URL List", example = "[https://static.namong.shop/origin/activity/image1.jpg, https://static.namong.shop/origin/activity/image2.jpg]")
         private List<String> imageList;
     }
 
@@ -50,7 +50,7 @@ public class ActivityRequest {
         private int divisionCount;
         @Schema(description = "인당 금액", example = "300000.00")
         private BigDecimal amountPerPerson;
-        @Schema(description = "정산에 참여 할 participantId 넣어주세요.", example = "[1, 2, 3]" )
+        @Schema(description = "정산에 참여 할 participantId 넣어주세요.", example = "[1, 2]" )
         private List<Long> participantIdList;
     }
 
