@@ -43,9 +43,12 @@ public class ActivityUseCase {
 
     @Transactional
     public void createActivity(Long memberId, Long scheduleId, ActivityRequest.CreateActivityDto request) {
+        // 활동 생성
         Activity activity = activityManageService.createActivity(memberId, scheduleId, request);
+        // 활동 참여 정보 생성
         List<ActivityParticipant> activityParticipant = activityParticipantManageService.createActivityParticipant(
                 activity, request.getParticipantIdList());
+        // 정산 정보 생성
         if (request.getSettlement()!=null){
             activity.setSettlementInfo(request.getSettlement().getTotalAmount());
             activityParticipantManageService.addSettlement(request.getSettlement(), activityParticipant);

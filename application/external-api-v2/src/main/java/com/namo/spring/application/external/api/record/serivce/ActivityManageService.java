@@ -47,6 +47,7 @@ public class ActivityManageService {
     public Activity createActivity(Long memberId, Long scheduleId, ActivityRequest.CreateActivityDto request) {
         Participant myParticipant = participantManageService.getMyParticipant(memberId, scheduleId);
         Activity activity = activityService.createActivity(ActivityConverter.toActivity(myParticipant.getSchedule(), request));
+        // 활동 이미지 생성
         if (request.getImageList() != null && !request.getImageList().isEmpty()){
             request.getImageList().forEach(image-> activityImageManageService.createActiveImage(activity, image));
         }
