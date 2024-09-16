@@ -11,9 +11,10 @@ public class ActivityConverter {
         return Activity.builder()
                 .schedule(schedule)
                 .title(request.getTitle())
-                .totalAmount(request.getSettlement().getTotalAmount())
                 .categoryTag(request.getTag())
                 .location(toLocation(request.getLocation()))
+                .startDate(request.getActivityStartDate())
+                .endDate(request.getActivityEndDate())
                 .build();
     }
 
