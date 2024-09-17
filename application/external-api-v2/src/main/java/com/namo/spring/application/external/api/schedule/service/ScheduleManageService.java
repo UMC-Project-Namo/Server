@@ -46,9 +46,15 @@ public class ScheduleManageService {
                 .orElseThrow(() -> new ScheduleException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
     }
 
+    /**
+     * 개인 일정을 찾아 반환합니다.
+     * !! 개인 일정에는 유저의 생일 일정도 포함됩니다.
+     * @param scheduleId
+     * @return
+     */
     public Schedule getPersonalSchedule(Long scheduleId) {
         Schedule schedule = getSchedule(scheduleId);
-        if (schedule.getScheduleType() != ScheduleType.PERSONAL.getValue()) {
+        if (schedule.getScheduleType() == ScheduleType.PERSONAL.getValue()) {
             throw new ScheduleException(ErrorStatus.NOT_PERSONAL_SCHEDULE);
         }
         return schedule;
