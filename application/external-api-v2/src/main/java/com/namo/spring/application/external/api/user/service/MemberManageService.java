@@ -104,6 +104,7 @@ public class MemberManageService {
     private void makeBaseCategory(Member member) {
         categoryMaker.makePersonalCategory(member);
         categoryMaker.makeMeetingCategory(member);
+        categoryMaker.makeBirthdayCategory(member);
     }
 
     public List<String> getMemberTagsByNickname(String nickname) {

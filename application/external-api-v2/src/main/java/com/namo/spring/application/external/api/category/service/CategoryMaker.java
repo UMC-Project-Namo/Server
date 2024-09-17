@@ -20,6 +20,8 @@ public class CategoryMaker {
     private static final Long BASE_PERSONAL_PALETTE_ID = ColorChip.getBaseCategoryPaletteId();
     private static final Long BASE_MEETING_PALETTE_ID = ColorChip.getBaseMeetingCategoryPaletteId();
 
+    private static final Long BASE_BIRTHDAY_PALETTE_ID = ColorChip.getBaseBirthdayCategoryPaletteId();
+
     private final PaletteService paletteService;
     private final CategoryService categoryService;
 
@@ -54,6 +56,22 @@ public class CategoryMaker {
         categoryService.createCategory(target);
     }
 
+    public void makeBirthdayCategory(Member member) {
+        Palette palette = paletteService.getPalette(BASE_BIRTHDAY_PALETTE_ID);
+
+        Category target = Category.builder()
+                .member(member)
+                .palette(palette)
+                .name(CategoryType.BIRTHDAY.getType())
+                .type(CategoryType.BIRTHDAY)
+                .orderNumber(3)
+                .status(CategoryStatus.ACTIVE)
+                .isShared(true)
+                .build();
+
+        categoryService.createCategory(target);
+    }
+
     public void makeCategory(Member member, String categoryName, Long paletteId, Boolean isShared) {
         Palette palette = paletteService.getPalette(paletteId);
 
@@ -62,7 +80,7 @@ public class CategoryMaker {
                 .palette(palette)
                 .name(categoryName)
                 .type(CategoryType.COMMON)
-                .orderNumber(3)
+                .orderNumber(4)
                 .status(CategoryStatus.ACTIVE)
                 .isShared(isShared)
                 .build();
