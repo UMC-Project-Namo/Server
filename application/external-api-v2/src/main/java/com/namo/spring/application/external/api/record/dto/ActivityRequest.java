@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotNull;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -15,9 +15,9 @@ public class ActivityRequest {
     @Getter
     public static class CreateActivityDto{
         @Schema(description = "활동 제목", example = "보드게임 밥디")
-        @Column(nullable = false)
+        @NotNull
         private String title;
-        @Column(nullable = false)
+        @NotNull
         @Schema(description = "활동에 참여할 participantId 를 넣어주세요", example = "[1, 2, 3]")
         private List<Long> participantIdList;
         @Schema(description = "활동 시작 시간", example = "2024-09-15 17:29:54")
