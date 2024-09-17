@@ -49,7 +49,7 @@ public class PersonalScheduleResponseConverter {
                 .interval(participant.getSchedule().getPeriod().getDayInterval())
                 .locationInfo(participant.getSchedule().getLocation() != null ?
                         toLocationDto(participant.getSchedule().getLocation()) : null)
-                .isMeetingSchedule(isMeetingSchedule)
+                .scheduleType(participant.getSchedule().getScheduleType())
                 .hasDiary(participant.isHasDiary())
                 .notificationInfo(notifications != null ?
                         toNotificationDtos(notifications, participant.getSchedule().getPeriod().getStartDate()) : null)

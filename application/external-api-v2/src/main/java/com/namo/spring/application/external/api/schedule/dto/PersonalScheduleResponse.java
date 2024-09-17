@@ -34,8 +34,8 @@ public class PersonalScheduleResponse {
         private LocationDto locationInfo;
         @Schema(description = "기록 작성 여부")
         private Boolean hasDiary;
-        @Schema(description = "모임 일정인지의 여부")
-        private Boolean isMeetingSchedule = false;
+        @Schema(description = "개인 스케줄 : 0, 모임 스케줄 : 1, 생일 스케줄 : 3", example = "0")
+        private int scheduleType;
         @Schema(description = "모임 일정 정보, 모임 일정이 아닐 시에는 null")
         private MeetingInfoDto meetingInfo;
         @Schema(description = "알림 일시, 알림 트리거, 정시 -> 'ST', 일-> 'D{1-59 까지의 정수}', 시-> 'H{1-36 까지의 정수}', 분-> 'M{1-7 까지의 정수}")

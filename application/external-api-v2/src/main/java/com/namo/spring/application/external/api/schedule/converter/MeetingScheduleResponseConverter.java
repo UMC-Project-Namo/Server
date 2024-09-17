@@ -72,6 +72,7 @@ public class MeetingScheduleResponseConverter {
                 .endDate(DateUtil.toSeconds(schedule.getPeriod().getEndDate()))
                 .interval(schedule.getPeriod().getDayInterval())
                 .participants(toMemberParticipantDtos(participants))
+                .scheduleType(schedule.getScheduleType())
                 .build();
     }
 
@@ -117,6 +118,7 @@ public class MeetingScheduleResponseConverter {
                 .interval(schedule.getPeriod().getDayInterval())
                 .participants(toUserParticipantDtos(participants))
                 .isCurMeetingSchedule(schedule.getId().equals(curSchedule.getId()))
+                .scheduleType(schedule.getScheduleType())
                 .build();
     }
 
