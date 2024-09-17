@@ -1,5 +1,6 @@
 package com.namo.spring.db.mysql.domains.record.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -16,8 +17,8 @@ public class ActivityImageService {
     private final ActivityImageRepository activityImageRepository;
 
     @Transactional
-    public ActivityImage createActivityImage(ActivityImage activityImage) {
-        return activityImageRepository.save(activityImage);
+    public void createActivityImages(List<ActivityImage> activityImages) {
+        activityImageRepository.saveAll(activityImages);
     }
 
     @Transactional(readOnly = true)

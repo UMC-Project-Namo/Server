@@ -8,7 +8,6 @@ import com.namo.spring.application.external.api.schedule.service.ParticipantMana
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.record.entity.Activity;
 import com.namo.spring.db.mysql.domains.record.exception.ActivityException;
-import com.namo.spring.db.mysql.domains.record.service.ActivityImageService;
 import com.namo.spring.db.mysql.domains.record.service.ActivityService;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 
@@ -49,7 +48,7 @@ public class ActivityManageService {
         Activity activity = activityService.createActivity(ActivityConverter.toActivity(myParticipant.getSchedule(), request));
         // 활동 이미지 생성
         if (request.getImageList() != null && !request.getImageList().isEmpty()){
-            request.getImageList().forEach(image-> activityImageManageService.createActiveImage(activity, image));
+            activityImageManageService.createActiveImages(activity, request.getImageList());
         }
         return activity;
     }
