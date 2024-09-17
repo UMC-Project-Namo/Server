@@ -28,6 +28,9 @@ public class Palette {
     @Column(nullable = false)
     private String belong;
 
+    @Column(name = "hex_code", nullable = false)
+    private String hexCode;
+
     @Column(nullable = false)
-    private int color;
+    private String name;
 }
