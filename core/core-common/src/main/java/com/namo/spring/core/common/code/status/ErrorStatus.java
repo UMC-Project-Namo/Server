@@ -91,12 +91,14 @@ public enum ErrorStatus implements BaseErrorCode {
 
     NOT_ACTIVITY_PARTICIPANT(HttpStatus.FORBIDDEN, "해당 활동의 참여자가 아닙니다."),
 
+    NOT_SCHEDULE_PARTICIPANT_OR_NOT_ACTIVE(HttpStatus.FORBIDDEN, "해당 일정의 참여자가 아닌 사람이 포함되어있거나 스케줄 초대를 수락하지 않은 사람이 포함되어있습니다."),
+
     /**
      * 404 : NOT FOUND 오류
      */
     NOT_FOUND_USER_FAILURE(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
 
-    NOT_FOUND_SCHEDULE_FAILURE(HttpStatus.NOT_FOUND, "일정을 찾을 수 없습니다."),
+    NOT_FOUND_SCHEDULE_FAILURE(HttpStatus.NOT_FOUND, "일정을 찾을 수 없습니다. (참여한 일정이 아니거나, 일정 정보가 없습니다)"),
 
     NOT_FOUND_PARTICIPANT_FAILURE(HttpStatus.NOT_FOUND, "일정의 참여자를 찾을 수 없습니다."),
 

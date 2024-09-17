@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.exception.ParticipantException;
 
 import lombok.RequiredArgsConstructor;
@@ -41,13 +42,7 @@ public class MeetingParticipantValidationUtils {
         if (participantIds.contains(ownerId)) {
             throw new ParticipantException(ErrorStatus.NOT_INCLUDE_OWNER_IN_REQUEST);
         }
-        Set<Long> uniqueIds = new HashSet<>();
-        Set<Long> duplicates = participantIds.stream()
-                .filter(id -> !uniqueIds.add(id))
-                .collect(Collectors.toSet());
-        if (!duplicates.isEmpty()) {
-            throw new ParticipantException(ErrorStatus.DUPLICATE_MEETING_PARTICIPANT);
-        }
+        validateDuplicateParticipantIds(participantIds);
     }
 
     /**
@@ -82,4 +77,20 @@ public class MeetingParticipantValidationUtils {
             throw new ParticipantException(ErrorStatus.DUPLICATE_MEETING_PARTICIPANT);
         }
     }
+
+    /**
+     * 참여자 정보에 중복되는 ID가 있는지 검증합니다.
+     *
+     * @param participantIds
+     */
+    public static void validateDuplicateParticipantIds(List<Long> participantIds) {
+        Set<Long> uniqueIds = new HashSet<>();
+        Set<Long> duplicates = participantIds.stream()
+                .filter(id -> !uniqueIds.add(id))
+                .collect(Collectors.toSet());
+        if (!duplicates.isEmpty()) {
+            throw new ParticipantException(ErrorStatus.DUPLICATE_MEETING_PARTICIPANT);
+        }
+    }
+
 }

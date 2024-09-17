@@ -33,7 +33,7 @@ public class ParticipantService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Participant> readMemberParticipant(Long id) {
+    public Optional<Participant> readParticipant(Long id) {
         return participantRepository.findById(id);
     }
 
@@ -47,7 +47,12 @@ public class ParticipantService {
     }
 
     @Transactional(readOnly = true)
-    public List<Participant> readParticipantsByIdAndScheduleId(List<Long> participantIds, Long scheduleId,
+    public List<Participant> readParticipantsByIdsAndScheduleIdFetchUser(List<Long> participantIds, Long scheduleId,
+            ParticipantStatus status) {
+        return participantRepository.findParticipantByIdAndScheduleIdFetchUser(participantIds, scheduleId, status);
+    }
+
+    public List<Participant> readParticipantsByIdsAndScheduleId(List<Long> participantIds, Long scheduleId,
             ParticipantStatus status) {
         return participantRepository.findParticipantByIdAndScheduleId(participantIds, scheduleId, status);
     }

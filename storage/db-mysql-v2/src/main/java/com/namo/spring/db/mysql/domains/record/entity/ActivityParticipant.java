@@ -46,9 +46,15 @@ public class ActivityParticipant extends BaseTimeEntity {
     private boolean isIncludedInSettlement;
 
     @Builder
-    public ActivityParticipant(Participant participant, Activity activity, BigDecimal amount) {
+    public ActivityParticipant(Participant participant, Activity activity) {
         this.participant = Objects.requireNonNull(participant, "participant는 null일 수 없습니다.");
         this.activity = Objects.requireNonNull(activity, "activity은 null일 수 없습니다.");
-        this.amount = Objects.requireNonNull(amount, "amount은 null일 수 없습니다.");
+        this.amount = BigDecimal.ZERO;
+        this.isIncludedInSettlement = false;
+    }
+
+    public void setSettlementInfo(BigDecimal amountPerPerson) {
+        this.amount = amountPerPerson;
+        this.isIncludedInSettlement = true;
     }
 }

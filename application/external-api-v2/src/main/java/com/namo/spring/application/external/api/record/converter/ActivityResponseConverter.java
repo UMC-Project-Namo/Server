@@ -16,12 +16,12 @@ public class ActivityResponseConverter {
                 .activityId(activity.getId())
                 .activityTitle(activity.getTitle())
                 .activityParticipants(
-                        activity.getParticipants().stream()
+                        activity.getActivityParticipants().stream()
                                 .map(ActivityResponseConverter::toActivityParticipantDto)
                                 .collect(Collectors.toList())
                 )
-                .activityStartDate(activity.getSchedule().getPeriod().getStartDate())
-                .activityEndDate(activity.getSchedule().getPeriod().getEndDate())
+                .activityStartDate(activity.getStartDate())
+                .activityEndDate(activity.getEndDate())
                 .activityLocation(toActivityLocationDto(activity.getSchedule().getLocation()))
                 .totalAmount(activity.getTotalAmount())
                 .tag(activity.getCategoryTag())
@@ -37,13 +37,15 @@ public class ActivityResponseConverter {
 
     public static ActivityResponse.ActivityLocationDto toActivityLocationDto(Location location) {
         return ActivityResponse.ActivityLocationDto.builder()
+                .longitude(location.getLongitude())
+                .latitude(location.getLatitude())
                 .kakaoLocationId(location.getKakaoLocationId())
                 .locationName(location.getName())
                 .build();
     }
 
     public static ActivityResponse.ActivitySettlementInfoDto toActivitySettlementInfoDto(Activity activity) {
-        long divisionCount = activity.getParticipants().stream()
+        long divisionCount = activity.getActivityParticipants().stream()
                 .filter(ActivityParticipant::isIncludedInSettlement)
                 .count();
         BigDecimal amountPerPerson = activity.getTotalAmount()
@@ -53,7 +55,7 @@ public class ActivityResponseConverter {
                 .totalAmount(activity.getTotalAmount())
                 .divisionCount((int)divisionCount)
                 .amountPerPerson(amountPerPerson)
-                .participants(activity.getParticipants().stream()
+                .participants(activity.getActivityParticipants().stream()
                         .map(ActivityResponseConverter::toActivitySettlementParticipant)
                         .toList())
                 .build();
