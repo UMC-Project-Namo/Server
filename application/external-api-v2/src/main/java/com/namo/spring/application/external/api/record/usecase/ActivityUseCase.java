@@ -47,7 +47,7 @@ public class ActivityUseCase {
         Activity activity = activityManageService.createActivity(memberId, scheduleId, request);
         // 활동 참여 정보 생성
         List<ActivityParticipant> activityParticipant = activityParticipantManageService.createActivityParticipant(
-                activity, request.getParticipantIdList());
+                activity, request.getParticipantIdList(), scheduleId);
         // 정산 정보 생성
         if (request.getSettlement()!=null){
             activity.setSettlementInfo(request.getSettlement().getTotalAmount());

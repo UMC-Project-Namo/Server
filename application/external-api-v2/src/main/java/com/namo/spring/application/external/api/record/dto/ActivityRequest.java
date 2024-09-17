@@ -26,7 +26,7 @@ public class ActivityRequest {
         private ActivitySettlementDto settlement;
         @Schema(description = "활동 태그", example = "술")
         private String tag;
-        @Schema(description = "활동 이미지 URL List", example = "[https://static.namong.shop/origin/activity/image1.jpg, https://static.namong.shop/origin/activity/image2.jpg]")
+        @Schema(description = "활동 이미지 URL List")
         private List<String> imageList;
     }
 
