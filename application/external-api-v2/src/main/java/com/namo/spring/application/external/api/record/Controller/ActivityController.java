@@ -4,6 +4,7 @@ import static com.namo.spring.core.common.code.status.ErrorStatus.*;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,7 +71,7 @@ public class ActivityController {
             @AuthenticationPrincipal SecurityUserDetails memberInfo,
             @Parameter(description = "활동을 생성할 스케줄 ID 입니다.", example = "1")
             @PathVariable Long scheduleId,
-            @RequestBody ActivityRequest.CreateActivityDto request
+            @Valid @RequestBody ActivityRequest.CreateActivityDto request
     ){
         activityUseCase.createActivity(memberInfo.getUserId(), scheduleId, request);
         return ResponseDto.onSuccess("활동 생성 완료");

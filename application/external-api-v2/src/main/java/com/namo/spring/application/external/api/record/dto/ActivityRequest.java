@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,7 +16,7 @@ public class ActivityRequest {
     @Getter
     public static class CreateActivityDto{
         @Schema(description = "활동 제목", example = "보드게임 밥디")
-        @NotNull
+        @NotBlank
         private String title;
         @NotNull
         @Schema(description = "활동에 참여할 participantId 를 넣어주세요", example = "[1, 2, 3]")
@@ -31,6 +32,7 @@ public class ActivityRequest {
         @Schema(description = "활동 태그", example = "술")
         private String tag;
         @Schema(description = "활동 이미지 URL List")
+        @NotNull
         private List<String> imageList;
     }
 
@@ -55,6 +57,7 @@ public class ActivityRequest {
         @Schema(description = "인당 금액", example = "300000.00")
         private BigDecimal amountPerPerson;
         @Schema(description = "정산에 참여 할 participantId 넣어주세요.", example = "[1, 2]" )
+        @NotNull
         private List<Long> participantIdList;
     }
 
