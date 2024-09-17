@@ -1,5 +1,7 @@
 package com.namo.spring.application.external.api.record.serivce;
 
+import static com.namo.spring.application.external.global.utils.MeetingParticipantValidationUtils.*;
+
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -22,16 +24,19 @@ public class ActivityParticipantManageService {
     private final ParticipantManageService participantManageService;
 
     /**
-     * 활동 참여자를 생성하는 메서드입니다.
-     * 스케줄의 참여자 정보를 찾아 활동 참여 정보를 생성합니다.
+     * 활동 참여자를 생성하는 메서드입니다. (스케줄의 참여자 정보를 찾아 활동 참여 정보를 생성합니다)
+     * !! 중복 참여자 여부, 참여자의 스케줄 참여 여부를 검증합니다.
+     *
      * @param activity
      * @param participantIdList
+     * @param scheduleId
      * @return
      */
-    public List<ActivityParticipant> createActivityParticipant(Activity activity, List<Long> participantIdList) {
-        List<Participant> participants = participantIdList.stream()
-                .map(participantManageService::getParticipant)
-                .toList();
+    public List<ActivityParticipant> createActivityParticipant(Activity activity, List<Long> participantIdList,
+            Long scheduleId) {
+        validateDuplicateParticipantIds(participantIdList);
+        List<Participant> participants = participantManageService.getParticipantsInSchedule(participantIdList,
+                scheduleId);
         List<ActivityParticipant> activityParticipants = participants.stream()
                 .map(participant -> ActivityParticipantConverter.toActivityParticipant(participant, activity))
                 .toList();
