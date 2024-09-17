@@ -116,6 +116,7 @@ public class PersonalScheduleResponseConverter {
                 .startDate(DateUtil.toSeconds(participant.getSchedule().getPeriod().getStartDate()))
                 .endDate(DateUtil.toSeconds(participant.getSchedule().getPeriod().getEndDate()))
                 .interval(participant.getSchedule().getPeriod().getDayInterval())
+                .scheduleType(participant.getSchedule().getScheduleType())
                 .build();
     }
 

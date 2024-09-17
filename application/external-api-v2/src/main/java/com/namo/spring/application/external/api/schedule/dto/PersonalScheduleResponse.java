@@ -109,6 +109,8 @@ public class PersonalScheduleResponse {
         private Long endDate;
         @Schema(description = "시작일과 종료일 차이")
         private Long interval;
+        @Schema(description = "개인 스케줄 : 0, 모임 스케줄 : 1, 생일 스케줄 : 3", example = "0")
+        private int scheduleType;
     }
 
 }
