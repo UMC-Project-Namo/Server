@@ -44,6 +44,12 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
         "LEFT JOIN FETCH p.member m " +
         "LEFT JOIN FETCH p.anonymous a " +
         "WHERE p.id in :ids AND s.id = :scheduleId AND p.status = :status")
+    List<Participant> findParticipantByIdAndScheduleIdFetchUser(List<Long> ids, Long scheduleId, ParticipantStatus status);
+
+    @Query("SELECT p " +
+            "FROM Participant p " +
+            "JOIN p.schedule s " +
+            "WHERE p.id in :ids AND s.id = :scheduleId AND p.status = :status")
     List<Participant> findParticipantByIdAndScheduleId(List<Long> ids, Long scheduleId, ParticipantStatus status);
 
     @Query("SELECT DISTINCT new com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery(" +
