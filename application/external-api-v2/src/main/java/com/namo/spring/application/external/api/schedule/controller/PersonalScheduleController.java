@@ -58,6 +58,18 @@ public class PersonalScheduleController implements PersonalScheduleApi {
     }
 
     /**
+     * 내 월간 캘린더 조회 시
+     * 친구의 생일 목록 조회 API
+     */
+    @GetMapping("/calendar/friends/birthdays")
+    public ResponseDto<List<PersonalScheduleResponse.GetMonthlyFriendBirthdayDto>> getMonthlyFriendsBirthday(
+            @RequestParam Integer year,
+            @RequestParam Integer month,
+            @AuthenticationPrincipal SecurityUserDetails member) {
+        return ResponseDto.onSuccess(personalScheduleUsecase.getMonthlyFriendsBirthday(year, month, member));
+    }
+
+    /**
      * 친구 월간 일정 조회 API
      */
     @GetMapping("/calendar/friends")
