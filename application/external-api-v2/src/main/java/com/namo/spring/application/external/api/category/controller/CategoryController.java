@@ -80,6 +80,7 @@ public class CategoryController {
         return ResponseDto.onSuccess("카테고리 수정 완료");
     }
 
+    @Operation(summary = "나의 카테고리 삭제", description = "나의 카테고리를 삭제 합니다.(Hard Delete)")
     @DeleteMapping("/{categoryId}")
     @ApiErrorCodes(value = {
             NOT_FOUND_CATEGORY_FAILURE,
