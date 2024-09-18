@@ -19,4 +19,5 @@ public class ScheduleParticipantQuery {
     private String customTitle;
     private String customImage;
     private Boolean isShared;
+    private Boolean birthdayVisible;
 }
