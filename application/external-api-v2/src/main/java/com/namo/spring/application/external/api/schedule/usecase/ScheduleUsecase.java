@@ -24,7 +24,7 @@ public class ScheduleUsecase {
 
     @Transactional(readOnly = true)
     public ScheduleResponse.ScheduleSummaryDto getScheduleSummary(Long memberId, Long scheduleId) {
-        Participant myScheduleParticipant = participantManageService.getMyParticipant(memberId, scheduleId);
+        Participant myScheduleParticipant = participantManageService.getParticipantByMemberAndSchedule(memberId, scheduleId);
         return ScheduleConverter.toScheduleSummaryDto(myScheduleParticipant);
     }
 

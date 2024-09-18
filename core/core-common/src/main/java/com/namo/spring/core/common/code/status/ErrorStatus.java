@@ -134,6 +134,8 @@ public enum ErrorStatus implements BaseErrorCode {
 
     NOT_FOUND_DEVICE_FAILURE(HttpStatus.NOT_FOUND, "유저의 기기 정보를 찾을 수 없습니다."),
 
+    NOT_PARTICIPATING_ACTIVITY(HttpStatus.NOT_FOUND, "참여한 활동이 아닙니다." ),
+
     /**
      * 404 : 예외 상황 에러
      */

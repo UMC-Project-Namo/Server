@@ -22,16 +22,23 @@ public class ActivityManageService {
     private final ActivityImageManageService activityImageManageService;
 
     /**
-     * 활동을 찾는 메서드입니다.
-     * !! 활동이 존재 하는지 검증합니다.
+     * 활동을 찾는 메서드입니다. (스케줄 참여자만 활동들의 정산내역을 확인할 수 있습니다)
+     * !! 활동이 존재 하는지, 참여한 스케줄 인지 검증합니다.
      *
      * @param memberId
      * @param activityId
      * @return
      */
     public Activity getMyActivity(Long memberId, Long activityId) {
-        return activityService.readActivity(activityId)
+        Activity activity = activityService.readActivity(activityId)
                 .orElseThrow(() -> new ActivityException(ErrorStatus.NOT_FOUND_GROUP_ACTIVITY_FAILURE));
+
+        boolean isParticipant = activity.getSchedule().getParticipantList().stream()
+                .anyMatch(participant -> participant.getMember().getId().equals(memberId));
+        if (!isParticipant) {
+            throw new ActivityException(ErrorStatus.NOT_PARTICIPATING_ACTIVITY);
+        }
+        return activity;
     }
 
     /**
@@ -44,7 +51,7 @@ public class ActivityManageService {
      * @return
      */
     public Activity createActivity(Long memberId, Long scheduleId, ActivityRequest.CreateActivityDto request) {
-        Participant myParticipant = participantManageService.getMyParticipant(memberId, scheduleId);
+        Participant myParticipant = participantManageService.getParticipantByMemberAndSchedule(memberId, scheduleId);
         Activity activity = activityService.createActivity(ActivityConverter.toActivity(myParticipant.getSchedule(), request));
         // 활동 이미지 생성
         if (request.getImageList() != null && !request.getImageList().isEmpty()){

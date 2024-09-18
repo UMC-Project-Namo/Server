@@ -29,7 +29,7 @@ public class DiaryUseCase {
 
     @Transactional
     public void createDiary(SecurityUserDetails memberInfo, DiaryRequest.CreateDiaryDto request) {
-        Participant participant = participantManageService.getScheduleParticipant(memberInfo.getUserId(),
+        Participant participant = participantManageService.getParticipantByMemberAndSchedule(memberInfo.getUserId(),
                 request.getScheduleId());
         diaryManageService.makeDiary(request, participant);
     }
@@ -42,7 +42,7 @@ public class DiaryUseCase {
 
     @Transactional(readOnly = true)
     public DiaryResponse.DiaryDto getScheduleDiary(Long scheduleId, SecurityUserDetails memberInfo) {
-        Participant participant = participantManageService.getScheduleParticipant(memberInfo.getUserId(),
+        Participant participant = participantManageService.getParticipantByMemberAndSchedule(memberInfo.getUserId(),
                 scheduleId);
         Diary diary = diaryManageService.getParticipantDiary(participant);
         return DiaryResponseConverter.toDiaryDto(diary);
