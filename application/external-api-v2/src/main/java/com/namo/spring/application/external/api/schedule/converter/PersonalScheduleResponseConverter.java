@@ -15,6 +15,7 @@ import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.type.Location;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
+import com.namo.spring.db.mysql.domains.user.dto.FriendBirthdayQuery;
 
 public class PersonalScheduleResponseConverter {
     private PersonalScheduleResponseConverter() {
@@ -117,6 +118,20 @@ public class PersonalScheduleResponseConverter {
                 .endDate(DateUtil.toSeconds(participant.getSchedule().getPeriod().getEndDate()))
                 .interval(participant.getSchedule().getPeriod().getDayInterval())
                 .scheduleType(participant.getSchedule().getScheduleType())
+                .build();
+    }
+
+    public static List<PersonalScheduleResponse.GetMonthlyFriendBirthdayDto> toGetMonthlyFriendBirthdayDtos(List<FriendBirthdayQuery> friendBirthdays, int year){
+        return friendBirthdays.stream()
+                .map(friendBirthday -> toGetMonthlyFriendBirthdayDto(friendBirthday, year))
+                .collect(Collectors.toList());
+    }
+
+    public static PersonalScheduleResponse.GetMonthlyFriendBirthdayDto toGetMonthlyFriendBirthdayDto(FriendBirthdayQuery friendBirthday, int year){
+        return PersonalScheduleResponse.GetMonthlyFriendBirthdayDto.builder()
+                .nickname(friendBirthday.getNickname())
+                .birthdayDate(DateUtil.toSeconds(friendBirthday.getBirthday().withYear(year).atStartOfDay()))
+                .categoryInfo(null)
                 .build();
     }
 
