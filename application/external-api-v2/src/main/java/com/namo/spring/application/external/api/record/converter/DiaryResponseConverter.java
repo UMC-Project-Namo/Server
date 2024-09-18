@@ -87,6 +87,7 @@ public class DiaryResponseConverter {
 
     public static DiaryResponse.DayOfDiaryDto toDayOfDiaryDto(Participant participant) {
         return DiaryResponse.DayOfDiaryDto.builder()
+                .scheduleId(participant.getSchedule().getId())
                 .scheduleType(participant.getSchedule().getScheduleType())
                 .categoryInfo(toCategoryInfoDto(participant.getCategory()))
                 .scheduleStartDate(participant.getSchedule().getPeriod().getStartDate())

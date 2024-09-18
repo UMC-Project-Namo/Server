@@ -100,7 +100,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     NOT_FOUND_SCHEDULE_FAILURE(HttpStatus.NOT_FOUND, "일정을 찾을 수 없습니다. (참여한 일정이 아니거나, 일정 정보가 없습니다)"),
 
-    NOT_FOUND_PARTICIPANT_FAILURE(HttpStatus.NOT_FOUND, "일정의 참여자를 찾을 수 없습니다."),
+    NOT_FOUND_PARTICIPANT_FAILURE(HttpStatus.NOT_FOUND, "일정의 참여자를 찾을 수 없습니다. (모임 스케줄의 경우 초대에 수락하지 않았을 수 있습니다"),
 
     NOT_FOUND_CATEGORY_FAILURE(HttpStatus.NOT_FOUND, "카테고리를 찾을 수 없습니다."),
 
@@ -133,6 +133,8 @@ public enum ErrorStatus implements BaseErrorCode {
     NOT_FOUND_MOBILE_DEVICE_FAILURE(HttpStatus.NOT_FOUND, "유저의 모바일 기기 정보를 찾을 수 없습니다."),
 
     NOT_FOUND_DEVICE_FAILURE(HttpStatus.NOT_FOUND, "유저의 기기 정보를 찾을 수 없습니다."),
+
+    NOT_PARTICIPATING_ACTIVITY(HttpStatus.NOT_FOUND, "참여한 활동이 아닙니다." ),
 
     /**
      * 404 : 예외 상황 에러

@@ -95,6 +95,8 @@ public class DiaryResponse {
     @AllArgsConstructor
     @Schema(description = "일별 일기에 대한 스케줄 DTO")
     public static class DayOfDiaryDto {
+        @Schema(description = "스케줄 ID", example = "3")
+        private Long scheduleId;
         @Schema(description = "개인 스케줄 : 0, 모임 스케줄 : 1", example = "0")
         private int scheduleType;
         private CategoryInfoDto categoryInfo;

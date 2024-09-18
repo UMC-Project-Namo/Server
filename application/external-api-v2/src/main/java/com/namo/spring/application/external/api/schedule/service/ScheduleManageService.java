@@ -205,7 +205,7 @@ public class ScheduleManageService {
      */
     public void updateMeetingScheduleProfile(MeetingScheduleRequest.PatchMeetingScheduleProfileDto dto, Schedule schedule,
                                              Long memberId){
-        Participant participant = participantManageService.getScheduleParticipant(memberId, schedule.getId());
+        Participant participant = participantManageService.getParticipantByMemberAndSchedule(memberId, schedule.getId());
         participant.updateCustomScheduleInfo(dto.getTitle(), dto.getImageUrl());
     }
 

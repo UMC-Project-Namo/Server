@@ -33,11 +33,6 @@ public class ParticipantService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Participant> readParticipant(Long id) {
-        return participantRepository.findById(id);
-    }
-
-    @Transactional(readOnly = true)
     public Optional<Participant> readParticipantByScheduleIdAndMemberId(Long scheduleId, Long memberId) {
         return participantRepository.findParticipantByScheduleIdAndMemberId(scheduleId, memberId);
     }
@@ -99,8 +94,8 @@ public class ParticipantService {
         participantRepository.deleteByIdIn(Ids);
     }
 
-    public Optional<Participant> readMemberParticipant(Long memberId, Long scheduleId) {
-        return participantRepository.findParticipantByMemberIdAndScheduleId(memberId, scheduleId);
+    public Optional<Participant> readActiveMemberParticipant(Long memberId, Long scheduleId, ParticipantStatus status) {
+        return participantRepository.findParticipantByMemberIdAndScheduleIdAndStatus(memberId, scheduleId, status);
     }
 
     public Optional<Participant> readAnonymousParticipant(Long anonymousId, Long scheduleId) {
