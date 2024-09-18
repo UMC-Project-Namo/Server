@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleSummaryQuery;
+import com.namo.spring.db.mysql.domains.user.dto.FriendBirthdayQuery;
 import org.springframework.stereotype.Service;
 
 import com.namo.spring.application.external.api.schedule.converter.LocationConverter;
@@ -95,11 +96,31 @@ public class ScheduleManageService {
                 period.getEndDate());
     }
 
-    public List<Participant> getMemberMonthlySchedules(Long targetMemberId, Long friendId, Period period) {
-        checkMemberIsFriend(targetMemberId, friendId);
-        return participantService.readParticipantsWithScheduleAndCategoryByPeriod(targetMemberId, Boolean.TRUE,
+    /**
+     * 요청한 기간에 포함된 날짜가
+     * 생일인 친구의 정보와 생일을 조회합니다.
+     * @param memberId
+     * @param period
+     * @return 친구 memberId, nickname, birthday
+     */
+    public List<FriendBirthdayQuery> getMonthlyFriendsBirthday(Long memberId, Period period){
+        return friendshipService.readBirthdayVisibleFriendsByPeriod(memberId, period.getStartDate().toLocalDate(), period.getEndDate().toLocalDate());
+    }
+
+    public List<Participant> getMemberMonthlySchedules(Member targetMember, Long friendId, Period period) {
+        checkMemberIsFriend(targetMember.getId(), friendId);
+        boolean birthdayVisible = targetMember.isBirthdayVisible();
+        return participantService.readParticipantsWithScheduleAndCategoryByPeriod(targetMember.getId(), Boolean.TRUE,
                         period.getStartDate(), period.getEndDate()).stream()
                 .filter(participant -> participant.getCategory().isShared())
+                // 생일 공유 여부에 따른 생일 일정 필터링
+                .filter(participant ->
+                {
+                    if (participant.getSchedule().getScheduleType() == ScheduleType.BIRTHDAY.getValue()) {
+                        return birthdayVisible;
+                    }
+                    return true;
+                })
                 .collect(Collectors.toList());
     }
 
