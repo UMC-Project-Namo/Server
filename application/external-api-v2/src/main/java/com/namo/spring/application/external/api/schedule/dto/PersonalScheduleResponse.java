@@ -34,7 +34,7 @@ public class PersonalScheduleResponse {
         private LocationDto locationInfo;
         @Schema(description = "기록 작성 여부")
         private Boolean hasDiary;
-        @Schema(description = "개인 일정 : 0, 모임 일정 : 1, 생일 일정: 3", example = "0")
+        @Schema(description = "개인 일정 : 0, 모임 일정 : 1, 생일 일정: 2", example = "0")
         private int scheduleType;
         @Schema(description = "모임 일정 정보, 모임 일정이 아닐 시에는 null")
         private MeetingInfoDto meetingInfo;
@@ -97,11 +97,11 @@ public class PersonalScheduleResponse {
     @Builder
     @Schema(title = "친구 일정 월간 조회 응답 DTO")
     public static class GetMonthlyFriendBirthdayDto {
-        @Schema(description = "친구 이름", example = "나모 정기 회의")
+        @Schema(description = "친구 이름", example = "나몽")
         private String nickname;
         @Schema(description = "생일 카테고리 정보")
         private CategoryDto categoryInfo;
-        @Schema(description = "친구의 생일, unix 타임스탬프 형식")
+        @Schema(description = "친구의 생일(현재 년도 기준), unix 타임스탬프 형식")
         private Long birthdayDate;
     }
 
@@ -122,7 +122,7 @@ public class PersonalScheduleResponse {
         private Long endDate;
         @Schema(description = "시작일과 종료일 차이")
         private Long interval;
-        @Schema(description = "개인 일정 : 0, 모임 일정 : 1, 친구의 생일 일정 : 3", example = "0")
+        @Schema(description = "개인 일정 : 0, 모임 일정 : 1, 친구의 생일 일정 : 2", example = "0")
         private int scheduleType;
     }
 

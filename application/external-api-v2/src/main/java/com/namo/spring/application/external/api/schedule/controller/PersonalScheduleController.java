@@ -58,7 +58,7 @@ public class PersonalScheduleController implements PersonalScheduleApi {
     }
 
     /**
-     * 내 월간 캘린더 조회 시
+     * 내 월간 캘린더 -
      * 친구의 생일 목록 조회 API
      */
     @GetMapping("/calendar/friends/birthdays")

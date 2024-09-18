@@ -86,7 +86,7 @@ public class MeetingScheduleResponse {
         private Long interval;
         @Schema(description = "일정 참여자 목록")
         private List<MemberParticipantDto> participants;
-        @Schema(description = "개인 스케줄 : 0, 모임 스케줄 : 1, 생일 스케줄 : 3", example = "0")
+        @Schema(description = "개인 스케줄 : 0, 모임 스케줄 : 1, 생일 스케줄 : 2", example = "0")
         private int scheduleType;
     }
 
@@ -109,7 +109,7 @@ public class MeetingScheduleResponse {
         private List<UserParticipantDto> participants;
         @Schema(description = "현재 조회하는 모임 일정인지의 여부")
         private Boolean isCurMeetingSchedule = false;
-        @Schema(description = "개인 스케줄 : 0, 모임 스케줄 : 1, 생일 스케줄 : 3", example = "0")
+        @Schema(description = "개인 일정 : 0, 모임 일정 : 1, 생일 일정 : 2", example = "0")
         private int scheduleType;
     }
 

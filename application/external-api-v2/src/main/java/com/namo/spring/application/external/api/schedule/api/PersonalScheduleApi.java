@@ -43,6 +43,12 @@ public interface PersonalScheduleApi {
             @Parameter(description = "월") @RequestParam Integer month,
             @AuthenticationPrincipal SecurityUserDetails member);
 
+    @Operation(summary = "개인 월간 일정 - 친구 생일 조회", description = "월간 친구 생일을 조회합니다.")
+    ResponseDto<List<PersonalScheduleResponse.GetMonthlyFriendBirthdayDto>> getMonthlyFriendsBirthday(
+            @Parameter(description = "연도") @RequestParam Integer year,
+            @Parameter(description = "월") @RequestParam Integer month,
+            @AuthenticationPrincipal SecurityUserDetails member);
+
     @Operation(summary = "친구 월간 일정 조회", description = "친구의 월간 일정을 조회합니다.")
     @ApiErrorCodes(value = {ErrorStatus.NOT_FRIENDSHIP_MEMBER})
     ResponseDto<List<PersonalScheduleResponse.GetFriendMonthlyScheduleDto>> getFriendMonthlySchedules(
