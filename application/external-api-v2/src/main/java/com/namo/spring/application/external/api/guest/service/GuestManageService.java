@@ -35,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class GuestManageService {
-    private static final long[] PALETTE_IDS = PaletteEnum.getPaletteColorIds();
+    private static final long[] PALETTE_IDS = PaletteEnum.getBasicColorIds();
     private final AnonymousService anonymousService;
     private final ParticipantService participantService;
     private final ParticipantMaker participantMaker;
