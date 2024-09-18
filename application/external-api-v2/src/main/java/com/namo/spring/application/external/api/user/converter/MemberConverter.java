@@ -16,7 +16,6 @@ public class MemberConverter {
         return Member.builder()
                 .email(response.get("email"))
                 .name(response.get("nickname"))
-                .birthday(response.getOrDefault("birthday", null))
                 .socialType(socialType)
                 .socialRefreshToken(socialRefreshToken)
                 .build();
@@ -36,7 +35,7 @@ public class MemberConverter {
                 .tag(member.getTag())
                 .name(member.getName())
                 .bio(member.getBio())
-                .birth(member.getBirthday())
+                .birthday(member.getBirthday())
                 .colorId(member.getPalette().getId())
                 .build();
     }
