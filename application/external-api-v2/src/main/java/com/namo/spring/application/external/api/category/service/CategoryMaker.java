@@ -19,7 +19,6 @@ public class CategoryMaker {
 
     private static final Long BASE_PERSONAL_PALETTE_ID = ColorChip.getBaseCategoryPaletteId();
     private static final Long BASE_MEETING_PALETTE_ID = ColorChip.getBaseMeetingCategoryPaletteId();
-
     private static final Long BASE_BIRTHDAY_PALETTE_ID = ColorChip.getBaseBirthdayCategoryPaletteId();
 
     private final PaletteService paletteService;
