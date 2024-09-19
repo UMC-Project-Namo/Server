@@ -6,10 +6,24 @@ import com.namo.spring.db.mysql.domains.category.entity.Category;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.type.Period;
+import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
+import com.namo.spring.db.mysql.domains.user.entity.Member;
 
 public class ScheduleConverter {
     private ScheduleConverter() {
         throw new IllegalStateException("Util Class");
+    }
+
+    public static Schedule toBirthdaySchedule(String title, Period period){
+        return Schedule.builder()
+                .title(title)
+                .period(period)
+                .location(null)
+                .scheduleType(ScheduleType.BIRTHDAY.getValue())
+                .imageUrl(null)
+                .participantCount(null)
+                .participantNicknames(null)
+                .build();
     }
 
     public static Schedule toSchedule(String title, Period period, MeetingScheduleRequest.LocationDto location,
@@ -26,22 +40,4 @@ public class ScheduleConverter {
                 .build();
     }
 
-    public static ScheduleResponse.ScheduleSummaryDto toScheduleSummaryDto(Participant participant) {
-        Schedule schedule = participant.getSchedule();
-        return ScheduleResponse.ScheduleSummaryDto.builder()
-                .scheduleId(schedule.getId())
-                .scheduleTitle(schedule.getTitle())
-                .scheduleStartDate(schedule.getPeriod().getStartDate())
-                .locationInfo(LocationConverter.toLocationInfoDto(schedule.getLocation()))
-                .categoryInfo(toCategoryInfoDto(participant.getCategory()))
-                .hasDiary(participant.isHasDiary())
-                .build();
-    }
-
-    private static ScheduleResponse.CategoryInfoDto toCategoryInfoDto(Category category) {
-        return ScheduleResponse.CategoryInfoDto.builder()
-                .name(category.getName())
-                .colorId(category.getPalette().getId())
-                .build();
-    }
 }
