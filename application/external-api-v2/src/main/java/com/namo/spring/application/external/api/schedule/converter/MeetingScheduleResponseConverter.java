@@ -48,7 +48,7 @@ public class MeetingScheduleResponseConverter {
                 .filter(participant -> {
                     boolean isSharedSchedule = true;
                     if (!participant.getMemberId().equals(ownerId))
-                        isSharedSchedule = participant.getIsShared();
+                        isSharedSchedule = participant.getCategoryIsShared();
                     return isSharedSchedule;
                 })
                 .collect(Collectors.groupingBy(participant -> participant.getSchedule().getId()));

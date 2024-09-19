@@ -3,7 +3,6 @@ package com.namo.spring.db.mysql.domains.schedule.dto;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +17,6 @@ public class ScheduleParticipantQuery {
     private Schedule schedule;
     private String customTitle;
     private String customImage;
-    private Boolean isShared;
+    private Boolean categoryIsShared;
     private Boolean birthdayVisible;
 }

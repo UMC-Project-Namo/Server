@@ -181,7 +181,7 @@ public class ScheduleManageService {
             return true;
         }
         // memberId가 있는 경우
-        return participant.getMemberId().equals(memberId) || participant.getIsShared();
+        return participant.getMemberId().equals(memberId) || participant.getCategoryIsShared();
     }
 
     /**
