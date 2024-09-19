@@ -27,7 +27,7 @@ public class ActivityUseCase {
 
     @Transactional(readOnly = true)
     public List<ActivityResponse.ActivityInfoDto> getActivities(Long memberId, Long scheduleId) {
-        Schedule schedule = participantManageService.getMyParticipant(memberId, scheduleId).getSchedule();
+        Schedule schedule = participantManageService.getParticipantByMemberAndSchedule(memberId, scheduleId).getSchedule();
         List<Activity> activities = schedule.getActivityList();
 
         return activities.stream()

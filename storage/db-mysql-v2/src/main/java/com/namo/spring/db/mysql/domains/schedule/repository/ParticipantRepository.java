@@ -86,7 +86,8 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
 
     void deleteByIdIn(List<Long> id);
 
-    Optional<Participant> findParticipantByMemberIdAndScheduleId(Long memberId, Long scheduleId);
+    Optional<Participant> findParticipantByMemberIdAndScheduleIdAndStatus(Long memberId, Long scheduleId,
+            ParticipantStatus status);
 
     Optional<Participant> findParticipantByAnonymousIdAndScheduleId(Long anonymousId, Long scheduleId);
 

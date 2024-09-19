@@ -88,8 +88,16 @@ public class ParticipantManageService {
         }
     }
 
-    public Participant getScheduleParticipant(Long memberId, Long scheduleId) {
-        return participantService.readMemberParticipant(memberId, scheduleId)
+    /**
+     * 나의 스케줄 참여 정보를 찾아서 반환하는 메서드입니다.
+     * !! 스케줄의 존재여부, 스케줄의 참여여부를 검증합니다.
+     *
+     * @param memberId
+     * @param scheduleId
+     * @return
+     */
+    public Participant getParticipantByMemberAndSchedule(Long memberId, Long scheduleId) {
+        return participantService.readActiveMemberParticipant(memberId, scheduleId, ACTIVE)
                 .orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_PARTICIPANT_FAILURE));
     }
 
@@ -147,19 +155,6 @@ public class ParticipantManageService {
         LocalDateTime startDateTime = localDate.atStartOfDay(); // 해당 날 00:00:00
         LocalDateTime endDateTime = localDate.atTime(23, 59, 59); // 해당 날 23:59:59
         return participantService.readParticipantHasDiaryByDateRange(memberId, startDateTime, endDateTime);
-    }
-
-    /**
-     * 나의 참여 정보를 찾아서 반환하는 메서드 입니다.
-     * !! 스케줄의 존재여부, 스케줄의 참여여부를 검증합니다.
-     *
-     * @param memberId
-     * @param scheduleId
-     * @return Schedule
-     */
-    public Participant getMyParticipant(Long memberId, Long scheduleId) {
-        return participantService.readMemberParticipant(memberId, scheduleId)
-                .orElseThrow(() -> new ScheduleException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
     }
 
     /**

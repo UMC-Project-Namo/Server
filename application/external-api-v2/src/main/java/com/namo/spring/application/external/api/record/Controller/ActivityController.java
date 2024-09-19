@@ -52,6 +52,7 @@ public class ActivityController {
     @Operation(summary = "모임 기록 활동에 대한 정산 팝업 조회", description = "모임 활동의 정산 내역을 조회합니다. (팝업 내용에 해당합니다)")
     @ApiErrorCodes(value = {
             NOT_FOUND_GROUP_ACTIVITY_FAILURE,
+            NOT_PARTICIPATING_ACTIVITY
     })
     @GetMapping("/settlement/{activityId}")
     public ResponseDto<ActivityResponse.ActivitySettlementInfoDto> getActivitySettlement(

@@ -48,8 +48,11 @@ public class ActivityResponseConverter {
         long divisionCount = activity.getActivityParticipants().stream()
                 .filter(ActivityParticipant::isIncludedInSettlement)
                 .count();
-        BigDecimal amountPerPerson = activity.getTotalAmount()
-                .divide(BigDecimal.valueOf(divisionCount), RoundingMode.HALF_UP);
+        BigDecimal amountPerPerson = BigDecimal.ZERO;
+        if (divisionCount > 0) {
+            amountPerPerson = activity.getTotalAmount()
+                    .divide(BigDecimal.valueOf(divisionCount), RoundingMode.HALF_UP);
+        }
 
         return ActivityResponse.ActivitySettlementInfoDto.builder()
                 .totalAmount(activity.getTotalAmount())
