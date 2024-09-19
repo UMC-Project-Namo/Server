@@ -21,7 +21,7 @@ INSERT INTO category (
 SELECT
     m.id AS member_id,
     3,
-    '생일 기본 카테고리',
+    '생일',
     '4',
     3,
     true AS is_shared,

@@ -7,10 +7,10 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum CategoryType implements CodedEnum {
-    COMMON("1", "일반 카테고리"),
-    BASE_MEETING("2", "모임 기본 카테고리"),
-    BASE_SCHEDULE("3", "일정 기본 카테고리"),
-    BIRTHDAY("4", "생일 기본 카테고리");
+    COMMON("1", "일반"),
+    BASE_MEETING("2", "모임"),
+    BASE_SCHEDULE("3", "일정"),
+    BIRTHDAY("4", "생일");
 
     private final String code;
     private final String type;
