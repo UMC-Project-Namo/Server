@@ -6,6 +6,7 @@ import java.util.List;
 
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -75,5 +76,14 @@ public class ActivityController {
     ){
         activityUseCase.createActivity(memberInfo.getUserId(), scheduleId, request);
         return ResponseDto.onSuccess("활동 생성 완료");
+    }
+
+    @DeleteMapping("/{activityId}")
+    public ResponseDto<String> deleteActivity(
+            @AuthenticationPrincipal SecurityUserDetails memberInfo,
+            @Parameter(description = "삭제할 활동 ID 입니다.", example = "1")
+            @PathVariable Long activityId
+    ){
+        return ResponseDto.onSuccess("활동 삭제 완료");
     }
 }
