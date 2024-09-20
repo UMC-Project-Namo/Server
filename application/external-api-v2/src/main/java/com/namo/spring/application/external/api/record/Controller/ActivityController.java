@@ -78,12 +78,20 @@ public class ActivityController {
         return ResponseDto.onSuccess("활동 생성 완료");
     }
 
+    @Operation(summary = "모임 기록 활동 삭제", description = "모임 활동을 삭제합니다. "
+            + "원본-리사이징 이미지 모두 즉시 삭제됩니다. "
+            + "(모임 참가인원은 삭제할 수 있습니다) ")
+    @ApiErrorCodes(value = {
+            NOT_FOUND_GROUP_ACTIVITY_FAILURE,
+            NOT_PARTICIPATING_ACTIVITY
+    })
     @DeleteMapping("/{activityId}")
     public ResponseDto<String> deleteActivity(
             @AuthenticationPrincipal SecurityUserDetails memberInfo,
             @Parameter(description = "삭제할 활동 ID 입니다.", example = "1")
             @PathVariable Long activityId
     ){
+        activityUseCase.deleteActivity(memberInfo.getUserId(), activityId);
         return ResponseDto.onSuccess("활동 삭제 완료");
     }
 }
