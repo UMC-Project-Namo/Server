@@ -35,4 +35,8 @@ public class ActivityService {
     public void deleteActivity(Long activityId) {
         activityRepository.deleteById(activityId);
     }
+
+    public void deleteActivity(Activity activity){
+        activityRepository.delete(activity);
+    }
 }

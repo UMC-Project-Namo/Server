@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import com.namo.spring.application.external.api.record.converter.ActivityConverter;
 import com.namo.spring.application.external.api.record.dto.ActivityRequest;
+import com.namo.spring.application.external.api.record.serivce.image.ActivityImageManageService;
 import com.namo.spring.application.external.api.schedule.service.ParticipantManageService;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.record.entity.Activity;
@@ -55,8 +56,15 @@ public class ActivityManageService {
         Activity activity = activityService.createActivity(ActivityConverter.toActivity(myParticipant.getSchedule(), request));
         // 활동 이미지 생성
         if (request.getImageList() != null && !request.getImageList().isEmpty()){
-            activityImageManageService.createActiveImages(activity, request.getImageList());
+            activityImageManageService.createImages(activity, request.getImageList());
         }
         return activity;
+    }
+
+    public void removeActivity(Activity activity) {
+        activity.getActivityImages().forEach(activityImage ->
+                activityImageManageService.deleteFromCloud(activityImage.getId()));
+        activityImageManageService.deleteImages(activity);
+        activityService.deleteActivity(activity);
     }
 }

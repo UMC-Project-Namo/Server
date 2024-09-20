@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.namo.spring.application.external.api.record.dto.DiaryRequest;
+import com.namo.spring.application.external.api.record.serivce.image.DiaryImageManageService;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.record.entity.Diary;
 import com.namo.spring.db.mysql.domains.record.exception.DiaryException;
@@ -61,7 +62,9 @@ public class DiaryManageService {
             throw new MemberException(ErrorStatus.ALREADY_WRITTEN_DIARY_FAILURE);
         Diary diary = Diary.of(participant, request.getContent(), request.getEnjoyRating());
         diaryService.createDiary(diary);
-        diaryImageManageService.createDiaryImages(diary, request.getDiaryImages());
+        diaryImageManageService.createImages(diary, request.getDiaryImages().stream()
+                .map(DiaryRequest.CreateDiaryImageDto::getImageUrl)
+                .toList());
     }
 
     /**
@@ -73,7 +76,7 @@ public class DiaryManageService {
      */
     public void updateDiary(Diary diary, DiaryRequest.UpdateDiaryDto request) {
         diary.update(request.getContent(), request.getEnjoyRating());
-        diaryImageManageService.updateDiaryImage(diary, request);
+        diaryImageManageService.updateImages(diary, request);
     }
 
     /**
@@ -85,7 +88,7 @@ public class DiaryManageService {
     @Transactional
     public void deleteDiary(Diary diary) {
         diary.getImages().forEach(diaryImage -> diaryImageManageService.deleteFromCloud(diaryImage.getId()));
-        diaryImageManageService.deleteDiaryImage(diary);
+        diaryImageManageService.deleteImages(diary);
         diaryService.deleteDiary(diary);
     }
 }
