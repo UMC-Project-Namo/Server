@@ -16,6 +16,7 @@ public class TagGenerator {
     private static final int MAX_TAG_VALUE = 10000;
 
     private final MemberManageService memberManageService;
+    private final Random random = new Random();
 
     public String generateTag(String nickname) {
         Set<String> existingTags = new HashSet<>(memberManageService.getUserTagsByNicname(nickname));
@@ -31,7 +32,6 @@ public class TagGenerator {
     }
 
     private String generateRandomTag() {
-        Random random = new Random();
-        return String.format("%0" + TAG_LENGTH + "d", random.nextInt(MAX_TAG_VALUE));
+        return String.format("%0" + TAG_LENGTH + "d", this.random.nextInt(MAX_TAG_VALUE));
     }
 }

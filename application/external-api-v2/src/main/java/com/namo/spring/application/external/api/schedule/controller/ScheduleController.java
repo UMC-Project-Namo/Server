@@ -1,8 +1,9 @@
 package com.namo.spring.application.external.api.schedule.controller;
 
+import static com.namo.spring.core.common.code.status.ErrorStatus.*;
+
 import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
-import com.namo.spring.core.common.code.status.ErrorStatus;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -37,11 +38,11 @@ public class ScheduleController {
     @Operation(summary = "일정 알림 추가/수정/삭제", description = "일정 알림을 추가/수정/삭제 합니다. " +
             "최종적으로 일정에 설정할 알림을 array로 전송하며, 알림을 모두 삭제할 때에는 empty array를 전송합니다.")
     @ApiErrorCodes(value = {
-            ErrorStatus.NOT_FOUND_USER_FAILURE,
-            ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE,
-            ErrorStatus.NOT_SCHEDULE_PARTICIPANT,
-            ErrorStatus.NOT_FOUND_MOBILE_DEVICE_FAILURE,
-            ErrorStatus.NOT_SUPPORTED_DEVICE_TYPE
+            NOT_FOUND_USER_FAILURE,
+            NOT_FOUND_SCHEDULE_FAILURE,
+            NOT_SCHEDULE_PARTICIPANT,
+            NOT_FOUND_MOBILE_DEVICE_FAILURE,
+            NOT_SUPPORTED_DEVICE_TYPE
 
     })
     @PutMapping("/{scheduleId}/notifications")

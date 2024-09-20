@@ -1,5 +1,7 @@
 package com.namo.spring.application.external.api.record.Controller;
 
+import static com.namo.spring.core.common.code.status.ErrorStatus.*;
+
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeParseException;
@@ -21,7 +23,6 @@ import com.namo.spring.application.external.api.record.dto.DiaryResponse;
 import com.namo.spring.application.external.api.record.usecase.DiaryUseCase;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
-import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.response.ResponseDto;
 import com.namo.spring.db.mysql.domains.record.exception.DiaryException;
 
@@ -41,8 +42,8 @@ public class DiaryController {
 
     @Operation(summary = "기록 생성", description = "기록(일기) 생성 API 입니다. 개인, 단체 일정 모두 공통으로 사용합니다.")
     @ApiErrorCodes(value = {
-            ErrorStatus.ALREADY_WRITTEN_DIARY_FAILURE,
-            ErrorStatus.NOT_FOUND_PARTICIPANT_FAILURE,
+            ALREADY_WRITTEN_DIARY_FAILURE,
+            NOT_FOUND_PARTICIPANT_FAILURE,
     })
     @PostMapping("")
     public ResponseDto<String> createDiary(
@@ -56,8 +57,8 @@ public class DiaryController {
     @PatchMapping("/{diaryId}")
     @Operation(summary = "기록 수정", description = "기록(일기) 수정 API 입니다. 모든 이미지 URL을 새로 보내주어야 합니다.")
     @ApiErrorCodes(value = {
-            ErrorStatus.NOT_FOUND_DIARY_FAILURE,
-            ErrorStatus.NOT_MY_DIARY_FAILURE,
+            NOT_FOUND_DIARY_FAILURE,
+            NOT_MY_DIARY_FAILURE,
     })
     public ResponseDto<String> updateDiary(
             @AuthenticationPrincipal SecurityUserDetails memberInfo,
@@ -70,8 +71,8 @@ public class DiaryController {
 
     @Operation(summary = "기록 조회", description = "기록(일기) 단일 상세 조회 API 입니다. 개인, 단체 일정 모두 공통으로 사용합니다.")
     @ApiErrorCodes(value = {
-            ErrorStatus.NOT_FOUND_PARTICIPANT_FAILURE,
-            ErrorStatus.NOT_WRITTEN_DIARY_FAILURE,
+            NOT_FOUND_PARTICIPANT_FAILURE,
+            NOT_WRITTEN_DIARY_FAILURE,
     })
     @GetMapping("/{scheduleId}")
     public ResponseDto<DiaryResponse.DiaryDto> getDiary(
@@ -84,7 +85,7 @@ public class DiaryController {
 
     @Operation(summary = "기록 보관함 조회", description = "기록(일기) 보관함 조회 API 입니다. ")
     @ApiErrorCodes(value = {
-            ErrorStatus.NOT_FILTERTYPE_OF_ARCHIVE,
+            NOT_FILTERTYPE_OF_ARCHIVE,
     })
     @GetMapping("/archive")
     public ResponseDto<List<DiaryResponse.DiaryArchiveDto>> getDiaryArchive(
@@ -102,7 +103,7 @@ public class DiaryController {
 
     @Operation(summary = "기록 캘린더 조회", description = "기록이 존재하는 달력 확인 API 입니다. 월별로 일기가 존재하는 날짜를 반환합니다. ")
     @ApiErrorCodes(value = {
-            ErrorStatus.INVALID_FORMAT_FAILURE,
+            INVALID_FORMAT_FAILURE,
     })
     @GetMapping("/calendar/{yearMonth}")
     public ResponseDto<DiaryResponse.DiaryExistDateDto> getArchiveCalender(
@@ -116,13 +117,13 @@ public class DiaryController {
                     .getExistDiaryDate(memberInfo.getUserId(), requestedYearMonth));
 
         } catch (DateTimeParseException e) {
-            throw new DiaryException(ErrorStatus.INVALID_FORMAT_FAILURE);
+            throw new DiaryException(INVALID_FORMAT_FAILURE);
         }
     }
 
     @Operation(summary = "날짜별 기록 정보 조회", description = "날짜 별 기록이 존재하는 스케줄 정보가 확인됩니다. 기록 캘린더 조회에서 요일을 선택하여 상세 정보를 확인할 때 사용하시면 됩니다.")
     @ApiErrorCodes(value = {
-            ErrorStatus.INVALID_FORMAT_FAILURE,
+            INVALID_FORMAT_FAILURE,
     })
     @GetMapping("/date/{date}")
     public ResponseDto<List<DiaryResponse.DayOfDiaryDto>> getDayDiary(
@@ -134,7 +135,7 @@ public class DiaryController {
             return ResponseDto.onSuccess(diaryUseCase
                     .getDayDiaryList(memberInfo.getUserId(), requestedDate));
         } catch (DateTimeParseException e) {
-            throw new DiaryException(ErrorStatus.INVALID_FORMAT_FAILURE);
+            throw new DiaryException(INVALID_FORMAT_FAILURE);
         }
     }
 
