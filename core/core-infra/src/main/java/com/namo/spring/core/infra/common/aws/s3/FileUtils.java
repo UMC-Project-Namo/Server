@@ -109,6 +109,12 @@ public class FileUtils {
             if (!key.isEmpty()) {
                 s3Uploader.delete(key);
             }
+
+            String resizedKey = url.replace("origin", "resized/origin");
+            if (!resizedKey.isEmpty()) {
+                // 리사이즈된 이미지 삭제
+                s3Uploader.delete(resizedKey);
+            }
         } catch (SdkClientException e) {
             throw new UtilsException(ErrorStatus.S3_DELETE_FAILURE);
         }
