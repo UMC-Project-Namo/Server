@@ -1,5 +1,7 @@
 package com.namo.spring.application.external.api.schedule.controller;
 
+import static com.namo.spring.core.common.code.status.ErrorStatus.*;
+
 import java.util.List;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.namo.spring.application.external.api.schedule.api.MeetingScheduleApi;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
 import com.namo.spring.application.external.api.schedule.usecase.MeetingScheduleUsecase;
+import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.core.common.response.ResponseDto;
 
@@ -34,10 +36,20 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v2/schedules/meeting")
-public class MeetingScheduleController implements MeetingScheduleApi {
+public class MeetingScheduleController {
     private final MeetingScheduleUsecase meetingScheduleUsecase;
 
     @Operation(summary = "모임 일정 생성", description = "모임 일정을 생성합니다. 요청 성공 시 모임 일정 ID를 전송합니다.")
+    @ApiErrorCodes(value = {
+            NOT_INCLUDE_OWNER_IN_REQUEST,
+            DUPLICATE_MEETING_PARTICIPANT,
+            NOT_FOUND_USER_FAILURE,
+            INVALID_MEETING_PARTICIPANT_COUNT,
+            NOT_FOUND_FRIENDSHIP_FAILURE,
+            INVALID_DATE,
+            NOT_FOUND_CATEGORY_FAILURE,
+            NOT_FOUND_PALETTE_FAILURE,
+    })
     @PostMapping(path = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDto<Long> createMeetingSchedule(
             @Valid @RequestPart MeetingScheduleRequest.PostMeetingScheduleDto dto,
@@ -46,6 +58,9 @@ public class MeetingScheduleController implements MeetingScheduleApi {
     }
 
     @Operation(summary = "모임 일정 목록 조회", description = "모임 일정 목록을 조회합니다.")
+    @ApiErrorCodes(value = {
+            NOT_FOUND_PARTICIPANT_FAILURE
+    })
     @GetMapping("")
     public ResponseDto<List<MeetingScheduleResponse.GetMeetingScheduleSummaryDto>> getMyMeetingSchedules(
             @AuthenticationPrincipal SecurityUserDetails memberInfo) {
@@ -53,6 +68,12 @@ public class MeetingScheduleController implements MeetingScheduleApi {
     }
 
     @Operation(summary = "모임 초대자 월간 일정 조회", description = "모임에 초대할 유저들의 월간 일정을 조회합니다.")
+    @ApiErrorCodes(value = {
+            INVALID_FORMAT_FAILURE,
+            INVALID_MEETING_PARTICIPANT_COUNT,
+            DUPLICATE_MEETING_PARTICIPANT,
+            NOT_FOUND_FRIENDSHIP_FAILURE,
+    })
     @GetMapping(path = "/preview")
     public ResponseDto<List<MeetingScheduleResponse.GetMonthlyMembersScheduleDto>> getMonthlyParticipantSchedules(
             @RequestParam Integer year,
@@ -64,6 +85,12 @@ public class MeetingScheduleController implements MeetingScheduleApi {
     }
 
     @Operation(summary = "모임 월간 일정 조회", description = "모임에 있는 유저들의 월간 일정을 조회합니다.")
+    @ApiErrorCodes(value = {
+            INVALID_FORMAT_FAILURE,
+            NOT_SCHEDULE_PARTICIPANT,
+            NOT_FOUND_SCHEDULE_FAILURE,
+            NOT_MEETING_SCHEDULE,
+    })
     @GetMapping(path = "/{meetingScheduleId}/calender")
     public ResponseDto<List<MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto>> getMonthlyMeetingParticipantSchedules(
             @PathVariable Long meetingScheduleId,
@@ -76,6 +103,11 @@ public class MeetingScheduleController implements MeetingScheduleApi {
     }
 
     @Operation(summary = "모임 일정 상세 조회", description = "모임 일정을 상세 조회합니다.")
+    @ApiErrorCodes(value = {
+            NOT_MEETING_SCHEDULE,
+            NOT_FOUND_FRIENDSHIP_FAILURE,
+            NOT_SCHEDULE_PARTICIPANT,
+    })
     @GetMapping(path = "/{meetingScheduleId}")
     public ResponseDto<MeetingScheduleResponse.GetMeetingScheduleDto> getMeetingSchedule(
             @PathVariable Long meetingScheduleId,
@@ -84,6 +116,16 @@ public class MeetingScheduleController implements MeetingScheduleApi {
     }
 
     @Operation(summary = "모임 일정 수정", description = "모임 일정을 수정합니다. 수정 권한은 모임의 방장에게만 있습니다.")
+    @ApiErrorCodes(value = {
+            NOT_INCLUDE_OWNER_IN_REQUEST,
+            DUPLICATE_MEETING_PARTICIPANT,
+            NOT_FOUND_SCHEDULE_FAILURE,
+            NOT_MEETING_SCHEDULE,
+            NOT_FOUND_FRIENDSHIP_FAILURE,
+            NOT_SCHEDULE_OWNER,
+            NOT_SCHEDULE_PARTICIPANT,
+            NOT_FOUND_PARTICIPANT_FAILURE
+    })
     @PatchMapping(path = "/{meetingScheduleId}")
     public ResponseDto<String> updateMeetingSchedule(
             @PathVariable Long meetingScheduleId,
@@ -104,6 +146,13 @@ public class MeetingScheduleController implements MeetingScheduleApi {
     }
 
     @Operation(summary = "게스트 초대용 링크 조회", description = "게스트 초대용 링크를 조회합니다. 초대 인원이 최대인 경우에 조회되지 않습니다.")
+    @ApiErrorCodes(value = {
+            NOT_SCHEDULE_OWNER,
+            NOT_SCHEDULE_PARTICIPANT,
+            NOT_FOUND_SCHEDULE_FAILURE,
+            NOT_MEETING_SCHEDULE,
+            INVALID_MEETING_PARTICIPANT_COUNT
+    })
     @GetMapping(path = "/{meetingScheduleId}/invitations")
     public ResponseDto<String> getGuestInvitationUrl(
             @PathVariable Long meetingScheduleId,
