@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @RequiredArgsConstructor
 public class SocialUtils {
-    private static final String naverApiURL = "https://openapi.naver.com/v2/nid/me";
+    private static final String naverApiURL = "https://openapi.naver.com/v1/nid/me";
     private static final String kakaoApiURL = "https://kapi.kakao.com/v2/user/me";
 
     public HttpURLConnection connectKakaoResourceServer(MemberRequest.SocialSignUpDto signUpReq) {
