@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.namo.spring.core.common.annotation.DomainService;
+import com.namo.spring.db.mysql.domains.record.entity.Activity;
 import com.namo.spring.db.mysql.domains.record.entity.ActivityImage;
 import com.namo.spring.db.mysql.domains.record.repository.ActivityImageRepository;
 
@@ -27,7 +28,7 @@ public class ActivityImageService {
     }
 
     @Transactional
-    public void deleteActivityImage(Long activityImageId) {
-        activityImageRepository.deleteById(activityImageId);
+    public void deleteActivityImages(List<ActivityImage> imageList) {
+        activityImageRepository.deleteAll(imageList);
     }
 }
