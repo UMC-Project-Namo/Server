@@ -63,11 +63,11 @@ public class SocialUtils {
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
             String line = "";
-            String result = "";
+            StringBuilder result = new StringBuilder();
             while ((line = br.readLine()) != null) {
-                result += line;
+                result.append(line);
             }
-            return result;
+            return result.toString();
         } catch (IOException e) {
             throw new UtilsException(ErrorStatus.SOCIAL_LOGIN_FAILURE);
         }
@@ -97,11 +97,11 @@ public class SocialUtils {
 
         Map<String, String> properties = (Map<String, String>)jsonMap.get("properties");
         Map<String, String> kakaoAccount = (Map<String, String>)jsonMap.get("kakao_account");
-        if (!(kakaoAccount.get("has_email") != "true")) {
+        if (kakaoAccount.get("has_email").equals("true")) {
             throw new UtilsException(ErrorStatus.SOCIAL_LOGIN_FAILURE);
         }
         properties.put("email", kakaoAccount.get("email"));
-        if ((kakaoAccount.get("has_birthday") == "true")) {
+        if ((kakaoAccount.get("has_birthday").equals("true"))) {
             properties.put("birthday", kakaoAccount.get("birthday"));
         }
         return properties;
