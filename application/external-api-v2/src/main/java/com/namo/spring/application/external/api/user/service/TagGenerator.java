@@ -1,7 +1,6 @@
 package com.namo.spring.application.external.api.user.service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
