@@ -46,10 +46,12 @@ public class FriendController {
         return ResponseDto.onSuccess("친구 요청이 전송되었습니다.");
     }
 
-    @GetMapping("")
+    @Operation(summary = "나에게 온 친구 요청 목록을 조회합니다.", description = "친구 요청 목록 조회 API 입니다. 수락 또는 거절한 친구 요청은 표시되지 않습니다.")
+    @GetMapping("/requests")
     public ResponseDto<List<FriendshipResponse.FriendRequestDto>> getFriendRequestList(
             @AuthenticationPrincipal SecurityUserDetails member
     ){
-        return ResponseDto.onSuccess(null);
+        return ResponseDto.onSuccess(friendUseCase
+                .getFriendshipRequest(member.getUserId()));
     }
 }
