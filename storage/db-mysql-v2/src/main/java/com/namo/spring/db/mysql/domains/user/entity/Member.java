@@ -73,6 +73,8 @@ public class Member extends BaseTimeEntity implements User {
     @Column(length = 4)
     private String tag;
 
+    private String profileImage;
+
     @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(length = 10)
     private String birthday;  // "MM-DD"
