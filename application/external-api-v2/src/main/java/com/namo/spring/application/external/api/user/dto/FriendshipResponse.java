@@ -8,7 +8,7 @@ public class FriendshipResponse {
     @Getter
     @Builder
     public static class FriendRequestDto{
-        private String image;
+        private String profileImage;
         private String nickname;
         private String tag;
         private String bio;
