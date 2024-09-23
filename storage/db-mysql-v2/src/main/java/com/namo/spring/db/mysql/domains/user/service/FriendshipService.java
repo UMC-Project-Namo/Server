@@ -5,6 +5,7 @@ import java.util.List;
 import com.namo.spring.core.common.annotation.DomainService;
 import com.namo.spring.db.mysql.domains.user.entity.Friendship;
 import com.namo.spring.db.mysql.domains.user.repository.FriendshipRepository;
+import com.namo.spring.db.mysql.domains.user.type.FriendshipStatus;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,5 +24,9 @@ public class FriendshipService {
 
     public void createFriendShip(Friendship friendship){
         friendshipRepository.save(friendship);
+    }
+
+    public List<Friendship> readFriendshipByStatus(Long memberId, FriendshipStatus status) {
+        return friendshipRepository.findAllByMemberIdAndStatus(memberId, status);
     }
 }
