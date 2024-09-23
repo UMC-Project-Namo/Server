@@ -12,6 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import com.namo.spring.application.external.global.utils.TagGenerator;
+
 public class TagGeneratorTest {
 
     @Mock

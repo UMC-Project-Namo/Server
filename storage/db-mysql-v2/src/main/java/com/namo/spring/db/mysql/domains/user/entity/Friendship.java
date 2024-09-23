@@ -1,5 +1,7 @@
 package com.namo.spring.db.mysql.domains.user.entity;
 
+import static com.namo.spring.db.mysql.domains.user.type.FriendshipStatus.*;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -44,10 +46,10 @@ public class Friendship extends BaseTimeEntity {
     private FriendshipStatus status;
 
     @Builder
-    public Friendship(Member member, Member friend, FriendshipStatus status) {
+    public Friendship(Member member, Member friend) {
         this.member = member;
         this.friend = friend;
-        this.status = status;
+        this.status = PENDING;
         this.isFavorite = false;
     }
 

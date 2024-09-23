@@ -83,6 +83,8 @@ public enum ErrorStatus implements BaseErrorCode {
     /**
      * 403 : 리소스 접근 권한 오류
      */
+    AlREADY_FRIENDSHIP_MEMBER(HttpStatus.BAD_REQUEST, "이미 처리된 친구 요청이거나 친구입니다."),
+
     NOT_FRIENDSHIP_MEMBER(HttpStatus.BAD_REQUEST, "요청한 회원과 친구가 아닙니다."),
 
     NOT_SCHEDULE_OWNER(HttpStatus.FORBIDDEN, "해당 일정의 생성자가 아닙니다."),

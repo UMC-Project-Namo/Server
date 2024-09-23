@@ -20,4 +20,8 @@ public class FriendshipService {
     public boolean existsByMemberIdAndFriendId(Long memberId, Long friendId) {
         return friendshipRepository.existsByMemberIdAndFriendId(memberId, friendId);
     }
+
+    public void createFriendShip(Friendship friendship){
+        friendshipRepository.save(friendship);
+    }
 }
