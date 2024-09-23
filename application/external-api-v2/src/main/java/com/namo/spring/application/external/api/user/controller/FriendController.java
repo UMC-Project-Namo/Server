@@ -2,12 +2,16 @@ package com.namo.spring.application.external.api.user.controller;
 
 import static com.namo.spring.core.common.code.status.ErrorStatus.*;
 
+import java.util.List;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.namo.spring.application.external.api.user.dto.FriendshipResponse;
 import com.namo.spring.application.external.api.user.usecase.FriendUseCase;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
@@ -40,5 +44,12 @@ public class FriendController {
     ) {
         friendUseCase.requestFriendship(member.getUserId(), memberId);
         return ResponseDto.onSuccess("친구 요청이 전송되었습니다.");
+    }
+
+    @GetMapping("")
+    public ResponseDto<List<FriendshipResponse.FriendRequestDto>> getFriendRequestList(
+            @AuthenticationPrincipal SecurityUserDetails member
+    ){
+        return ResponseDto.onSuccess(null);
     }
 }
