@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.namo.spring.application.external.api.user.converter.FriendshipConverter;
+import com.namo.spring.application.external.global.utils.FriendshipValidator;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.user.entity.Friendship;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
@@ -23,6 +24,7 @@ public class FriendManageService {
     private static final Integer REQUEST_PAGE_SIZE = 20;
 
     private final FriendshipService friendshipService;
+    private final FriendshipValidator friendshipValidator;
 
     /**
      * 친구 요청을 생성하는 메서드입니다.
@@ -32,9 +34,7 @@ public class FriendManageService {
      * @param target 친구 요청을 받는 사람
      */
     public void requestFriendShip(Member me, Member target) {
-        if (friendshipService.existsByMemberIdAndFriendId(me.getId(), target.getId())){
-            throw new MemberException(ErrorStatus.AlREADY_FRIENDSHIP_MEMBER);
-        }
+        friendshipValidator.validateAlreadyFriendship(me, target);
         friendshipService.createFriendShip(FriendshipConverter.toFriendShip(me, target));
     }
 
@@ -66,21 +66,18 @@ public class FriendManageService {
      * @param friendship 수락할 요청 건
      */
     public void acceptRequest(Long memberId, Friendship friendship) {
-        if (!friendship.getFriend().getId().equals(memberId)){
-            throw new MemberException(ErrorStatus.NOT_MY_FRIENDSHIP_REQUEST);
-        }
+        friendshipValidator.validateFriendshipToMember(friendship, memberId);
         friendship.accept();
     }
 
     /**
      * 친구 요청을 거절하는 메서드입니다.
+     * !! 나에게 온 요청이 맞는지 검증합니다.
      * @param memberId 요청을 받은 사람의 ID
      * @param friendship 수락할 요청 건
      */
     public void rejectRequest(Long memberId, Friendship friendship) {
-        if (!friendship.getFriend().getId().equals(memberId)) {
-            throw new MemberException(ErrorStatus.NOT_MY_FRIENDSHIP_REQUEST);
-        }
+        friendshipValidator.validateFriendshipToMember(friendship, memberId);
         friendship.reject();
     }
 }
