@@ -1,7 +1,9 @@
 package com.namo.spring.db.mysql.domains.user.repository;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -14,7 +16,7 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
 
     boolean existsByMemberIdAndFriendId(Long memberId, Long friendId);
 
-    List<Friendship> findAllByMemberIdAndStatus(Long memberId, FriendshipStatus status, Pageable pageable);
+    List<Friendship> findAllByFriendIdAndStatus(Long memberId, FriendshipStatus status, Pageable pageable);
 
-    Friendship findByMemberIdAndStatus(Long friendshipId, FriendshipStatus status);
+    Optional<Friendship> findByIdAndStatus(Long friendshipId, FriendshipStatus status);
 }
