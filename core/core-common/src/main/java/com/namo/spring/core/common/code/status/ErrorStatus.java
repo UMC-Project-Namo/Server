@@ -40,6 +40,8 @@ public enum ErrorStatus implements BaseErrorCode {
     DUPLICATE_MEETING_PARTICIPANT(HttpStatus.BAD_REQUEST, "중복되는 참여자입니다."),
     INVALID_MEETING_PARTICIPANT_COUNT(HttpStatus.BAD_REQUEST, "모임 일정은 최소 1명, 최대 9명까지 초대 가능합니다."),
     CATEGORY_IN_USE_FAILURE(HttpStatus.BAD_REQUEST, "사용중인 카테고리는 삭제할 수 없습니다."),
+    INVALID_NICKNAME_TAG_FORMAT(HttpStatus.BAD_REQUEST, "잘못된 닉네임#태그형식입니다."),
+    INVALID_TAG_FORMAT(HttpStatus.BAD_REQUEST, "잘못된 태그 형식입니다."),
 
     /**
      * 401 : 소셜 로그인 오류

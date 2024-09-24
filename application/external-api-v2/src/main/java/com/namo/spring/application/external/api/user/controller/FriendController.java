@@ -38,13 +38,13 @@ public class FriendController {
             NOT_FOUND_USER_FAILURE,
             AlREADY_FRIENDSHIP_MEMBER
     })
-    @PostMapping("/{memberId}")
+    @PostMapping("/{nickname-tag}")
     public ResponseDto<String> requestFriend(
             @AuthenticationPrincipal SecurityUserDetails member,
-            @Parameter(description = "친구 요청할 상대방 사용자의 ID 입니다.", example = "3")
-            @PathVariable Long memberId
+            @Parameter(description = "친구 요청할 상대방 사용자의 닉네임#태그 입니다.", example = "캐슬#2342")
+            @PathVariable String nickname
     ) {
-        friendUseCase.requestFriendship(member.getUserId(), memberId);
+        friendUseCase.requestFriendship(member.getUserId(), nickname);
         return ResponseDto.onSuccess("친구 요청이 전송되었습니다.");
     }
 

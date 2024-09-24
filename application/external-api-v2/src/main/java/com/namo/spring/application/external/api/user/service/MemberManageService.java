@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.namo.spring.application.external.api.category.service.CategoryMaker;
 import com.namo.spring.application.external.api.user.converter.MemberConverter;
 import com.namo.spring.application.external.api.user.dto.MemberDto;
+import com.namo.spring.application.external.global.utils.NicknameTag;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
@@ -47,6 +48,12 @@ public class MemberManageService {
 
     public Member getActiveMember(Long memberId){
         return memberService.readMemberByStatus(memberId, MemberStatus.ACTIVE)
+                .orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_ACTIVE_USER_FAILURE));
+    }
+
+    public Member getActiveMemberByNicknameTag(String nicknameTag){
+        NicknameTag findTarget = NicknameTag.from(nicknameTag);
+        return memberService.readMemberByStatus(findTarget.getNickname(), findTarget.getTag(), MemberStatus.ACTIVE)
                 .orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_ACTIVE_USER_FAILURE));
     }
 

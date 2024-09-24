@@ -35,4 +35,8 @@ public class MemberService {
     public Optional<Member> readMemberByStatus(Long memberId, MemberStatus status){
         return memberRepository.findByIdAndStatus(memberId, status);
     }
+
+    public Optional<Member> readMemberByStatus(String nickname, String tag, MemberStatus status){
+        return memberRepository.findByNicknameAndTagAndStatus(nickname, tag, status);
+    }
 }
