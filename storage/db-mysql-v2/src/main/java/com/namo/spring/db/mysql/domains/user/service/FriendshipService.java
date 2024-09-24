@@ -25,8 +25,8 @@ public class FriendshipService {
         return friendshipRepository.existsByMemberIdAndFriendId(memberId, friendId);
     }
 
-    public void createFriendShip(Friendship friendship){
-        friendshipRepository.save(friendship);
+    public Friendship createFriendShip(Friendship friendship){
+        return friendshipRepository.save(friendship);
     }
 
     public List<Friendship> readAllFriendshipByStatus(Long memberId, FriendshipStatus status, Pageable pageable) {

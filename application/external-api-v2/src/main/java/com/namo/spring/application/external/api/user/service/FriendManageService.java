@@ -68,6 +68,9 @@ public class FriendManageService {
     public void acceptRequest(Long memberId, Friendship friendship) {
         friendshipValidator.validateFriendshipToMember(friendship, memberId);
         friendship.accept();
+        Friendship reverse = friendshipService.createFriendShip(
+                FriendshipConverter.toFriendShip(friendship.getFriend(), friendship.getMember()));
+        reverse.accept();
     }
 
     /**
