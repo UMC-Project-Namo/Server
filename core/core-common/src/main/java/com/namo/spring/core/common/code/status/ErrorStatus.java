@@ -85,6 +85,8 @@ public enum ErrorStatus implements BaseErrorCode {
      */
     AlREADY_FRIENDSHIP_MEMBER(HttpStatus.BAD_REQUEST, "이미 처리된 친구 요청이거나 친구입니다."),
 
+    NOT_MY_FRIENDSHIP_REQUEST(HttpStatus.BAD_REQUEST, "나에게 요청온 친구 요청이 아닙니다."),
+
     NOT_FRIENDSHIP_MEMBER(HttpStatus.BAD_REQUEST, "요청한 회원과 친구가 아닙니다."),
 
     NOT_SCHEDULE_OWNER(HttpStatus.FORBIDDEN, "해당 일정의 생성자가 아닙니다."),
@@ -138,6 +140,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     NOT_PARTICIPATING_ACTIVITY(HttpStatus.NOT_FOUND, "참여한 활동이 아닙니다." ),
 
+    NOT_FOUND_FRIENDSHIP_REQUEST(HttpStatus.NOT_FOUND, "친구 요청을 찾을 수 없습니다."),
     /**
      * 404 : 예외 상황 에러
      */
