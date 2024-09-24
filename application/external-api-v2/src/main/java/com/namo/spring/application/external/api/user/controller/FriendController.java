@@ -33,7 +33,8 @@ public class FriendController {
 
     private final FriendUseCase friendUseCase;
 
-    @Operation(summary = "친구를 요청합니다.", description = "친구 요청 API 입니다. 상대방이 수락을 해야 친구가 됩니다.")
+    @Operation(summary = "친구를 요청합니다.", description = "친구 요청 API 입니다. 상대방이 수락을 해야 친구가 됩니다."
+            + "만약 상대방이 친구 요청을 보낸 상태이면 요청할 수 없습니다.")
     @ApiErrorCodes(value = {
             NOT_FOUND_USER_FAILURE,
             AlREADY_FRIENDSHIP_MEMBER
