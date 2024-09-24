@@ -61,4 +61,7 @@ public class Friendship extends BaseTimeEntity {
         this.isFavorite = false;
     }
 
+    public void accept() {
+        status = ACCEPTED;
+    }
 }
