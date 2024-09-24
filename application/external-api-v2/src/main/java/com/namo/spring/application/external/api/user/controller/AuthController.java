@@ -33,7 +33,7 @@ public class AuthController{
 
     private final AuthFacade memberFacade;
 
-    @Operation(summary = "소셜 회원가입", description = "카카오,네이버 소셜 로그인을 통한 회원가입을 진행합니다.")
+    @Operation(summary = "애플 회원가입", description = "애플 소셜 로그인을 통한 회원가입을 진행합니다.")
     @PostMapping(value = "/signup/apple")
     @PreAuthorize("isAnonymous()")
     public ResponseDto<MemberResponse.SignUpDto> appleSignup(
@@ -43,7 +43,7 @@ public class AuthController{
         return ResponseDto.onSuccess(signupDto);
     }
 
-    @Operation(summary = "애플 회원가입", description = "애플 소셜 로그인을 통한 회원가입을 진행합니다.")
+    @Operation(summary = "소셜 회원가입", description = "카카오,네이버 소셜 로그인을 통한 회원가입을 진행합니다.")
     @PostMapping(value = "/signup/{socialType}")
     @PreAuthorize("isAnonymous()")
     public ResponseDto<MemberResponse.SignUpDto> socialSignup(

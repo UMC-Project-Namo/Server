@@ -16,17 +16,17 @@ public class FriendshipConverter {
     }
 
     public static FriendshipResponse.FriendRequestDto toFriendRequestDto(Friendship friendship){
-        Member friend = friendship.getFriend();
-        String birthday = friend.isBirthdayVisible() ? friend.getBirthday() : BIRTHDAY_HIDDEN;
+        Member requestMember = friendship.getMember();
+        String birthday = requestMember.isBirthdayVisible() ? requestMember.getBirthday() : BIRTHDAY_HIDDEN;
         return FriendshipResponse.FriendRequestDto.builder()
                 .friendRequestId(friendship.getId())
-                .memberId(friend.getId())
-                .profileImage(friend.getProfileImage())
-                .nickname(friend.getNickname())
-                .tag(friend.getTag())
-                .bio(friend.getBio())
+                .memberId(requestMember.getId())
+                .profileImage(requestMember.getProfileImage())
+                .nickname(requestMember.getNickname())
+                .tag(requestMember.getTag())
+                .bio(requestMember.getBio())
                 .birthday(birthday)
-                .favoriteColorId(friend.getPalette().getId())
+                .favoriteColorId(requestMember.getPalette().getId())
                 .build();
     }
 }
