@@ -6,6 +6,8 @@ import com.namo.spring.db.mysql.domains.user.entity.Member;
 
 public class FriendShipConverter {
 
+    private static final String BIRTHDAY_HIDDEN = "비공개";
+
     public static Friendship toFriendShip(Member request, Member target){
         return Friendship.builder()
                 .member(request)
@@ -14,11 +16,16 @@ public class FriendShipConverter {
     }
 
     public static FriendshipResponse.FriendRequestDto toFriendRequestDto(Friendship friendship){
+        Member friend = friendship.getFriend();
+        String birthday = friend.isBirthdayVisible() ? friend.getBirthday() : BIRTHDAY_HIDDEN;
         return FriendshipResponse.FriendRequestDto.builder()
-                .profileImage(friendship.getFriend().getProfileImage())
-                .nickname(friendship.getFriend().getNickname())
-                .tag(friendship.getFriend().getTag())
-                .bio(friendship.getFriend().getBio())
+                .memberId(friend.getId())
+                .profileImage(friend.getProfileImage())
+                .nickname(friend.getNickname())
+                .tag(friend.getTag())
+                .bio(friend.getBio())
+                .birthday(birthday)
+                .favoriteColorId(friend.getPalette().getId())
                 .build();
     }
 }
