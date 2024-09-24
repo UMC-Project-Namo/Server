@@ -50,6 +50,11 @@ public class MemberManageService {
                 .orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_ACTIVE_USER_FAILURE));
     }
 
+    public Member getPendingMember(Long memberId){
+        return memberService.readMemberByStatus(memberId, MemberStatus.PENDING)
+                .orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_PENDING_USER_FAILURE));
+    }
+
     public Optional<Member> getMemberByEmailAndSocialType(String email, SocialType socialType) {
         return memberRepository.findMemberByEmailAndSocialType(email, socialType);
     }

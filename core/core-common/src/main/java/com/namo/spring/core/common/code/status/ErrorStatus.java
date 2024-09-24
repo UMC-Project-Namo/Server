@@ -104,6 +104,8 @@ public enum ErrorStatus implements BaseErrorCode {
 
     NOT_FOUND_ACTIVE_USER_FAILURE(HttpStatus.NOT_FOUND, "활성화된 유저를 찾을 수 없습니다. (가입되지 않은 유저거나, 회원가입이 완료되지 않았습니다.)"),
 
+    NOT_FOUND_PENDING_USER_FAILURE(HttpStatus.NOT_FOUND, "회원가입 대기중인 유저를 찾을 수 없습니다. (가입되지 않은 유저거나, 이미 가입이 완료되었습니다.)"),
+
     NOT_FOUND_SCHEDULE_FAILURE(HttpStatus.NOT_FOUND, "일정을 찾을 수 없습니다. (참여한 일정이 아니거나, 일정 정보가 없습니다)"),
 
     NOT_FOUND_PARTICIPANT_FAILURE(HttpStatus.NOT_FOUND, "일정의 참여자를 찾을 수 없습니다. (모임 스케줄의 경우 초대에 수락하지 않았을 수 있습니다"),
