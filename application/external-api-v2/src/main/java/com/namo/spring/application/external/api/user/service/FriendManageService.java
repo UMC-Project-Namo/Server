@@ -71,4 +71,16 @@ public class FriendManageService {
         }
         friendship.accept();
     }
+
+    /**
+     * 친구 요청을 거절하는 메서드입니다.
+     * @param memberId 요청을 받은 사람의 ID
+     * @param friendship 수락할 요청 건
+     */
+    public void rejectRequest(Long memberId, Friendship friendship) {
+        if (!friendship.getFriend().getId().equals(memberId)) {
+            throw new MemberException(ErrorStatus.NOT_MY_FRIENDSHIP_REQUEST);
+        }
+        friendship.reject();
+    }
 }

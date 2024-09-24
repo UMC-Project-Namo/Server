@@ -41,4 +41,10 @@ public class FriendUseCase {
         Friendship friendship = friendManageService.getPendingFriendship(friendshipId);
         friendManageService.acceptRequest(memberId, friendship);
     }
+
+    @Transactional
+    public void rejectFriendRequest(Long memberId, Long friendshipId) {
+        Friendship friendship = friendManageService.getPendingFriendship(friendshipId);
+        friendManageService.rejectRequest(memberId, friendship);
+    }
 }

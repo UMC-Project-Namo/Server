@@ -75,11 +75,17 @@ public class FriendController {
     }
 
     @PatchMapping("/{friendshipId}/reject")
-    @Operation(summary = "친구 요청을 거절합니다.", description = "친구 요청을 거절하는 API 입니다.")
+    @ApiErrorCodes(value = {
+            NOT_FOUND_FRIENDSHIP_REQUEST,
+            NOT_MY_FRIENDSHIP_REQUEST
+    })
+    @Operation(summary = "친구 요청을 거절합니다.", description = "수신한 친구 요청을 거절하는 API 입니다.")
     public ResponseDto<String> rejectFriendRequest(
             @AuthenticationPrincipal SecurityUserDetails member,
-            @Parameter(description = "친구 요청 ID입니다.", example = "3") @PathVariable Long friendshipId
+            @Parameter(description = "거절할 친구 요청 정보 ID (memberId가 아닙니다)", example = "3")
+            @PathVariable Long friendshipId
     ) {
+        friendUseCase.rejectFriendRequest(member.getUserId(), friendshipId);
         return ResponseDto.onSuccess("친구 요청을 거절했습니다.");
     }
 
