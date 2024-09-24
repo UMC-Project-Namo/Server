@@ -74,7 +74,7 @@ public class FriendController {
         return ResponseDto.onSuccess("친구 요청을 수락했습니다.");
     }
 
-    @PatchMapping("/{friendshipId}/reject")
+    @PatchMapping("/requests/{friendshipId}/reject")
     @ApiErrorCodes(value = {
             NOT_FOUND_FRIENDSHIP_REQUEST,
             NOT_MY_FRIENDSHIP_REQUEST
