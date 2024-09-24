@@ -71,13 +71,13 @@ public class FriendManageService {
     }
 
     /**
-     * 친구 요청을 거절하는 메서드입니다.
+     * 친구 요청을 거절하는 메서드입니다. (친구 요청 자체가 삭제됩니다)
      * !! 나에게 온 요청이 맞는지 검증합니다.
      * @param memberId 요청을 받은 사람의 ID
      * @param friendship 수락할 요청 건
      */
     public void rejectRequest(Long memberId, Friendship friendship) {
         friendshipValidator.validateFriendshipToMember(friendship, memberId);
-        friendship.reject();
+        friendshipService.delete(friendship);
     }
 }
