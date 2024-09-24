@@ -19,6 +19,7 @@ public class FriendShipConverter {
         Member friend = friendship.getFriend();
         String birthday = friend.isBirthdayVisible() ? friend.getBirthday() : BIRTHDAY_HIDDEN;
         return FriendshipResponse.FriendRequestDto.builder()
+                .friendRequestId(friendship.getId())
                 .memberId(friend.getId())
                 .profileImage(friend.getProfileImage())
                 .nickname(friend.getNickname())

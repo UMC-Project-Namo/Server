@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,5 +54,15 @@ public class FriendController {
     ){
         return ResponseDto.onSuccess(friendUseCase
                 .getFriendshipRequest(member.getUserId()));
+    }
+
+    @Operation(summary = "친구 요청 수락", description = "수신한 친구 요청을 수락합니다.")
+    @PatchMapping("/requests/{friendshipId}/accept")
+    public ResponseDto<String> acceptFriendRequest(
+            @AuthenticationPrincipal SecurityUserDetails member,
+            @Parameter(description = "수락할 친구요청의 ID (memberId가 아닙니다)", example = "10")
+            @PathVariable Long friendshipId
+    ){
+        return ResponseDto.onSuccess("친구 요청을 수락했습니다.");
     }
 }
