@@ -42,9 +42,9 @@ public class FriendController {
     public ResponseDto<String> requestFriend(
             @AuthenticationPrincipal SecurityUserDetails member,
             @Parameter(description = "친구 요청할 상대방 사용자의 닉네임#태그 입니다.", example = "캐슬#2342")
-            @PathVariable String nickname
+            @PathVariable(name = "nickname-tag") String nicknameTag
     ) {
-        friendUseCase.requestFriendship(member.getUserId(), nickname);
+        friendUseCase.requestFriendship(member.getUserId(), nicknameTag);
         return ResponseDto.onSuccess("친구 요청이 전송되었습니다.");
     }
 
