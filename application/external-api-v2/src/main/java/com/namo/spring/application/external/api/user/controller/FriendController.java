@@ -50,10 +50,12 @@ public class FriendController {
     @Operation(summary = "나에게 온 친구 요청 목록을 조회합니다.", description = "친구 요청 목록 조회 API 입니다. 수락 또는 거절한 친구 요청은 표시되지 않습니다.")
     @GetMapping("/requests")
     public ResponseDto<List<FriendshipResponse.FriendRequestDto>> getFriendRequestList(
-            @AuthenticationPrincipal SecurityUserDetails member
+            @AuthenticationPrincipal SecurityUserDetails member,
+            @Parameter(description = "1 부터 시작하는 페이지 번호입니다 (기본값 1)", example = "1")
+            @RequestParam(value = "page", defaultValue = "1") int page
     ){
         return ResponseDto.onSuccess(friendUseCase
-                .getFriendshipRequest(member.getUserId()));
+                .getFriendshipRequest(member.getUserId(), page));
     }
 
     @Operation(summary = "친구 요청 수락", description = "수신한 친구 요청을 수락합니다.")

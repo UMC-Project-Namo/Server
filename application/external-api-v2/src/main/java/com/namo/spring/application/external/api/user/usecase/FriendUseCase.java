@@ -29,10 +29,10 @@ public class FriendUseCase {
     }
 
     @Transactional(readOnly = true)
-    public List<FriendshipResponse.FriendRequestDto> getFriendshipRequest(Long memberId) {
-        List<Friendship> receivedRequests = friendManageService.getReceivedFriendRequests(memberId);
+    public List<FriendshipResponse.FriendRequestDto> getFriendshipRequest(Long memberId, int page) {
+        List<Friendship> receivedRequests = friendManageService.getReceivedFriendRequests(memberId, page);
         return receivedRequests.stream()
-                .map(FriendShipConverter::toFriendRequestDto)
+                .map(FriendshipConverter::toFriendRequestDto)
                 .toList();
     }
 }

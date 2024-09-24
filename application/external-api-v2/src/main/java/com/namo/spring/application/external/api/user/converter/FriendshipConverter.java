@@ -4,7 +4,7 @@ import com.namo.spring.application.external.api.user.dto.FriendshipResponse;
 import com.namo.spring.db.mysql.domains.user.entity.Friendship;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 
-public class FriendShipConverter {
+public class FriendshipConverter {
 
     private static final String BIRTHDAY_HIDDEN = "비공개";
 

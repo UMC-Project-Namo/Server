@@ -18,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FriendManageService {
 
+    private static final Integer REQUEST_PAGE_SIZE = 20;
+
     private final FriendshipService friendshipService;
 
     /**
@@ -31,16 +33,17 @@ public class FriendManageService {
         if (friendshipService.existsByMemberIdAndFriendId(me.getId(), target.getId())){
             throw new MemberException(ErrorStatus.AlREADY_FRIENDSHIP_MEMBER);
         }
-        friendshipService.createFriendShip(FriendShipConverter.toFriendShip(me, target));
+        friendshipService.createFriendShip(FriendshipConverter.toFriendShip(me, target));
     }
 
     /**
-     * 친구 요청을 받은 목록을 조회하는 메서드입니다.
+     * 친구 요청을 받은 목록을 페이징하여 조회하는 메서드입니다.
      * !! PENDING 상태의 요청만 조회됩니다. (거절, 수락된 친구관계 조회 x)
-     * @param memberId
-     * @return
+     * @param memberId 요청을 받는 사용자의 ID
+     * @return PENDING 상태의 친구 요청 목록
      */
-    public List<Friendship> getReceivedFriendRequests(Long memberId) {
-        return friendshipService.readFriendshipByStatus(memberId, FriendshipStatus.PENDING);
+    public List<Friendship> getReceivedFriendRequests(Long memberId, int page) {
+        Pageable pageable = PageRequest.of(page - 1, REQUEST_PAGE_SIZE);
+        return friendshipService.readAllFriendshipByStatus(memberId, FriendshipStatus.PENDING, pageable);
     }
 }
