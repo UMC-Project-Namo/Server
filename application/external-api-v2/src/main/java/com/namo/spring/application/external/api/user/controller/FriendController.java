@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.namo.spring.application.external.api.user.dto.FriendshipResponse;
@@ -59,12 +60,17 @@ public class FriendController {
     }
 
     @Operation(summary = "친구 요청 수락", description = "수신한 친구 요청을 수락합니다.")
+    @ApiErrorCodes(value = {
+            NOT_FOUND_FRIENDSHIP_REQUEST,
+            NOT_MY_FRIENDSHIP_REQUEST
+    })
     @PatchMapping("/requests/{friendshipId}/accept")
     public ResponseDto<String> acceptFriendRequest(
             @AuthenticationPrincipal SecurityUserDetails member,
-            @Parameter(description = "수락할 친구요청의 ID (memberId가 아닙니다)", example = "10")
+            @Parameter(description = "수락할 친구 요청 정보 ID (memberId가 아닙니다)", example = "4")
             @PathVariable Long friendshipId
     ){
+        friendUseCase.acceptRequest(member.getUserId(), friendshipId);
         return ResponseDto.onSuccess("친구 요청을 수락했습니다.");
     }
 }

@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.namo.spring.application.external.api.user.converter.FriendShipConverter;
+import com.namo.spring.application.external.api.user.converter.FriendshipConverter;
 import com.namo.spring.application.external.api.user.dto.FriendshipResponse;
 import com.namo.spring.application.external.api.user.service.FriendManageService;
 import com.namo.spring.application.external.api.user.service.MemberManageService;
@@ -34,5 +34,11 @@ public class FriendUseCase {
         return receivedRequests.stream()
                 .map(FriendshipConverter::toFriendRequestDto)
                 .toList();
+    }
+
+    @Transactional
+    public void acceptRequest(Long memberId, Long friendshipId) {
+        Friendship friendship = friendManageService.getPendingFriendship(friendshipId);
+        friendManageService.acceptRequest(memberId, friendship);
     }
 }
