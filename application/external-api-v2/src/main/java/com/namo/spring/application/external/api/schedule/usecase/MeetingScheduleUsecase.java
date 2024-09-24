@@ -36,7 +36,7 @@ public class MeetingScheduleUsecase {
     @Transactional
     public Long createMeetingSchedule(MeetingScheduleRequest.PostMeetingScheduleDto dto, SecurityUserDetails memberInfo) {
         validateUniqueParticipantIds(memberInfo.getUserId(), dto.getParticipants());
-        Member owner = memberManageService.getMember(memberInfo.getUserId());
+        Member owner = memberManageService.getActiveMember(memberInfo.getUserId());
         Schedule schedule = scheduleManageService.createMeetingSchedule(dto, owner);
         return schedule.getId();
     }

@@ -34,7 +34,7 @@ public class PersonalScheduleUsecase {
     @Transactional
     public Long createPersonalSchedule(PersonalScheduleRequest.PostPersonalScheduleDto dto,
             SecurityUserDetails memberInfo) throws JsonProcessingException {
-        Member member = memberManageService.getMember(memberInfo.getUserId());
+        Member member = memberManageService.getActiveMember(memberInfo.getUserId());
         Schedule schedule = scheduleManageService.createPersonalSchedule(dto, member);
         if (!dto.getReminderTrigger().isEmpty()) {
             notificationManageService.createScheduleReminderNotification(schedule, member, dto.getReminderTrigger());
@@ -62,7 +62,7 @@ public class PersonalScheduleUsecase {
     @Transactional(readOnly = true)
     public List<PersonalScheduleResponse.GetFriendMonthlyScheduleDto> getFriendMonthlySchedules(int year, int month,
             Long targetMemberId, SecurityUserDetails memberInfo) {
-        Member targetMember = memberManageService.getMember(targetMemberId);
+        Member targetMember = memberManageService.getActiveMember(targetMemberId);
         return toGetFriendMonthlyScheduleDtos(
                 scheduleManageService.getMemberMonthlySchedules(targetMember.getId(), memberInfo.getUserId(),
                         getExtendedPeriod(year, month)));

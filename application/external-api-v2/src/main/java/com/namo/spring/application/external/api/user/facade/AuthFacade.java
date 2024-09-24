@@ -112,7 +112,8 @@ public class AuthFacade {
         Member member = memberManageService.getMember(memberId);
         String tag = tagGenerator.generateTag(member.getNickname());
         Palette palette = paletteService.getPalette(dto.getColorId());
-        member.signUpComplete(dto.getName(), dto.getNickname(), dto.getBirthday(), dto.getBio(), tag, palette);
+        member.signUpComplete(dto.getName(), dto.getNickname(), dto.getBirthday(), dto.getBio(), tag, palette,
+                dto.getProfileImage());
         memberManageService.saveMember(member);
         return member;
     }

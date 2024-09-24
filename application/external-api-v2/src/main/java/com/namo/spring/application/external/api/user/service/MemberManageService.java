@@ -45,12 +45,13 @@ public class MemberManageService {
                 .orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_USER_FAILURE));
     }
 
-    public Optional<Member> getMemberByEmailAndSocialType(String email, SocialType socialType) {
-        return memberRepository.findMemberByEmailAndSocialType(email, socialType);
+    public Member getActiveMember(Long memberId){
+        return memberService.readMemberByStatus(memberId, MemberStatus.ACTIVE)
+                .orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_ACTIVE_USER_FAILURE));
     }
 
-    public Optional<Member> getMemberAuthId(String authId) {
-        return memberRepository.findMemberByAuthId(authId);
+    public Optional<Member> getMemberByEmailAndSocialType(String email, SocialType socialType) {
+        return memberRepository.findMemberByEmailAndSocialType(email, socialType);
     }
 
     public List<Member> getInactiveMember() {

@@ -166,7 +166,8 @@ public class Member extends BaseTimeEntity implements User {
         return !status.equals(MemberStatus.PENDING);
     }
 
-    public void signUpComplete(String name, String nickname, String birthday, String bio, String tag, Palette palette) {
+    public void signUpComplete(String name, String nickname, String birthday, String bio, String tag, Palette palette,
+            String profileImage) {
         this.name = name;
         this.nickname = nickname;
         this.birthday = birthday;
@@ -174,5 +175,6 @@ public class Member extends BaseTimeEntity implements User {
         this.tag = tag;
         this.palette = palette;
         this.status = MemberStatus.ACTIVE;
+        this.profileImage = profileImage;
     }
 }

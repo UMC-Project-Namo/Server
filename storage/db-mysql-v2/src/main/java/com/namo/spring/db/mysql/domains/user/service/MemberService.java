@@ -28,22 +28,11 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public List<Member> readActiveMembersById(List<Long> memberIds) {
-        return memberRepository.findMembersByIdInAndStatusIs(memberIds, MemberStatus.ACTIVE);
-    }
-
-    @Transactional
-    public void deleteMember(Long memberId) {
-        memberRepository.deleteById(memberId);
-    }
-
-    @Transactional
-    public void deleteMember(Member member) {
-        memberRepository.delete(member);
-    }
-
-    @Transactional(readOnly = true)
     public List<Member> readMemberByNickname(String nickname) {
         return memberRepository.findMembersByNickname(nickname);
+    }
+
+    public Optional<Member> readMemberByStatus(Long memberId, MemberStatus status){
+        return memberRepository.findByIdAndStatus(memberId, status);
     }
 }

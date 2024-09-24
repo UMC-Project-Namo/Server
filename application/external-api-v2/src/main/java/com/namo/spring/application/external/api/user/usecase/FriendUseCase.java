@@ -23,8 +23,8 @@ public class FriendUseCase {
 
     @Transactional
     public void requestFriendship(Long myMemberId, Long targetMemberId) {
-        Member me = memberManageService.getMember(myMemberId);
-        Member friend = memberManageService.getMember(targetMemberId);
+        Member me = memberManageService.getActiveMember(myMemberId);
+        Member friend = memberManageService.getActiveMember(targetMemberId);
         friendManageService.requestFriendShip(me, friend);
     }
 

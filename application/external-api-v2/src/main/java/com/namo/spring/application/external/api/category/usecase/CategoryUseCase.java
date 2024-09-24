@@ -32,7 +32,7 @@ public class CategoryUseCase {
 
     @Transactional
     public void createCategory(Long memberId, CategoryRequest.CategoryCreateDto request){
-        Member member = memberManageService.getMember(memberId);
+        Member member = memberManageService.getActiveMember(memberId);
         categoryManageService.createCategory(member, request);
     }
 
