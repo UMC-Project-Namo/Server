@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @RequiredArgsConstructor
 public class ParticipationActionManager {
+    // todo : 기획 변경에 따라 활동 초대 수락, 거절이 없어짐 -> 미사용 class
     private final CategoryService categoryService;
     private final PaletteService paletteService;
     private final ParticipantService participantService;

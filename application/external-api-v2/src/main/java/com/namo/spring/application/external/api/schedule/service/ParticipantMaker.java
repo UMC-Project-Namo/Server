@@ -49,8 +49,9 @@ public class ParticipantMaker {
     public void makeMeetingScheduleParticipants(Schedule schedule, List<Member> members) {
         List<Participant> participants = members.stream()
                 .map(member -> Participant.of(ParticipantRole.NON_OWNER.getValue(), member, schedule,
-                        ParticipantStatus.INACTIVE, null, null, null, null))
+                        ParticipantStatus.ACTIVE, null, null, schedule.getTitle(), schedule.getImageUrl()))
                 .collect(Collectors.toList());
+        members.forEach(member -> schedule.addActiveParticipant(member.getNickname()));
         participantService.createParticipants(participants);
     }
 
