@@ -1,5 +1,7 @@
 package com.namo.spring.application.external.api.schedule.converter;
 
+import java.util.List;
+
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.ScheduleResponse;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
@@ -38,7 +40,9 @@ public class ScheduleConverter {
                 .categoryInfo(toCategoryInfoDto(participant.getCategory()))
                 .hasDiary(participant.isHasDiary())
                 .participantCount(schedule.getParticipantCount())
-                .participantInfo(toParticipantInfoDto(participant))
+                .participantInfo(schedule.getParticipantList().stream()
+                        .map(ScheduleConverter::toParticipantInfoDto)
+                        .toList())
                 .build();
     }
 
