@@ -1,4 +1,4 @@
-package com.namo.spring.application.external.api.user.service;
+package com.namo.spring.application.external.api.user.scheduler;
 
 import java.util.List;
 
@@ -6,6 +6,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.namo.spring.application.external.api.user.service.MemberManageService;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 
 import lombok.RequiredArgsConstructor;

@@ -1,10 +1,14 @@
-package com.namo.spring.application.external.api.user.service;
+package com.namo.spring.application.external.global.utils;
 
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
 import org.springframework.stereotype.Component;
+
+import com.namo.spring.application.external.api.user.service.MemberManageService;
+import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.db.mysql.domains.user.exception.MemberException;
 
 import lombok.RequiredArgsConstructor;
 

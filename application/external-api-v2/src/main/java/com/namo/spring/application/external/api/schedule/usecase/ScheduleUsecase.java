@@ -31,7 +31,7 @@ public class ScheduleUsecase {
     @Transactional
     public void updateOrCreateScheduleReminder(ScheduleRequest.PutScheduleReminderDto dto, Long scheduleId,
             SecurityUserDetails memberInfo) {
-        Member member = memberManageService.getMember(memberInfo.getUserId());
+        Member member = memberManageService.getActiveMember(memberInfo.getUserId());
         notificationManageService.updateOrCreateScheduleReminderNotification(scheduleId, member,
                 dto.getReminderTrigger());
     }

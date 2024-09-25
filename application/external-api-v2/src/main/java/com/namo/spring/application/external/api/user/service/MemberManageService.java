@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.namo.spring.application.external.api.category.service.CategoryMaker;
 import com.namo.spring.application.external.api.user.converter.MemberConverter;
 import com.namo.spring.application.external.api.user.dto.MemberDto;
+import com.namo.spring.application.external.global.utils.NicknameTag;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
@@ -45,12 +46,24 @@ public class MemberManageService {
                 .orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_USER_FAILURE));
     }
 
-    public Optional<Member> getMemberByEmailAndSocialType(String email, SocialType socialType) {
-        return memberRepository.findMemberByEmailAndSocialType(email, socialType);
+    public Member getActiveMember(Long memberId){
+        return memberService.readMemberByStatus(memberId, MemberStatus.ACTIVE)
+                .orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_ACTIVE_USER_FAILURE));
     }
 
-    public Optional<Member> getMemberAuthId(String authId) {
-        return memberRepository.findMemberByAuthId(authId);
+    public Member getActiveMemberByNicknameTag(String nicknameTag){
+        NicknameTag findTarget = NicknameTag.from(nicknameTag);
+        return memberService.readMemberByStatus(findTarget.getNickname(), findTarget.getTag(), MemberStatus.ACTIVE)
+                .orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_ACTIVE_USER_FAILURE));
+    }
+
+    public Member getPendingMember(Long memberId){
+        return memberService.readMemberByStatus(memberId, MemberStatus.PENDING)
+                .orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_PENDING_USER_FAILURE));
+    }
+
+    public Optional<Member> getMemberByEmailAndSocialType(String email, SocialType socialType) {
+        return memberRepository.findMemberByEmailAndSocialType(email, socialType);
     }
 
     public List<Member> getInactiveMember() {

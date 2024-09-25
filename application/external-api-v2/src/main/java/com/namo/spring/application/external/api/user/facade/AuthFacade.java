@@ -16,7 +16,7 @@ import com.namo.spring.application.external.api.user.dto.MemberResponse;
 import com.namo.spring.application.external.api.user.helper.JwtAuthHelper;
 import com.namo.spring.application.external.api.user.service.MemberManageService;
 import com.namo.spring.application.external.api.user.service.SocialLoginService;
-import com.namo.spring.application.external.api.user.service.TagGenerator;
+import com.namo.spring.application.external.global.utils.TagGenerator;
 import com.namo.spring.application.external.global.common.security.jwt.CustomJwts;
 import com.namo.spring.db.mysql.domains.category.entity.Palette;
 import com.namo.spring.db.mysql.domains.category.service.PaletteService;
@@ -109,10 +109,11 @@ public class AuthFacade {
 
     @Transactional
     public Member completeSignup(MemberRequest.CompleteSignUpDto dto, Long memberId) {
-        Member member = memberManageService.getMember(memberId);
+        Member member = memberManageService.getPendingMember(memberId);
         String tag = tagGenerator.generateTag(member.getNickname());
         Palette palette = paletteService.getPalette(dto.getColorId());
-        member.signUpComplete(dto.getName(), dto.getNickname(), dto.getBirthday(), dto.getBio(), tag, palette);
+        member.signUpComplete(dto.getName(), dto.getNickname(), dto.getBirthday(), dto.getBio(), tag, palette,
+                dto.getProfileImage());
         memberManageService.saveMember(member);
         return member;
     }
