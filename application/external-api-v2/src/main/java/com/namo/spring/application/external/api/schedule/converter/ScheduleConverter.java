@@ -1,11 +1,15 @@
 package com.namo.spring.application.external.api.schedule.converter;
 
+import java.util.List;
+
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.ScheduleResponse;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.type.Period;
+import com.namo.spring.db.mysql.domains.user.entity.Member;
+import com.namo.spring.db.mysql.domains.user.entity.User;
 
 public class ScheduleConverter {
     private ScheduleConverter() {
@@ -35,6 +39,10 @@ public class ScheduleConverter {
                 .locationInfo(LocationConverter.toLocationInfoDto(schedule.getLocation()))
                 .categoryInfo(toCategoryInfoDto(participant.getCategory()))
                 .hasDiary(participant.isHasDiary())
+                .participantCount(schedule.getParticipantCount())
+                .participantInfo(schedule.getParticipantList().stream()
+                        .map(ScheduleConverter::toParticipantInfoDto)
+                        .toList())
                 .build();
     }
 
@@ -42,6 +50,16 @@ public class ScheduleConverter {
         return ScheduleResponse.CategoryInfoDto.builder()
                 .name(category.getName())
                 .colorId(category.getPalette().getId())
+                .build();
+    }
+
+    private static ScheduleResponse.ParticipantInfoDto toParticipantInfoDto(Participant participant){
+        User user = participant.getUser();
+        boolean isMember = user instanceof Member;
+        return ScheduleResponse.ParticipantInfoDto.builder()
+                .userId(user.getId())
+                .nickname(user.getNickname())
+                .isMember(isMember)
                 .build();
     }
 }
