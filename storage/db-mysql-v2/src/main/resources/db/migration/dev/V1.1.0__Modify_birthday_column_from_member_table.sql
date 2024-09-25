@@ -1,4 +1,4 @@
--- V1.1.1__Modify_birthday_column_from_member_table
+-- V1.1.0__Modify_birthday_column_from_member_table
 
 -- birthday DATE 타입 임시 컬럼 추가
 ALTER TABLE member

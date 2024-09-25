@@ -1,4 +1,4 @@
--- V1.0.8__Modify_and_add_column_to_palette_table
+-- V1.1.1__Modify_and_add_column_to_palette_table
 
 ALTER TABLE palette
     CHANGE COLUMN color hex_code VARCHAR(10),
