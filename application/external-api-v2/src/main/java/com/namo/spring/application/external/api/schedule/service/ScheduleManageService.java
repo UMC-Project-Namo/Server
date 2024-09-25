@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import com.namo.spring.application.external.api.category.service.CategoryManageService;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleSummaryQuery;
+import com.namo.spring.db.mysql.domains.user.dto.FriendBirthdayQuery;
 import org.springframework.stereotype.Service;
 
 import com.namo.spring.application.external.api.schedule.converter.LocationConverter;
@@ -49,9 +50,15 @@ public class ScheduleManageService {
                 .orElseThrow(() -> new ScheduleException(ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE));
     }
 
+    /**
+     * 개인 일정을 찾아 반환합니다.
+     * !! 개인 일정에는 유저의 생일 일정도 포함됩니다.
+     * @param scheduleId
+     * @return
+     */
     public Schedule getPersonalSchedule(Long scheduleId) {
         Schedule schedule = getSchedule(scheduleId);
-        if (schedule.getScheduleType() != ScheduleType.PERSONAL.getValue()) {
+        if (schedule.getScheduleType() == ScheduleType.PERSONAL.getValue()) {
             throw new ScheduleException(ErrorStatus.NOT_PERSONAL_SCHEDULE);
         }
         return schedule;
@@ -92,11 +99,31 @@ public class ScheduleManageService {
                 period.getEndDate());
     }
 
-    public List<Participant> getMemberMonthlySchedules(Long targetMemberId, Long friendId, Period period) {
-        checkMemberIsFriend(targetMemberId, friendId);
-        return participantService.readParticipantsWithScheduleAndCategoryByPeriod(targetMemberId, Boolean.TRUE,
+    /**
+     * 요청한 기간에 포함된 날짜가
+     * 생일인 친구의 정보와 생일을 조회합니다.
+     * @param memberId
+     * @param period
+     * @return 친구 memberId, nickname, birthday
+     */
+    public List<FriendBirthdayQuery> getMonthlyFriendsBirthday(Long memberId, Period period){
+        return friendshipService.readBirthdayVisibleFriendsByPeriod(memberId, period.getStartDate().toLocalDate(), period.getEndDate().toLocalDate());
+    }
+
+    public List<Participant> getMemberMonthlySchedules(Member targetMember, Long friendId, Period period) {
+        checkMemberIsFriend(targetMember.getId(), friendId);
+        boolean birthdayVisible = targetMember.isBirthdayVisible();
+        return participantService.readParticipantsWithScheduleAndCategoryByPeriod(targetMember.getId(), Boolean.TRUE,
                         period.getStartDate(), period.getEndDate()).stream()
                 .filter(participant -> participant.getCategory().isShared())
+                // 생일 공유 여부에 따른 생일 일정 필터링
+                .filter(participant ->
+                {
+                    if (participant.getSchedule().getScheduleType() == ScheduleType.BIRTHDAY.getValue()) {
+                        return birthdayVisible;
+                    }
+                    return true;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -118,30 +145,28 @@ public class ScheduleManageService {
                         period.getEndDate())
                 .stream()
                 // 다른 유저의 일정일 경우 공유 여부로 필터링
-                .filter(participant -> {
-                    boolean isSharedSchedule = true;
-                    if (!participant.getMemberId().equals(memberId))
-                        isSharedSchedule = participant.getIsShared();
-                    return isSharedSchedule;
-                })
+                .filter(participant -> isSharedOrOwnSchedule(participant, memberId, null))
+                // 다른 유저의 생일 일정일 경우 생일 공유 여부로 필터링
+                .filter(participant -> isBirthdayVisible(memberId, participant))
                 .collect(Collectors.toList());
     }
 
     public List<ScheduleParticipantQuery> getMonthlyMeetingParticipantSchedules(Schedule schedule, Period period,
             Long memberId, Long anonymousId) {
         checkUserIsParticipant(schedule, memberId, null);
-        List<Participant> participants = participantService.readParticipantsByScheduleIdAndStatusAndType(
-                schedule.getId(), ScheduleType.MEETING, ParticipantStatus.ACTIVE);
-        List<Long> members = participants.stream()
+        List<Long> memberIds = participantService.readParticipantsByScheduleIdAndStatusAndType(
+                schedule.getId(), ScheduleType.MEETING, ParticipantStatus.ACTIVE).stream()
                 .map(Participant::getUser)
                 .map(User::getId)
                 .collect(Collectors.toList());
 
-        return participantService.readParticipantsWithUserAndScheduleByPeriod(members, period.getStartDate(),
+        return participantService.readParticipantsWithUserAndScheduleByPeriod(memberIds, period.getStartDate(),
                         period.getEndDate())
                 .stream()
                 // 다른 유저의 일정일 경우 공유 여부로 필터링
                 .filter(participant -> isSharedOrOwnSchedule(participant, memberId, anonymousId))
+                // 다른 유저의 생일 일정일 경우 생일 공유 여부로 필터링
+                .filter(participant -> isBirthdayVisible(memberId, participant))
                 .collect(Collectors.toList());
     }
 
@@ -149,7 +174,6 @@ public class ScheduleManageService {
      * 게스트 유저가 조회할 경우 공유된 일정만을,
      * 회원 유저가 조회할 경우 조회하는 회원의 비공개 일정까지 조회되도록
      * 필터링 합니다.
-     *
      * @param participant
      * @param memberId
      * @param anonymousId
@@ -160,7 +184,23 @@ public class ScheduleManageService {
             return true;
         }
         // memberId가 있는 경우
-        return participant.getMemberId().equals(memberId) || participant.getIsShared();
+        return participant.getMemberId().equals(memberId) || participant.getCategoryIsShared();
+    }
+
+    /**
+     * 다른 유저의 생일일 경우
+     * 그 유저의 생일 공유 여부로 생일 일정이 조회되도록
+     * 필터링 합니다.
+     * @param memberId
+     * @param participant 일정과 참여자 정보
+     * @return
+     */
+    private boolean isBirthdayVisible(Long memberId, ScheduleParticipantQuery participant) {
+        if (!participant.getMemberId().equals(memberId) &&
+                participant.getSchedule().getScheduleType() == ScheduleType.BIRTHDAY.getValue()) {
+            return participant.getBirthdayVisible();
+        }
+        return true;
     }
 
     private void checkUserIsParticipant(Schedule schedule, Long memberId, Long anonymousId) {

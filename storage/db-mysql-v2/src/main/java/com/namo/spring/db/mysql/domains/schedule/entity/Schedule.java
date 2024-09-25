@@ -50,7 +50,7 @@ public class Schedule extends BaseTimeEntity {
     @Embedded
     private Location location;
 
-    // 0: 개인, 1: 그룹
+    // 0: 개인, 1: 그룹, 2: 생일
     @Column(nullable = false, columnDefinition = "TINYINT")
     private int scheduleType;
 

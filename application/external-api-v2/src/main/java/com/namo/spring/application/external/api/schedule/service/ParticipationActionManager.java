@@ -39,8 +39,7 @@ public class ParticipationActionManager {
     /**
      * 모임 요청을 거절했을 시, participant를 삭제
      */
-    public void removeParticipant(Schedule schedule, Participant participant) {
-        schedule.removeParticipant(participant.getMember().getNickname());
+    public void removeParticipant(Participant participant) {
         participantService.deleteParticipant(participant.getId());
     }
 

@@ -51,7 +51,7 @@ public class DiaryResponse {
         @Schema(description = "스케줄 제목", example = "저녁 약속")
         private String title;
         private DiarySummaryDto diarySummary;
-        @Schema(description = "개인 스케줄 : 0, 모임 스케줄 : 1", example = "0")
+        @Schema(description = "개인 일정 : 0, 모임 일정 : 1, 생일 일정 : 2", example = "0")
         private int scheduleType;
         private ParticipantInfo participantInfo;
     }
@@ -97,7 +97,7 @@ public class DiaryResponse {
     public static class DayOfDiaryDto {
         @Schema(description = "스케줄 ID", example = "3")
         private Long scheduleId;
-        @Schema(description = "개인 스케줄 : 0, 모임 스케줄 : 1", example = "0")
+        @Schema(description = "개인 일정 : 0, 모임 일정 : 1, 생일 일정 : 2", example = "0")
         private int scheduleType;
         private CategoryInfoDto categoryInfo;
         private LocalDateTime scheduleStartDate;

@@ -1,7 +1,9 @@
 package com.namo.spring.application.external.api.user.dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import lombok.Builder;

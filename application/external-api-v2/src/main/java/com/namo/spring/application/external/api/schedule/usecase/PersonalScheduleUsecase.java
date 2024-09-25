@@ -5,6 +5,7 @@ import static com.namo.spring.application.external.global.utils.SchedulePeriodVa
 
 import java.util.List;
 
+import com.namo.spring.db.mysql.domains.user.dto.FriendBirthdayQuery;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,6 +53,14 @@ public class PersonalScheduleUsecase {
         return toGetMonthlyScheduleDtos(scheduleInfo, scheduleNotifications);
     }
 
+    @Transactional(readOnly = true)
+    public List<PersonalScheduleResponse.GetMonthlyFriendBirthdayDto> getMonthlyFriendsBirthday(int year, int month,
+                                                                                      SecurityUserDetails memberInfo) {
+        List<FriendBirthdayQuery> friendsBirthday = scheduleManageService.getMonthlyFriendsBirthday(memberInfo.getUserId(),
+                getExtendedPeriod(year, month));
+        return toGetMonthlyFriendBirthdayDtos(friendsBirthday, year);
+    }
+
     @Transactional
     public void updatePersonalSchedule(PersonalScheduleRequest.PatchPersonalScheduleDto patchPersonalScheduleDto,
             Long scheduleId, SecurityUserDetails memberInfo) {
@@ -64,7 +73,7 @@ public class PersonalScheduleUsecase {
             Long targetMemberId, SecurityUserDetails memberInfo) {
         Member targetMember = memberManageService.getActiveMember(targetMemberId);
         return toGetFriendMonthlyScheduleDtos(
-                scheduleManageService.getMemberMonthlySchedules(targetMember.getId(), memberInfo.getUserId(),
+                scheduleManageService.getMemberMonthlySchedules(targetMember, memberInfo.getUserId(),
                         getExtendedPeriod(year, month)));
     }
 }

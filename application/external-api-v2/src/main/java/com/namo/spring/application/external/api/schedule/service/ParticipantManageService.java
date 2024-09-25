@@ -68,7 +68,7 @@ public class ParticipantManageService {
 
     public void deleteParticipant(Long memberId, Long scheduleId) {
         Participant participant = getValidatedParticipantWithSchedule(scheduleId, memberId);
-        participationActionManager.removeParticipant(participant.getSchedule(), participant);
+        participationActionManager.removeParticipant(participant);
     }
 
     public void updateMeetingScheduleParticipants(Long ownerId, Schedule schedule,

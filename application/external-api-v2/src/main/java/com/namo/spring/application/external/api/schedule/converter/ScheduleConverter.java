@@ -1,20 +1,30 @@
 package com.namo.spring.application.external.api.schedule.converter;
 
-import java.util.List;
-
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.ScheduleResponse;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.type.Period;
+import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
-import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.entity.User;
 
 public class ScheduleConverter {
     private ScheduleConverter() {
         throw new IllegalStateException("Util Class");
+    }
+
+    public static Schedule toBirthdaySchedule(String title, Period period){
+        return Schedule.builder()
+                .title(title)
+                .period(period)
+                .location(null)
+                .scheduleType(ScheduleType.BIRTHDAY.getValue())
+                .imageUrl(null)
+                .participantCount(null)
+                .participantNicknames(null)
+                .build();
     }
 
     public static Schedule toSchedule(String title, Period period, MeetingScheduleRequest.LocationDto location,

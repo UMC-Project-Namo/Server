@@ -1,5 +1,6 @@
 package com.namo.spring.db.mysql.domains.user.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -73,17 +74,16 @@ public class Member extends BaseTimeEntity implements User {
     @Column(length = 4)
     private String tag;
 
-    private String profileImage;
-
-    @JdbcTypeCode(SqlTypes.VARCHAR)
-    @Column(length = 10)
-    private String birthday;  // "MM-DD"
+    @Column(columnDefinition = "DATE")
+    private LocalDate birthday;
 
     @Column(nullable = false)
     private boolean birthdayVisible;
 
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private String bio;
+
+    private String profileImage;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -121,7 +121,7 @@ public class Member extends BaseTimeEntity implements User {
     private List<Participant> participants;
 
     @Builder
-    public Member(String name, String tag, String birthday, String authId, String email,
+    public Member(String name, String tag, LocalDate birthday, String authId, String email,
             SocialType socialType, String socialRefreshToken) {
         this.name = name;
         this.nameVisible = true;
@@ -166,7 +166,7 @@ public class Member extends BaseTimeEntity implements User {
         return !status.equals(MemberStatus.PENDING);
     }
 
-    public void signUpComplete(String name, String nickname, String birthday, String bio, String tag, Palette palette,
+    public void signUpComplete(String name, String nickname, LocalDate birthday, String bio, String tag, Palette palette,
             String profileImage) {
         this.name = name;
         this.nickname = nickname;

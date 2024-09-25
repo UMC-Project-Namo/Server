@@ -48,7 +48,7 @@ public class PersonalScheduleRequest {
     @Schema(title = "개인 일정 수정 요청 DTO")
     public static class PatchPersonalScheduleDto {
         @NotBlank(message = "일정 이름 입력은 필수 입니다. 수정 사항이 없을 시 원본 값을 전송합니다.")
-        @Schema(description = "모임 일정 이름, 수정 사항이 없을 시 원본 값을 전송합니다.")
+        @Schema(description = "개인 일정 이름, 수정 사항이 없을 시 원본 값을 전송합니다.")
         private String title;
         @NotNull(message = "카테고리 ID는 필수입니다. 수정 사항이 없을 시 원본 값을 전송합니다.")
         @Schema(description = "카테고리 ID")

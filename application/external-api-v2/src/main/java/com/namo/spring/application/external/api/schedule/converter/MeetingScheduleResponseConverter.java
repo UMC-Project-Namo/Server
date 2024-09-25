@@ -48,7 +48,7 @@ public class MeetingScheduleResponseConverter {
                 .filter(participant -> {
                     boolean isSharedSchedule = true;
                     if (!participant.getMemberId().equals(ownerId))
-                        isSharedSchedule = participant.getIsShared();
+                        isSharedSchedule = participant.getCategoryIsShared();
                     return isSharedSchedule;
                 })
                 .collect(Collectors.groupingBy(participant -> participant.getSchedule().getId()));
@@ -72,6 +72,7 @@ public class MeetingScheduleResponseConverter {
                 .endDate(DateUtil.toSeconds(schedule.getPeriod().getEndDate()))
                 .interval(schedule.getPeriod().getDayInterval())
                 .participants(toMemberParticipantDtos(participants))
+                .scheduleType(schedule.getScheduleType())
                 .build();
     }
 
@@ -117,6 +118,7 @@ public class MeetingScheduleResponseConverter {
                 .interval(schedule.getPeriod().getDayInterval())
                 .participants(toUserParticipantDtos(participants))
                 .isCurMeetingSchedule(schedule.getId().equals(curSchedule.getId()))
+                .scheduleType(schedule.getScheduleType())
                 .build();
     }
 

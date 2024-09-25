@@ -15,6 +15,8 @@ import com.namo.spring.db.mysql.domains.user.entity.Member;
 
 import lombok.RequiredArgsConstructor;
 
+import static com.namo.spring.application.external.api.schedule.converter.ScheduleResponseConverter.toScheduleSummaryDto;
+
 @Component
 @RequiredArgsConstructor
 public class ScheduleUsecase {
@@ -25,7 +27,7 @@ public class ScheduleUsecase {
     @Transactional(readOnly = true)
     public ScheduleResponse.ScheduleSummaryDto getScheduleSummary(Long memberId, Long scheduleId) {
         Participant myScheduleParticipant = participantManageService.getParticipantByMemberAndSchedule(memberId, scheduleId);
-        return ScheduleConverter.toScheduleSummaryDto(myScheduleParticipant);
+        return toScheduleSummaryDto(myScheduleParticipant);
     }
 
     @Transactional

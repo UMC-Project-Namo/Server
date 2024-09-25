@@ -1,7 +1,5 @@
 package com.namo.spring.application.external.api.schedule.controller;
 
-import static com.namo.spring.core.common.code.status.ErrorStatus.*;
-
 import java.util.List;
 
 import jakarta.validation.Valid;
@@ -18,14 +16,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.namo.spring.application.external.api.schedule.api.PersonalScheduleApi;
 import com.namo.spring.application.external.api.schedule.dto.PersonalScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.PersonalScheduleResponse;
 import com.namo.spring.application.external.api.schedule.usecase.PersonalScheduleUsecase;
-import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.core.common.response.ResponseDto;
 
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.RequiredArgsConstructor;
@@ -36,14 +33,12 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v2/schedules")
-public class PersonalScheduleController  {
+public class PersonalScheduleController implements PersonalScheduleApi {
     private final PersonalScheduleUsecase personalScheduleUsecase;
 
-    @Operation(summary = "개인 일정 생성", description = "개인 일정을 생성합니다. 요청 성공 시 개인 일정 ID를 전송합니다.")
-    @ApiErrorCodes(value = {
-            NOT_FOUND_USER_FAILURE,
-            NOT_FOUND_CATEGORY_FAILURE,
-            INVALID_DATE})
+    /**
+     * 일정 생성 API
+     */
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDto<Long> createPersonalSchedule(
             @Valid @RequestBody PersonalScheduleRequest.PostPersonalScheduleDto dto,
@@ -51,10 +46,9 @@ public class PersonalScheduleController  {
         return ResponseDto.onSuccess(personalScheduleUsecase.createPersonalSchedule(dto, member));
     }
 
-    @Operation(summary = "개인 월간 일정 조회", description = "개인 월간 일정을 조회합니다.")
-    @ApiErrorCodes(value = {
-            INVALID_FORMAT_FAILURE
-    })
+    /**
+     * 내 월간 일정 조회 API
+     */
     @GetMapping("/calendar")
     public ResponseDto<List<PersonalScheduleResponse.GetMonthlyScheduleDto>> getMyMonthlySchedules(
             @RequestParam Integer year,
@@ -63,8 +57,21 @@ public class PersonalScheduleController  {
         return ResponseDto.onSuccess(personalScheduleUsecase.getMyMonthlySchedules(year, month, member));
     }
 
-    @Operation(summary = "친구 월간 일정 조회", description = "친구의 월간 일정을 조회합니다.")
-    @ApiErrorCodes(value = {NOT_FRIENDSHIP_MEMBER})
+    /**
+     * 내 월간 캘린더 -
+     * 친구의 생일 목록 조회 API
+     */
+    @GetMapping("/calendar/friends/birthdays")
+    public ResponseDto<List<PersonalScheduleResponse.GetMonthlyFriendBirthdayDto>> getMonthlyFriendsBirthday(
+            @RequestParam Integer year,
+            @RequestParam Integer month,
+            @AuthenticationPrincipal SecurityUserDetails member) {
+        return ResponseDto.onSuccess(personalScheduleUsecase.getMonthlyFriendsBirthday(year, month, member));
+    }
+
+    /**
+     * 친구 월간 일정 조회 API
+     */
     @GetMapping("/calendar/friends")
     public ResponseDto<List<PersonalScheduleResponse.GetFriendMonthlyScheduleDto>> getFriendMonthlySchedules(
             @RequestParam Integer year,
@@ -74,13 +81,9 @@ public class PersonalScheduleController  {
         return ResponseDto.onSuccess(personalScheduleUsecase.getFriendMonthlySchedules(year, month, memberId, member));
     }
 
-    @Operation(summary = "개인 일정 내용 수정", description = "개인 일정 내용을 수정합니다.")
-    @ApiErrorCodes(value = {
-            INVALID_DATE,
-            NOT_SCHEDULE_OWNER,
-            NOT_FOUND_SCHEDULE_FAILURE,
-            NOT_PERSONAL_SCHEDULE
-    })
+    /**
+     * 개인 일정 수정 API
+     */
     @PatchMapping("/{scheduleId}")
     public ResponseDto<String> updatePersonalSchedules(@PathVariable Long scheduleId,
             @Valid @RequestBody PersonalScheduleRequest.PatchPersonalScheduleDto dto,

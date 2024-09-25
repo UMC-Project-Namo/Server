@@ -21,6 +21,11 @@ public class ScheduleService {
         return scheduleRepository.save(schedule);
     }
 
+    @Transactional
+    public void createSchedules(List<Schedule> schedule) {
+        scheduleRepository.saveAll(schedule);
+    }
+
     @Transactional(readOnly = true)
     public Optional<Schedule> readSchedule(Long id) {
         return scheduleRepository.findById(id);

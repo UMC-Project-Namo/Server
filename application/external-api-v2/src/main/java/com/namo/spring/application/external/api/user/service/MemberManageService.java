@@ -70,8 +70,8 @@ public class MemberManageService {
         return memberRepository.findMembersByStatusAndDate(MemberStatus.INACTIVE, LocalDateTime.now().minusDays(3));
     }
 
-    public void saveMember(Member member) {
-        memberRepository.save(member);
+    public Member saveMember(Member member) {
+        return memberRepository.save(member);
     }
 
     public void removeMember(Member member) {
@@ -117,6 +117,7 @@ public class MemberManageService {
     private void makeBaseCategory(Member member) {
         categoryMaker.makePersonalCategory(member);
         categoryMaker.makeMeetingCategory(member);
+        categoryMaker.makeBirthdayCategory(member);
     }
 
     public List<String> getMemberTagsByNickname(String nickname) {

@@ -1,7 +1,9 @@
 package com.namo.spring.application.external.api.user.dto;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -42,7 +44,8 @@ public class MemberResponse {
         private String tag;
         private String name;
         private String bio;
-        private String birth;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+        private LocalDate birthday;
         private Long colorId;
     }
 }
