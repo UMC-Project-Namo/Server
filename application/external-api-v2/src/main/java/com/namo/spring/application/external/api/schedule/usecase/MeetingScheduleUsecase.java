@@ -4,6 +4,7 @@ import static com.namo.spring.application.external.api.schedule.converter.Meetin
 import static com.namo.spring.application.external.global.utils.MeetingParticipantValidationUtils.*;
 import static com.namo.spring.application.external.global.utils.SchedulePeriodValidationUtils.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -47,24 +48,23 @@ public class MeetingScheduleUsecase {
     }
 
     @Transactional(readOnly = true)
-    public List<MeetingScheduleResponse.GetMonthlyMembersScheduleDto> getMonthlyMemberSchedules(List<Long> memberIds,
-            int year, int month, SecurityUserDetails memberInfo) {
-        validateYearMonth(year, month);
+    public List<MeetingScheduleResponse.GetMonthlyMembersScheduleDto> getMonthlyMemberSchedules(List<Long> memberIds, LocalDate startDate, LocalDate endDate, SecurityUserDetails memberInfo) {
+        validatePeriod(startDate, endDate);
         validateUniqueParticipantIds(memberInfo.getUserId(), memberIds);
 
         List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyMembersSchedules(
-                memberIds, getExtendedPeriod(year, month), memberInfo.getUserId());
+                memberIds, startDate, endDate, memberInfo.getUserId());
         return toGetMonthlyMembersScheduleDtos(participantsWithSchedule,memberInfo.getUserId());
     }
 
     @Transactional(readOnly = true)
     public List<MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto> getMonthlyMeetingParticipantSchedules(
-            Long scheduleId, int year, int month, SecurityUserDetails memberInfo) {
-        validateYearMonth(year, month);
+            Long scheduleId, LocalDate startDate, LocalDate endDate, SecurityUserDetails memberInfo) {
+        validatePeriod(startDate, endDate);
 
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
         List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyMeetingParticipantSchedules(
-                schedule, getExtendedPeriod(year, month), memberInfo.getUserId(), null);
+                schedule, startDate, endDate, memberInfo.getUserId(), null);
         return toGetMonthlyMeetingParticipantScheduleDtos(participantsWithSchedule, schedule, memberInfo.getUserId());
     }
 

@@ -1,7 +1,9 @@
 package com.namo.spring.application.external.api.schedule.api;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.Valid;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -35,25 +37,25 @@ public interface PersonalScheduleApi {
             @Parameter(description = "개인 일정 생성 요청 dto") @Valid @RequestBody PersonalScheduleRequest.PostPersonalScheduleDto dto,
             @AuthenticationPrincipal SecurityUserDetails member) throws JsonProcessingException;
 
-    @Operation(summary = "개인 월간 일정 조회", description = "개인 월간 일정을 조회합니다.")
+    @Operation(summary = "개인 캘린더 조회", description = "개인 캘린더을 조회합니다.")
     @ApiErrorCodes(value = {
             ErrorStatus.INVALID_FORMAT_FAILURE})
     ResponseDto<List<PersonalScheduleResponse.GetMonthlyScheduleDto>> getMyMonthlySchedules(
-            @Parameter(description = "연도") @RequestParam Integer year,
-            @Parameter(description = "월") @RequestParam Integer month,
+            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate endDate,
             @AuthenticationPrincipal SecurityUserDetails member);
 
-    @Operation(summary = "개인 월간 일정 - 친구 생일 조회", description = "월간 친구 생일을 조회합니다.")
+    @Operation(summary = "개인 캘린더 - 친구 생일 조회", description = "친구 생일을 조회합니다.")
     ResponseDto<List<PersonalScheduleResponse.GetMonthlyFriendBirthdayDto>> getMonthlyFriendsBirthday(
-            @Parameter(description = "연도") @RequestParam Integer year,
-            @Parameter(description = "월") @RequestParam Integer month,
+            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate endDate,
             @AuthenticationPrincipal SecurityUserDetails member);
 
-    @Operation(summary = "친구 월간 일정 조회", description = "친구의 월간 일정을 조회합니다.")
+    @Operation(summary = "친구 캘린더 조회", description = "친구의 캘린더을 조회합니다.")
     @ApiErrorCodes(value = {ErrorStatus.NOT_FRIENDSHIP_MEMBER})
     ResponseDto<List<PersonalScheduleResponse.GetFriendMonthlyScheduleDto>> getFriendMonthlySchedules(
-            @Parameter(description = "연도") @RequestParam Integer year,
-            @Parameter(description = "월") @RequestParam Integer month,
+            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate endDate,
             @Parameter(description = "친구 유저 ID") @RequestParam Long memberId,
             @AuthenticationPrincipal SecurityUserDetails member);
 
