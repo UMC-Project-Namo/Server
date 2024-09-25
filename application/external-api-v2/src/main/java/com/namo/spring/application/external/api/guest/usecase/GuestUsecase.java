@@ -37,15 +37,4 @@ public class GuestUsecase {
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
         return toPostGuestParticipantDto(guestManageService.createOrValidateGuest(dto, schedule, code));
     }
-
-    @Transactional(readOnly = true)
-    public List<GuestMeetingResponse.GetMonthlyMeetingParticipantScheduleDto> getMonthlyMeetingParticipantSchedules(
-            Long scheduleId, int year, int month, String tag, String nickname) {
-        validateYearMonth(year, month);
-        Anonymous anonymous = guestManageService.getAnonymousByTagAndNickname(tag, nickname);
-        Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
-        List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyMeetingParticipantSchedules(
-                schedule, getExtendedPeriod(year, month), null, anonymous.getId());
-        return toGetMonthlyMeetingParticipantScheduleDtos(participantsWithSchedule, schedule, null);
-    }
 }

@@ -1,7 +1,9 @@
 package com.namo.spring.application.external.api.schedule.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.Valid;
 
 import org.springframework.http.MediaType;
@@ -47,14 +49,14 @@ public class PersonalScheduleController implements PersonalScheduleApi {
     }
 
     /**
-     * 내 월간 일정 조회 API
+     * 내 캘린더 조회 API
      */
     @GetMapping("/calendar")
     public ResponseDto<List<PersonalScheduleResponse.GetMonthlyScheduleDto>> getMyMonthlySchedules(
-            @RequestParam Integer year,
-            @RequestParam Integer month,
+            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate endDate,
             @AuthenticationPrincipal SecurityUserDetails member) {
-        return ResponseDto.onSuccess(personalScheduleUsecase.getMyMonthlySchedules(year, month, member));
+        return ResponseDto.onSuccess(personalScheduleUsecase.getMyMonthlySchedules(startDate, endDate, member));
     }
 
     /**
@@ -63,22 +65,22 @@ public class PersonalScheduleController implements PersonalScheduleApi {
      */
     @GetMapping("/calendar/friends/birthdays")
     public ResponseDto<List<PersonalScheduleResponse.GetMonthlyFriendBirthdayDto>> getMonthlyFriendsBirthday(
-            @RequestParam Integer year,
-            @RequestParam Integer month,
+            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate endDate,
             @AuthenticationPrincipal SecurityUserDetails member) {
-        return ResponseDto.onSuccess(personalScheduleUsecase.getMonthlyFriendsBirthday(year, month, member));
+        return ResponseDto.onSuccess(personalScheduleUsecase.getMonthlyFriendsBirthday(startDate, endDate, member));
     }
 
     /**
-     * 친구 월간 일정 조회 API
+     * 친구 캘린더 조회 API
      */
     @GetMapping("/calendar/friends")
     public ResponseDto<List<PersonalScheduleResponse.GetFriendMonthlyScheduleDto>> getFriendMonthlySchedules(
-            @RequestParam Integer year,
-            @RequestParam Integer month,
+            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate endDate,
             @RequestParam Long memberId,
             @AuthenticationPrincipal SecurityUserDetails member) {
-        return ResponseDto.onSuccess(personalScheduleUsecase.getFriendMonthlySchedules(year, month, memberId, member));
+        return ResponseDto.onSuccess(personalScheduleUsecase.getFriendMonthlySchedules(startDate, endDate, memberId, member));
     }
 
     /**

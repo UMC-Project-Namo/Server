@@ -1,5 +1,6 @@
 package com.namo.spring.application.external.api.schedule.converter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -121,17 +122,17 @@ public class PersonalScheduleResponseConverter {
                 .build();
     }
 
-    public static List<PersonalScheduleResponse.GetMonthlyFriendBirthdayDto> toGetMonthlyFriendBirthdayDtos(List<FriendBirthdayQuery> friendBirthdays, int year){
+    public static List<PersonalScheduleResponse.GetMonthlyFriendBirthdayDto> toGetMonthlyFriendBirthdayDtos(List<FriendBirthdayQuery> friendBirthdays, LocalDate startDate, LocalDate endDate){
         return friendBirthdays.stream()
-                .map(friendBirthday -> toGetMonthlyFriendBirthdayDto(friendBirthday, year))
+                .map(friendBirthday -> toGetMonthlyFriendBirthdayDto(friendBirthday, startDate, endDate))
                 .collect(Collectors.toList());
     }
 
-    public static PersonalScheduleResponse.GetMonthlyFriendBirthdayDto toGetMonthlyFriendBirthdayDto(FriendBirthdayQuery friendBirthday, int year){
+    public static PersonalScheduleResponse.GetMonthlyFriendBirthdayDto toGetMonthlyFriendBirthdayDto(FriendBirthdayQuery friendBirthday, LocalDate startDate, LocalDate endDate){
+        int year = friendBirthday.getBirthday().getMonthValue() == startDate.getMonthValue() ? startDate.getYear() : endDate.getYear();
         return PersonalScheduleResponse.GetMonthlyFriendBirthdayDto.builder()
                 .nickname(friendBirthday.getNickname())
                 .birthdayDate(DateUtil.toSeconds(friendBirthday.getBirthday().withYear(year).atStartOfDay()))
-                .categoryInfo(null)
                 .build();
     }
 

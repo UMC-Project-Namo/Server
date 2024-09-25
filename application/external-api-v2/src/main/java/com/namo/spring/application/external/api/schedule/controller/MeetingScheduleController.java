@@ -2,8 +2,10 @@ package com.namo.spring.application.external.api.schedule.controller;
 
 import static com.namo.spring.core.common.code.status.ErrorStatus.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
@@ -67,7 +69,7 @@ public class MeetingScheduleController {
         return ResponseDto.onSuccess(meetingScheduleUsecase.getMeetingSchedules(memberInfo));
     }
 
-    @Operation(summary = "모임 초대자 월간 일정 조회", description = "모임에 초대할 유저들의 월간 일정을 조회합니다.")
+    @Operation(summary = "모임 초대자 캘린더 조회", description = "모임에 초대할 유저들의 일정을 조회합니다.")
     @ApiErrorCodes(value = {
             INVALID_FORMAT_FAILURE,
             INVALID_MEETING_PARTICIPANT_COUNT,
@@ -76,15 +78,15 @@ public class MeetingScheduleController {
     })
     @GetMapping(path = "/preview")
     public ResponseDto<List<MeetingScheduleResponse.GetMonthlyMembersScheduleDto>> getMonthlyParticipantSchedules(
-            @RequestParam Integer year,
-            @RequestParam Integer month,
+            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate endDate,
             @RequestParam List<Long> participantIds,
             @AuthenticationPrincipal SecurityUserDetails memberInfo) {
         return ResponseDto.onSuccess(
-                meetingScheduleUsecase.getMonthlyMemberSchedules(participantIds, year, month, memberInfo));
+                meetingScheduleUsecase.getMonthlyMemberSchedules(participantIds, startDate, endDate, memberInfo));
     }
 
-    @Operation(summary = "모임 월간 일정 조회", description = "모임에 있는 유저들의 월간 일정을 조회합니다.")
+    @Operation(summary = "모임 캘린더 조회", description = "모임에 있는 유저들의 일정을 조회합니다.")
     @ApiErrorCodes(value = {
             INVALID_FORMAT_FAILURE,
             NOT_SCHEDULE_PARTICIPANT,
@@ -94,11 +96,11 @@ public class MeetingScheduleController {
     @GetMapping(path = "/{meetingScheduleId}/calender")
     public ResponseDto<List<MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto>> getMonthlyMeetingParticipantSchedules(
             @PathVariable Long meetingScheduleId,
-            @RequestParam Integer year,
-            @RequestParam Integer month,
+            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate endDate,
             @AuthenticationPrincipal SecurityUserDetails memberInfo) {
         return ResponseDto.onSuccess(
-                meetingScheduleUsecase.getMonthlyMeetingParticipantSchedules(meetingScheduleId, year, month,
+                meetingScheduleUsecase.getMonthlyMeetingParticipantSchedules(meetingScheduleId, startDate, endDate,
                         memberInfo));
     }
 

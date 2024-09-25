@@ -1,6 +1,7 @@
 package com.namo.spring.application.external.global.utils;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.temporal.TemporalAdjusters;
@@ -29,6 +30,19 @@ public class SchedulePeriodValidationUtils {
         }
         return period;
     }
+
+    /**
+     * 시작 날짜가 끝 날짜보다 앞서지 않았는지 검증 후 반환합니다.
+     *
+     * @param startDate 시작 날짜
+     * @param endDate   종료 날짜
+     */
+    public static void validatePeriod(LocalDate startDate, LocalDate endDate) {
+        if (startDate.isAfter(endDate)) {
+            throw new ScheduleException(ErrorStatus.INVALID_DATE);
+        }
+    }
+
 
     /**
      * 년도와 월이 유효한 값인지 검증합니다.

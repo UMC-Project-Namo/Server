@@ -3,6 +3,8 @@ package com.namo.spring.application.external.api.schedule.service;
 import static com.namo.spring.application.external.global.utils.MeetingParticipantValidationUtils.*;
 import static com.namo.spring.application.external.global.utils.SchedulePeriodValidationUtils.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -94,27 +96,27 @@ public class ScheduleManageService {
         return participantService.readScheduleParticipantSummaryByScheduleIds(memberId);
     }
 
-    public List<Participant> getMyMonthlySchedules(Long memberId, Period period) {
-        return participantService.readParticipantsWithScheduleAndCategoryByPeriod(memberId, null, period.getStartDate(),
-                period.getEndDate());
+    public List<Participant> getMyMonthlySchedules(Long memberId, LocalDate startDate, LocalDate endDate) {
+        return participantService.readParticipantsWithScheduleAndCategoryByPeriod(memberId, null, startDate.atStartOfDay(), endDate.plusDays(1).atStartOfDay());
     }
 
     /**
      * 요청한 기간에 포함된 날짜가
      * 생일인 친구의 정보와 생일을 조회합니다.
      * @param memberId
-     * @param period
+     * @param startDate
+     * @param endDate
      * @return 친구 memberId, nickname, birthday
      */
-    public List<FriendBirthdayQuery> getMonthlyFriendsBirthday(Long memberId, Period period){
-        return friendshipService.readBirthdayVisibleFriendsByPeriod(memberId, period.getStartDate().toLocalDate(), period.getEndDate().toLocalDate());
+    public List<FriendBirthdayQuery> getMonthlyFriendsBirthday(Long memberId, LocalDate startDate, LocalDate endDate){
+        return friendshipService.readBirthdayVisibleFriendsByPeriod(memberId, startDate, endDate);
     }
 
-    public List<Participant> getMemberMonthlySchedules(Member targetMember, Long friendId, Period period) {
+    public List<Participant> getMemberMonthlySchedules(Member targetMember, Long friendId, LocalDate startDate, LocalDate endDate) {
         checkMemberIsFriend(targetMember.getId(), friendId);
         boolean birthdayVisible = targetMember.isBirthdayVisible();
         return participantService.readParticipantsWithScheduleAndCategoryByPeriod(targetMember.getId(), Boolean.TRUE,
-                        period.getStartDate(), period.getEndDate()).stream()
+                        startDate.atStartOfDay(), endDate.plusDays(1).atStartOfDay()).stream()
                 .filter(participant -> participant.getCategory().isShared())
                 // 생일 공유 여부에 따른 생일 일정 필터링
                 .filter(participant ->
@@ -133,7 +135,7 @@ public class ScheduleManageService {
         }
     }
 
-    public List<ScheduleParticipantQuery> getMonthlyMembersSchedules(List<Long> memberIds, Period period,
+    public List<ScheduleParticipantQuery> getMonthlyMembersSchedules(List<Long> memberIds, LocalDate startDate, LocalDate endDate,
             Long memberId) {
         validateParticipantCount(memberIds.size());
         List<Long> members = participantManageService.getFriendshipValidatedParticipants(memberId, memberIds)
@@ -141,8 +143,8 @@ public class ScheduleManageService {
                 .map(Member::getId)
                 .collect(Collectors.toList());
         members.add(memberId);
-        return participantService.readParticipantsWithUserAndScheduleByPeriod(members, period.getStartDate(),
-                        period.getEndDate())
+        return participantService.readParticipantsWithUserAndScheduleByPeriod(members, startDate.atStartOfDay(),
+                        endDate.plusDays(1).atStartOfDay())
                 .stream()
                 // 다른 유저의 일정일 경우 공유 여부로 필터링
                 .filter(participant -> isSharedOrOwnSchedule(participant, memberId, null))
@@ -151,7 +153,7 @@ public class ScheduleManageService {
                 .collect(Collectors.toList());
     }
 
-    public List<ScheduleParticipantQuery> getMonthlyMeetingParticipantSchedules(Schedule schedule, Period period,
+    public List<ScheduleParticipantQuery> getMonthlyMeetingParticipantSchedules(Schedule schedule, LocalDate startDate, LocalDate endDate,
             Long memberId, Long anonymousId) {
         checkUserIsParticipant(schedule, memberId, null);
         List<Long> memberIds = participantService.readParticipantsByScheduleIdAndStatusAndType(
@@ -160,8 +162,8 @@ public class ScheduleManageService {
                 .map(User::getId)
                 .collect(Collectors.toList());
 
-        return participantService.readParticipantsWithUserAndScheduleByPeriod(memberIds, period.getStartDate(),
-                        period.getEndDate())
+        return participantService.readParticipantsWithUserAndScheduleByPeriod(memberIds, startDate.atStartOfDay(),
+                        endDate.plusDays(1).atStartOfDay())
                 .stream()
                 // 다른 유저의 일정일 경우 공유 여부로 필터링
                 .filter(participant -> isSharedOrOwnSchedule(participant, memberId, anonymousId))

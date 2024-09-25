@@ -3,6 +3,7 @@ package com.namo.spring.application.external.api.schedule.usecase;
 import static com.namo.spring.application.external.api.schedule.converter.PersonalScheduleResponseConverter.*;
 import static com.namo.spring.application.external.global.utils.SchedulePeriodValidationUtils.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.namo.spring.db.mysql.domains.user.dto.FriendBirthdayQuery;
@@ -34,7 +35,7 @@ public class PersonalScheduleUsecase {
 
     @Transactional
     public Long createPersonalSchedule(PersonalScheduleRequest.PostPersonalScheduleDto dto,
-            SecurityUserDetails memberInfo) throws JsonProcessingException {
+            SecurityUserDetails memberInfo) {
         Member member = memberManageService.getActiveMember(memberInfo.getUserId());
         Schedule schedule = scheduleManageService.createPersonalSchedule(dto, member);
         if (!dto.getReminderTrigger().isEmpty()) {
@@ -44,21 +45,22 @@ public class PersonalScheduleUsecase {
     }
 
     @Transactional(readOnly = true)
-    public List<PersonalScheduleResponse.GetMonthlyScheduleDto> getMyMonthlySchedules(int year, int month,
-            SecurityUserDetails memberInfo) {
+    public List<PersonalScheduleResponse.GetMonthlyScheduleDto> getMyMonthlySchedules(LocalDate startDate, LocalDate endDate,
+                                                                                      SecurityUserDetails memberInfo) {
+        validatePeriod(startDate, endDate);
         List<Participant> scheduleInfo = scheduleManageService.getMyMonthlySchedules(memberInfo.getUserId(),
-                getExtendedPeriod(year, month));
+                startDate, endDate);
         List<ScheduleNotificationQuery> scheduleNotifications = notificationManageService.getScheduleNotifications(
                 memberInfo.getUserId(), scheduleInfo);
         return toGetMonthlyScheduleDtos(scheduleInfo, scheduleNotifications);
     }
 
     @Transactional(readOnly = true)
-    public List<PersonalScheduleResponse.GetMonthlyFriendBirthdayDto> getMonthlyFriendsBirthday(int year, int month,
+    public List<PersonalScheduleResponse.GetMonthlyFriendBirthdayDto> getMonthlyFriendsBirthday(LocalDate startDate, LocalDate endDate,
                                                                                       SecurityUserDetails memberInfo) {
-        List<FriendBirthdayQuery> friendsBirthday = scheduleManageService.getMonthlyFriendsBirthday(memberInfo.getUserId(),
-                getExtendedPeriod(year, month));
-        return toGetMonthlyFriendBirthdayDtos(friendsBirthday, year);
+        validatePeriod(startDate, endDate);
+        List<FriendBirthdayQuery> friendsBirthday = scheduleManageService.getMonthlyFriendsBirthday(memberInfo.getUserId(), startDate, endDate);
+        return toGetMonthlyFriendBirthdayDtos(friendsBirthday, startDate, endDate);
     }
 
     @Transactional
@@ -69,11 +71,12 @@ public class PersonalScheduleUsecase {
     }
 
     @Transactional(readOnly = true)
-    public List<PersonalScheduleResponse.GetFriendMonthlyScheduleDto> getFriendMonthlySchedules(int year, int month,
+    public List<PersonalScheduleResponse.GetFriendMonthlyScheduleDto> getFriendMonthlySchedules(LocalDate startDate, LocalDate endDate,
             Long targetMemberId, SecurityUserDetails memberInfo) {
+        validatePeriod(startDate, endDate);
         Member targetMember = memberManageService.getActiveMember(targetMemberId);
         return toGetFriendMonthlyScheduleDtos(
                 scheduleManageService.getMemberMonthlySchedules(targetMember, memberInfo.getUserId(),
-                        getExtendedPeriod(year, month)));
+                        startDate, endDate));
     }
 }
