@@ -40,6 +40,8 @@ public enum ErrorStatus implements BaseErrorCode {
     DUPLICATE_MEETING_PARTICIPANT(HttpStatus.BAD_REQUEST, "중복되는 참여자입니다."),
     INVALID_MEETING_PARTICIPANT_COUNT(HttpStatus.BAD_REQUEST, "모임 일정은 최소 1명, 최대 9명까지 초대 가능합니다."),
     CATEGORY_IN_USE_FAILURE(HttpStatus.BAD_REQUEST, "사용중인 카테고리는 삭제할 수 없습니다."),
+    INVALID_NICKNAME_TAG_FORMAT(HttpStatus.BAD_REQUEST, "잘못된 닉네임#태그형식입니다."),
+    INVALID_TAG_FORMAT(HttpStatus.BAD_REQUEST, "잘못된 태그 형식입니다."),
 
     /**
      * 401 : 소셜 로그인 오류
@@ -83,6 +85,10 @@ public enum ErrorStatus implements BaseErrorCode {
     /**
      * 403 : 리소스 접근 권한 오류
      */
+    AlREADY_FRIENDSHIP_MEMBER(HttpStatus.BAD_REQUEST, "이미 진행중인 친구 요청이거나 친구입니다."),
+
+    NOT_MY_FRIENDSHIP_REQUEST(HttpStatus.BAD_REQUEST, "나에게 요청온 친구 요청이 아닙니다."),
+
     NOT_FRIENDSHIP_MEMBER(HttpStatus.BAD_REQUEST, "요청한 회원과 친구가 아닙니다."),
 
     NOT_SCHEDULE_OWNER(HttpStatus.FORBIDDEN, "해당 일정의 생성자가 아닙니다."),
@@ -97,6 +103,10 @@ public enum ErrorStatus implements BaseErrorCode {
      * 404 : NOT FOUND 오류
      */
     NOT_FOUND_USER_FAILURE(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
+
+    NOT_FOUND_ACTIVE_USER_FAILURE(HttpStatus.NOT_FOUND, "활성화된 유저를 찾을 수 없습니다. (가입되지 않은 유저거나, 회원가입이 완료되지 않았습니다.)"),
+
+    NOT_FOUND_PENDING_USER_FAILURE(HttpStatus.NOT_FOUND, "회원가입 대기중인 유저를 찾을 수 없습니다. (가입되지 않은 유저거나, 이미 가입이 완료되었습니다.)"),
 
     NOT_FOUND_SCHEDULE_FAILURE(HttpStatus.NOT_FOUND, "일정을 찾을 수 없습니다. (참여한 일정이 아니거나, 일정 정보가 없습니다)"),
 
@@ -136,6 +146,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     NOT_PARTICIPATING_ACTIVITY(HttpStatus.NOT_FOUND, "참여한 활동이 아닙니다." ),
 
+    NOT_FOUND_FRIENDSHIP_REQUEST(HttpStatus.NOT_FOUND, "친구 요청을 찾을 수 없습니다."),
     /**
      * 404 : 예외 상황 에러
      */

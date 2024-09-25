@@ -79,5 +79,6 @@ public class MemberRequest {
         @NotNull(message = "색상 ID는 필수 값입니다.")
         private Long colorId;
         private String bio;
+        private String profileImage;
     }
 }
