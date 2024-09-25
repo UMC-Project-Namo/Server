@@ -24,6 +24,7 @@ public class ActivityResponse {
         private LocalDateTime activityEndDate;
         private ActivityLocationDto activityLocation;
         private BigDecimal totalAmount;
+        private List<ActivityImageDto> activityImages;
         private String tag;
     }
 
@@ -69,5 +70,18 @@ public class ActivityResponse {
         private Long activityParticipantId;
         private String participantNickname;
         private boolean isIncludedInSettlement;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    @Schema(description = "활동 이미지 정보 DTO")
+    public static class ActivityImageDto {
+        @Schema(description = "정렬 순서", example = "1")
+        private Integer orderNumber;
+        @Schema(description = "이미지 ID", example = "34")
+        private Long activityImageId;
+        @Schema(description = "이미지 URL", example = "https://static.namong.shop/resized/origin/acitivity/image.png")
+        private String imageUrl;
     }
 }
