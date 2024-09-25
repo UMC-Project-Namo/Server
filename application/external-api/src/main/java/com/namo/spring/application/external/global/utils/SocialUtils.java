@@ -97,11 +97,11 @@ public class SocialUtils {
 
 		Map<String, String> properties = (Map<String, String>)jsonMap.get("properties");
 		Map<String, String> kakaoAccount = (Map<String, String>)jsonMap.get("kakao_account");
-		if (!(kakaoAccount.get("has_email") != "true")) {
+		if (kakaoAccount.get("has_email") == "true") {
 			throw new UtilsException(ErrorStatus.SOCIAL_LOGIN_FAILURE);
 		}
 		properties.put("email", kakaoAccount.get("email"));
-		if ((kakaoAccount.get("has_birthday") == "true")) {
+		if ((kakaoAccount.get("has_birthday")=="true")) {
 			properties.put("birthday", kakaoAccount.get("birthday"));
 		}
 		return properties;

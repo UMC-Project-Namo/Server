@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.namo.spring.application.external.api.user.api.AuthApi;
 import com.namo.spring.application.external.api.user.converter.MemberConverter;
 import com.namo.spring.application.external.api.user.dto.MemberRequest;
 import com.namo.spring.application.external.api.user.dto.MemberResponse;
@@ -21,6 +20,7 @@ import com.namo.spring.core.common.response.ResponseDto;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.type.SocialType;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.RequiredArgsConstructor;
@@ -29,10 +29,11 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v2/auths")
-public class AuthController implements AuthApi {
+public class AuthController{
 
     private final AuthFacade memberFacade;
 
+    @Operation(summary = "애플 회원가입", description = "애플 소셜 로그인을 통한 회원가입을 진행합니다.")
     @PostMapping(value = "/signup/apple")
     @PreAuthorize("isAnonymous()")
     public ResponseDto<MemberResponse.SignUpDto> appleSignup(
@@ -42,6 +43,7 @@ public class AuthController implements AuthApi {
         return ResponseDto.onSuccess(signupDto);
     }
 
+    @Operation(summary = "소셜 회원가입", description = "카카오,네이버 소셜 로그인을 통한 회원가입을 진행합니다.")
     @PostMapping(value = "/signup/{socialType}")
     @PreAuthorize("isAnonymous()")
     public ResponseDto<MemberResponse.SignUpDto> socialSignup(
@@ -52,6 +54,7 @@ public class AuthController implements AuthApi {
         return ResponseDto.onSuccess(signupDto);
     }
 
+    @Operation(summary = "회원가입 완료", description = "회원가입 완료 처리를 진행합니다. 이 과정을 거치지 않으면 소셜 연결만 되어있는 상태입니다.")
     @PostMapping(value = "/signup/complete")
     public ResponseDto<MemberResponse.SignUpDoneDto> completeSignup(
             @Valid @RequestBody MemberRequest.CompleteSignUpDto dto,
@@ -61,6 +64,7 @@ public class AuthController implements AuthApi {
         return ResponseDto.onSuccess(MemberConverter.toSignUpDoneDto(target));
     }
 
+    @Operation(summary = "토큰 재발급", description = "토큰 재발급")
     @PostMapping(value = "/reissuance")
     public ResponseDto<MemberResponse.ReissueDto> reissueAccessToken(
             @RequestHeader(value = "refreshToken") String refreshToken
@@ -68,6 +72,7 @@ public class AuthController implements AuthApi {
         return ResponseDto.onSuccess(memberFacade.reissueAccessToken(refreshToken));
     }
 
+    @Operation(summary = "로그아웃", description = "로그아웃 API, 로그아웃 처리된 유저의 토큰을 만료시킵니다.")
     @PostMapping(value = "/logout")
     @PreAuthorize("isAuthenticated()")
     public ResponseDto<String> logout(
@@ -80,6 +85,12 @@ public class AuthController implements AuthApi {
         return ResponseDto.onSuccess("로그아웃 되었습니다.");
     }
 
+    @Operation(summary = "소셜 회원 탈퇴", description = """
+            회원 탈퇴 API, 소셜 회원 탈퇴 처리를 진행합니다.
+            회원 탈퇴 시, 소셜 회원 정보를 삭제하고, 회원의 애플리케이션 연결을 해제합니다.
+            		
+            이때, 삭제 처리는 바로 진행되는 것이 아니며 탈퇴 신청 후 3일간 유예기간이 있습니다.
+            """)
     @PostMapping("/delete/{socialType}")
     @PreAuthorize("isAuthenticated()")
     public ResponseDto<String> removeAuthUser(

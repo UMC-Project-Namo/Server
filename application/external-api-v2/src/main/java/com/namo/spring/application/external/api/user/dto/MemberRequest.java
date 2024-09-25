@@ -91,5 +91,6 @@ public class MemberRequest {
         private Long colorId;
         @Schema(description = "한 줄 소개")
         private String bio;
+        private String profileImage;
     }
 }

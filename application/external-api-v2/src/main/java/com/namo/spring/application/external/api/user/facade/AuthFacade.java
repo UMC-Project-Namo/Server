@@ -3,7 +3,6 @@ package com.namo.spring.application.external.api.user.facade;
 import java.util.List;
 import java.util.Map;
 
-import com.namo.spring.application.external.api.schedule.service.ScheduleMaker;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +16,7 @@ import com.namo.spring.application.external.api.user.dto.MemberResponse;
 import com.namo.spring.application.external.api.user.helper.JwtAuthHelper;
 import com.namo.spring.application.external.api.user.service.MemberManageService;
 import com.namo.spring.application.external.api.user.service.SocialLoginService;
-import com.namo.spring.application.external.api.user.service.TagGenerator;
+import com.namo.spring.application.external.global.utils.TagGenerator;
 import com.namo.spring.application.external.global.common.security.jwt.CustomJwts;
 import com.namo.spring.db.mysql.domains.category.entity.Palette;
 import com.namo.spring.db.mysql.domains.category.service.PaletteService;
@@ -36,7 +35,6 @@ public class AuthFacade {
     private final MemberManageService memberManageService;
     private final TagGenerator tagGenerator;
     private final PaletteService paletteService;
-    private final ScheduleMaker scheduleMaker;
 
     @Transactional
     public MemberResponse.SignUpDto socialSignup(MemberRequest.SocialSignUpDto signUpDto, SocialType socialType) {
@@ -111,12 +109,12 @@ public class AuthFacade {
 
     @Transactional
     public Member completeSignup(MemberRequest.CompleteSignUpDto dto, Long memberId) {
-        Member member = memberManageService.getMember(memberId);
+        Member member = memberManageService.getPendingMember(memberId);
         String tag = tagGenerator.generateTag(member.getNickname());
         Palette palette = paletteService.getPalette(dto.getColorId());
-        member.signUpComplete(dto.getName(), dto.getNickname(), dto.getBirthday(), dto.getBio(), tag, palette);
-        Member savedMember = memberManageService.saveMember(member);
-        scheduleMaker.createBirthdaySchedules(savedMember);
+        member.signUpComplete(dto.getName(), dto.getNickname(), dto.getBirthday(), dto.getBio(), tag, palette,
+                dto.getProfileImage());
+        memberManageService.saveMember(member);
         return member;
     }
 }

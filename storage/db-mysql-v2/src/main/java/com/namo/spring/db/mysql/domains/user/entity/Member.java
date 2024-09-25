@@ -83,6 +83,8 @@ public class Member extends BaseTimeEntity implements User {
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private String bio;
 
+    private String profileImage;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MemberRole memberRole;
@@ -119,7 +121,7 @@ public class Member extends BaseTimeEntity implements User {
     private List<Participant> participants;
 
     @Builder
-    public Member(String name, String tag, LocalDate birthday, String authId, String email,
+    public Member(String name, String tag, String birthday, String authId, String email,
             SocialType socialType, String socialRefreshToken) {
         this.name = name;
         this.nameVisible = true;
@@ -164,7 +166,8 @@ public class Member extends BaseTimeEntity implements User {
         return !status.equals(MemberStatus.PENDING);
     }
 
-    public void signUpComplete(String name, String nickname, LocalDate birthday, String bio, String tag, Palette palette) {
+    public void signUpComplete(String name, String nickname, String birthday, String bio, String tag, Palette palette,
+            String profileImage) {
         this.name = name;
         this.nickname = nickname;
         this.birthday = birthday;
@@ -172,5 +175,6 @@ public class Member extends BaseTimeEntity implements User {
         this.tag = tag;
         this.palette = palette;
         this.status = MemberStatus.ACTIVE;
+        this.profileImage = profileImage;
     }
 }

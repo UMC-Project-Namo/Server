@@ -1,9 +1,10 @@
 package com.namo.spring.application.external.api.guest.controller;
 
+import static com.namo.spring.core.common.code.status.ErrorStatus.*;
+
 import java.util.List;
 
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
-import com.namo.spring.core.common.code.status.ErrorStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
@@ -39,11 +40,11 @@ public class GuestController {
 
     @Operation(summary = "게스트 로그인 / 모임 참여", description = "참여 코드에 대하여 게스트 접근을 허용합니다. 참여 코드와 닉네임이 존재할 시 게스트 로그인을, 존재 하지 않을 시에는 모임에 참여합니다.")
     @ApiErrorCodes(value = {
-            ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE,
-            ErrorStatus.NOT_MEETING_SCHEDULE,
-            ErrorStatus.ANONYMOUS_LOGIN_FAILURE,
-            ErrorStatus.NOT_SCHEDULE_PARTICIPANT,
-            ErrorStatus.NOT_FOUND_COLOR
+            NOT_FOUND_SCHEDULE_FAILURE,
+            NOT_MEETING_SCHEDULE,
+            ANONYMOUS_LOGIN_FAILURE,
+            NOT_SCHEDULE_PARTICIPANT,
+            NOT_FOUND_COLOR
     })
     @PostMapping(path = "/invitations")
     public ResponseDto<GuestParticipantResponse.PostGuestParticipantInfoDto> guestMeetingAccess(
@@ -54,11 +55,11 @@ public class GuestController {
 
     @Operation(summary = "모임 일정 월간 조회")
     @ApiErrorCodes(value = {
-            ErrorStatus.INVALID_FORMAT_FAILURE,
-            ErrorStatus.NOT_MEETING_SCHEDULE,
-            ErrorStatus.NOT_FOUND_SCHEDULE_FAILURE,
-            ErrorStatus.NOT_FOUND_USER_FAILURE,
-            ErrorStatus.NOT_SCHEDULE_PARTICIPANT,
+            INVALID_FORMAT_FAILURE,
+            NOT_MEETING_SCHEDULE,
+            NOT_FOUND_SCHEDULE_FAILURE,
+            NOT_FOUND_USER_FAILURE,
+            NOT_SCHEDULE_PARTICIPANT,
     })
     @GetMapping(path = "/meeting/{meetingScheduleId}/calendar")
     public ResponseDto<List<GuestMeetingResponse.GetMonthlyMeetingParticipantScheduleDto>> getMonthlyMeetingParticipantSchedules(

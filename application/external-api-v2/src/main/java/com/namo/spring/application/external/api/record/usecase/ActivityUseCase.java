@@ -54,4 +54,10 @@ public class ActivityUseCase {
             activityParticipantManageService.addSettlement(request.getSettlement(), activityParticipant);
         }
     }
+
+    @Transactional
+    public void deleteActivity(Long memberId, Long activityId) {
+        Activity target = activityManageService.getMyActivity(memberId, activityId);
+        activityManageService.removeActivity(target);
+    }
 }

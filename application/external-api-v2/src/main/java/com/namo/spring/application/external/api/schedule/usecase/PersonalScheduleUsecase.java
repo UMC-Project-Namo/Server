@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.namo.spring.application.external.api.notification.service.NotificationManageService;
 import com.namo.spring.application.external.api.schedule.dto.PersonalScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.PersonalScheduleResponse;
@@ -33,8 +34,8 @@ public class PersonalScheduleUsecase {
 
     @Transactional
     public Long createPersonalSchedule(PersonalScheduleRequest.PostPersonalScheduleDto dto,
-            SecurityUserDetails memberInfo) {
-        Member member = memberManageService.getMember(memberInfo.getUserId());
+            SecurityUserDetails memberInfo) throws JsonProcessingException {
+        Member member = memberManageService.getActiveMember(memberInfo.getUserId());
         Schedule schedule = scheduleManageService.createPersonalSchedule(dto, member);
         if (!dto.getReminderTrigger().isEmpty()) {
             notificationManageService.createScheduleReminderNotification(schedule, member, dto.getReminderTrigger());
@@ -70,7 +71,7 @@ public class PersonalScheduleUsecase {
     @Transactional(readOnly = true)
     public List<PersonalScheduleResponse.GetFriendMonthlyScheduleDto> getFriendMonthlySchedules(int year, int month,
             Long targetMemberId, SecurityUserDetails memberInfo) {
-        Member targetMember = memberManageService.getMember(targetMemberId);
+        Member targetMember = memberManageService.getActiveMember(targetMemberId);
         return toGetFriendMonthlyScheduleDtos(
                 scheduleManageService.getMemberMonthlySchedules(targetMember, memberInfo.getUserId(),
                         getExtendedPeriod(year, month)));

@@ -8,6 +8,7 @@ import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.type.Period;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
+import com.namo.spring.db.mysql.domains.user.entity.User;
 
 public class ScheduleConverter {
     private ScheduleConverter() {
@@ -40,4 +41,36 @@ public class ScheduleConverter {
                 .build();
     }
 
+    public static ScheduleResponse.ScheduleSummaryDto toScheduleSummaryDto(Participant participant) {
+        Schedule schedule = participant.getSchedule();
+        return ScheduleResponse.ScheduleSummaryDto.builder()
+                .scheduleId(schedule.getId())
+                .scheduleTitle(schedule.getTitle())
+                .scheduleStartDate(schedule.getPeriod().getStartDate())
+                .locationInfo(LocationConverter.toLocationInfoDto(schedule.getLocation()))
+                .categoryInfo(toCategoryInfoDto(participant.getCategory()))
+                .hasDiary(participant.isHasDiary())
+                .participantCount(schedule.getParticipantCount())
+                .participantInfo(schedule.getParticipantList().stream()
+                        .map(ScheduleConverter::toParticipantInfoDto)
+                        .toList())
+                .build();
+    }
+
+    private static ScheduleResponse.CategoryInfoDto toCategoryInfoDto(Category category) {
+        return ScheduleResponse.CategoryInfoDto.builder()
+                .name(category.getName())
+                .colorId(category.getPalette().getId())
+                .build();
+    }
+
+    private static ScheduleResponse.ParticipantInfoDto toParticipantInfoDto(Participant participant){
+        User user = participant.getUser();
+        boolean isMember = user instanceof Member;
+        return ScheduleResponse.ParticipantInfoDto.builder()
+                .userId(user.getId())
+                .nickname(user.getNickname())
+                .isMember(isMember)
+                .build();
+    }
 }

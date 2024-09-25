@@ -1,6 +1,7 @@
 package com.namo.spring.application.external.api.schedule.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -26,6 +27,8 @@ public class ScheduleResponse {
         private LocalDateTime scheduleStartDate;
         private LocationInfoDto locationInfo;
         private CategoryInfoDto categoryInfo;
+        private List<ParticipantInfoDto> participantInfo;
+        private int participantCount;
         private boolean hasDiary;
     }
 
@@ -48,6 +51,19 @@ public class ScheduleResponse {
         private String name;
         @Schema(description = "카테고리 색상", example = "1")
         private Long colorId;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    @Schema(description = "참여자 정보 DTO")
+    public static class ParticipantInfoDto{
+        @Schema(description = "유저 ID (회원일 경우 memberId, 비회원인 경우 AnonymousId)", example = "2")
+        private Long userId;
+        @Schema(description = "유저 이름", example = "캐슬")
+        private String nickname;
+        @Schema(description = "회원 여부 (true: 회원/ false: 비회원) ", example = "true")
+        private boolean isMember;
     }
 
 }

@@ -1,5 +1,7 @@
 package com.namo.spring.application.external.api.user.controller;
 
+import static com.namo.spring.core.common.code.status.ErrorStatus.*;
+
 import jakarta.validation.Valid;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -12,7 +14,6 @@ import com.namo.spring.application.external.api.user.dto.MemberRequest;
 import com.namo.spring.application.external.api.user.facade.TermFacade;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
-import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.common.response.ResponseDto;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,10 +32,10 @@ public class TermController {
     @Operation(summary = "약관을 동의합니다. ", description = "약관 동의 API")
     @PostMapping("")
     @ApiErrorCodes(value = {
-            ErrorStatus.EMPTY_ACCESS_KEY,
-            ErrorStatus.EXPIRATION_ACCESS_TOKEN,
-            ErrorStatus.EXPIRATION_REFRESH_TOKEN,
-            ErrorStatus.INTERNET_SERVER_ERROR
+            EMPTY_ACCESS_KEY,
+            EXPIRATION_ACCESS_TOKEN,
+            EXPIRATION_REFRESH_TOKEN,
+            INTERNET_SERVER_ERROR
     })
     public ResponseDto<String> createTerm(@Valid @RequestBody MemberRequest.TermDto termDto,
             @AuthenticationPrincipal SecurityUserDetails member) {

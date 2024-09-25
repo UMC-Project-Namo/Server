@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @RequiredArgsConstructor
 public class SocialUtils {
-    private static final String naverApiURL = "https://openapi.naver.com/v2/nid/me";
+    private static final String naverApiURL = "https://openapi.naver.com/v1/nid/me";
     private static final String kakaoApiURL = "https://kapi.kakao.com/v2/user/me";
 
     public HttpURLConnection connectKakaoResourceServer(MemberRequest.SocialSignUpDto signUpReq) {
@@ -63,11 +63,11 @@ public class SocialUtils {
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
             String line = "";
-            String result = "";
+            StringBuilder result = new StringBuilder();
             while ((line = br.readLine()) != null) {
-                result += line;
+                result.append(line);
             }
-            return result;
+            return result.toString();
         } catch (IOException e) {
             throw new UtilsException(ErrorStatus.SOCIAL_LOGIN_FAILURE);
         }
@@ -97,7 +97,7 @@ public class SocialUtils {
 
         Map<String, String> properties = (Map<String, String>)jsonMap.get("properties");
         Map<String, String> kakaoAccount = (Map<String, String>)jsonMap.get("kakao_account");
-        if (!(kakaoAccount.get("has_email") != "true")) {
+        if (kakaoAccount.get("has_email") == "true") {
             throw new UtilsException(ErrorStatus.SOCIAL_LOGIN_FAILURE);
         }
         properties.put("email", kakaoAccount.get("email"));
