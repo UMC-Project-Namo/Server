@@ -99,8 +99,6 @@ public class PersonalScheduleResponse {
     public static class GetMonthlyFriendBirthdayDto {
         @Schema(description = "친구 이름", example = "나몽")
         private String nickname;
-        @Schema(description = "생일 카테고리 정보")
-        private CategoryDto categoryInfo;
         @Schema(description = "친구의 생일(현재 년도 기준), unix 타임스탬프 형식")
         private Long birthdayDate;
     }
