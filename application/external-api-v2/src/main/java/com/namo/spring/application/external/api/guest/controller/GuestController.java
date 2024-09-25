@@ -53,24 +53,4 @@ public class GuestController {
         return ResponseDto.onSuccess(guestUsecase.createOrValidateGuest(dto, code));
     }
 
-    @Operation(summary = "모임 일정 월간 조회")
-    @ApiErrorCodes(value = {
-            INVALID_FORMAT_FAILURE,
-            NOT_MEETING_SCHEDULE,
-            NOT_FOUND_SCHEDULE_FAILURE,
-            NOT_FOUND_USER_FAILURE,
-            NOT_SCHEDULE_PARTICIPANT,
-    })
-    @GetMapping(path = "/meeting/{meetingScheduleId}/calendar")
-    public ResponseDto<List<GuestMeetingResponse.GetMonthlyMeetingParticipantScheduleDto>> getMonthlyMeetingParticipantSchedules(
-        @Parameter(description ="모임 일정 ID")@PathVariable Long meetingScheduleId,
-        @Parameter(description ="연도")@RequestParam Integer year,
-        @Parameter(description ="월")@RequestParam Integer month,
-        @Parameter(description ="게스트 태그")@RequestParam String tag,
-        @Parameter(description ="게스트 닉네임")@RequestParam String nickname
-    ) {
-        return ResponseDto.onSuccess(
-                guestUsecase.getMonthlyMeetingParticipantSchedules(meetingScheduleId, year, month, tag, nickname));
-    }
-
 }
