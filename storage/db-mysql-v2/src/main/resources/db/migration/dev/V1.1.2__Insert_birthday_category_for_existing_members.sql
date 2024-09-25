@@ -25,7 +25,7 @@ SELECT
     '4',
     3,
     true AS is_shared,
-    'ACTIVE' AS status,
+    1,
     CURRENT_TIMESTAMP AS created_at,
     CURRENT_TIMESTAMP AS updated_at
 FROM
