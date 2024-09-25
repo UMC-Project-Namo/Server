@@ -150,8 +150,8 @@ public class Participant extends BaseTimeEntity {
         return schedule.getIsMeetingSchedule() ? this.getCustomTitle() : schedule.getTitle();
     }
 
-    public String getScheduleImage(){
-        return schedule.getIsMeetingSchedule() ? this.getCustomImage() : schedule.getImageUrl();
+    public void updateCategory(Category category) {
+        this.category = category;
     }
 
 }

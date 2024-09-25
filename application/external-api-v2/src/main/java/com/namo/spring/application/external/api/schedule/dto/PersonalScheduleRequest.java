@@ -50,6 +50,9 @@ public class PersonalScheduleRequest {
         @NotBlank(message = "일정 이름 입력은 필수 입니다. 수정 사항이 없을 시 원본 값을 전송합니다.")
         @Schema(description = "모임 일정 이름, 수정 사항이 없을 시 원본 값을 전송합니다.")
         private String title;
+        @NotNull(message = "카테고리 ID는 필수입니다. 수정 사항이 없을 시 원본 값을 전송합니다.")
+        @Schema(description = "카테고리 ID")
+        private Long categoryId;
         @NotNull(message = "기간 입력은 필수 입니다. 수정 사항이 없을 시 원본 값을 전송합니다.")
         @Schema(description = "기간, 수정 사항이 없을 시 원본 값을 전송합니다.")
         private MeetingScheduleRequest.PeriodDto period;
