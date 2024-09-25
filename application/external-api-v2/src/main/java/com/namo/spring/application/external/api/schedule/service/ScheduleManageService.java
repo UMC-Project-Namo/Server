@@ -6,6 +6,8 @@ import static com.namo.spring.application.external.global.utils.SchedulePeriodVa
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.namo.spring.application.external.api.category.service.CategoryManageService;
+import com.namo.spring.db.mysql.domains.category.entity.Category;
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleSummaryQuery;
 import com.namo.spring.db.mysql.domains.user.dto.FriendBirthdayQuery;
 import org.springframework.stereotype.Service;
@@ -41,6 +43,7 @@ public class ScheduleManageService {
     private final ParticipantManageService participantManageService;
     private final ParticipantService participantService;
     private final FriendshipService friendshipService;
+    private final CategoryManageService categoryManageService;
 
     public Schedule getSchedule(Long scheduleId) {
         return scheduleService.readSchedule(scheduleId)
@@ -219,7 +222,9 @@ public class ScheduleManageService {
 
     public void updatePersonalSchedule(PersonalScheduleRequest.PatchPersonalScheduleDto dto, Schedule schedule,
             Long memberId) {
-        validateScheduleOwner(schedule, memberId);
+        Participant participant = validateAndGetScheduleOwner(schedule, memberId);
+        Category category = categoryManageService.getMyCategory(memberId, dto.getCategoryId());
+        participant.updateCategory(category);
         updateScheduleContent(dto.getTitle(), dto.getLocation(), dto.getPeriod(), null, schedule);
     }
 
@@ -228,7 +233,7 @@ public class ScheduleManageService {
      */
     public void updateMeetingSchedule(MeetingScheduleRequest.PatchMeetingScheduleDto dto, Schedule schedule,
                                       Long memberId) {
-        validateScheduleOwner(schedule, memberId);
+        validateAndGetScheduleOwner(schedule, memberId);
         updateScheduleContent(dto.getTitle(), dto.getLocation(), dto.getPeriod(), dto.getImageUrl(), schedule);
         // 기존의 인원과, 초대될 & 삭제될 member  검증
         if (!dto.getParticipantsToAdd().isEmpty() || !dto.getParticipantsToRemove().isEmpty()) {
@@ -273,12 +278,13 @@ public class ScheduleManageService {
         schedule.updateContent(title, period, location, imageUrl);
     }
 
-    public void validateScheduleOwner(Schedule schedule, Long memberId) {
+    public Participant validateAndGetScheduleOwner(Schedule schedule, Long memberId) {
         Participant participant = participantManageService.getValidatedParticipantWithSchedule(memberId,
                 schedule.getId());
         if (participant.getIsOwner() != ParticipantRole.OWNER.getValue()) {
             throw new ScheduleException(ErrorStatus.NOT_SCHEDULE_OWNER);
         }
+        return participant;
     }
 
 }

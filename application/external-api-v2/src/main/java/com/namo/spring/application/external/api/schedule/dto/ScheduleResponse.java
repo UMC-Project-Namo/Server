@@ -62,8 +62,8 @@ public class ScheduleResponse {
         private Long userId;
         @Schema(description = "유저 이름", example = "캐슬")
         private String nickname;
-        @Schema(description = "회원 여부 (true: 회원/ false: 비회원) ", example = "true")
-        private boolean isMember;
+        @Schema(description = "게스트 여부 (true: 비회원/ false: 회원) ", example = "true")
+        private Boolean isGuest;
     }
 
 }

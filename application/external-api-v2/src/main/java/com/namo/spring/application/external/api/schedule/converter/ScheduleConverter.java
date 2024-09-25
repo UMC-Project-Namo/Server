@@ -7,7 +7,7 @@ import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.type.Period;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
-import com.namo.spring.db.mysql.domains.user.entity.Member;
+import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
 import com.namo.spring.db.mysql.domains.user.entity.User;
 
 public class ScheduleConverter {
@@ -66,11 +66,10 @@ public class ScheduleConverter {
 
     private static ScheduleResponse.ParticipantInfoDto toParticipantInfoDto(Participant participant){
         User user = participant.getUser();
-        boolean isMember = user instanceof Member;
         return ScheduleResponse.ParticipantInfoDto.builder()
                 .userId(user.getId())
                 .nickname(user.getNickname())
-                .isMember(isMember)
+                .isGuest(user instanceof Anonymous)
                 .build();
     }
 }
