@@ -36,13 +36,12 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
             "AND fr.birthdayVisible = true " +
             "AND f.status = 'ACCEPTED' " +
             "AND (" +
-            "    (FUNCTION('MONTH', fr.birthday) > FUNCTION('MONTH', :startDate) " +
-            "     OR (FUNCTION('MONTH', fr.birthday) = FUNCTION('MONTH', :startDate) " +
-            "         AND FUNCTION('DAY', fr.birthday) >= FUNCTION('DAY', :startDate))) " +
-            "    AND " +
-            "    (FUNCTION('MONTH', fr.birthday) < FUNCTION('MONTH', :endDate) " +
-            "     OR (FUNCTION('MONTH', fr.birthday) = FUNCTION('MONTH', :endDate) " +
-            "         AND FUNCTION('DAY', fr.birthday) <= FUNCTION('DAY', :endDate))) " +
+            "    (FUNCTION('DAYOFYEAR', fr.birthday) >= FUNCTION('DAYOFYEAR', :startDate) " +
+            "     AND FUNCTION('DAYOFYEAR', fr.birthday) <= FUNCTION('DAYOFYEAR', :endDate)) " +
+            "    OR " +
+            "    (FUNCTION('DAYOFYEAR', :startDate) > FUNCTION('DAYOFYEAR', :endDate) " +
+            "     AND (FUNCTION('DAYOFYEAR', fr.birthday) >= FUNCTION('DAYOFYEAR', :startDate) " +
+            "          OR FUNCTION('DAYOFYEAR', fr.birthday) <= FUNCTION('DAYOFYEAR', :endDate))) " +
             ")")
     List<FriendBirthdayQuery> findBirthdayVisibleFriendIdsByPeriod(
             Long memberId,
