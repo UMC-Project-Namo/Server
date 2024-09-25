@@ -47,6 +47,7 @@ public class PersonalScheduleUsecase {
     @Transactional(readOnly = true)
     public List<PersonalScheduleResponse.GetMonthlyScheduleDto> getMyMonthlySchedules(LocalDate startDate, LocalDate endDate,
                                                                                       SecurityUserDetails memberInfo) {
+        validatePeriod(startDate, endDate);
         List<Participant> scheduleInfo = scheduleManageService.getMyMonthlySchedules(memberInfo.getUserId(),
                 startDate, endDate);
         List<ScheduleNotificationQuery> scheduleNotifications = notificationManageService.getScheduleNotifications(
@@ -57,6 +58,7 @@ public class PersonalScheduleUsecase {
     @Transactional(readOnly = true)
     public List<PersonalScheduleResponse.GetMonthlyFriendBirthdayDto> getMonthlyFriendsBirthday(LocalDate startDate, LocalDate endDate,
                                                                                       SecurityUserDetails memberInfo) {
+        validatePeriod(startDate, endDate);
         List<FriendBirthdayQuery> friendsBirthday = scheduleManageService.getMonthlyFriendsBirthday(memberInfo.getUserId(), startDate, endDate);
         return toGetMonthlyFriendBirthdayDtos(friendsBirthday, startDate, endDate);
     }
@@ -71,6 +73,7 @@ public class PersonalScheduleUsecase {
     @Transactional(readOnly = true)
     public List<PersonalScheduleResponse.GetFriendMonthlyScheduleDto> getFriendMonthlySchedules(LocalDate startDate, LocalDate endDate,
             Long targetMemberId, SecurityUserDetails memberInfo) {
+        validatePeriod(startDate, endDate);
         Member targetMember = memberManageService.getActiveMember(targetMemberId);
         return toGetFriendMonthlyScheduleDtos(
                 scheduleManageService.getMemberMonthlySchedules(targetMember, memberInfo.getUserId(),
