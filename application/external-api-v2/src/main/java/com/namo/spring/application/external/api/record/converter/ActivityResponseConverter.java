@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import com.namo.spring.application.external.api.record.dto.ActivityResponse;
 import com.namo.spring.db.mysql.domains.record.entity.Activity;
+import com.namo.spring.db.mysql.domains.record.entity.ActivityImage;
 import com.namo.spring.db.mysql.domains.record.entity.ActivityParticipant;
 import com.namo.spring.db.mysql.domains.schedule.type.Location;
 
@@ -24,6 +25,9 @@ public class ActivityResponseConverter {
                 .activityEndDate(activity.getEndDate())
                 .activityLocation(toActivityLocationDto(activity.getSchedule().getLocation()))
                 .totalAmount(activity.getTotalAmount())
+                .activityImages(activity.getActivityImages().stream()
+                        .map(ActivityResponseConverter::toActivityImageDto)
+                        .toList())
                 .tag(activity.getCategoryTag())
                 .build();
     }
@@ -70,6 +74,14 @@ public class ActivityResponseConverter {
                 .activityParticipantId(activityParticipant.getParticipant().getId())
                 .participantNickname(activityParticipant.getParticipant().getMember().getNickname())
                 .isIncludedInSettlement(activityParticipant.isIncludedInSettlement())
+                .build();
+    }
+
+    public static ActivityResponse.ActivityImageDto toActivityImageDto(ActivityImage image){
+        return ActivityResponse.ActivityImageDto.builder()
+                .activityImageId(image.getId())
+                .imageUrl(image.getImageUrl())
+                .orderNumber(image.getImageOrder())
                 .build();
     }
 
