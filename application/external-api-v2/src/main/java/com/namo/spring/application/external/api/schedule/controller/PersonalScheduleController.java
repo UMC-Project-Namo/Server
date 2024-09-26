@@ -2,10 +2,9 @@ package com.namo.spring.application.external.api.schedule.controller;
 
 import java.time.LocalDate;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.Valid;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,8 +52,8 @@ public class PersonalScheduleController implements PersonalScheduleApi {
      */
     @GetMapping("/calendar")
     public ResponseDto<List<PersonalScheduleResponse.GetMonthlyScheduleDto>> getMyMonthlySchedules(
-            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate startDate,
-            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate endDate,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
             @AuthenticationPrincipal SecurityUserDetails member) {
         return ResponseDto.onSuccess(personalScheduleUsecase.getMyMonthlySchedules(startDate, endDate, member));
     }
@@ -65,8 +64,8 @@ public class PersonalScheduleController implements PersonalScheduleApi {
      */
     @GetMapping("/calendar/friends/birthdays")
     public ResponseDto<List<PersonalScheduleResponse.GetMonthlyFriendBirthdayDto>> getMonthlyFriendsBirthday(
-            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate startDate,
-            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate endDate,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
             @AuthenticationPrincipal SecurityUserDetails member) {
         return ResponseDto.onSuccess(personalScheduleUsecase.getMonthlyFriendsBirthday(startDate, endDate, member));
     }
@@ -76,8 +75,8 @@ public class PersonalScheduleController implements PersonalScheduleApi {
      */
     @GetMapping("/calendar/friends")
     public ResponseDto<List<PersonalScheduleResponse.GetFriendMonthlyScheduleDto>> getFriendMonthlySchedules(
-            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate startDate,
-            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate endDate,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
             @RequestParam Long memberId,
             @AuthenticationPrincipal SecurityUserDetails member) {
         return ResponseDto.onSuccess(personalScheduleUsecase.getFriendMonthlySchedules(startDate, endDate, memberId, member));
