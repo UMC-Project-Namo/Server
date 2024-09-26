@@ -43,7 +43,6 @@ public class ScheduleController {
             NOT_SCHEDULE_PARTICIPANT,
             NOT_FOUND_MOBILE_DEVICE_FAILURE,
             NOT_SUPPORTED_DEVICE_TYPE
-
     })
     @PutMapping("/{scheduleId}/notifications")
     public ResponseDto<String> updateScheduleReminder(@Parameter(description = "일정 ID") @PathVariable Long scheduleId,
@@ -51,6 +50,19 @@ public class ScheduleController {
                                                       @AuthenticationPrincipal SecurityUserDetails member) {
         scheduleUsecase.updateOrCreateScheduleReminder(dto, scheduleId, member);
         return ResponseDto.onSuccess("알림 수정 성공");
+    }
+
+    @Operation(summary = "일정 삭제", description = "일정을 삭제합니다.")
+    @ApiErrorCodes(value = {
+            NOT_FOUND_SCHEDULE_FAILURE,
+            NOT_SCHEDULE_PARTICIPANT,
+            NOT_SCHEDULE_OWNER
+    })
+    @DeleteMapping("/{scheduleId}")
+    public ResponseDto<String> deleteSchedule(@Parameter(description = "일정 ID") @PathVariable Long scheduleId,
+                                              @AuthenticationPrincipal SecurityUserDetails member) {
+        scheduleUsecase.deleteSchedule(scheduleId, member);
+        return ResponseDto.onSuccess("일정 삭제 성공");
     }
 
 }

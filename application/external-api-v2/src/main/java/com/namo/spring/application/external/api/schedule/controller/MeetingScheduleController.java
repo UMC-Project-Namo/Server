@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -78,8 +79,8 @@ public class MeetingScheduleController {
     })
     @GetMapping(path = "/preview")
     public ResponseDto<List<MeetingScheduleResponse.GetMonthlyMembersScheduleDto>> getMonthlyParticipantSchedules(
-            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate startDate,
-            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate endDate,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
             @RequestParam List<Long> participantIds,
             @AuthenticationPrincipal SecurityUserDetails memberInfo) {
         return ResponseDto.onSuccess(
@@ -96,8 +97,8 @@ public class MeetingScheduleController {
     @GetMapping(path = "/{meetingScheduleId}/calender")
     public ResponseDto<List<MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto>> getMonthlyMeetingParticipantSchedules(
             @PathVariable Long meetingScheduleId,
-            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate startDate,
-            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate endDate,
+           @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
             @AuthenticationPrincipal SecurityUserDetails memberInfo) {
         return ResponseDto.onSuccess(
                 meetingScheduleUsecase.getMonthlyMeetingParticipantSchedules(meetingScheduleId, startDate, endDate,

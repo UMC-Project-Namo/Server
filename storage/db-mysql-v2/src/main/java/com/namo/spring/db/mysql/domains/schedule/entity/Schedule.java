@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.namo.spring.db.mysql.domains.notification.entity.Notification;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -62,10 +63,13 @@ public class Schedule extends BaseTimeEntity {
     private String participantNicknames;
 
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Activity> activityList;
+    private List<Activity> activityList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "schedule")
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Participant> participantList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notification> notifications = new ArrayList<>();
 
     @Builder
     public Schedule(String title, Period period, Location location, int scheduleType, String imageUrl,
