@@ -41,21 +41,21 @@ public interface PersonalScheduleApi {
     @ApiErrorCodes(value = {
             ErrorStatus.INVALID_FORMAT_FAILURE})
     ResponseDto<List<PersonalScheduleResponse.GetMonthlyScheduleDto>> getMyMonthlySchedules(
-            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate startDate,
-            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate endDate,
+            @RequestParam  LocalDate startDate,
+            @RequestParam  LocalDate endDate,
             @AuthenticationPrincipal SecurityUserDetails member);
 
     @Operation(summary = "개인 캘린더 - 친구 생일 조회", description = "친구 생일을 조회합니다.")
     ResponseDto<List<PersonalScheduleResponse.GetMonthlyFriendBirthdayDto>> getMonthlyFriendsBirthday(
-            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate startDate,
-            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate endDate,
+            @RequestParam  LocalDate startDate,
+            @RequestParam  LocalDate endDate,
             @AuthenticationPrincipal SecurityUserDetails member);
 
     @Operation(summary = "친구 캘린더 조회", description = "친구의 캘린더을 조회합니다.")
     @ApiErrorCodes(value = {ErrorStatus.NOT_FRIENDSHIP_MEMBER})
     ResponseDto<List<PersonalScheduleResponse.GetFriendMonthlyScheduleDto>> getFriendMonthlySchedules(
-            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate startDate,
-            @RequestParam @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") LocalDate endDate,
+            @RequestParam  LocalDate startDate,
+            @RequestParam  LocalDate endDate,
             @Parameter(description = "친구 유저 ID") @RequestParam Long memberId,
             @AuthenticationPrincipal SecurityUserDetails member);
 
