@@ -53,4 +53,11 @@ public class ScheduleController {
         return ResponseDto.onSuccess("알림 수정 성공");
     }
 
+    @DeleteMapping("/{scheduleId}")
+    public ResponseDto<String> deleteSchedule(@PathVariable Long scheduleId,
+                                              @AuthenticationPrincipal SecurityUserDetails member) {
+        scheduleUsecase.deleteSchedule(scheduleId, member);
+        return ResponseDto.onSuccess("알림 삭제 성공");
+    }
+
 }

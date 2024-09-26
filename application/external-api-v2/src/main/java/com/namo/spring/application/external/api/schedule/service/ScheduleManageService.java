@@ -289,4 +289,9 @@ public class ScheduleManageService {
         return participant;
     }
 
+    public void deleteSchedule(Schedule schedule, Long memberId){
+        validateAndGetScheduleOwner(schedule, memberId);
+        scheduleService.deleteSchedule(schedule.getId());
+    }
+
 }

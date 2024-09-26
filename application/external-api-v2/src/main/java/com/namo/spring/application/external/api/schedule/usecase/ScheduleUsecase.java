@@ -1,5 +1,11 @@
 package com.namo.spring.application.external.api.schedule.usecase;
 
+import com.namo.spring.application.external.api.schedule.service.ScheduleManageService;
+import com.namo.spring.core.common.code.status.ErrorStatus;
+import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
+import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
+import com.namo.spring.db.mysql.domains.schedule.service.ScheduleService;
+import com.namo.spring.db.mysql.domains.schedule.type.ParticipantRole;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +29,7 @@ public class ScheduleUsecase {
     private final MemberManageService memberManageService;
     private final NotificationManageService notificationManageService;
     private final ParticipantManageService participantManageService;
+    private final ScheduleManageService scheduleManageService;
 
     @Transactional(readOnly = true)
     public ScheduleResponse.ScheduleSummaryDto getScheduleSummary(Long memberId, Long scheduleId) {
@@ -36,5 +43,11 @@ public class ScheduleUsecase {
         Member member = memberManageService.getActiveMember(memberInfo.getUserId());
         notificationManageService.updateOrCreateScheduleReminderNotification(scheduleId, member,
                 dto.getReminderTrigger());
+    }
+
+    @Transactional
+    public void deleteSchedule(Long scheduleId, SecurityUserDetails memberInfo) {
+        Schedule schedule= scheduleManageService.getSchedule(scheduleId);
+        scheduleManageService.deleteSchedule(schedule, memberInfo.getUserId());
     }
 }
