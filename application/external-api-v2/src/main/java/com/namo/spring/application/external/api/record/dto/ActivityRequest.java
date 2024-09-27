@@ -32,7 +32,6 @@ public class ActivityRequest {
         @Schema(description = "활동 태그", example = "술")
         private String tag;
         @Schema(description = "활동 이미지 URL List")
-        @NotNull
         private List<String> imageList;
     }
 
@@ -59,6 +58,18 @@ public class ActivityRequest {
         @Schema(description = "정산에 참여 할 participantId 넣어주세요.", example = "[1, 2]" )
         @NotNull
         private List<Long> participantIdList;
+    }
+
+    public static class UpdateActivityDto{
+        private String title;
+        @Schema(description = "활동 시작 시간", example = "2024-09-15 17:29:54")
+        private LocalDateTime activityStartDate;
+        @Schema(description = "활동 종료 시간", example = "2024-09-15 18:29:54")
+        private LocalDateTime activityEndDate;
+        @Schema(description = "활동 위치 정보")
+        private ActivityLocationDto location;
+        @Schema(description = "전체 활동 이미지 URL List")
+        private List<String> imageList;
     }
 
 }
