@@ -93,7 +93,7 @@ public class Participant extends BaseTimeEntity {
         this.customImage =customImage;
     }
 
-    public static Participant of(int isOwner, User user, Schedule schedule, ParticipantStatus status, Category category,
+    public static Participant of(int isOwner, User user, Schedule schedule, Category category,
             Palette palette, String customTitle, String customImage) {
         return Participant.builder()
                 .isOwner(isOwner)

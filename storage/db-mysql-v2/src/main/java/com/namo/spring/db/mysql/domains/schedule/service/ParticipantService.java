@@ -12,7 +12,6 @@ import com.namo.spring.core.common.annotation.DomainService;
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.repository.ParticipantRepository;
-import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 
 import lombok.RequiredArgsConstructor;
@@ -91,8 +90,8 @@ public class ParticipantService {
         participantRepository.deleteByIdIn(Ids);
     }
 
-    public Optional<Participant> readActiveMemberParticipant(Long memberId, Long scheduleId, ParticipantStatus status) {
-        return participantRepository.findParticipantByMemberIdAndScheduleIdAndStatus(memberId, scheduleId, status);
+    public Optional<Participant> readMemberParticipant(Long memberId, Long scheduleId) {
+        return participantRepository.findParticipantByMemberIdAndScheduleId(memberId, scheduleId);
     }
 
     public Optional<Participant> readAnonymousParticipant(Long anonymousId, Long scheduleId) {

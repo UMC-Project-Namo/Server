@@ -13,7 +13,6 @@ import org.springframework.data.repository.query.Param;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
-import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 
 public interface ParticipantRepository extends JpaRepository<Participant, Long> {
 
@@ -83,8 +82,7 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
 
     void deleteByIdIn(List<Long> id);
 
-    Optional<Participant> findParticipantByMemberIdAndScheduleIdAndStatus(Long memberId, Long scheduleId,
-            ParticipantStatus status);
+    Optional<Participant> findParticipantByMemberIdAndScheduleId(Long memberId, Long scheduleId);
 
     Optional<Participant> findParticipantByAnonymousIdAndScheduleId(Long anonymousId, Long scheduleId);
 

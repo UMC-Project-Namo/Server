@@ -1,13 +1,12 @@
 package com.namo.spring.application.external.api.schedule.service;
 
-import static com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus.*;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.namo.spring.db.mysql.domains.user.entity.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +31,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ParticipantManageService {
     private final ParticipantMaker participantMaker;
-    private final ParticipationActionManager participationActionManager;
     private final FriendshipService friendshipService;
     private final ParticipantService participantService;
 
@@ -61,14 +59,9 @@ public class ParticipantManageService {
                 () -> new ScheduleException(ErrorStatus.NOT_SCHEDULE_PARTICIPANT));
     }
 
-    public void activateParticipant(Long memberId, Long scheduleId) {
-        Participant participant = getValidatedParticipantWithSchedule(scheduleId, memberId);
-        participationActionManager.activateParticipant(participant.getSchedule(), participant);
-    }
-
     public void deleteParticipant(Long memberId, Long scheduleId) {
         Participant participant = getValidatedParticipantWithSchedule(scheduleId, memberId);
-        participationActionManager.removeParticipant(participant);
+        participantService.deleteParticipant(participant.getId());
     }
 
     public void updateMeetingScheduleParticipants(Long ownerId, Schedule schedule,
@@ -84,8 +77,14 @@ public class ParticipantManageService {
             if (participantsToRemove.isEmpty()) {
                 throw new ScheduleException(ErrorStatus.NOT_FOUND_PARTICIPANT_FAILURE);
             }
-            participationActionManager.removeParticipants(schedule, participantsToRemove);
+            removeParticipants(schedule, participantsToRemove);
         }
+    }
+
+    private void removeParticipants(Schedule schedule, List<Participant> participants) {
+        List<User> users = participants.stream().map(Participant::getUser).collect(Collectors.toList());
+        schedule.removeParticipants(users.stream().map(User::getNickname).collect(Collectors.toList()));
+        participantService.deleteByIdIn(participants.stream().map(Participant::getId).collect(Collectors.toList()));
     }
 
     /**
@@ -97,7 +96,7 @@ public class ParticipantManageService {
      * @return
      */
     public Participant getParticipantByMemberAndSchedule(Long memberId, Long scheduleId) {
-        return participantService.readActiveMemberParticipant(memberId, scheduleId, ACTIVE)
+        return participantService.readMemberParticipant(memberId, scheduleId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_PARTICIPANT_FAILURE));
     }
 
@@ -168,7 +167,7 @@ public class ParticipantManageService {
     public List<Participant> getParticipantsInSchedule(List<Long> participantIdList, Long scheduleId) {
         List<Participant> participants = participantService.readParticipantsByIdsAndScheduleId(participantIdList, scheduleId);
         if (participantIdList.size() != participants.size()){
-            throw new ParticipantException(ErrorStatus.NOT_SCHEDULE_PARTICIPANT_OR_NOT_ACTIVE);
+            throw new ParticipantException(ErrorStatus.NOT_SCHEDULE_PARTICIPANT);
         }
         return participants;
     }
