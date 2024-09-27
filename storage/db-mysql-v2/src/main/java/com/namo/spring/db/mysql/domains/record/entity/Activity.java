@@ -94,4 +94,8 @@ public class Activity extends BaseTimeEntity {
     public void updateLocation(Location location){
         this.location = location;
     }
+
+    public void updateTag(String tag) {
+        this.categoryTag = tag;
+    }
 }

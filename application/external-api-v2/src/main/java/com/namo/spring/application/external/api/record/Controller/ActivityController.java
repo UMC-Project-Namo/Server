@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.namo.spring.application.external.api.record.dto.ActivityRequest;
@@ -97,14 +98,14 @@ public class ActivityController {
         return ResponseDto.onSuccess("활동 수정 완료");
     }
 
-    @Operation(summary = "모임 활동 참여자 수정", description = "활동의 참여자를를 수정하는 API 입니다. "
+    @Operation(summary = "모임 활동 참여자 수정", description = "활동의 참여자를 수정하는 API 입니다. "
             + "(정산 참여자가 삭제될 수 없습니다)")
     @ApiErrorCodes(value = {
             NOT_FOUND_GROUP_ACTIVITY_FAILURE,
             NOT_PARTICIPATING_ACTIVITY,
             IN_SETTLEMENT_ACTIVITY_MEMBER
     })
-    @PatchMapping("/participants/{activityId}")
+    @PatchMapping("/{activityId}/participants")
     public ResponseDto<String> updateActivityParticipants(
             @AuthenticationPrincipal SecurityUserDetails memberInfo,
             @Parameter(description = "활동 참여자 정보를 수정 할 활동 ID 입니다.", example = "1")
@@ -113,6 +114,23 @@ public class ActivityController {
     ){
         activityUseCase.updateActivityParticipants(memberInfo.getUserId(), activityId, request);
         return ResponseDto.onSuccess("활동 참여자 수정 완료");
+    }
+
+    @Operation(summary = "모임 활동 태그 수정", description = "활동의 태그를 수정하는 API 입니다.")
+    @PatchMapping("/{activityId}/tag")
+    @ApiErrorCodes(value = {
+            NOT_FOUND_GROUP_ACTIVITY_FAILURE,
+            NOT_PARTICIPATING_ACTIVITY,
+    })
+    public ResponseDto<String> updateActivityTag(
+            @AuthenticationPrincipal SecurityUserDetails memberInfo,
+            @Parameter(description = "활동 태그 정보를 수정 할 활동 ID 입니다.", example = "1")
+            @PathVariable Long activityId,
+            @Parameter(description = "수정 할 활동 Tag 정보 입니다.", example = "동아리")
+            @RequestParam String tag
+    ){
+        activityUseCase.updateActivityTag(memberInfo.getUserId(), activityId, tag);
+        return ResponseDto.onSuccess("활동 태그 수정 완료");
     }
 
     @Operation(summary = "모임 기록 활동 삭제", description = "모임 활동을 삭제합니다. "

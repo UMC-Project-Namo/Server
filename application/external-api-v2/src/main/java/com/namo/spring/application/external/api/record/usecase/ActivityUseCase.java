@@ -73,4 +73,8 @@ public class ActivityUseCase {
         activityManageService.removeActivity(target);
     }
 
+    public void updateActivityTag(Long memberId, Long activityId, String tag) {
+        Activity target = activityManageService.getMyActivity(memberId, activityId);
+        target.updateTag(tag);
+    }
 }
