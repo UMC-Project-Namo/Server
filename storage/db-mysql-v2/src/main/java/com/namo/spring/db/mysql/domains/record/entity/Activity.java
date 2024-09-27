@@ -84,4 +84,14 @@ public class Activity extends BaseTimeEntity {
     public void setSettlementInfo(BigDecimal totalAmount){
         this.totalAmount = totalAmount;
     }
+
+    public void updateInfo(String title, LocalDateTime activityStartDate, LocalDateTime activityEndDate) {
+        this.title = title;
+        this.startDate = activityStartDate;
+        this.endDate = activityEndDate;
+    }
+
+    public void updateLocation(Location location){
+        this.location = location;
+    }
 }
