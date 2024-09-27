@@ -23,7 +23,7 @@ public class ActivityUserService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<ActivityParticipant> readActivityParticipant(Long activityParticipantId) {
+    public Optional<ActivityParticipant> readActivityParticipants(Long activityParticipantId) {
         return activityUserRepository.findById(activityParticipantId);
     }
 
@@ -32,7 +32,19 @@ public class ActivityUserService {
         activityUserRepository.deleteById(activityParticipantId);
     }
 
+    public void deleteAll(List<ActivityParticipant> activityParticipants){
+        activityUserRepository.deleteAll(activityParticipants);
+    }
+
     public List<ActivityParticipant> createActivityParticipants(List<ActivityParticipant> activityParticipants){
         return activityUserRepository.saveAll(activityParticipants);
     }
+
+    /**
+     * 정산 참여 여부에 따라 조회
+     */
+    public List<ActivityParticipant> readAllByActivityAndParticipantIdAndSettlementStatus(Activity activity, List<Long> participantIdList, boolean isInSettlement) {
+        return activityUserRepository.findByActivityAndIncludedInSettlementAndParticipantIdIn(activity, isInSettlement, participantIdList);
+    }
+
 }
