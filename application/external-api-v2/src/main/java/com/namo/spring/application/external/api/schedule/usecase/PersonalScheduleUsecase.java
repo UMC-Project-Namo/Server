@@ -79,4 +79,10 @@ public class PersonalScheduleUsecase {
                 scheduleManageService.getMemberMonthlySchedules(targetMember, memberInfo.getUserId(),
                         startDate, endDate));
     }
+
+    @Transactional
+    public void deleteSchedule(Long scheduleId, SecurityUserDetails memberInfo) {
+        Schedule schedule= scheduleManageService.getSchedule(scheduleId);
+        scheduleManageService.deleteSchedule(schedule, memberInfo.getUserId());
+    }
 }

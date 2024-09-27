@@ -65,7 +65,7 @@ public class ActivityController {
     @Operation(summary = "모임 기록 활동 생성", description = "모임 활동을 생성합니다.(스케줄 초대에 수락한 유저만 활동에 추가할 수 있습니다)")
     @ApiErrorCodes(value = {
             NOT_FOUND_SCHEDULE_FAILURE,
-            NOT_SCHEDULE_PARTICIPANT_OR_NOT_ACTIVE
+            NOT_SCHEDULE_PARTICIPANT
     })
     @PostMapping("/{scheduleId}")
     public ResponseDto<String> createActivity(
