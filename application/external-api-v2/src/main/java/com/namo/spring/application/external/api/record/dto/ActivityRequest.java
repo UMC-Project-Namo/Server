@@ -92,7 +92,7 @@ public class ActivityRequest {
         private int divisionCount;
         @Schema(description = "인당 금액", example = "300000.00")
         private BigDecimal amountPerPerson;
-        @Schema(description = "정산에 참여 할 activityParticipantId 넣어주세요.", example = "[1, 2]" )
+        @Schema(description = "정산에 참여 할 activityParticipantId 넣어주세요. (주의 : participantID가 아닙니다)", example = "[1, 2]" )
         private List<Long> activityParticipantId;
     }
 

@@ -116,6 +116,13 @@ public class ActivityController {
         return ResponseDto.onSuccess("활동 참여자 수정 완료");
     }
 
+    @Operation(summary = "모임 활동 정산 내역 수정", description = "활동의 정산 내역을 수정하는 API 입니다. "
+            + "(활동 참여자가 아닌 ID를 넣으면 안됩니다.)")
+    @ApiErrorCodes(value = {
+            NOT_FOUND_GROUP_ACTIVITY_FAILURE,
+            NOT_PARTICIPATING_ACTIVITY,
+            NOT_ACTIVITY_PARTICIPANT
+    })
     @PatchMapping("/{activityId}/settlement")
     public ResponseDto<String> updateActivitySettlement(
             @AuthenticationPrincipal SecurityUserDetails memberInfo,
@@ -123,6 +130,7 @@ public class ActivityController {
             @PathVariable Long activityId,
             @RequestBody ActivityRequest.UpdateActivitySettlementDto request
     ){
+        activityUseCase.updateActivitySettlement(memberInfo.getUserId(), activityId, request);
         return ResponseDto.onSuccess("정산 정보 수정 완료");
     }
 

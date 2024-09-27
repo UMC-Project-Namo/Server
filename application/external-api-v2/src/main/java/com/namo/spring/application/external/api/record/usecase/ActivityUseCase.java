@@ -68,13 +68,23 @@ public class ActivityUseCase {
     }
 
     @Transactional
-    public void deleteActivity(Long memberId, Long activityId) {
-        Activity target = activityManageService.getMyActivity(memberId, activityId);
-        activityManageService.removeActivity(target);
-    }
-
     public void updateActivityTag(Long memberId, Long activityId, String tag) {
         Activity target = activityManageService.getMyActivity(memberId, activityId);
         target.updateTag(tag);
+    }
+
+    @Transactional
+    public void updateActivitySettlement(Long memberId, Long activityId,
+            ActivityRequest.UpdateActivitySettlementDto request) {
+        Activity target = activityManageService.getMyActivity(memberId, activityId);
+        target.setSettlementInfo(request.getTotalAmount());
+        activityParticipantManageService.updateActivityParticipantsSettlement(target, request);
+
+    }
+
+    @Transactional
+    public void deleteActivity(Long memberId, Long activityId) {
+        Activity target = activityManageService.getMyActivity(memberId, activityId);
+        activityManageService.removeActivity(target);
     }
 }
