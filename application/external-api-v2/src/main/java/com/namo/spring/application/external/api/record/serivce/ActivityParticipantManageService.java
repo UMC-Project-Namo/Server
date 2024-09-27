@@ -2,7 +2,9 @@ package com.namo.spring.application.external.api.record.serivce;
 
 import static com.namo.spring.application.external.global.utils.MeetingParticipantValidationUtils.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
@@ -76,5 +78,31 @@ public class ActivityParticipantManageService {
         }
         activityUserService.deleteAll(deleteTarget);
         createActivityParticipant(activity, request.getAddParticipantIdList(), activity.getSchedule().getId());
+    }
+
+    /**
+     * 활동 정산 정보를 업데이트 하는 메서드입니다.
+     * 새로운 정산 정보에 포함되면 업데이트, 포함되지 않으면 정산 정보를 분리합니다.
+     * !! 활동 참여자가 아닌 유저가 정산에 포함되는지 검증합니다.
+     * @param activity
+     * @param request
+     */
+    public void updateActivityParticipantsSettlement(Activity activity,
+            ActivityRequest.UpdateActivitySettlementDto request) {
+        Set<Long> participantIdSet = new HashSet<>(request.getActivityParticipantId());
+
+        activity.getActivityParticipants().forEach(activityParticipant -> {
+            // ID가 Set에 있으면 정산 정보 설정 후 해당 ID를 Set에서 제거
+            if (participantIdSet.remove(activityParticipant.getId())) {
+                activityParticipant.setSettlementInfo(request.getAmountPerPerson());
+            } else {
+                // ID가 Set에 없으면 정산 정보 초기화
+                activityParticipant.departSettlement();
+            }
+        });
+
+        if (!participantIdSet.isEmpty()) {
+            throw new ActivityParticipantException(ErrorStatus.NOT_ACTIVITY_PARTICIPANT);
+        }
     }
 }

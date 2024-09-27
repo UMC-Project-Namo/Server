@@ -57,4 +57,9 @@ public class ActivityParticipant extends BaseTimeEntity {
         this.amount = amountPerPerson;
         this.isIncludedInSettlement = true;
     }
+
+    public void departSettlement(){
+        this.amount = BigDecimal.ZERO;
+        this.isIncludedInSettlement = false;
+    }
 }
