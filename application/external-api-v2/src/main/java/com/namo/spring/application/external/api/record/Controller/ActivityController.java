@@ -97,6 +97,16 @@ public class ActivityController {
         return ResponseDto.onSuccess("활동 수정 완료");
     }
 
+    @PatchMapping("/participants/{activityId}")
+    public ResponseDto<String> updateActivityParticipants(
+            @AuthenticationPrincipal SecurityUserDetails memberInfo,
+            @Parameter(description = "활동 참여자 정보를 수정 할 활동 ID 입니다.", example = "1")
+            @PathVariable Long activityId,
+            @RequestBody ActivityRequest.UpdateActivityParticipantsDto request
+    ){
+        return ResponseDto.onSuccess("활동 참여자 수정 완료");
+    }
+
     @Operation(summary = "모임 기록 활동 삭제", description = "모임 활동을 삭제합니다. "
             + "원본-리사이징 이미지 모두 즉시 삭제됩니다. "
             + "(모임 참가인원은 삭제할 수 있습니다) ")

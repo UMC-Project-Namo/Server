@@ -76,4 +76,12 @@ public class ActivityRequest {
         private List<Long> deleteImages;
     }
 
+    public static class UpdateActivityParticipantsDto{
+        @Schema(description = "활동에 참여할 participantId 를 넣어주세요 (유지할 사용자 제외)", example = "[1, 2, 3]")
+        private List<Long> addParticipantIdList;
+
+        @Schema(description = "활동에서 제외할 participantId 를 넣어주세요", example = "[1, 2, 3]")
+        private List<Long> deleteParticipantIdList;
+    }
+
 }
