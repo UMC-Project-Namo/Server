@@ -4,7 +4,6 @@ import static com.namo.spring.application.external.global.utils.MeetingParticipa
 import static com.namo.spring.application.external.global.utils.SchedulePeriodValidationUtils.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +25,6 @@ import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
 import com.namo.spring.db.mysql.domains.schedule.service.ScheduleService;
 import com.namo.spring.db.mysql.domains.schedule.type.Location;
 import com.namo.spring.db.mysql.domains.schedule.type.ParticipantRole;
-import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 import com.namo.spring.db.mysql.domains.schedule.type.Period;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
@@ -156,8 +154,8 @@ public class ScheduleManageService {
     public List<ScheduleParticipantQuery> getMonthlyMeetingParticipantSchedules(Schedule schedule, LocalDate startDate, LocalDate endDate,
             Long memberId, Long anonymousId) {
         checkUserIsParticipant(schedule, memberId, null);
-        List<Long> memberIds = participantService.readParticipantsByScheduleIdAndStatusAndType(
-                schedule.getId(), ScheduleType.MEETING, ParticipantStatus.ACTIVE).stream()
+        List<Long> memberIds = participantService.readParticipantsByScheduleIdAndScheduleType(
+                schedule.getId(), ScheduleType.MEETING).stream()
                 .map(Participant::getUser)
                 .map(User::getId)
                 .collect(Collectors.toList());
@@ -218,8 +216,7 @@ public class ScheduleManageService {
 
     public List<Participant> getMeetingScheduleParticipants(Schedule schedule, Long memberId, Long anonymousId) {
         checkUserIsParticipant(schedule, memberId, anonymousId);
-        return participantService.readParticipantsByScheduleIdAndStatusAndType(schedule.getId(), ScheduleType.MEETING,
-                null);
+        return participantService.readParticipantsByScheduleIdAndScheduleType(schedule.getId(), ScheduleType.MEETING);
     }
 
     public void updatePersonalSchedule(PersonalScheduleRequest.PatchPersonalScheduleDto dto, Schedule schedule,

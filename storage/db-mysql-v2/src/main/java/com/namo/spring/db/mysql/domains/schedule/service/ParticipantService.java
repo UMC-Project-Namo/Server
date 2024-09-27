@@ -42,14 +42,12 @@ public class ParticipantService {
     }
 
     @Transactional(readOnly = true)
-    public List<Participant> readParticipantsByIdsAndScheduleIdFetchUser(List<Long> participantIds, Long scheduleId,
-            ParticipantStatus status) {
-        return participantRepository.findParticipantByIdAndScheduleIdFetchUser(participantIds, scheduleId, status);
+    public List<Participant> readParticipantsByIdsAndScheduleIdFetchUser(List<Long> participantIds, Long scheduleId) {
+        return participantRepository.findParticipantByIdAndScheduleIdFetchUser(participantIds, scheduleId);
     }
 
-    public List<Participant> readParticipantsByIdsAndScheduleId(List<Long> participantIds, Long scheduleId,
-            ParticipantStatus status) {
-        return participantRepository.findParticipantByIdAndScheduleId(participantIds, scheduleId, status);
+    public List<Participant> readParticipantsByIdsAndScheduleId(List<Long> participantIds, Long scheduleId) {
+        return participantRepository.findParticipantByIdAndScheduleId(participantIds, scheduleId);
     }
 
     @Transactional(readOnly = true)
@@ -81,9 +79,8 @@ public class ParticipantService {
     }
 
     @Transactional(readOnly = true)
-    public List<Participant> readParticipantsByScheduleIdAndStatusAndType(Long scheduleId, ScheduleType type,
-            ParticipantStatus status) {
-        return participantRepository.findParticipantsByScheduleIdAndStatusAndType(scheduleId, type.getValue(), status);
+    public List<Participant> readParticipantsByScheduleIdAndScheduleType(Long scheduleId, ScheduleType type) {
+        return participantRepository.findParticipantsByScheduleIdAndStatusAndType(scheduleId, type.getValue());
     }
 
     public void deleteParticipant(Long id) {

@@ -80,7 +80,7 @@ public class ParticipantManageService {
 
         if (!dto.getParticipantsToRemove().isEmpty()) {
             List<Participant> participantsToRemove = participantService.readParticipantsByIdsAndScheduleIdFetchUser(
-                    dto.getParticipantsToRemove(), schedule.getId(), ACTIVE);
+                    dto.getParticipantsToRemove(), schedule.getId());
             if (participantsToRemove.isEmpty()) {
                 throw new ScheduleException(ErrorStatus.NOT_FOUND_PARTICIPANT_FAILURE);
             }
@@ -166,8 +166,7 @@ public class ParticipantManageService {
      * @return
      */
     public List<Participant> getParticipantsInSchedule(List<Long> participantIdList, Long scheduleId) {
-        List<Participant> participants = participantService.readParticipantsByIdsAndScheduleId(participantIdList,
-                scheduleId, ACTIVE);
+        List<Participant> participants = participantService.readParticipantsByIdsAndScheduleId(participantIdList, scheduleId);
         if (participantIdList.size() != participants.size()){
             throw new ParticipantException(ErrorStatus.NOT_SCHEDULE_PARTICIPANT_OR_NOT_ACTIVE);
         }
