@@ -79,6 +79,13 @@ public class ActivityController {
         return ResponseDto.onSuccess("활동 생성 완료");
     }
 
+    @Operation(summary = "모임 기록 활동 수정", description = "모임 활동을 수정합니다. "
+            + "활동(제목, 시작-종료시간, 장소, 이미지)를 수정하는 API 입니다."
+            + "(모임 참가인원은 누구나 수정할 수 있습니다.) ")
+    @ApiErrorCodes(value = {
+            NOT_FOUND_GROUP_ACTIVITY_FAILURE,
+            NOT_PARTICIPATING_ACTIVITY
+    })
     @PatchMapping("/{activityId}")
     public ResponseDto<String> updateActivity(
             @AuthenticationPrincipal SecurityUserDetails memberInfo,
@@ -86,6 +93,7 @@ public class ActivityController {
             @PathVariable Long activityId,
             @RequestBody ActivityRequest.UpdateActivityDto request
     ){
+        activityUseCase.updateActivity(memberInfo.getUserId(), activityId, request);
         return ResponseDto.onSuccess("활동 수정 완료");
     }
 

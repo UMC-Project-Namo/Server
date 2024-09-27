@@ -56,8 +56,15 @@ public class ActivityUseCase {
     }
 
     @Transactional
+    public void updateActivity(Long memberId, Long activityId, ActivityRequest.UpdateActivityDto request) {
+        Activity target = activityManageService.getMyActivity(memberId, activityId);
+        activityManageService.updateActivity(target, request);
+    }
+
+    @Transactional
     public void deleteActivity(Long memberId, Long activityId) {
         Activity target = activityManageService.getMyActivity(memberId, activityId);
         activityManageService.removeActivity(target);
     }
+
 }
