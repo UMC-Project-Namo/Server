@@ -11,6 +11,7 @@ import com.namo.spring.db.mysql.domains.record.entity.Activity;
 import com.namo.spring.db.mysql.domains.record.exception.ActivityException;
 import com.namo.spring.db.mysql.domains.record.service.ActivityService;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
+import com.namo.spring.db.mysql.domains.schedule.type.Location;
 
 import lombok.RequiredArgsConstructor;
 
@@ -59,6 +60,20 @@ public class ActivityManageService {
             activityImageManageService.createImages(activity, request.getImageList());
         }
         return activity;
+    }
+
+    /**
+     * 활동을 업데이트 하는 메서드입니다.
+     * 활동 제목, 시작-종료시간, 장소, 이미지를 업데이트 합니다.
+     * !! 이미지 업데이트 책임은 activityImageManageService 에 있습니다.
+     * @param activity
+     * @param request
+     */
+    public void updateActivity(Activity activity, ActivityRequest.UpdateActivityDto request) {
+        activity.updateInfo(request.getTitle(), request.getActivityStartDate(), request.getActivityEndDate());
+        Location newLocation = ActivityConverter.toLocation(request.getLocation());
+        activity.updateLocation(newLocation);
+        activityImageManageService.updateImages(activity, request);
     }
 
     public void removeActivity(Activity activity) {

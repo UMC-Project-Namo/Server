@@ -60,7 +60,9 @@ public class ActivityRequest {
         private List<Long> participantIdList;
     }
 
+    @Getter
     public static class UpdateActivityDto{
+        @Schema(description = "활동 제목", example = "보드게임 밥디")
         private String title;
         @Schema(description = "활동 시작 시간", example = "2024-09-15 17:29:54")
         private LocalDateTime activityStartDate;
@@ -70,6 +72,8 @@ public class ActivityRequest {
         private ActivityLocationDto location;
         @Schema(description = "전체 활동 이미지 URL List")
         private List<String> imageList;
+        @Schema(description = "삭제할 이미지 ID 배열을 넣어주세요", example = "[1, 2, 3]")
+        private List<Long> deleteImages;
     }
 
 }
