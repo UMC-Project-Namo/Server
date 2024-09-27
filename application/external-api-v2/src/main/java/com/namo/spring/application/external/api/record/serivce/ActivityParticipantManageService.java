@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import com.namo.spring.application.external.api.record.converter.ActivityParticipantConverter;
 import com.namo.spring.application.external.api.record.dto.ActivityRequest;
 import com.namo.spring.application.external.api.schedule.service.ParticipantManageService;
+import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.record.entity.Activity;
 import com.namo.spring.db.mysql.domains.record.entity.ActivityParticipant;
+import com.namo.spring.db.mysql.domains.record.exception.ActivityParticipantException;
 import com.namo.spring.db.mysql.domains.record.service.ActivityUserService;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 
@@ -57,5 +59,22 @@ public class ActivityParticipantManageService {
                 .forEach(activityParticipant -> {
                     activityParticipant.setSettlementInfo(settlement.getAmountPerPerson());
                 });
+    }
+
+    /**
+     * 활동 참여자를 업데이트하는 메서드입니다.
+     * 추가할 참여자에대해 활동 참여 정보를 만들고, 삭제할 참여자는 참여정보가 삭제됩니다.
+     * !! 활동 삭제시 정산 미참여자만 삭제가 가능합니다.
+     * @param activity
+     * @param request
+     */
+    public void updateActivityParticipants(Activity activity, ActivityRequest.UpdateActivityParticipantsDto request) {
+        List<ActivityParticipant> deleteTarget = activityUserService.readAllByActivityAndParticipantIdAndSettlementStatus(activity,
+                request.getDeleteParticipantIdList(), false);
+        if ((long)deleteTarget.size() != request.getDeleteParticipantIdList().size()){
+            throw new ActivityParticipantException(ErrorStatus.IN_SETTLEMENT_ACTIVITY_MEMBER);
+        }
+        activityUserService.deleteAll(deleteTarget);
+        createActivityParticipant(activity, request.getAddParticipantIdList(), activity.getSchedule().getId());
     }
 }
