@@ -59,10 +59,6 @@ public class Participant extends BaseTimeEntity {
     @JoinColumn(name = "schedule_id", nullable = false)
     private Schedule schedule;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private ParticipantStatus status;
-
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "category_id", nullable = true)
     private Category category;
@@ -84,13 +80,12 @@ public class Participant extends BaseTimeEntity {
     private Diary diary;
 
     @Builder
-    public Participant(int isOwner, User user, Schedule schedule, ParticipantStatus status, Category category,
+    public Participant(int isOwner, User user, Schedule schedule, Category category,
             Palette palette, String customTitle, String customImage) {
         this.isOwner = Objects.requireNonNull(isOwner, "isOwner은 null일 수 없습니다.");
         this.member = user instanceof Member ? (Member)user : null;
         this.anonymous = user instanceof Anonymous ? (Anonymous)user : null;
         this.schedule = Objects.requireNonNull(schedule, "schedule은 null일 수 없습니다.");
-        this.status = Objects.requireNonNull(status, "status는 null일 수 없습니다.");
         this.category = category;
         this.palette = palette;
         this.hasDiary = false;
@@ -104,7 +99,6 @@ public class Participant extends BaseTimeEntity {
                 .isOwner(isOwner)
                 .user(user)
                 .schedule(schedule)
-                .status(status)
                 .category(category)
                 .palette(palette)
                 .customTitle(customTitle)
@@ -122,7 +116,6 @@ public class Participant extends BaseTimeEntity {
     }
 
     public void activateStatus(Category category, Palette palette) {
-        this.status = ParticipantStatus.ACTIVE;
         this.category = category;
         this.palette = palette;
         this.customTitle = schedule.getTitle();
@@ -132,10 +125,6 @@ public class Participant extends BaseTimeEntity {
     public void updateCustomScheduleInfo(String title, String imageUrl) {
         this.customTitle = title;
         this.customImage = imageUrl;
-    }
-
-    public void inactiveStatus() {
-        this.status = ParticipantStatus.INACTIVE;
     }
 
     public void diaryCreated() {
