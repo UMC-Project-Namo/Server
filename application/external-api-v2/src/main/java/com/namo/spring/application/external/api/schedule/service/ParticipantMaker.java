@@ -13,7 +13,6 @@ import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
 import com.namo.spring.db.mysql.domains.schedule.type.ParticipantRole;
-import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 
@@ -40,7 +39,6 @@ public class ParticipantMaker {
         if(schedule.getIsMeetingSchedule()){
             participant = Participant.of(ParticipantRole.OWNER.getValue(), member, schedule, category, palette, schedule.getTitle(), schedule.getImageUrl());
         } else participant = Participant.of(ParticipantRole.OWNER.getValue(), member, schedule, category, palette, null, null);
-
         participantService.createParticipant(participant);
     }
 
@@ -49,7 +47,6 @@ public class ParticipantMaker {
                 .map(member -> Participant.of(ParticipantRole.NON_OWNER.getValue(), member, schedule,
                         null, null, schedule.getTitle(), schedule.getImageUrl()))
                 .collect(Collectors.toList());
-        members.forEach(member -> schedule.addActiveParticipant(member.getNickname()));
         participantService.createParticipants(participants);
     }
 
@@ -58,7 +55,7 @@ public class ParticipantMaker {
         Participant participant = Participant.of(ParticipantRole.NON_OWNER.getValue(), anonymous, schedule,
                 null, palette, schedule.getTitle(), schedule.getImageUrl());
         Participant savedParticipant = participantService.createParticipant(participant);
-        schedule.addActiveParticipant(anonymous.getNickname());
+        schedule.setGuestParticipantsInfo(anonymous.getNickname());
         return savedParticipant;
     }
 

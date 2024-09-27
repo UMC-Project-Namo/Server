@@ -40,8 +40,10 @@ public class ParticipantManageService {
 
     public void createMeetingScheduleParticipants(Member owner, Schedule schedule, List<Member> participants) {
         participantMaker.makeScheduleOwner(schedule, owner, null, owner.getPalette().getId());
-        schedule.addActiveParticipant(owner.getNickname());
         participantMaker.makeMeetingScheduleParticipants(schedule, participants);
+        List<String> participantNicknames = List.of(owner.getNickname());
+        participantNicknames.addAll(participants.stream().map(Member::getNickname).collect(Collectors.toList()));
+        schedule.setMemberParticipantsInfo(participantNicknames);
     }
 
     public List<Member> getFriendshipValidatedParticipants(Long ownerId, List<Long> memberIds) {
