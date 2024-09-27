@@ -56,7 +56,6 @@ public class ActivityRequest {
         @Schema(description = "인당 금액", example = "300000.00")
         private BigDecimal amountPerPerson;
         @Schema(description = "정산에 참여 할 participantId 넣어주세요.", example = "[1, 2]" )
-        @NotNull
         private List<Long> participantIdList;
     }
 
@@ -83,6 +82,18 @@ public class ActivityRequest {
 
         @Schema(description = "활동에서 제외할 participantId 를 넣어주세요", example = "[1, 2, 3]")
         private List<Long> deleteParticipantIdList;
+    }
+
+    @Getter
+    public static class UpdateActivitySettlementDto{
+        @Schema(description = "활동 정산 총 금액", example = "150000.00")
+        private BigDecimal totalAmount;
+        @Schema(description = "정산 인원 수", example = "5")
+        private int divisionCount;
+        @Schema(description = "인당 금액", example = "300000.00")
+        private BigDecimal amountPerPerson;
+        @Schema(description = "정산에 참여 할 activityParticipantId 넣어주세요.", example = "[1, 2]" )
+        private List<Long> activityParticipantId;
     }
 
 }

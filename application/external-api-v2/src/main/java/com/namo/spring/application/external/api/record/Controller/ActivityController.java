@@ -56,7 +56,7 @@ public class ActivityController {
             NOT_FOUND_GROUP_ACTIVITY_FAILURE,
             NOT_PARTICIPATING_ACTIVITY
     })
-    @GetMapping("/settlement/{activityId}")
+    @GetMapping("/{activityId}/settlement")
     public ResponseDto<ActivityResponse.ActivitySettlementInfoDto> getActivitySettlement(
             @AuthenticationPrincipal SecurityUserDetails memberInfo,
             @Parameter(description = "정산할 활동(activity) ID 입니다.", example = "1")
@@ -114,6 +114,16 @@ public class ActivityController {
     ){
         activityUseCase.updateActivityParticipants(memberInfo.getUserId(), activityId, request);
         return ResponseDto.onSuccess("활동 참여자 수정 완료");
+    }
+
+    @PatchMapping("/{activityId}/settlement")
+    public ResponseDto<String> updateActivitySettlement(
+            @AuthenticationPrincipal SecurityUserDetails memberInfo,
+            @Parameter(description = "활동 정산 정보를 수정 할 활동 ID 입니다.", example = "1")
+            @PathVariable Long activityId,
+            @RequestBody ActivityRequest.UpdateActivitySettlementDto request
+    ){
+        return ResponseDto.onSuccess("정산 정보 수정 완료");
     }
 
     @Operation(summary = "모임 활동 태그 수정", description = "활동의 태그를 수정하는 API 입니다.")
