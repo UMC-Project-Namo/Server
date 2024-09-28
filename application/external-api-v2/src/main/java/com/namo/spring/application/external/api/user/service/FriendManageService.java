@@ -1,7 +1,10 @@
 package com.namo.spring.application.external.api.user.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
+import com.namo.spring.db.mysql.domains.user.dto.FriendBirthdayQuery;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -82,5 +85,23 @@ public class FriendManageService {
     public void rejectRequest(Long memberId, Friendship friendship) {
         friendshipValidator.validateFriendshipToMember(friendship, memberId);
         friendshipService.delete(friendship);
+    }
+
+    /**
+     * 요청한 기간에 포함된 날짜가
+     * 생일인 친구의 정보와 생일을 조회합니다.
+     * @param memberId
+     * @param startDate
+     * @param endDate
+     * @return 친구 memberId, nickname, birthday
+     */
+    public List<FriendBirthdayQuery> getMonthlyFriendsBirthday(Long memberId, LocalDate startDate, LocalDate endDate){
+        return friendshipService.readBirthdayVisibleFriendsByPeriod(memberId, startDate, endDate);
+    }
+
+    public void checkMemberIsFriend(Long memberId, Long friendId) {
+        if (!friendshipService.existsByMemberIdAndFriendId(memberId, friendId)) {
+            throw new ScheduleException(ErrorStatus.NOT_FRIENDSHIP_MEMBER);
+        }
     }
 }
