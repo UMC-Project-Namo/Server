@@ -6,6 +6,7 @@ import static com.namo.spring.application.external.global.utils.SchedulePeriodVa
 import java.time.LocalDate;
 import java.util.List;
 
+import com.namo.spring.application.external.api.user.service.FriendManageService;
 import com.namo.spring.db.mysql.domains.user.dto.FriendBirthdayQuery;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class PersonalScheduleUsecase {
     private final MemberManageService memberManageService;
     private final ScheduleManageService scheduleManageService;
     private final NotificationManageService notificationManageService;
+    private final FriendManageService friendManageService;
 
     @Transactional
     public Long createPersonalSchedule(PersonalScheduleRequest.PostPersonalScheduleDto dto,
@@ -59,7 +61,7 @@ public class PersonalScheduleUsecase {
     public List<PersonalScheduleResponse.GetMonthlyFriendBirthdayDto> getMonthlyFriendsBirthday(LocalDate startDate, LocalDate endDate,
                                                                                       SecurityUserDetails memberInfo) {
         validatePeriod(startDate, endDate);
-        List<FriendBirthdayQuery> friendsBirthday = scheduleManageService.getMonthlyFriendsBirthday(memberInfo.getUserId(), startDate, endDate);
+        List<FriendBirthdayQuery> friendsBirthday = friendManageService.getMonthlyFriendsBirthday(memberInfo.getUserId(), startDate, endDate);
         return toGetMonthlyFriendBirthdayDtos(friendsBirthday, startDate, endDate);
     }
 
@@ -73,11 +75,11 @@ public class PersonalScheduleUsecase {
     @Transactional(readOnly = true)
     public List<PersonalScheduleResponse.GetFriendMonthlyScheduleDto> getFriendMonthlySchedules(LocalDate startDate, LocalDate endDate,
             Long targetMemberId, SecurityUserDetails memberInfo) {
+        friendManageService.checkMemberIsFriend(memberInfo.getUserId(), targetMemberId);
         validatePeriod(startDate, endDate);
         Member targetMember = memberManageService.getActiveMember(targetMemberId);
         return toGetFriendMonthlyScheduleDtos(
-                scheduleManageService.getMemberMonthlySchedules(targetMember, memberInfo.getUserId(),
-                        startDate, endDate));
+                scheduleManageService.getMemberMonthlySchedules(targetMember, startDate, endDate));
     }
 
     @Transactional

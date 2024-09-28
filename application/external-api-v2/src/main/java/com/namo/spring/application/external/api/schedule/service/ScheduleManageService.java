@@ -98,20 +98,7 @@ public class ScheduleManageService {
         return participantService.readParticipantsWithScheduleAndCategoryByPeriod(memberId, null, startDate.atStartOfDay(), endDate.plusDays(1).atStartOfDay());
     }
 
-    /**
-     * 요청한 기간에 포함된 날짜가
-     * 생일인 친구의 정보와 생일을 조회합니다.
-     * @param memberId
-     * @param startDate
-     * @param endDate
-     * @return 친구 memberId, nickname, birthday
-     */
-    public List<FriendBirthdayQuery> getMonthlyFriendsBirthday(Long memberId, LocalDate startDate, LocalDate endDate){
-        return friendshipService.readBirthdayVisibleFriendsByPeriod(memberId, startDate, endDate);
-    }
-
-    public List<Participant> getMemberMonthlySchedules(Member targetMember, Long friendId, LocalDate startDate, LocalDate endDate) {
-        checkMemberIsFriend(targetMember.getId(), friendId);
+    public List<Participant> getMemberMonthlySchedules(Member targetMember, LocalDate startDate, LocalDate endDate) {
         boolean birthdayVisible = targetMember.isBirthdayVisible();
         return participantService.readParticipantsWithScheduleAndCategoryByPeriod(targetMember.getId(), Boolean.TRUE,
                         startDate.atStartOfDay(), endDate.plusDays(1).atStartOfDay()).stream()
@@ -125,12 +112,6 @@ public class ScheduleManageService {
                     return true;
                 })
                 .collect(Collectors.toList());
-    }
-
-    private void checkMemberIsFriend(Long memberId, Long friendId) {
-        if (!friendshipService.existsByMemberIdAndFriendId(memberId, friendId)) {
-            throw new ScheduleException(ErrorStatus.NOT_FRIENDSHIP_MEMBER);
-        }
     }
 
     public List<ScheduleParticipantQuery> getMonthlyMembersSchedules(List<Long> memberIds, LocalDate startDate, LocalDate endDate,
@@ -278,7 +259,7 @@ public class ScheduleManageService {
     }
 
     public Participant validateAndGetScheduleOwner(Schedule schedule, Long memberId) {
-        Participant participant = participantManageService.getValidatedParticipantWithSchedule(memberId,
+        Participant participant = participantManageService.getParticipantWithScheduleAndMember(memberId,
                 schedule.getId());
         if (participant.getIsOwner() != ParticipantRole.OWNER.getValue()) {
             throw new ScheduleException(ErrorStatus.NOT_SCHEDULE_OWNER);
