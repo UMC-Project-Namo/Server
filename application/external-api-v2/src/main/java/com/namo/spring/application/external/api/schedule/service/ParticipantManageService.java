@@ -56,14 +56,21 @@ public class ParticipantManageService {
         return friends;
     }
 
-    public Participant getValidatedParticipantWithSchedule(Long memberId, Long scheduleId) {
+    /**
+     * scheduleId와 memberId로 찾은
+     * Participant 객체를 Member, Schedule과 함께 로딩하여 반환합니다.
+     * @param memberId
+     * @param scheduleId
+     * @return Participant
+     */
+    public Participant getParticipantWithScheduleAndMember(Long memberId, Long scheduleId) {
         return participantService.readParticipantByScheduleIdAndMemberId(scheduleId, memberId).orElseThrow(
                 () -> new ScheduleException(ErrorStatus.NOT_SCHEDULE_PARTICIPANT));
     }
 
-    public void deleteParticipant(Long memberId, Long scheduleId) {
-        Participant participant = getValidatedParticipantWithSchedule(scheduleId, memberId);
+    public void deleteParticipant(Participant participant, Schedule schedule) {
         participantService.deleteParticipant(participant.getId());
+        schedule.removeParticipant(participant.getMember().getNickname());
     }
 
     public void updateMeetingScheduleParticipants(Long ownerId, Schedule schedule,
