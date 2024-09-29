@@ -12,15 +12,7 @@ import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
@@ -163,4 +155,18 @@ public class MeetingScheduleController {
     ) {
         return ResponseDto.onSuccess(meetingScheduleUsecase.getGuestInvitationUrl(meetingScheduleId, memberInfo));
     }
+
+    @Operation(summary = "모임 일정 나가기", description = "모임 일정에서 나갑니다. 남은 모임 참여자가 없을 경우 모임 일정이 삭제됩니다.")
+    @ApiErrorCodes(value = {
+            NOT_FOUND_SCHEDULE_FAILURE,
+            NOT_MEETING_SCHEDULE,
+            NOT_SCHEDULE_PARTICIPANT
+    })
+    @DeleteMapping(path = "/{meetingScheduleId}/withdraw")
+    public ResponseDto<String> leaveMeeting(@PathVariable Long meetingScheduleId,
+                                            @AuthenticationPrincipal SecurityUserDetails memberInfo){
+        meetingScheduleUsecase.leaveMeetingSchedule(meetingScheduleId, memberInfo);
+        return ResponseDto.onSuccess("모임 나가기 성공");
+    }
+
 }
