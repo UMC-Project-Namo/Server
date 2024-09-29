@@ -2,19 +2,16 @@ package com.namo.spring.application.external.api.schedule.controller;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.namo.spring.application.external.api.schedule.api.PersonalScheduleApi;
@@ -28,6 +25,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import static com.namo.spring.core.common.code.status.ErrorStatus.*;
 
 @Tag(name = "개인 일정", description = "개인 일정 API")
 @Slf4j
@@ -91,5 +90,18 @@ public class PersonalScheduleController implements PersonalScheduleApi {
             @AuthenticationPrincipal SecurityUserDetails member) {
         personalScheduleUsecase.updatePersonalSchedule(dto, scheduleId, member);
         return ResponseDto.onSuccess("일정 수정 성공");
+    }
+
+    @Operation(summary = "일정 삭제", description = "일정을 삭제합니다.")
+    @ApiErrorCodes(value = {
+            NOT_FOUND_SCHEDULE_FAILURE,
+            NOT_SCHEDULE_PARTICIPANT,
+            NOT_SCHEDULE_OWNER
+    })
+    @DeleteMapping("/{scheduleId}")
+    public ResponseDto<String> deleteSchedule(@Parameter(description = "일정 ID") @PathVariable Long scheduleId,
+                                              @AuthenticationPrincipal SecurityUserDetails member) {
+        personalScheduleUsecase.deleteSchedule(scheduleId, member);
+        return ResponseDto.onSuccess("일정 삭제 성공");
     }
 }

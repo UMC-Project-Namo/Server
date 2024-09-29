@@ -156,8 +156,6 @@ public class MeetingScheduleResponse {
         private String nickname;
         @Schema(description = "색상 ID")
         private Long colorId;
-        @Schema(description = "참여 여부")
-        private Boolean isActive;
         @Schema(description = "방장 여부")
         private Boolean isOwner;
     }
