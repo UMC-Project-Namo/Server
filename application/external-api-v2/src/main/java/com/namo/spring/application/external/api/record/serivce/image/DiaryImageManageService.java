@@ -28,7 +28,9 @@ public class DiaryImageManageService extends AbstractImageManageService<Diary, D
     public void updateImages(Diary diary, DiaryRequest.UpdateDiaryDto request) {
         request.getDeleteImages().forEach(this::deleteFromCloud);
         deleteAllImages(diary);
-        createImages(diary, request.getDiaryImages().stream().map(DiaryRequest.CreateDiaryImageDto::getImageUrl).toList());
+        createImages(diary, request.getDiaryImages().stream()
+                .map(DiaryRequest.CreateDiaryImageDto::getImageUrl)
+                .toList());
     }
 
     @Override

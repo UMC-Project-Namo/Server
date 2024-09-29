@@ -1,6 +1,7 @@
 package com.namo.spring.application.external.api.record.serivce;
 
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import com.namo.spring.application.external.api.record.converter.ActivityConverter;
 import com.namo.spring.application.external.api.record.dto.ActivityRequest;
@@ -11,6 +12,7 @@ import com.namo.spring.db.mysql.domains.record.entity.Activity;
 import com.namo.spring.db.mysql.domains.record.exception.ActivityException;
 import com.namo.spring.db.mysql.domains.record.service.ActivityService;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
+import com.namo.spring.db.mysql.domains.schedule.type.Location;
 
 import lombok.RequiredArgsConstructor;
 
@@ -55,10 +57,24 @@ public class ActivityManageService {
         Participant myParticipant = participantManageService.getParticipantByMemberAndSchedule(memberId, scheduleId);
         Activity activity = activityService.createActivity(ActivityConverter.toActivity(myParticipant.getSchedule(), request));
         // 활동 이미지 생성
-        if (request.getImageList() != null && !request.getImageList().isEmpty()){
+        if (!CollectionUtils.isEmpty(request.getImageList())) {
             activityImageManageService.createImages(activity, request.getImageList());
         }
         return activity;
+    }
+
+    /**
+     * 활동을 업데이트 하는 메서드입니다.
+     * 활동 제목, 시작-종료시간, 장소, 이미지를 업데이트 합니다.
+     * !! 이미지 업데이트 책임은 activityImageManageService 에 있습니다.
+     * @param activity
+     * @param request
+     */
+    public void updateActivity(Activity activity, ActivityRequest.UpdateActivityDto request) {
+        activity.updateInfo(request.getTitle(), request.getActivityStartDate(), request.getActivityEndDate());
+        Location newLocation = ActivityConverter.toLocation(request.getLocation());
+        activity.updateLocation(newLocation);
+        activityImageManageService.updateImages(activity, request);
     }
 
     public void removeActivity(Activity activity) {

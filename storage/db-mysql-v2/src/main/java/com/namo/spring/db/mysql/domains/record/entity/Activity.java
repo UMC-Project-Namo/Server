@@ -65,7 +65,7 @@ public class Activity extends BaseTimeEntity {
     @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ActivityParticipant> activityParticipants;
 
-    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "activity")
     private List<ActivityImage> activityImages;
 
     @Builder
@@ -83,5 +83,19 @@ public class Activity extends BaseTimeEntity {
 
     public void setSettlementInfo(BigDecimal totalAmount){
         this.totalAmount = totalAmount;
+    }
+
+    public void updateInfo(String title, LocalDateTime activityStartDate, LocalDateTime activityEndDate) {
+        this.title = title;
+        this.startDate = activityStartDate;
+        this.endDate = activityEndDate;
+    }
+
+    public void updateLocation(Location location){
+        this.location = location;
+    }
+
+    public void updateTag(String tag) {
+        this.categoryTag = tag;
     }
 }

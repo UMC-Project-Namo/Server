@@ -49,10 +49,37 @@ public class ActivityUseCase {
         List<ActivityParticipant> activityParticipant = activityParticipantManageService.createActivityParticipant(
                 activity, request.getParticipantIdList(), scheduleId);
         // 정산 정보 생성
-        if (request.getSettlement()!=null){
+        if (request.getSettlement()!=null && request.getSettlement().getParticipantIdList().isEmpty()){
             activity.setSettlementInfo(request.getSettlement().getTotalAmount());
             activityParticipantManageService.addSettlement(request.getSettlement(), activityParticipant);
         }
+    }
+
+    @Transactional
+    public void updateActivity(Long memberId, Long activityId, ActivityRequest.UpdateActivityDto request) {
+        Activity target = activityManageService.getMyActivity(memberId, activityId);
+        activityManageService.updateActivity(target, request);
+    }
+
+    @Transactional
+    public void updateActivityParticipants(Long memberId, Long activityId, ActivityRequest.UpdateActivityParticipantsDto request) {
+        Activity target = activityManageService.getMyActivity(memberId, activityId);
+        activityParticipantManageService.updateActivityParticipants(target, request);
+    }
+
+    @Transactional
+    public void updateActivityTag(Long memberId, Long activityId, String tag) {
+        Activity target = activityManageService.getMyActivity(memberId, activityId);
+        target.updateTag(tag);
+    }
+
+    @Transactional
+    public void updateActivitySettlement(Long memberId, Long activityId,
+            ActivityRequest.UpdateActivitySettlementDto request) {
+        Activity target = activityManageService.getMyActivity(memberId, activityId);
+        target.setSettlementInfo(request.getTotalAmount());
+        activityParticipantManageService.updateActivityParticipantsSettlement(target, request);
+
     }
 
     @Transactional
