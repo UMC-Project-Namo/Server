@@ -43,6 +43,12 @@ public class SchedulePeriodValidationUtils {
         }
     }
 
+    public static void validatePeriod(LocalDateTime startDate, LocalDateTime endDate){
+        if (startDate.isAfter(endDate)) {
+            throw new ScheduleException(ErrorStatus.INVALID_DATE);
+        }
+    }
+
 
     /**
      * 년도와 월이 유효한 값인지 검증합니다.

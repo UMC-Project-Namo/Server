@@ -18,7 +18,7 @@ public class ActivityConverter {
                 .build();
     }
 
-    private static Location toLocation(ActivityRequest.ActivityLocationDto request){
+    public static Location toLocation(ActivityRequest.ActivityLocationDto request){
         return Location.builder()
                 .latitude(request.getLatitude())
                 .longitude(request.getLongitude())
