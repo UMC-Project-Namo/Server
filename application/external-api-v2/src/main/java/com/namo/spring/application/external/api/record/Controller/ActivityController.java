@@ -87,7 +87,7 @@ public class ActivityController {
             NOT_FOUND_GROUP_ACTIVITY_FAILURE,
             NOT_PARTICIPATING_ACTIVITY
     })
-    @PatchMapping("/{activityId}")
+    @PatchMapping("/{activityId}/content")
     public ResponseDto<String> updateActivity(
             @AuthenticationPrincipal SecurityUserDetails memberInfo,
             @Parameter(description = "수정 할 활동 ID 입니다.", example = "1")
