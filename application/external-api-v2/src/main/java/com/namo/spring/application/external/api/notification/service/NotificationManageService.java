@@ -49,7 +49,7 @@ public class NotificationManageService {
     }
 
     public void updateOrCreateScheduleReminderNotification(Long scheduleId, Member member, List<String> triggers) {
-        Participant participant = participantManageService.getValidatedParticipantWithSchedule(member.getId(),
+        Participant participant = participantManageService.getParticipantWithScheduleAndMember(member.getId(),
                 scheduleId);
         notificationService.deleteScheduleNotificationsByScheduleAndReceiver(participant.getSchedule().getId(),
                 member.getId(), NotificationType.SCHEDULE_REMINDER);

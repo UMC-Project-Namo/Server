@@ -4,7 +4,6 @@ import static com.namo.spring.application.external.global.utils.MeetingParticipa
 import static com.namo.spring.application.external.global.utils.SchedulePeriodValidationUtils.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +25,6 @@ import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
 import com.namo.spring.db.mysql.domains.schedule.service.ScheduleService;
 import com.namo.spring.db.mysql.domains.schedule.type.Location;
 import com.namo.spring.db.mysql.domains.schedule.type.ParticipantRole;
-import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 import com.namo.spring.db.mysql.domains.schedule.type.Period;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
@@ -100,20 +98,7 @@ public class ScheduleManageService {
         return participantService.readParticipantsWithScheduleAndCategoryByPeriod(memberId, null, startDate.atStartOfDay(), endDate.plusDays(1).atStartOfDay());
     }
 
-    /**
-     * 요청한 기간에 포함된 날짜가
-     * 생일인 친구의 정보와 생일을 조회합니다.
-     * @param memberId
-     * @param startDate
-     * @param endDate
-     * @return 친구 memberId, nickname, birthday
-     */
-    public List<FriendBirthdayQuery> getMonthlyFriendsBirthday(Long memberId, LocalDate startDate, LocalDate endDate){
-        return friendshipService.readBirthdayVisibleFriendsByPeriod(memberId, startDate, endDate);
-    }
-
-    public List<Participant> getMemberMonthlySchedules(Member targetMember, Long friendId, LocalDate startDate, LocalDate endDate) {
-        checkMemberIsFriend(targetMember.getId(), friendId);
+    public List<Participant> getMemberMonthlySchedules(Member targetMember, LocalDate startDate, LocalDate endDate) {
         boolean birthdayVisible = targetMember.isBirthdayVisible();
         return participantService.readParticipantsWithScheduleAndCategoryByPeriod(targetMember.getId(), Boolean.TRUE,
                         startDate.atStartOfDay(), endDate.plusDays(1).atStartOfDay()).stream()
@@ -127,12 +112,6 @@ public class ScheduleManageService {
                     return true;
                 })
                 .collect(Collectors.toList());
-    }
-
-    private void checkMemberIsFriend(Long memberId, Long friendId) {
-        if (!friendshipService.existsByMemberIdAndFriendId(memberId, friendId)) {
-            throw new ScheduleException(ErrorStatus.NOT_FRIENDSHIP_MEMBER);
-        }
     }
 
     public List<ScheduleParticipantQuery> getMonthlyMembersSchedules(List<Long> memberIds, LocalDate startDate, LocalDate endDate,
@@ -156,8 +135,8 @@ public class ScheduleManageService {
     public List<ScheduleParticipantQuery> getMonthlyMeetingParticipantSchedules(Schedule schedule, LocalDate startDate, LocalDate endDate,
             Long memberId, Long anonymousId) {
         checkUserIsParticipant(schedule, memberId, null);
-        List<Long> memberIds = participantService.readParticipantsByScheduleIdAndStatusAndType(
-                schedule.getId(), ScheduleType.MEETING, ParticipantStatus.ACTIVE).stream()
+        List<Long> memberIds = participantService.readParticipantsByScheduleIdAndScheduleType(
+                schedule.getId(), ScheduleType.MEETING).stream()
                 .map(Participant::getUser)
                 .map(User::getId)
                 .collect(Collectors.toList());
@@ -218,8 +197,7 @@ public class ScheduleManageService {
 
     public List<Participant> getMeetingScheduleParticipants(Schedule schedule, Long memberId, Long anonymousId) {
         checkUserIsParticipant(schedule, memberId, anonymousId);
-        return participantService.readParticipantsByScheduleIdAndStatusAndType(schedule.getId(), ScheduleType.MEETING,
-                null);
+        return participantService.readParticipantsByScheduleIdAndScheduleType(schedule.getId(), ScheduleType.MEETING);
     }
 
     public void updatePersonalSchedule(PersonalScheduleRequest.PatchPersonalScheduleDto dto, Schedule schedule,
@@ -281,7 +259,7 @@ public class ScheduleManageService {
     }
 
     public Participant validateAndGetScheduleOwner(Schedule schedule, Long memberId) {
-        Participant participant = participantManageService.getValidatedParticipantWithSchedule(memberId,
+        Participant participant = participantManageService.getParticipantWithScheduleAndMember(memberId,
                 schedule.getId());
         if (participant.getIsOwner() != ParticipantRole.OWNER.getValue()) {
             throw new ScheduleException(ErrorStatus.NOT_SCHEDULE_OWNER);

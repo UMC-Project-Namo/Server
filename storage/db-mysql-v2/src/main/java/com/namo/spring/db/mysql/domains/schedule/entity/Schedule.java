@@ -109,19 +109,16 @@ public class Schedule extends BaseTimeEntity {
         }
     }
 
-    public void addActiveParticipant(String nickname) {
-        if (!StringUtils.hasText(nickname))
-            throw new IllegalArgumentException("nickname은 null이거나 빈 문자열일 수 없습니다.");
-        if (this.participantNicknames == null || this.participantNicknames.equals("")) {
-            this.participantNicknames = nickname;
-        } else {
-            this.participantNicknames += ", " + nickname;
-        }
-        if (this.participantCount == null) {
-            this.participantCount = 1;
-        } else {
-            this.participantCount++;
-        }
+    public void setMemberParticipantsInfo(List<String> nicknames) {
+        if (nicknames.isEmpty())
+            throw new IllegalArgumentException("nickname은 null이거나 빈 list일 수 없습니다.");
+        this.participantNicknames = String.join(", ", nicknames);
+        this.participantCount = nicknames.size();
+    }
+
+    public void setGuestParticipantsInfo(String nickname) {
+        this.participantNicknames += ", " + nickname;
+        this.participantCount += 1;
     }
 
     public void updateParticipant(String oldNickname, String newNickname) {
@@ -158,7 +155,6 @@ public class Schedule extends BaseTimeEntity {
         for (String nicknameToRemove : nicknamesToRemove) {
             currentNicknames.remove(nicknameToRemove);
         }
-
         updateParticipants(currentNicknames);
     }
 
