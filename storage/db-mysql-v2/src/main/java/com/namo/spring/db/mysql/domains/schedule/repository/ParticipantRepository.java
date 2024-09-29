@@ -13,7 +13,6 @@ import org.springframework.data.repository.query.Param;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
-import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 
 public interface ParticipantRepository extends JpaRepository<Participant, Long> {
 
@@ -22,7 +21,8 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
     @Query("SELECT new com.namo.spring.db.mysql.domains.schedule.dto.ScheduleSummaryQuery(" +
             "s.id, p.customTitle, s.period.startDate, p.customImage, s.participantCount, s.participantNicknames) " +
             "FROM Participant p JOIN p.schedule s JOIN p.member m " +
-            "WHERE p.member.id = :memberId AND p.status = 'ACTIVE' AND s.scheduleType = :scheduleType")
+            "WHERE p.member.id = :memberId " +
+            "AND s.scheduleType = :scheduleType")
     List<ScheduleSummaryQuery> findScheduleSummaryByMemberAndScheduleType(Long memberId, int scheduleType);
 
     boolean existsByScheduleIdAndMemberId(Long scheduleId, Long memberId);
@@ -30,10 +30,8 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
     boolean existsByScheduleIdAndAnonymousId(Long scheduleId, Long anonymousId);
 
     @Query("SELECT p FROM Participant p JOIN FETCH p.schedule s LEFT JOIN FETCH p.palette " +
-        "WHERE s.id = :scheduleId AND s.scheduleType = :scheduleType " +
-        "AND (:status IS NULL OR p.status = :status)")
-    List<Participant> findParticipantsByScheduleIdAndStatusAndType(Long scheduleId, int scheduleType,
-            ParticipantStatus status);
+        "WHERE s.id = :scheduleId AND s.scheduleType = :scheduleType ")
+    List<Participant> findParticipantsByScheduleIdAndStatusAndType(Long scheduleId, int scheduleType);
 
     @Query("SELECT p FROM Participant p JOIN FETCH p.member m JOIN FETCH p.schedule s WHERE s.id = :scheduleId AND m.id = :memberId")
     Optional<Participant> findParticipantByScheduleIdAndMemberId(Long scheduleId, Long memberId);
@@ -43,14 +41,14 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
         "JOIN p.schedule s " +
         "LEFT JOIN FETCH p.member m " +
         "LEFT JOIN FETCH p.anonymous a " +
-        "WHERE p.id in :ids AND s.id = :scheduleId AND p.status = :status")
-    List<Participant> findParticipantByIdAndScheduleIdFetchUser(List<Long> ids, Long scheduleId, ParticipantStatus status);
+        "WHERE p.id in :ids AND s.id = :scheduleId")
+    List<Participant> findParticipantByIdAndScheduleIdFetchUser(List<Long> ids, Long scheduleId);
 
     @Query("SELECT p " +
             "FROM Participant p " +
             "JOIN p.schedule s " +
-            "WHERE p.id in :ids AND s.id = :scheduleId AND p.status = :status")
-    List<Participant> findParticipantByIdAndScheduleId(List<Long> ids, Long scheduleId, ParticipantStatus status);
+            "WHERE p.id in :ids AND s.id = :scheduleId")
+    List<Participant> findParticipantByIdAndScheduleId(List<Long> ids, Long scheduleId);
 
     @Query("SELECT DISTINCT new com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery(" +
         "p.id, m.palette.id, m.id, m.nickname, s, p.customTitle, p.customImage, p.category.isShared, m.birthdayVisible" +
@@ -58,7 +56,6 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
         "JOIN p.schedule s " +
         "JOIN p.member m " +
         "WHERE m.id IN :memberIds " +
-        "AND p.status = 'ACTIVE' " +
         "AND (s.period.startDate < :endDate " +
         "AND s.period.endDate >= :startDate) " +
         "ORDER BY s.period.startDate ASC")
@@ -72,7 +69,6 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
         "JOIN FETCH p.schedule s " +
         "JOIN FETCH p.category c " +
         "WHERE p.member.id = :memberId " +
-        "AND p.status = 'ACTIVE' " +
         "AND (s.period.startDate < :endDate " +
         "AND s.period.endDate >= :startDate) " +
         "AND (:isShared IS NULL OR c.isShared = :isShared) " +
@@ -86,8 +82,7 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
 
     void deleteByIdIn(List<Long> id);
 
-    Optional<Participant> findParticipantByMemberIdAndScheduleIdAndStatus(Long memberId, Long scheduleId,
-            ParticipantStatus status);
+    Optional<Participant> findParticipantByMemberIdAndScheduleId(Long memberId, Long scheduleId);
 
     Optional<Participant> findParticipantByAnonymousIdAndScheduleId(Long anonymousId, Long scheduleId);
 

@@ -11,7 +11,6 @@ import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleSummaryQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.type.Location;
-import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
 
@@ -179,7 +178,6 @@ public class MeetingScheduleResponseConverter {
                 .isGuest(participant.getUser() instanceof Anonymous)
                 .nickname(participant.getUser().getNickname())
                 .colorId(participant.getPalette() != null ? participant.getPalette().getId() : null)
-                .isActive(getParticipantIsActive(participant.getStatus()))
                 .isOwner(getParticipantIsOwner(participant.getIsOwner()))
                 .build();
     }
@@ -188,7 +186,4 @@ public class MeetingScheduleResponseConverter {
         return isOwner == ScheduleType.MEETING.getValue();
     }
 
-    private static boolean getParticipantIsActive(ParticipantStatus status) {
-        return status == ParticipantStatus.ACTIVE;
-    }
 }

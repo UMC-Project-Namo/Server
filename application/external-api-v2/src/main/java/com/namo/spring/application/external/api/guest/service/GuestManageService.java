@@ -21,7 +21,6 @@ import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.exception.ParticipantException;
 import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
-import com.namo.spring.db.mysql.domains.schedule.type.ParticipantStatus;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 import com.namo.spring.db.mysql.domains.user.dto.AnonymousInviteCodeQuery;
 import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
@@ -70,8 +69,8 @@ public class GuestManageService {
      * 게스트 유저가 모임 일정에서 표시될 고유 색상을 부여합니다.
      */
     private Long selectPaletteColorId(Long scheduleId) {
-        List<Long> participantsColors = participantService.readParticipantsByScheduleIdAndStatusAndType(scheduleId,
-                        ScheduleType.MEETING, ParticipantStatus.ACTIVE)
+        List<Long> participantsColors = participantService.readParticipantsByScheduleIdAndScheduleType(scheduleId,
+                        ScheduleType.MEETING)
                 .stream().map(Participant::getPalette).map(Palette::getId).collect(Collectors.toList());
         return Arrays.stream(PALETTE_IDS)
                 .filter((color) -> !participantsColors.contains(color))

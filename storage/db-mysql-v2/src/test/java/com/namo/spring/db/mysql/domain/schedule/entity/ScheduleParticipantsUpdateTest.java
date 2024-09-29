@@ -3,6 +3,7 @@ package com.namo.spring.db.mysql.domain.schedule.entity;
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,37 +29,29 @@ public class ScheduleParticipantsUpdateTest {
     }
 
     @Test
-    void addActiveParticipant_ShouldAddParticipant() {
-        schedule.addActiveParticipant("Owner");
-
-        assertThat(schedule.getParticipantNicknames()).isEqualTo("Owner");
-        assertThat(schedule.getParticipantCount()).isEqualTo(1);
-
-        schedule.addActiveParticipant("Participant");
-
-        assertThat(schedule.getParticipantNicknames()).isEqualTo("Owner, Participant");
-        assertThat(schedule.getParticipantCount()).isEqualTo(2);
+    void addActiveParticipant_ShouldAddParticipantNicknames() {
+        schedule.setMemberParticipantsInfo(List.of("Owner", "Participant1", "Participant2"));
+        assertThat(schedule.getParticipantNicknames()).isEqualTo("Owner, Participant1, Participant2");
+        assertThat(schedule.getParticipantCount()).isEqualTo(3);
     }
 
     @Test
-    void addActiveParticipant_ShouldThrowException_WhenNicknameIsEmpty() {
-        assertThatThrownBy(() -> schedule.addActiveParticipant(""))
+    void setParticipant_Nicknames_ShouldThrowException_WhenNicknameIsEmpty() {
+        assertThatThrownBy(() -> schedule.setMemberParticipantsInfo(new ArrayList<>()))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("nickname은 null이거나 빈 문자열일 수 없습니다.");
+                .hasMessage("nickname은 null이거나 빈 list일 수 없습니다.");
     }
 
     @Test
     void updateParticipant_ShouldUpdateNickname() {
         // Given
-        schedule.addActiveParticipant("Owner");
-        schedule.addActiveParticipant("Participant");
-        schedule.addActiveParticipant("Participant");
+        schedule.setMemberParticipantsInfo(List.of("Owner", "Participant1", "Participant2"));
 
         // When
-        schedule.updateParticipant("Participant", "updatedParticipant");
+        schedule.updateParticipant("Participant1", "updatedParticipant");
 
         // Then
-        assertThat(schedule.getParticipantNicknames()).isEqualTo("Owner, updatedParticipant, Participant");
+        assertThat(schedule.getParticipantNicknames()).isEqualTo("Owner, updatedParticipant, Participant2");
     }
 
     @Test
@@ -77,9 +70,7 @@ public class ScheduleParticipantsUpdateTest {
 
     @Test
     void removeParticipant_ShouldRemoveParticipant() {
-        schedule.addActiveParticipant("Owner");
-        schedule.addActiveParticipant("Participant1");
-        schedule.addActiveParticipant("Participant2");
+        schedule.setMemberParticipantsInfo(List.of("Owner", "Participant1", "Participant2"));
 
         schedule.removeParticipants(List.of("Participant1", "Participant2"));
 
@@ -89,9 +80,7 @@ public class ScheduleParticipantsUpdateTest {
 
     @Test
     void removeParticipant_ShouldRemoveParticipant_DuplicateNicknameRequest() {
-        schedule.addActiveParticipant("Owner");
-        schedule.addActiveParticipant("Participant");
-        schedule.addActiveParticipant("Participant");
+        schedule.setMemberParticipantsInfo(List.of("Owner", "Participant", "Participant"));
 
         schedule.removeParticipants(List.of("Participant", "Participant"));
 
