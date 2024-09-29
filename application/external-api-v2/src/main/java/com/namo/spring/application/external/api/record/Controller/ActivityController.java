@@ -1,6 +1,6 @@
 package com.namo.spring.application.external.api.record.Controller;
 
-import static com.namo.spring.application.external.global.utils.SchedulePeriodValidationUtils.*;
+import static com.namo.spring.application.external.global.utils.PeriodValidationUtils.*;
 import static com.namo.spring.core.common.code.status.ErrorStatus.*;
 
 import java.util.List;
@@ -22,7 +22,7 @@ import com.namo.spring.application.external.api.record.dto.ActivityResponse;
 import com.namo.spring.application.external.api.record.usecase.ActivityUseCase;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
-import com.namo.spring.application.external.global.utils.SchedulePeriodValidationUtils;
+import com.namo.spring.application.external.global.utils.PeriodValidationUtils;
 import com.namo.spring.core.common.response.ResponseDto;
 
 import io.swagger.v3.oas.annotations.Operation;
