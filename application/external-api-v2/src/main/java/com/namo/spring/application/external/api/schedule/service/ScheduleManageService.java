@@ -272,4 +272,26 @@ public class ScheduleManageService {
         scheduleService.deleteSchedule(schedule.getId());
     }
 
+
+    public void leaveMeetingSchedule(Schedule schedule, Long memberId) {
+        Participant participant = participantManageService.getParticipantWithScheduleAndMember(schedule.getId(), memberId);
+        // 방장이 모임을 나갈 경우
+        if(participant.getIsOwner()==ParticipantRole.OWNER.getValue()){
+            participantService.readFirstParticipantByScheduleId(schedule.getId()).ifPresentOrElse(
+                    // 가나다 순으로 가장 먼저 조회된 참여자에게 방장 권한 부여
+                    newOwner -> {
+                        newOwner.setIsOwner(ParticipantRole.OWNER);
+                        participant.setIsOwner(ParticipantRole.NON_OWNER);
+                        participantManageService.deleteParticipant(participant, schedule);
+                    },
+                    // 참여자가 방장만 존재할 경우 모임 일정을 삭제
+                    () -> scheduleService.deleteSchedule(schedule.getId())
+            );
+        }
+        // 방장이 아닌 유저가 모임을 나갈 경우
+        else {
+            participantManageService.deleteParticipant(participant, schedule);
+        }
+    }
+
 }

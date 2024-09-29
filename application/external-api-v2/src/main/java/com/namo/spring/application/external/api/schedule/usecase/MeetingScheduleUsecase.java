@@ -99,4 +99,10 @@ public class MeetingScheduleUsecase {
         validateParticipantCount(scheduleManageService.getScheduleParticipantIds(schedule.getId()).size());
         return guestManageService.generateInvitationUrl(scheduleId);
     }
+
+    @Transactional
+    public void leaveMeetingSchedule(Long scheduleId, SecurityUserDetails memberInfo) {
+        Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
+        scheduleManageService.leaveMeetingSchedule(schedule, memberInfo.getUserId());
+    }
 }

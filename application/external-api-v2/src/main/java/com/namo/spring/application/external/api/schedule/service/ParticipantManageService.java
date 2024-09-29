@@ -63,7 +63,7 @@ public class ParticipantManageService {
      * @param scheduleId
      * @return Participant
      */
-    public Participant getParticipantWithScheduleAndMember(Long memberId, Long scheduleId) {
+    public Participant getParticipantWithScheduleAndMember(Long scheduleId, Long memberId) {
         return participantService.readParticipantByScheduleIdAndMemberId(scheduleId, memberId).orElseThrow(
                 () -> new ScheduleException(ErrorStatus.NOT_SCHEDULE_PARTICIPANT));
     }
