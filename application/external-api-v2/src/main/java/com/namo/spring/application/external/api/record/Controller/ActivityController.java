@@ -1,5 +1,6 @@
 package com.namo.spring.application.external.api.record.Controller;
 
+import static com.namo.spring.application.external.global.utils.SchedulePeriodValidationUtils.*;
 import static com.namo.spring.core.common.code.status.ErrorStatus.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ import com.namo.spring.application.external.api.record.dto.ActivityResponse;
 import com.namo.spring.application.external.api.record.usecase.ActivityUseCase;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
+import com.namo.spring.application.external.global.utils.SchedulePeriodValidationUtils;
 import com.namo.spring.core.common.response.ResponseDto;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -46,7 +48,6 @@ public class ActivityController {
             @AuthenticationPrincipal SecurityUserDetails memberInfo,
             @Parameter(description = "활동을 조회할 스케줄 ID 입니다..", example = "1")
             @PathVariable Long scheduleId) {
-
         return ResponseDto.onSuccess(activityUseCase
                 .getActivities(memberInfo.getUserId(), scheduleId));
     }
@@ -76,6 +77,7 @@ public class ActivityController {
             @PathVariable Long scheduleId,
             @Valid @RequestBody ActivityRequest.CreateActivityDto request
     ){
+        validatePeriod(request.getActivityStartDate(), request.getActivityEndDate());
         activityUseCase.createActivity(memberInfo.getUserId(), scheduleId, request);
         return ResponseDto.onSuccess("활동 생성 완료");
     }
@@ -94,6 +96,7 @@ public class ActivityController {
             @PathVariable Long activityId,
             @RequestBody ActivityRequest.UpdateActivityDto request
     ){
+        validatePeriod(request.getActivityStartDate(), request.getActivityEndDate());
         activityUseCase.updateActivity(memberInfo.getUserId(), activityId, request);
         return ResponseDto.onSuccess("활동 수정 완료");
     }
