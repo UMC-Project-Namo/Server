@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.Valid;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +26,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+import static com.namo.spring.core.common.code.status.ErrorStatus.*;
 
 @Tag(name = "개인 일정", description = "개인 일정 관련 API")
 public interface PersonalScheduleApi {
@@ -69,4 +72,13 @@ public interface PersonalScheduleApi {
     ResponseDto<String> updatePersonalSchedules(@Parameter(description = "일정 ID") @PathVariable Long scheduleId,
             @Parameter(description = "일정 내용 수정 요청 dto") @Valid @RequestBody PersonalScheduleRequest.PatchPersonalScheduleDto dto,
             @AuthenticationPrincipal SecurityUserDetails member);
+
+    @Operation(summary = "일정 삭제", description = "일정을 삭제합니다.")
+    @ApiErrorCodes(value = {
+            NOT_FOUND_SCHEDULE_FAILURE,
+            NOT_SCHEDULE_PARTICIPANT,
+            NOT_SCHEDULE_OWNER
+    })
+    ResponseDto<String> deleteSchedule(@Parameter(description = "일정 ID") @PathVariable Long scheduleId,
+                                              @AuthenticationPrincipal SecurityUserDetails member);
 }
