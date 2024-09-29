@@ -41,21 +41,21 @@ public interface PersonalScheduleApi {
     @ApiErrorCodes(value = {
             ErrorStatus.INVALID_FORMAT_FAILURE})
     ResponseDto<List<PersonalScheduleResponse.GetMonthlyScheduleDto>> getMyMonthlySchedules(
-            @RequestParam  LocalDate startDate,
-            @RequestParam  LocalDate endDate,
+            @Parameter(description = "yyyy-mm-dd 형식으로 입력합니다.")@RequestParam  LocalDate startDate,
+            @Parameter(description = "yyyy-mm-dd 형식으로 입력합니다.")@RequestParam  LocalDate endDate,
             @AuthenticationPrincipal SecurityUserDetails member);
 
     @Operation(summary = "개인 캘린더 - 친구 생일 조회", description = "친구 생일을 조회합니다.")
     ResponseDto<List<PersonalScheduleResponse.GetMonthlyFriendBirthdayDto>> getMonthlyFriendsBirthday(
-            @RequestParam  LocalDate startDate,
-            @RequestParam  LocalDate endDate,
+            @Parameter(description = "yyyy-mm-dd 형식으로 입력합니다.")@RequestParam  LocalDate startDate,
+            @Parameter(description = "yyyy-mm-dd 형식으로 입력합니다.")@RequestParam  LocalDate endDate,
             @AuthenticationPrincipal SecurityUserDetails member);
 
     @Operation(summary = "친구 캘린더 조회", description = "친구의 캘린더을 조회합니다.")
     @ApiErrorCodes(value = {ErrorStatus.NOT_FRIENDSHIP_MEMBER})
     ResponseDto<List<PersonalScheduleResponse.GetFriendMonthlyScheduleDto>> getFriendMonthlySchedules(
-            @RequestParam  LocalDate startDate,
-            @RequestParam  LocalDate endDate,
+            @Parameter(description = "yyyy-mm-dd 형식으로 입력합니다.")@RequestParam  LocalDate startDate,
+            @Parameter(description = "yyyy-mm-dd 형식으로 입력합니다.")@RequestParam  LocalDate endDate,
             @Parameter(description = "친구 유저 ID") @RequestParam Long memberId,
             @AuthenticationPrincipal SecurityUserDetails member);
 
