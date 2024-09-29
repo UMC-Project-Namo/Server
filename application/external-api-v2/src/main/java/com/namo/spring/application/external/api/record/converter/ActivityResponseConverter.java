@@ -71,7 +71,7 @@ public class ActivityResponseConverter {
     public static ActivityResponse.ActivitySettlementParticipant toActivitySettlementParticipant(
             ActivityParticipant activityParticipant) {
         return ActivityResponse.ActivitySettlementParticipant.builder()
-                .activityParticipantId(activityParticipant.getParticipant().getId())
+                .activityParticipantId(activityParticipant.getId())
                 .participantNickname(activityParticipant.getParticipant().getMember().getNickname())
                 .isIncludedInSettlement(activityParticipant.isIncludedInSettlement())
                 .build();
