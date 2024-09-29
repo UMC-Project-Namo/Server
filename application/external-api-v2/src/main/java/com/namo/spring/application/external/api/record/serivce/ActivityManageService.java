@@ -1,6 +1,7 @@
 package com.namo.spring.application.external.api.record.serivce;
 
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import com.namo.spring.application.external.api.record.converter.ActivityConverter;
 import com.namo.spring.application.external.api.record.dto.ActivityRequest;
@@ -56,7 +57,7 @@ public class ActivityManageService {
         Participant myParticipant = participantManageService.getParticipantByMemberAndSchedule(memberId, scheduleId);
         Activity activity = activityService.createActivity(ActivityConverter.toActivity(myParticipant.getSchedule(), request));
         // 활동 이미지 생성
-        if (request.getImageList() != null && !request.getImageList().isEmpty()){
+        if (!CollectionUtils.isEmpty(request.getImageList())) {
             activityImageManageService.createImages(activity, request.getImageList());
         }
         return activity;

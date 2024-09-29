@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.namo.spring.application.external.api.record.converter.ActivityParticipantConverter;
 import com.namo.spring.application.external.api.record.dto.ActivityRequest;
@@ -71,13 +72,18 @@ public class ActivityParticipantManageService {
      * @param request
      */
     public void updateActivityParticipants(Activity activity, ActivityRequest.UpdateActivityParticipantsDto request) {
-        List<ActivityParticipant> deleteTarget = activityUserService.readAllByActivityAndParticipantIdAndSettlementStatus(activity,
-                request.getParticipantsToRemove(), false);
-        if ((long)deleteTarget.size() != request.getParticipantsToRemove().size()){
-            throw new ActivityParticipantException(ErrorStatus.IN_SETTLEMENT_ACTIVITY_MEMBER);
+        if (!CollectionUtils.isEmpty(request.getParticipantsToRemove())) {
+            List<ActivityParticipant> deleteTarget = activityUserService.readAllByActivityAndParticipantIdAndSettlementStatus(
+                    activity,
+                    request.getParticipantsToRemove(), false);
+            if ((long)deleteTarget.size() != request.getParticipantsToRemove().size()) {
+                throw new ActivityParticipantException(ErrorStatus.IN_SETTLEMENT_ACTIVITY_MEMBER);
+            }
+            activityUserService.deleteAll(deleteTarget);
         }
-        activityUserService.deleteAll(deleteTarget);
-        createActivityParticipant(activity, request.getParticipantsToAdd(), activity.getSchedule().getId());
+        if (!CollectionUtils.isEmpty(request.getParticipantsToAdd())) {
+            createActivityParticipant(activity, request.getParticipantsToAdd(), activity.getSchedule().getId());
+        }
     }
 
     /**
