@@ -44,8 +44,11 @@ public class ParticipantMaker {
 
     public void makeMeetingScheduleParticipants(Schedule schedule, List<Member> members) {
         List<Participant> participants = members.stream()
-                .map(member -> Participant.of(ParticipantRole.NON_OWNER.getValue(), member, schedule,
-                        null, null, schedule.getTitle(), schedule.getImageUrl()))
+                .map(member -> {
+                    Category category = categoryService.readMeetingCategoryByMember(member);
+                    return Participant.of(ParticipantRole.NON_OWNER.getValue(), member, schedule,
+                            category, member.getPalette(), schedule.getTitle(), schedule.getImageUrl());
+                })
                 .collect(Collectors.toList());
         participantService.createParticipants(participants);
     }
