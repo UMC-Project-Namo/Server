@@ -123,5 +123,14 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
             @Param("endDate") LocalDateTime endDate);
 
     boolean existsByCategory(Category category);
+
+    @Query("SELECT p "+
+            "FROM Participant p " +
+            "JOIN FETCH p.member m "+
+            "WHERE p.schedule.id = :scheduleId " +
+            "AND p.isOwner = 0 " +
+            "ORDER BY m.nickname " +
+            "LIMIT 1")
+    Optional<Participant> findFirstParticipantByScheduleIdOrderByNickname(Long scheduleId);
 }
 
