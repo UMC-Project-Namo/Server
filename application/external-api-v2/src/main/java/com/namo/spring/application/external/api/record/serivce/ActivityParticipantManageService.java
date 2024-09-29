@@ -72,12 +72,12 @@ public class ActivityParticipantManageService {
      */
     public void updateActivityParticipants(Activity activity, ActivityRequest.UpdateActivityParticipantsDto request) {
         List<ActivityParticipant> deleteTarget = activityUserService.readAllByActivityAndParticipantIdAndSettlementStatus(activity,
-                request.getDeleteParticipantIdList(), false);
-        if ((long)deleteTarget.size() != request.getDeleteParticipantIdList().size()){
+                request.getParticipantsToRemove(), false);
+        if ((long)deleteTarget.size() != request.getParticipantsToRemove().size()){
             throw new ActivityParticipantException(ErrorStatus.IN_SETTLEMENT_ACTIVITY_MEMBER);
         }
         activityUserService.deleteAll(deleteTarget);
-        createActivityParticipant(activity, request.getAddParticipantIdList(), activity.getSchedule().getId());
+        createActivityParticipant(activity, request.getParticipantsToAdd(), activity.getSchedule().getId());
     }
 
     /**
