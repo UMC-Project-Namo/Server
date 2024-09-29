@@ -14,7 +14,7 @@ import com.namo.spring.db.mysql.domains.schedule.type.Period;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class SchedulePeriodValidationUtils {
+public class PeriodValidationUtils {
 
     /**
      * 시작 날짜가 끝 날짜보다 앞서지 않았는지 검증 후 반환합니다.
