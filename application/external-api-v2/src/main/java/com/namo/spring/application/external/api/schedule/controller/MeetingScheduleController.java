@@ -1,12 +1,13 @@
 package com.namo.spring.application.external.api.schedule.controller;
 
+import static com.namo.spring.application.external.global.utils.PeriodValidationUtils.validatePeriod;
 import static com.namo.spring.core.common.code.status.ErrorStatus.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -47,9 +48,9 @@ public class MeetingScheduleController {
     })
     @PostMapping(path = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDto<Long> createMeetingSchedule(
-            @Valid @RequestPart MeetingScheduleRequest.PostMeetingScheduleDto dto,
+            @Valid @RequestPart MeetingScheduleRequest.PostMeetingScheduleDto request,
             @AuthenticationPrincipal SecurityUserDetails memberInfo) {
-        return ResponseDto.onSuccess(meetingScheduleUsecase.createMeetingSchedule(dto, memberInfo));
+        return ResponseDto.onSuccess(meetingScheduleUsecase.createMeetingSchedule(request, memberInfo));
     }
 
     @Operation(summary = "모임 일정 목록 조회", description = "모임 일정 목록을 조회합니다.")
@@ -71,10 +72,11 @@ public class MeetingScheduleController {
     })
     @GetMapping(path = "/preview")
     public ResponseDto<List<MeetingScheduleResponse.GetMonthlyMembersScheduleDto>> getMonthlyParticipantSchedules(
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+            @Parameter(description = "yyyy-mm-dd 형식으로 입력합니다.") @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @Parameter(description = "yyyy-mm-dd 형식으로 입력합니다.") @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
             @RequestParam List<Long> participantIds,
             @AuthenticationPrincipal SecurityUserDetails memberInfo) {
+        validatePeriod(startDate, endDate);
         return ResponseDto.onSuccess(
                 meetingScheduleUsecase.getMonthlyMemberSchedules(participantIds, startDate, endDate, memberInfo));
     }
@@ -89,9 +91,10 @@ public class MeetingScheduleController {
     @GetMapping(path = "/{meetingScheduleId}/calender")
     public ResponseDto<List<MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto>> getMonthlyMeetingParticipantSchedules(
             @PathVariable Long meetingScheduleId,
-           @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
-        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+            @Parameter(description = "yyyy-mm-dd 형식으로 입력합니다.") @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @Parameter(description = "yyyy-mm-dd 형식으로 입력합니다.") @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
             @AuthenticationPrincipal SecurityUserDetails memberInfo) {
+        validatePeriod(startDate, endDate);
         return ResponseDto.onSuccess(
                 meetingScheduleUsecase.getMonthlyMeetingParticipantSchedules(meetingScheduleId, startDate, endDate,
                         memberInfo));
@@ -124,9 +127,9 @@ public class MeetingScheduleController {
     @PatchMapping(path = "/{meetingScheduleId}")
     public ResponseDto<String> updateMeetingSchedule(
             @PathVariable Long meetingScheduleId,
-            @RequestBody @Valid MeetingScheduleRequest.PatchMeetingScheduleDto dto,
+            @RequestBody @Valid MeetingScheduleRequest.PatchMeetingScheduleDto request,
             @AuthenticationPrincipal SecurityUserDetails memberInfo) {
-        meetingScheduleUsecase.updateMeetingSchedule(dto, meetingScheduleId, memberInfo);
+        meetingScheduleUsecase.updateMeetingSchedule(request, meetingScheduleId, memberInfo);
         return ResponseDto.onSuccess("모임 일정 수정 성공");
     }
 
@@ -134,9 +137,9 @@ public class MeetingScheduleController {
     @PatchMapping(path = "/{meetingScheduleId}/profile")
     public ResponseDto<String> updateMeetingScheduleProfile(
             @PathVariable Long meetingScheduleId,
-            @RequestBody @Valid MeetingScheduleRequest.PatchMeetingScheduleProfileDto dto,
+            @RequestBody @Valid MeetingScheduleRequest.PatchMeetingScheduleProfileDto request,
             @AuthenticationPrincipal SecurityUserDetails memberInfo) {
-        meetingScheduleUsecase.updateMeetingScheduleProfile(dto, meetingScheduleId, memberInfo);
+        meetingScheduleUsecase.updateMeetingScheduleProfile(request, meetingScheduleId, memberInfo);
         return ResponseDto.onSuccess("모임 일정 프로필 수정 성공");
     }
 

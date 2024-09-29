@@ -1,7 +1,7 @@
 package com.namo.spring.application.external.api.schedule.service;
 
 import static com.namo.spring.application.external.global.utils.MeetingParticipantValidationUtils.*;
-import static com.namo.spring.application.external.global.utils.SchedulePeriodValidationUtils.*;
+import static com.namo.spring.application.external.global.utils.PeriodValidationUtils.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import com.namo.spring.application.external.api.category.service.CategoryManageService;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleSummaryQuery;
-import com.namo.spring.db.mysql.domains.user.dto.FriendBirthdayQuery;
 import org.springframework.stereotype.Service;
 
 import com.namo.spring.application.external.api.schedule.converter.LocationConverter;

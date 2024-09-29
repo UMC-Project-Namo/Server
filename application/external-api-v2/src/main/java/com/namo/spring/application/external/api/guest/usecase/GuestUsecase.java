@@ -1,23 +1,16 @@
 package com.namo.spring.application.external.api.guest.usecase;
 
-import static com.namo.spring.application.external.api.guest.converter.GuestMeetingResponseConverter.*;
 import static com.namo.spring.application.external.api.guest.converter.GuestParticipantResponseConverter.*;
-import static com.namo.spring.application.external.global.utils.SchedulePeriodValidationUtils.*;
-
-import java.util.List;
 
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.namo.spring.application.external.api.guest.dto.GuestMeetingResponse;
 import com.namo.spring.application.external.api.guest.dto.GuestParticipantRequest;
 import com.namo.spring.application.external.api.guest.dto.GuestParticipantResponse;
 import com.namo.spring.application.external.api.guest.service.GuestManageService;
 import com.namo.spring.application.external.api.schedule.service.ScheduleManageService;
-import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
-import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

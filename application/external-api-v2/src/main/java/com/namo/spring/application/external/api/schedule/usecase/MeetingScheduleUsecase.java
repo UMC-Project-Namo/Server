@@ -2,7 +2,6 @@ package com.namo.spring.application.external.api.schedule.usecase;
 
 import static com.namo.spring.application.external.api.schedule.converter.MeetingScheduleResponseConverter.*;
 import static com.namo.spring.application.external.global.utils.MeetingParticipantValidationUtils.*;
-import static com.namo.spring.application.external.global.utils.SchedulePeriodValidationUtils.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -49,7 +48,6 @@ public class MeetingScheduleUsecase {
 
     @Transactional(readOnly = true)
     public List<MeetingScheduleResponse.GetMonthlyMembersScheduleDto> getMonthlyMemberSchedules(List<Long> memberIds, LocalDate startDate, LocalDate endDate, SecurityUserDetails memberInfo) {
-        validatePeriod(startDate, endDate);
         validateUniqueParticipantIds(memberInfo.getUserId(), memberIds);
 
         List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyMembersSchedules(
@@ -60,8 +58,6 @@ public class MeetingScheduleUsecase {
     @Transactional(readOnly = true)
     public List<MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto> getMonthlyMeetingParticipantSchedules(
             Long scheduleId, LocalDate startDate, LocalDate endDate, SecurityUserDetails memberInfo) {
-        validatePeriod(startDate, endDate);
-
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
         List<ScheduleParticipantQuery> participantsWithSchedule = scheduleManageService.getMonthlyMeetingParticipantSchedules(
                 schedule, startDate, endDate, memberInfo.getUserId(), null);
@@ -78,18 +74,18 @@ public class MeetingScheduleUsecase {
     }
 
     @Transactional
-    public void updateMeetingSchedule(MeetingScheduleRequest.PatchMeetingScheduleDto dto, Long scheduleId,
+    public void updateMeetingSchedule(MeetingScheduleRequest.PatchMeetingScheduleDto request, Long scheduleId,
                                       SecurityUserDetails memberInfo) {
-        validateUniqueParticipantIds(memberInfo.getUserId(), dto);
+        validateUniqueParticipantIds(memberInfo.getUserId(), request);
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
-        scheduleManageService.updateMeetingSchedule(dto, schedule, memberInfo.getUserId());
+        scheduleManageService.updateMeetingSchedule(request, schedule, memberInfo.getUserId());
     }
 
     @Transactional
-    public void updateMeetingScheduleProfile(MeetingScheduleRequest.PatchMeetingScheduleProfileDto dto, Long scheduleId,
+    public void updateMeetingScheduleProfile(MeetingScheduleRequest.PatchMeetingScheduleProfileDto request, Long scheduleId,
                                              SecurityUserDetails memberInfo){
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
-        scheduleManageService.updateMeetingScheduleProfile(dto, schedule, memberInfo.getUserId());
+        scheduleManageService.updateMeetingScheduleProfile(request, schedule, memberInfo.getUserId());
     }
 
     @Transactional
