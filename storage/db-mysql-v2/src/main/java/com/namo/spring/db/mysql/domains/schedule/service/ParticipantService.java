@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleSummaryQuery;
+import com.namo.spring.db.mysql.domains.schedule.type.ParticipantRole;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -82,38 +83,52 @@ public class ParticipantService {
         return participantRepository.findParticipantsByScheduleIdAndStatusAndType(scheduleId, type.getValue());
     }
 
+    @Transactional
     public void deleteParticipant(Long id) {
         participantRepository.deleteById(id);
     }
 
+    @Transactional
     public void deleteByIdIn(List<Long> Ids) {
         participantRepository.deleteByIdIn(Ids);
     }
 
+    @Transactional(readOnly = true)
     public Optional<Participant> readMemberParticipant(Long memberId, Long scheduleId) {
         return participantRepository.findParticipantByMemberIdAndScheduleId(memberId, scheduleId);
     }
 
+    @Transactional(readOnly = true)
     public Optional<Participant> readAnonymousParticipant(Long anonymousId, Long scheduleId) {
         return participantRepository.findParticipantByAnonymousIdAndScheduleId(anonymousId, scheduleId);
     }
 
+    @Transactional(readOnly = true)
+    public Optional<Participant> readFirstParticipantByScheduleId(Long scheduleId){
+        return participantRepository.findFirstParticipantByScheduleIdOrderByNickname(scheduleId);
+    }
+
+    @Transactional(readOnly = true)
     public List<Participant> readParticipantsForDiary(Long memberId, Pageable pageable) {
         return participantRepository.findAllByMemberIdAndHasDiary(memberId, pageable);
     }
 
+    @Transactional(readOnly = true)
     public List<Participant> readParticipantHasDiaryByScheduleName(Long memberId, Pageable pageable, String keyword) {
         return participantRepository.findAllByScheduleTitleAndHasDiary(memberId, keyword, pageable);
     }
 
+    @Transactional(readOnly = true)
     public List<Participant> readParticipantHasDiaryByDiaryContent(Long memberId, Pageable pageable, String keyword) {
         return participantRepository.findAllByDiaryContentAndHasDiary(memberId, keyword, pageable);
     }
 
+    @Transactional(readOnly = true)
     public List<Participant> readParticipantHasDiaryByMember(Long memberId, Pageable pageable, String keyword) {
         return participantRepository.findAllByMemberAndHasDiary(memberId, keyword, pageable);
     }
 
+    @Transactional(readOnly = true)
     public List<Participant> readParticipantHasDiaryByDateRange(Long memberId, LocalDateTime startDate,
             LocalDateTime endDate) {
         return participantRepository.findAllByDateRangeAndHasDiary(memberId, startDate, endDate);

@@ -2,6 +2,7 @@ package com.namo.spring.db.mysql.domains.schedule.entity;
 
 import java.util.Objects;
 
+import com.namo.spring.db.mysql.domains.schedule.type.ParticipantRole;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -112,11 +113,8 @@ public class Participant extends BaseTimeEntity {
         return null;
     }
 
-    public void activateStatus(Category category, Palette palette) {
-        this.category = category;
-        this.palette = palette;
-        this.customTitle = schedule.getTitle();
-        this.customImage = schedule.getImageUrl();
+    public void setIsOwner(ParticipantRole role) {
+        this.isOwner = role.getValue();
     }
 
     public void updateCustomScheduleInfo(String title, String imageUrl) {

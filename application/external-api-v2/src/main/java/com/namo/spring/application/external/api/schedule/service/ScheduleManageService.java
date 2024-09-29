@@ -1,7 +1,7 @@
 package com.namo.spring.application.external.api.schedule.service;
 
 import static com.namo.spring.application.external.global.utils.MeetingParticipantValidationUtils.*;
-import static com.namo.spring.application.external.global.utils.SchedulePeriodValidationUtils.*;
+import static com.namo.spring.application.external.global.utils.PeriodValidationUtils.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import com.namo.spring.application.external.api.category.service.CategoryManageService;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleSummaryQuery;
-import com.namo.spring.db.mysql.domains.user.dto.FriendBirthdayQuery;
 import org.springframework.stereotype.Service;
 
 import com.namo.spring.application.external.api.schedule.converter.LocationConverter;
@@ -270,6 +269,42 @@ public class ScheduleManageService {
     public void deleteSchedule(Schedule schedule, Long memberId){
         validateAndGetScheduleOwner(schedule, memberId);
         scheduleService.deleteSchedule(schedule.getId());
+    }
+
+
+    public void leaveMeetingSchedule(Schedule schedule, Long memberId) {
+        Participant participant = participantManageService.getParticipantWithScheduleAndMember(schedule.getId(), memberId);
+        // 방장이 모임을 나갈 경우
+        if(participant.getIsOwner()==ParticipantRole.OWNER.getValue()){
+            changeOwnerOrDeleteSchedule(schedule, participant);
+        }
+        // 방장이 아닌 유저가 모임을 나갈 경우
+        else {
+            participantManageService.deleteParticipant(participant, schedule);
+        }
+    }
+
+    /**
+     * !! 방장인 참여자가 모임을 나갈 경우
+     * 남은 참여자의 유무에 따라
+     * 방장을 재설정 또는 모임을 삭제합니다.
+     *
+     * 새로운 방장은 '가나다' 순으로 정렬하여
+     * 가장 먼저 조회되는 참여자로 설정합니다.
+     * @param schedule
+     * @param participant 방장 participant
+     */
+    private void changeOwnerOrDeleteSchedule(Schedule schedule, Participant participant) {
+        participantService.readFirstParticipantByScheduleId(schedule.getId()).ifPresentOrElse(
+                // 가나다 순으로 가장 먼저 조회된 참여자에게 방장 권한 부여
+                newOwner -> {
+                    newOwner.setIsOwner(ParticipantRole.OWNER);
+                    participant.setIsOwner(ParticipantRole.NON_OWNER);
+                    participantManageService.deleteParticipant(participant, schedule);
+                },
+                // 참여자가 방장만 존재할 경우 모임 일정을 삭제
+                () -> scheduleService.deleteSchedule(schedule.getId())
+        );
     }
 
 }

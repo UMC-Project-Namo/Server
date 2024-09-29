@@ -1,15 +1,5 @@
 package com.namo.spring.application.external.api.schedule.service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.YearMonth;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import com.namo.spring.db.mysql.domains.user.entity.User;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.record.exception.DiaryException;
@@ -20,11 +10,20 @@ import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
 import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
 import com.namo.spring.db.mysql.domains.user.entity.Friendship;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
+import com.namo.spring.db.mysql.domains.user.entity.User;
 import com.namo.spring.db.mysql.domains.user.exception.MemberException;
 import com.namo.spring.db.mysql.domains.user.service.FriendshipService;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -41,7 +40,8 @@ public class ParticipantManageService {
     public void createMeetingScheduleParticipants(Member owner, Schedule schedule, List<Member> participants) {
         participantMaker.makeScheduleOwner(schedule, owner, null, owner.getPalette().getId());
         participantMaker.makeMeetingScheduleParticipants(schedule, participants);
-        List<String> participantNicknames = List.of(owner.getNickname());
+        List<String> participantNicknames = new ArrayList<>();
+        participantNicknames.add(owner.getNickname());
         participantNicknames.addAll(participants.stream().map(Member::getNickname).collect(Collectors.toList()));
         schedule.setMemberParticipantsInfo(participantNicknames);
     }
@@ -63,7 +63,7 @@ public class ParticipantManageService {
      * @param scheduleId
      * @return Participant
      */
-    public Participant getParticipantWithScheduleAndMember(Long memberId, Long scheduleId) {
+    public Participant getParticipantWithScheduleAndMember(Long scheduleId, Long memberId) {
         return participantService.readParticipantByScheduleIdAndMemberId(scheduleId, memberId).orElseThrow(
                 () -> new ScheduleException(ErrorStatus.NOT_SCHEDULE_PARTICIPANT));
     }
