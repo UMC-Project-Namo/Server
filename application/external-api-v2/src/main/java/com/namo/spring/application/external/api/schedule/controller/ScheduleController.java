@@ -2,6 +2,7 @@ package com.namo.spring.application.external.api.schedule.controller;
 
 import static com.namo.spring.core.common.code.status.ErrorStatus.*;
 
+import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
 import com.namo.spring.application.external.api.schedule.dto.ScheduleRequest;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -52,4 +53,12 @@ public class ScheduleController {
         return ResponseDto.onSuccess("알림 수정 성공");
     }
 
+    @GetMapping("/{scheduleId}/settlement")
+    public ResponseDto<MeetingScheduleResponse.ScheduleSettlementDto> getScheduleSettlement(
+            @AuthenticationPrincipal SecurityUserDetails memberInfo,
+            @Parameter(description = "전체 정산할 스케줄(scheduleId) ID 입니다.", example = "1")
+            @PathVariable Long scheduleId
+    ){
+        return ResponseDto.onSuccess(null);
+    }
 }

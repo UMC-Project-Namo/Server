@@ -1,5 +1,6 @@
 package com.namo.spring.application.external.api.schedule.dto;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -158,5 +159,19 @@ public class MeetingScheduleResponse {
         private Long colorId;
         @Schema(description = "방장 여부")
         private Boolean isOwner;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    @Builder
+    @Schema(title = "스케줄 전체 정산 - 스케줄에 대한 모든 활동 정산 내역")
+    public static class ScheduleSettlementDto{
+        private BigDecimal totalAmount;
+        List<SettlementUserDto> settlementUser;
+    }
+
+    public static class SettlementUserDto{
+        private String username;
+        private BigDecimal amount;
     }
 }
