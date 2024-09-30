@@ -53,12 +53,17 @@ public class ScheduleController {
         return ResponseDto.onSuccess("알림 수정 성공");
     }
 
+    @Operation(summary = "스케줄 정산내역 (전체 정산) API", description = "스케줄의 모든 활동에 대한 전체 정산 조회하기")
+    @ApiErrorCodes(value = {
+            NOT_FOUND_PARTICIPANT_FAILURE,
+    })
     @GetMapping("/{scheduleId}/settlement")
     public ResponseDto<MeetingScheduleResponse.ScheduleSettlementDto> getScheduleSettlement(
             @AuthenticationPrincipal SecurityUserDetails memberInfo,
             @Parameter(description = "전체 정산할 스케줄(scheduleId) ID 입니다.", example = "1")
             @PathVariable Long scheduleId
     ){
-        return ResponseDto.onSuccess(null);
+        return ResponseDto.onSuccess(scheduleUsecase
+                .getScheduleSettlement(memberInfo.getUserId(), scheduleId));
     }
 }
