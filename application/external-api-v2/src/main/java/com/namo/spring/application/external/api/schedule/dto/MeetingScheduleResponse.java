@@ -167,11 +167,14 @@ public class MeetingScheduleResponse {
     @Schema(title = "스케줄 전체 정산 - 스케줄에 대한 모든 활동 정산 내역")
     public static class ScheduleSettlementDto{
         private BigDecimal totalAmount;
-        List<SettlementUserDto> settlementUser;
+        List<SettlementUserDto> settlementUserList;
     }
 
+    @AllArgsConstructor
+    @Getter
+    @Builder
     public static class SettlementUserDto{
-        private String username;
+        private String nickname;
         private BigDecimal amount;
     }
 }
