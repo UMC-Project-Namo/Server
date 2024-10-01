@@ -1,8 +1,8 @@
 package com.namo.spring.application.external.api.schedule.service;
 
+import com.namo.spring.application.external.api.record.enums.DiaryFilter;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.core.common.code.status.ErrorStatus;
-import com.namo.spring.db.mysql.domains.record.exception.DiaryException;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.exception.ParticipantException;
@@ -124,20 +124,8 @@ public class ParticipantManageService {
         if (filterType == null || filterType.isEmpty())
             return participantService.readParticipantsForDiary(memberId, pageable);
 
-        switch (filterType) {
-            case "ScheduleName" -> {
-                return participantService.readParticipantHasDiaryByScheduleName(memberId, pageable, keyword);
-            }
-            case "DiaryContent" -> {
-                return participantService.readParticipantHasDiaryByDiaryContent(memberId, pageable, keyword);
-            }
-            case "MemberNickname" -> {
-                return participantService.readParticipantHasDiaryByMember(memberId, pageable, keyword);
-            }
-            default -> {
-                throw new DiaryException(ErrorStatus.NOT_FILTERTYPE_OF_ARCHIVE);
-            }
-        }
+        DiaryFilter diaryFilter = DiaryFilter.from(filterType);
+        return diaryFilter.apply(participantService, memberId, pageable, keyword);
     }
 
     /**
