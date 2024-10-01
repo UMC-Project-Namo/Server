@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.namo.spring.application.external.api.guest.service.GuestManageService;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
+import com.namo.spring.application.external.api.schedule.service.ParticipantManageService;
 import com.namo.spring.application.external.api.schedule.service.ScheduleManageService;
 import com.namo.spring.application.external.api.user.service.MemberManageService;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
@@ -31,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class MeetingScheduleUsecase {
     private final ScheduleManageService scheduleManageService;
+    private final ParticipantManageService participantManageService;
     private final MemberManageService memberManageService;
     private final GuestManageService guestManageService;
 
@@ -105,7 +107,8 @@ public class MeetingScheduleUsecase {
 
     @Transactional(readOnly = true)
     public MeetingScheduleResponse.ScheduleSettlementDto getScheduleSettlement(Long memberId, Long scheduleId) {
-        Schedule meetingSchedule = scheduleManageService.getMeetingSchedule(scheduleId);
+        Schedule meetingSchedule = participantManageService.getParticipantWithScheduleAndMember(scheduleId, memberId)
+                .getSchedule();
         return toScheduleSettlementDto(meetingSchedule);
     }
 }
