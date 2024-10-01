@@ -166,6 +166,7 @@ public class MeetingScheduleResponse {
     @Builder
     @Schema(title = "스케줄 전체 정산 - 스케줄에 대한 모든 활동 정산 내역")
     public static class ScheduleSettlementDto{
+        @Schema(description = "총 결제 금액", example = "100000")
         private BigDecimal totalAmount;
         List<SettlementUserDto> settlementUserList;
     }
@@ -174,7 +175,9 @@ public class MeetingScheduleResponse {
     @Getter
     @Builder
     public static class SettlementUserDto{
+        @Schema(description = "닉네임#태그", example = "캐슬#1234")
         private String nickname;
+        @Schema(description = "유저별 합산 금액", example = "30000")
         private BigDecimal amount;
     }
 }

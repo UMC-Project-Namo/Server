@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import com.namo.spring.db.mysql.domains.record.entity.Activity;
 import com.namo.spring.db.mysql.domains.record.entity.ActivityParticipant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
+import com.namo.spring.db.mysql.domains.user.entity.User;
 
 public class SettlementCalculator {
 
@@ -31,8 +32,12 @@ public class SettlementCalculator {
         return schedule.getActivityList().stream()
                 .flatMap(activity -> activity.getActivityParticipants().stream())
                 .collect(Collectors.groupingBy(
-                        activityParticipant -> activityParticipant.getParticipant().getUser().getNickname(),
+                        activityParticipant -> {
+                            User user = activityParticipant.getParticipant().getUser();
+                            return user.getNickname() + "#" + user.getTag();
+                        },
                         Collectors.reducing(BigDecimal.ZERO, ActivityParticipant::getAmount, BigDecimal::add)
                 ));
+
     }
 }
