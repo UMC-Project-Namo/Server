@@ -31,7 +31,7 @@ public class PersonalScheduleController implements PersonalScheduleApi {
     /**
      * 일정 생성 API
      */
-    @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "")
     public ResponseDto<Long> createPersonalSchedule(
             @Valid @RequestBody PersonalScheduleRequest.PostPersonalScheduleDto request,
             @AuthenticationPrincipal SecurityUserDetails member){

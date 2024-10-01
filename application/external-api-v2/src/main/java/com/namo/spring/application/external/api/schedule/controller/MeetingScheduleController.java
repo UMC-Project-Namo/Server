@@ -46,7 +46,7 @@ public class MeetingScheduleController {
             NOT_FOUND_CATEGORY_FAILURE,
             NOT_FOUND_PALETTE_FAILURE,
     })
-    @PostMapping(path = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "")
     public ResponseDto<Long> createMeetingSchedule(
             @Valid @RequestPart MeetingScheduleRequest.PostMeetingScheduleDto request,
             @AuthenticationPrincipal SecurityUserDetails memberInfo) {
