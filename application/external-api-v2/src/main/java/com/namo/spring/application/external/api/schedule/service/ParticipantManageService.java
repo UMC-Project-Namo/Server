@@ -150,9 +150,8 @@ public class ParticipantManageService {
      * @return 일기가 작성된 참여 정보 목록
      */
     public List<Participant> getMyParticipantByDayForDiary(Long memberId, LocalDate localDate) {
-        LocalDateTime startDateTime = localDate.atStartOfDay(); // 해당 날 00:00:00
-        LocalDateTime endDateTime = localDate.atTime(23, 59, 59); // 해당 날 23:59:59
-        return participantService.readParticipantHasDiaryByDateRange(memberId, startDateTime, endDateTime);
+        Period period = PeriodValidationUtils.getPeriodForDay(localDate);
+        return participantService.readParticipantHasDiaryByDateRange(memberId, period.getStartDate(), period.getEndDate());
     }
 
     /**
