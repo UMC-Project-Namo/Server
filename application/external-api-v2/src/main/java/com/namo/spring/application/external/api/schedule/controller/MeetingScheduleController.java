@@ -88,7 +88,7 @@ public class MeetingScheduleController {
             NOT_FOUND_SCHEDULE_FAILURE,
             NOT_MEETING_SCHEDULE,
     })
-    @GetMapping(path = "/{meetingScheduleId}/calender")
+    @GetMapping(path = "/{meetingScheduleId}/calendar")
     public ResponseDto<List<MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto>> getMonthlyMeetingParticipantSchedules(
             @PathVariable Long meetingScheduleId,
             @Parameter(description = "yyyy-mm-dd 형식으로 입력합니다.") @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,

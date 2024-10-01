@@ -106,7 +106,7 @@ public class DiaryController {
             INVALID_FORMAT_FAILURE,
     })
     @GetMapping("/calendar/{yearMonth}")
-    public ResponseDto<DiaryResponse.DiaryExistDateDto> getArchiveCalender(
+    public ResponseDto<DiaryResponse.DiaryExistDateDto> getArchiveCalendar(
             @AuthenticationPrincipal SecurityUserDetails memberInfo,
             @Parameter(description = "조회할 달력의 년도-월 입니다.", example = "2024-08")
             @PathVariable String yearMonth
