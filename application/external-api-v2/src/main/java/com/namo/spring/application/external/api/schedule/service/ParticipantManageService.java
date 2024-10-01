@@ -2,12 +2,14 @@ package com.namo.spring.application.external.api.schedule.service;
 
 import com.namo.spring.application.external.api.record.enums.DiaryFilter;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
+import com.namo.spring.application.external.global.utils.PeriodValidationUtils;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.exception.ParticipantException;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
 import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
+import com.namo.spring.db.mysql.domains.schedule.type.Period;
 import com.namo.spring.db.mysql.domains.user.entity.Friendship;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.entity.User;
@@ -136,9 +138,8 @@ public class ParticipantManageService {
      * @return 일기가 작성된 참여 정보 목록
      */
     public List<Participant> getMyParticipantByMonthForDiary(Long memberId, YearMonth yearMonth) {
-        LocalDateTime startDateTime = yearMonth.atDay(1).atStartOfDay();
-        LocalDateTime endDateTime = yearMonth.atEndOfMonth().atTime(23, 59, 59);
-        return participantService.readParticipantHasDiaryByDateRange(memberId, startDateTime, endDateTime);
+        Period period = PeriodValidationUtils.getMonthPeriod(yearMonth.getYear(), yearMonth.getMonthValue());
+        return participantService.readParticipantHasDiaryByDateRange(memberId, period.getStartDate(), period.getEndDate());
     }
 
     /**

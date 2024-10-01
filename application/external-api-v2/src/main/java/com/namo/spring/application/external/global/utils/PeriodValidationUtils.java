@@ -85,4 +85,18 @@ public class PeriodValidationUtils {
         LocalDateTime endDate = lastDay.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
         return Period.of(startDate, endDate);
     }
+
+    /**
+     * 입력한 달 기준 1일부터 말일까지의 날을 반환합니다 (해당 달만 포함)
+     * @param year
+     * @param month
+     * @return
+     */
+    public static Period getMonthPeriod(int year, int month) {
+        YearMonth yearMonth = validateYearMonth(year, month); // 유효성 검사
+        LocalDateTime startDateTime = yearMonth.atDay(1).atStartOfDay(); // 월 1일 00:00:00
+        LocalDateTime endDateTime = yearMonth.atEndOfMonth().atTime(23, 59, 59); // 월 말일 23:59:59
+
+        return Period.of(startDateTime, endDateTime);
+    }
 }
