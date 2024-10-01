@@ -1,4 +1,4 @@
-package com.namo.spring.application.external.global.utils;
+package com.namo.spring.db.mysql.domains.schedule.service;
 
 
 import java.math.BigDecimal;

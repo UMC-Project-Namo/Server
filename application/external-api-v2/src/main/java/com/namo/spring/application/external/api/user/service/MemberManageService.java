@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.namo.spring.application.external.api.category.service.CategoryMaker;
 import com.namo.spring.application.external.api.user.converter.MemberConverter;
 import com.namo.spring.application.external.api.user.dto.MemberDto;
-import com.namo.spring.application.external.global.utils.NicknameTag;
+import com.namo.spring.db.mysql.domains.user.service.NicknameTag;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
 import com.namo.spring.db.mysql.domains.user.entity.Member;

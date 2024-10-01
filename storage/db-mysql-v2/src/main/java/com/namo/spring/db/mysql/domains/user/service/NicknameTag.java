@@ -1,4 +1,4 @@
-package com.namo.spring.application.external.global.utils;
+package com.namo.spring.db.mysql.domains.user.service;
 
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.user.exception.MemberException;

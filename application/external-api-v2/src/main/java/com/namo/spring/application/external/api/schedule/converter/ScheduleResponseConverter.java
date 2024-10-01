@@ -1,7 +1,7 @@
 package com.namo.spring.application.external.api.schedule.converter;
 
 
-import static com.namo.spring.application.external.global.utils.SettlementCalculator.*;
+import static com.namo.spring.db.mysql.domains.schedule.service.SettlementCalculator.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
 import com.namo.spring.application.external.api.schedule.dto.ScheduleResponse;
-import com.namo.spring.application.external.global.utils.SettlementCalculator;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
