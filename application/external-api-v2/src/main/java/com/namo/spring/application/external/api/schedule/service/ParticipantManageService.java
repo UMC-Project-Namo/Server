@@ -59,6 +59,7 @@ public class ParticipantManageService {
     /**
      * scheduleId와 memberId로 찾은
      * Participant 객체를 Member, Schedule과 함께 로딩하여 반환합니다.
+     * schedule 에 대해 Fetch 조회 됩니다.
      * @param memberId
      * @param scheduleId
      * @return Participant
