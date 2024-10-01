@@ -48,7 +48,7 @@ public class MeetingScheduleController {
     })
     @PostMapping(path = "")
     public ResponseDto<Long> createMeetingSchedule(
-            @Valid @RequestPart MeetingScheduleRequest.PostMeetingScheduleDto request,
+            @Valid @RequestBody MeetingScheduleRequest.PostMeetingScheduleDto request,
             @AuthenticationPrincipal SecurityUserDetails memberInfo) {
         return ResponseDto.onSuccess(meetingScheduleUsecase.createMeetingSchedule(request, memberInfo));
     }
