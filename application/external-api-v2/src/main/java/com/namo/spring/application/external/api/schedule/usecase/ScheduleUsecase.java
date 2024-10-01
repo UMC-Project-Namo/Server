@@ -35,11 +35,4 @@ public class ScheduleUsecase {
         notificationManageService.updateOrCreateScheduleReminderNotification(scheduleId, member,
                 dto.getReminderTrigger());
     }
-
-    @Transactional(readOnly = true)
-    public MeetingScheduleResponse.ScheduleSettlementDto getScheduleSettlement(Long memberId, Long scheduleId) {
-        Participant participant = participantManageService.getParticipantByMemberAndSchedule(
-                memberId, scheduleId);
-        return toScheduleSettlementDto(participant.getSchedule());
-    }
 }

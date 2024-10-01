@@ -1,6 +1,7 @@
 package com.namo.spring.application.external.api.schedule.usecase;
 
 import static com.namo.spring.application.external.api.schedule.converter.MeetingScheduleResponseConverter.*;
+import static com.namo.spring.application.external.api.schedule.converter.ScheduleResponseConverter.*;
 import static com.namo.spring.application.external.global.utils.MeetingParticipantValidationUtils.*;
 
 import java.time.LocalDate;
@@ -100,5 +101,11 @@ public class MeetingScheduleUsecase {
     public void leaveMeetingSchedule(Long scheduleId, SecurityUserDetails memberInfo) {
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
         scheduleManageService.leaveMeetingSchedule(schedule, memberInfo.getUserId());
+    }
+
+    @Transactional(readOnly = true)
+    public MeetingScheduleResponse.ScheduleSettlementDto getScheduleSettlement(Long memberId, Long scheduleId) {
+        Schedule meetingSchedule = scheduleManageService.getMeetingSchedule(scheduleId);
+        return toScheduleSettlementDto(meetingSchedule);
     }
 }
