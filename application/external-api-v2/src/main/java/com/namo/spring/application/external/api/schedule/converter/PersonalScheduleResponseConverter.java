@@ -132,7 +132,7 @@ public class PersonalScheduleResponseConverter {
         int year = friendBirthday.getBirthday().getMonthValue() == startDate.getMonthValue() ? startDate.getYear() : endDate.getYear();
         return PersonalScheduleResponse.GetMonthlyFriendBirthdayDto.builder()
                 .nickname(friendBirthday.getNickname())
-                .birthdayDate(DateUtil.toSeconds(friendBirthday.getBirthday().withYear(year).atStartOfDay()))
+                .birthdayDate(friendBirthday.getBirthday().withYear(year).atStartOfDay())
                 .build();
     }
 
