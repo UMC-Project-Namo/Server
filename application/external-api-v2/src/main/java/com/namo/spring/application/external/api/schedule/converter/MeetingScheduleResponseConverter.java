@@ -1,11 +1,6 @@
 package com.namo.spring.application.external.api.schedule.converter;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
-import com.namo.spring.core.common.utils.DateUtil;
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
 import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleSummaryQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
@@ -13,6 +8,10 @@ import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.type.Location;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class MeetingScheduleResponseConverter {
     private MeetingScheduleResponseConverter() {
@@ -31,7 +30,7 @@ public class MeetingScheduleResponseConverter {
         return MeetingScheduleResponse.GetMeetingScheduleSummaryDto.builder()
                 .meetingScheduleId(schedule.getMeetingScheduleId())
                 .title(schedule.getTitle())
-                .startDate(DateUtil.toSeconds(schedule.getStartDate()))
+                .startDate(schedule.getStartDate())
                 .imageUrl(schedule.getImageUrl())
                 .participantCount(schedule.getParticipantCount())
                 .participantNicknames(schedule.getParticipantNicknames())
@@ -67,8 +66,8 @@ public class MeetingScheduleResponseConverter {
         return MeetingScheduleResponse.GetMonthlyMembersScheduleDto.builder()
                 .scheduleId(schedule.getId())
                 .title(title)
-                .startDate(DateUtil.toSeconds(schedule.getPeriod().getStartDate()))
-                .endDate(DateUtil.toSeconds(schedule.getPeriod().getEndDate()))
+                .startDate(schedule.getPeriod().getStartDate())
+                .endDate(schedule.getPeriod().getEndDate())
                 .interval(schedule.getPeriod().getDayInterval())
                 .participants(toMemberParticipantDtos(participants))
                 .scheduleType(schedule.getScheduleType())
@@ -112,8 +111,8 @@ public class MeetingScheduleResponseConverter {
         return MeetingScheduleResponse.GetMonthlyMeetingParticipantScheduleDto.builder()
                 .scheduleId(schedule.getId())
                 .title(title)
-                .startDate(DateUtil.toSeconds(schedule.getPeriod().getStartDate()))
-                .endDate(DateUtil.toSeconds(schedule.getPeriod().getEndDate()))
+                .startDate(schedule.getPeriod().getStartDate())
+                .endDate(schedule.getPeriod().getEndDate())
                 .interval(schedule.getPeriod().getDayInterval())
                 .participants(toUserParticipantDtos(participants))
                 .isCurMeetingSchedule(schedule.getId().equals(curSchedule.getId()))
@@ -146,8 +145,8 @@ public class MeetingScheduleResponseConverter {
                 .scheduleId(schedule.getId())
                 .title(customScheduleInfo.getCustomTitle())
                 .imageUrl(customScheduleInfo.getCustomImage())
-                .startDate(DateUtil.toSeconds(schedule.getPeriod().getStartDate()))
-                .endDate(DateUtil.toSeconds(schedule.getPeriod().getEndDate()))
+                .startDate(schedule.getPeriod().getStartDate())
+                .endDate(schedule.getPeriod().getEndDate())
                 .interval(schedule.getPeriod().getDayInterval())
                 .locationInfo(schedule.getLocation() != null ? toLocationDto(schedule.getLocation()) : null)
                 .participants(toUserParticipantDetailDtos(participants))

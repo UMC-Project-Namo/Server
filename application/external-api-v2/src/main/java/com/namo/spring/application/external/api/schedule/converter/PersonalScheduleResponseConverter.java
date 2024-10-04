@@ -46,8 +46,8 @@ public class PersonalScheduleResponseConverter {
                 .scheduleId(participant.getSchedule().getId())
                 .title(participant.getScheduleTitle())
                 .categoryInfo(toCategoryDto(participant.getCategory()))
-                .startDate(DateUtil.toSeconds(participant.getSchedule().getPeriod().getStartDate()))
-                .endDate(DateUtil.toSeconds(participant.getSchedule().getPeriod().getEndDate()))
+                .startDate(participant.getSchedule().getPeriod().getStartDate())
+                .endDate(participant.getSchedule().getPeriod().getEndDate())
                 .interval(participant.getSchedule().getPeriod().getDayInterval())
                 .locationInfo(participant.getSchedule().getLocation() != null ?
                         toLocationDto(participant.getSchedule().getLocation()) : null)
@@ -115,8 +115,8 @@ public class PersonalScheduleResponseConverter {
                 .scheduleId(participant.getSchedule().getId())
                 .title(participant.getSchedule().getTitle())
                 .categoryInfo(toCategoryDto(participant.getCategory()))
-                .startDate(DateUtil.toSeconds(participant.getSchedule().getPeriod().getStartDate()))
-                .endDate(DateUtil.toSeconds(participant.getSchedule().getPeriod().getEndDate()))
+                .startDate(participant.getSchedule().getPeriod().getStartDate())
+                .endDate(participant.getSchedule().getPeriod().getEndDate())
                 .interval(participant.getSchedule().getPeriod().getDayInterval())
                 .scheduleType(participant.getSchedule().getScheduleType())
                 .build();
