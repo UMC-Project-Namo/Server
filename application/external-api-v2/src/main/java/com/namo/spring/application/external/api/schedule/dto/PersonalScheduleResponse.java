@@ -1,5 +1,6 @@
 package com.namo.spring.application.external.api.schedule.dto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,10 +25,10 @@ public class PersonalScheduleResponse {
         private String title;
         @Schema(description = "카테고리 정보")
         private CategoryDto categoryInfo;
-        @Schema(description = "일정 시작일, unix 타임스탬프 형식")
-        private Long startDate;
-        @Schema(description = "일정 종료일, unix 타임스탬프 형식")
-        private Long endDate;
+        @Schema(description = "일정 시작일", example = "2024-10-04 00:00:00")
+        private LocalDateTime startDate;
+        @Schema(description = "일정 종료일", example = "2024-10-04 00:00:00")
+        private LocalDateTime endDate;
         @Schema(description = "시작일과 종료일 차이")
         private Long interval;
         @Schema(description = "장소 정보, 없을 시 null")
@@ -114,10 +115,10 @@ public class PersonalScheduleResponse {
         private String title;
         @Schema(description = "카테고리 정보")
         private CategoryDto categoryInfo;
-        @Schema(description = "일정 시작일, unix 타임스탬프 형식")
-        private Long startDate;
-        @Schema(description = "일정 종료일, unix 타임스탬프 형식")
-        private Long endDate;
+        @Schema(description = "일정 시작일", example = "2024-10-04 00:00:00")
+        private LocalDateTime startDate;
+        @Schema(description = "일정 종료일", example = "2024-10-04 00:00:00")
+        private LocalDateTime endDate;
         @Schema(description = "시작일과 종료일 차이")
         private Long interval;
         @Schema(description = "개인 일정 : 0, 모임 일정 : 1, 친구의 생일 일정 : 2", example = "0")
