@@ -16,7 +16,7 @@ import com.namo.spring.application.external.api.user.dto.MemberResponse;
 import com.namo.spring.application.external.api.user.helper.JwtAuthHelper;
 import com.namo.spring.application.external.api.user.service.MemberManageService;
 import com.namo.spring.application.external.api.user.service.SocialLoginService;
-import com.namo.spring.application.external.global.utils.TagGenerator;
+import com.namo.spring.application.external.api.user.service.TagGenerator;
 import com.namo.spring.application.external.global.common.security.jwt.CustomJwts;
 import com.namo.spring.db.mysql.domains.category.entity.Palette;
 import com.namo.spring.db.mysql.domains.category.service.PaletteService;

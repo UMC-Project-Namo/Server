@@ -37,11 +37,11 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
     Optional<Participant> findParticipantByScheduleIdAndMemberId(Long scheduleId, Long memberId);
 
     @Query("SELECT p " +
-        "FROM Participant p " +
-        "JOIN p.schedule s " +
-        "LEFT JOIN FETCH p.member m " +
-        "LEFT JOIN FETCH p.anonymous a " +
-        "WHERE p.id in :ids AND s.id = :scheduleId")
+            "FROM Participant p " +
+            "JOIN p.schedule s " +
+            "LEFT JOIN FETCH p.member m " +
+            "LEFT JOIN FETCH p.anonymous a " +
+            "WHERE p.id in :ids AND s.id = :scheduleId")
     List<Participant> findParticipantByIdAndScheduleIdFetchUser(List<Long> ids, Long scheduleId);
 
     @Query("SELECT p " +
@@ -51,33 +51,33 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
     List<Participant> findParticipantByIdAndScheduleId(List<Long> ids, Long scheduleId);
 
     @Query("SELECT DISTINCT new com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery(" +
-        "p.id, m.palette.id, m.id, m.nickname, s, p.customTitle, p.customImage, p.category.isShared, m.birthdayVisible" +
-        ") FROM Participant p " +
-        "JOIN p.schedule s " +
-        "JOIN p.member m " +
-        "WHERE m.id IN :memberIds " +
-        "AND (s.period.startDate < :endDate " +
-        "AND s.period.endDate >= :startDate) " +
-        "ORDER BY s.period.startDate ASC")
+            "p.id, m.palette.id, m.id, m.nickname, s, p.customTitle, p.customImage, p.category.isShared, m.birthdayVisible" +
+            ") FROM Participant p " +
+            "JOIN p.schedule s " +
+            "JOIN p.member m " +
+            "WHERE m.id IN :memberIds " +
+            "AND (s.period.startDate < :endDate " +
+            "AND s.period.endDate >= :startDate) " +
+            "ORDER BY s.period.startDate ASC")
     List<ScheduleParticipantQuery> findParticipantsWithUserAndScheduleByPeriod(
-        List<Long> memberIds,
-        LocalDateTime startDate,
-        LocalDateTime endDate
+            List<Long> memberIds,
+            LocalDateTime startDate,
+            LocalDateTime endDate
     );
 
     @Query("SELECT p FROM Participant p " +
-        "JOIN FETCH p.schedule s " +
-        "JOIN FETCH p.category c " +
-        "WHERE p.member.id = :memberId " +
-        "AND (s.period.startDate < :endDate " +
-        "AND s.period.endDate >= :startDate) " +
-        "AND (:isShared IS NULL OR c.isShared = :isShared) " +
-        "ORDER BY s.period.startDate ASC")
+            "JOIN FETCH p.schedule s " +
+            "JOIN FETCH p.category c " +
+            "WHERE p.member.id = :memberId " +
+            "AND (s.period.startDate < :endDate " +
+            "AND s.period.endDate >= :startDate) " +
+            "AND (:isShared IS NULL OR c.isShared = :isShared) " +
+            "ORDER BY s.period.startDate ASC")
     List<Participant> findParticipantsWithScheduleAndCategoryByPeriod(
-        Long memberId,
-        Boolean isShared,
-        LocalDateTime startDate,
-        LocalDateTime endDate
+            Long memberId,
+            Boolean isShared,
+            LocalDateTime startDate,
+            LocalDateTime endDate
     );
 
     void deleteByIdIn(List<Long> id);
@@ -87,40 +87,44 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
     Optional<Participant> findParticipantByAnonymousIdAndScheduleId(Long anonymousId, Long scheduleId);
 
     @Query("SELECT p "
-        + "FROM Participant p "
-        + "WHERE p.hasDiary = true and p.member.id = :memberId "
-        + "order by p.schedule.period.startDate desc ")
+            + "FROM Participant p "
+            + "JOIN FETCH p.diary d "
+            + "WHERE p.hasDiary = true and p.member.id = :memberId "
+            + "order by p.schedule.period.startDate desc ")
     List<Participant> findAllByMemberIdAndHasDiary(@Param("memberId") Long memberId, Pageable pageable);
 
     @Query("SELECT p "
-        + "FROM Participant p "
-        + "WHERE p.hasDiary = true AND p.member.id = :memberId AND p.schedule.title LIKE %:keyword% "
-        + "ORDER BY p.schedule.period.startDate DESC")
+            + "FROM Participant p "
+            + "JOIN FETCH p.diary d "
+            + "WHERE p.hasDiary = true AND p.member.id = :memberId AND p.schedule.title LIKE %:keyword% "
+            + "ORDER BY p.schedule.period.startDate DESC")
     List<Participant> findAllByScheduleTitleAndHasDiary(@Param("memberId") Long memberId,
             @Param("keyword") String keyword, Pageable pageable);
 
     @Query("SELECT p "
-        + "FROM Participant p "
-        + "WHERE p.hasDiary = true AND p.member.id = :memberId AND p.diary.content LIKE %:keyword% "
-        + "ORDER BY p.schedule.period.startDate DESC")
+            + "FROM Participant p "
+            + "JOIN FETCH p.diary d "
+            + "WHERE p.hasDiary = true AND p.member.id = :memberId AND p.diary.content LIKE %:keyword% "
+            + "ORDER BY p.schedule.period.startDate DESC")
     List<Participant> findAllByDiaryContentAndHasDiary(@Param("memberId") Long memberId,
             @Param("keyword") String keyword, Pageable pageable);
 
     @Query("SELECT p "
-        + "FROM Participant p "
-        + "WHERE p.hasDiary = true AND p.member.id = :memberId AND p.schedule.participantNicknames LIKE %:keyword% "
-        + "ORDER BY p.schedule.period.startDate DESC")
+            + "FROM Participant p "
+            + "JOIN FETCH p.diary d "
+            + "WHERE p.hasDiary = true AND p.member.id = :memberId AND p.schedule.participantNicknames LIKE %:keyword% "
+            + "ORDER BY p.schedule.period.startDate DESC")
     List<Participant> findAllByMemberAndHasDiary(@Param("memberId") Long memberId, @Param("keyword") String keyword,
             Pageable pageable);
 
     @Query("SELECT p "
-        + "FROM Participant p "
-        + "WHERE p.hasDiary = true "
-        + "AND p.member.id = :memberId "
-        + "AND p.schedule.period.startDate BETWEEN :startDate AND :endDate")
+            + "FROM Participant p "
+            + "JOIN FETCH p.diary d "
+            + "WHERE p.hasDiary = true "
+            + "AND p.member.id = :memberId "
+            + "AND p.schedule.period.startDate BETWEEN :startDate AND :endDate")
     List<Participant> findAllByDateRangeAndHasDiary(@Param("memberId") Long memberId,
-            @Param("startDate") LocalDateTime startDate,
-            @Param("endDate") LocalDateTime endDate);
+            @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
     boolean existsByCategory(Category category);
 

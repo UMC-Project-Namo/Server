@@ -1,13 +1,15 @@
 package com.namo.spring.application.external.api.schedule.service;
 
+import com.namo.spring.application.external.api.record.enums.DiaryFilter;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
+import com.namo.spring.application.external.global.utils.PeriodValidationUtils;
 import com.namo.spring.core.common.code.status.ErrorStatus;
-import com.namo.spring.db.mysql.domains.record.exception.DiaryException;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.exception.ParticipantException;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
 import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
+import com.namo.spring.db.mysql.domains.schedule.type.Period;
 import com.namo.spring.db.mysql.domains.user.entity.Friendship;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.entity.User;
@@ -59,6 +61,7 @@ public class ParticipantManageService {
     /**
      * scheduleId와 memberId로 찾은
      * Participant 객체를 Member, Schedule과 함께 로딩하여 반환합니다.
+     * schedule 에 대해 Fetch 조회 됩니다.
      * @param memberId
      * @param scheduleId
      * @return Participant
@@ -123,20 +126,8 @@ public class ParticipantManageService {
         if (filterType == null || filterType.isEmpty())
             return participantService.readParticipantsForDiary(memberId, pageable);
 
-        switch (filterType) {
-            case "ScheduleName" -> {
-                return participantService.readParticipantHasDiaryByScheduleName(memberId, pageable, keyword);
-            }
-            case "DiaryContent" -> {
-                return participantService.readParticipantHasDiaryByDiaryContent(memberId, pageable, keyword);
-            }
-            case "MemberNickname" -> {
-                return participantService.readParticipantHasDiaryByMember(memberId, pageable, keyword);
-            }
-            default -> {
-                throw new DiaryException(ErrorStatus.NOT_FILTERTYPE_OF_ARCHIVE);
-            }
-        }
+        DiaryFilter diaryFilter = DiaryFilter.from(filterType);
+        return diaryFilter.apply(participantService, memberId, pageable, keyword);
     }
 
     /**
@@ -147,9 +138,8 @@ public class ParticipantManageService {
      * @return 일기가 작성된 참여 정보 목록
      */
     public List<Participant> getMyParticipantByMonthForDiary(Long memberId, YearMonth yearMonth) {
-        LocalDateTime startDateTime = yearMonth.atDay(1).atStartOfDay();
-        LocalDateTime endDateTime = yearMonth.atEndOfMonth().atTime(23, 59, 59);
-        return participantService.readParticipantHasDiaryByDateRange(memberId, startDateTime, endDateTime);
+        Period period = PeriodValidationUtils.getMonthPeriod(yearMonth.getYear(), yearMonth.getMonthValue());
+        return participantService.readParticipantHasDiaryByDateRange(memberId, period.getStartDate(), period.getEndDate());
     }
 
     /**
@@ -160,9 +150,8 @@ public class ParticipantManageService {
      * @return 일기가 작성된 참여 정보 목록
      */
     public List<Participant> getMyParticipantByDayForDiary(Long memberId, LocalDate localDate) {
-        LocalDateTime startDateTime = localDate.atStartOfDay(); // 해당 날 00:00:00
-        LocalDateTime endDateTime = localDate.atTime(23, 59, 59); // 해당 날 23:59:59
-        return participantService.readParticipantHasDiaryByDateRange(memberId, startDateTime, endDateTime);
+        Period period = PeriodValidationUtils.getPeriodForDay(localDate);
+        return participantService.readParticipantHasDiaryByDateRange(memberId, period.getStartDate(), period.getEndDate());
     }
 
     /**

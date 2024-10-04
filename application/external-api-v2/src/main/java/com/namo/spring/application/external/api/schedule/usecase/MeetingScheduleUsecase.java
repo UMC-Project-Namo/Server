@@ -1,6 +1,7 @@
 package com.namo.spring.application.external.api.schedule.usecase;
 
 import static com.namo.spring.application.external.api.schedule.converter.MeetingScheduleResponseConverter.*;
+import static com.namo.spring.application.external.api.schedule.converter.ScheduleResponseConverter.*;
 import static com.namo.spring.application.external.global.utils.MeetingParticipantValidationUtils.*;
 
 import java.time.LocalDate;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.namo.spring.application.external.api.guest.service.GuestManageService;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
+import com.namo.spring.application.external.api.schedule.service.ParticipantManageService;
 import com.namo.spring.application.external.api.schedule.service.ScheduleManageService;
 import com.namo.spring.application.external.api.user.service.MemberManageService;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
@@ -30,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class MeetingScheduleUsecase {
     private final ScheduleManageService scheduleManageService;
+    private final ParticipantManageService participantManageService;
     private final MemberManageService memberManageService;
     private final GuestManageService guestManageService;
 
@@ -100,5 +103,12 @@ public class MeetingScheduleUsecase {
     public void leaveMeetingSchedule(Long scheduleId, SecurityUserDetails memberInfo) {
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
         scheduleManageService.leaveMeetingSchedule(schedule, memberInfo.getUserId());
+    }
+
+    @Transactional(readOnly = true)
+    public MeetingScheduleResponse.ScheduleSettlementDto getScheduleSettlement(Long memberId, Long scheduleId) {
+        Schedule meetingSchedule = participantManageService.getParticipantWithScheduleAndMember(scheduleId, memberId)
+                .getSchedule();
+        return toScheduleSettlementDto(meetingSchedule);
     }
 }
