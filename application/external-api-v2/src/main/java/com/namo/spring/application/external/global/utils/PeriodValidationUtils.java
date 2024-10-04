@@ -26,13 +26,13 @@ public class PeriodValidationUtils {
     private static final int END_OF_DAY_SECOND = 59;
 
     /**
-     * 시작 날짜가 끝 날짜보다 앞서지 않았는지 검증 후 반환합니다.
+     * 시작 날짜가 끝 날짜보다 앞서지 않았는지 검증 후 기간을 반환합니다.
      *
      * @param startDate 시작 날짜
      * @param endDate   종료 날짜
      * @return 검증된 Period
      */
-    public static Period getValidatedPeriod(Long startDate, Long endDate) {
+    public static Period getValidatedPeriod(LocalDateTime startDate, LocalDateTime endDate) {
         Period period = Period.of(startDate, endDate);
         if (period.getStartDate().isAfter(period.getEndDate())) {
             throw new ScheduleException(ErrorStatus.INVALID_DATE);
