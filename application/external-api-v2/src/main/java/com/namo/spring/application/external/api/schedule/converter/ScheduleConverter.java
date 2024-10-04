@@ -1,7 +1,7 @@
 package com.namo.spring.application.external.api.schedule.converter;
 
-import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.ScheduleResponse;
+import com.namo.spring.application.external.api.schedule.dto.interfaces.LocationDtoInterface;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
@@ -27,7 +27,7 @@ public class ScheduleConverter {
                 .build();
     }
 
-    public static Schedule toSchedule(String title, Period period, MeetingScheduleRequest.LocationDto location,
+    public static Schedule toSchedule(String title, Period period, LocationDtoInterface location,
             int type,
             String imageUrl, Integer participantCount, String participantNames) {
         return Schedule.builder()

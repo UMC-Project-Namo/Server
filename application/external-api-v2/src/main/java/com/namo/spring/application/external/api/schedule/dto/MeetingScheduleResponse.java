@@ -1,6 +1,7 @@
 package com.namo.spring.application.external.api.schedule.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,8 +24,8 @@ public class MeetingScheduleResponse {
         private Long meetingScheduleId;
         @Schema(description = "모임 일정 제목", example = "나모 정기 회의")
         private String title;
-        @Schema(description = "모임 일정 시작 일시, unix 타임 스탬프 형식")
-        private Long startDate;
+        @Schema(description = "일정 시작일", example = "2024-10-04 00:00:00")
+        private LocalDateTime startDate;
         @Schema(description = "모임 일정 이미지  url")
         private String imageUrl;
         @Schema(description = "모임 일정 참여자 수", example = "9")
@@ -44,10 +45,10 @@ public class MeetingScheduleResponse {
         private String title;
         @Schema(description = "모임 일정 이미지  url", example = "")
         private String imageUrl;
-        @Schema(description = "일정 시작일, unix 타임스탬프 형식")
-        private Long startDate;
-        @Schema(description = "일정 종료일, unix 타임스탬프 형식")
-        private Long endDate;
+        @Schema(description = "일정 시작일", example = "2024-10-04 00:00:00")
+        private LocalDateTime startDate;
+        @Schema(description = "일정 종료일", example = "2024-10-04 00:00:00")
+        private LocalDateTime endDate;
         @Schema(description = "시작일과 종료일 차이")
         private Long interval;
         @Schema(description = "위치 정보, 없을 시에는 null")
@@ -79,10 +80,10 @@ public class MeetingScheduleResponse {
         private Long scheduleId;
         @Schema(description = "일정 이름", example = "나모 정기 회의")
         private String title;
-        @Schema(description = "일정 시작일, unix 타임스탬프 형식")
-        private Long startDate;
-        @Schema(description = "일정 종료일, unix 타임스탬프 형식")
-        private Long endDate;
+        @Schema(description = "일정 시작일", example = "2024-10-04 00:00:00")
+        private LocalDateTime startDate;
+        @Schema(description = "일정 종료일", example = "2024-10-04 00:00:00")
+        private LocalDateTime endDate;
         @Schema(description = "시작일과 종료일 차이")
         private Long interval;
         @Schema(description = "일정 참여자 목록")
@@ -100,10 +101,10 @@ public class MeetingScheduleResponse {
         private Long scheduleId;
         @Schema(description = "일정 이름", example = "나모 정기 회의")
         private String title;
-        @Schema(description = "일정 시작일, unix 타임스탬프 형식")
-        private Long startDate;
-        @Schema(description = "일정 종료일, unix 타임스탬프 형식")
-        private Long endDate;
+        @Schema(description = "일정 시작일", example = "2024-10-04 00:00:00")
+        private LocalDateTime startDate;
+        @Schema(description = "일정 종료일", example = "2024-10-04 00:00:00")
+        private LocalDateTime endDate;
         @Schema(description = "시작일과 종료일 차이")
         private Long interval;
         @Schema(description = "일정 참여자 목록")

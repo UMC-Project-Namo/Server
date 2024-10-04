@@ -1,10 +1,12 @@
 package com.namo.spring.application.external.api.schedule.service;
 
+import com.namo.spring.application.external.api.schedule.converter.LocationConverter;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.PersonalScheduleRequest;
 import com.namo.spring.core.infra.common.properties.ImageUrlProperties;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.service.ScheduleService;
+import com.namo.spring.db.mysql.domains.schedule.type.Location;
 import com.namo.spring.db.mysql.domains.schedule.type.Period;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
@@ -32,8 +34,8 @@ public class ScheduleMaker {
 
     public Schedule createPersonalSchedule(PersonalScheduleRequest.PostPersonalScheduleDto dto, Period period,
             String nickname) {
-        Schedule schedule = toSchedule(dto.getTitle(), period, dto.getLocation(), PERSONAL_SCHEDULE_TYPE, null, 1,
-                nickname);
+        Schedule schedule = toSchedule(dto.getTitle(), period, dto.getLocation(), PERSONAL_SCHEDULE_TYPE, null, null,
+                null);
         return scheduleService.createSchedule(schedule);
     }
 

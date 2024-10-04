@@ -1,7 +1,10 @@
 package com.namo.spring.application.external.api.schedule.dto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import com.namo.spring.application.external.api.schedule.dto.interfaces.LocationDtoInterface;
+import com.namo.spring.application.external.api.schedule.dto.interfaces.PeriodDtoInterface;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -41,19 +44,19 @@ public class MeetingScheduleRequest {
     @NoArgsConstructor
     @AllArgsConstructor
     @Getter
-    public static class PeriodDto {
+    public static class PeriodDto implements PeriodDtoInterface {
         @NotNull(message = "일정 시작일은 필수입니다.")
-        @Schema(description = "일정 시작일, unix 타임스탬프 형식")
-        private Long startDate;
+        @Schema(description = "일정 시작일", example = "2024-10-04 00:00:00")
+        private LocalDateTime startDate;
         @NotNull(message = "일정 종료일은 필수입니다.")
-        @Schema(description = "일정 종료일, unix 타임스탬프 형식")
-        private Long endDate;
+        @Schema(description = "일정 종료일", example = "2024-10-04 00:00:00")
+        private LocalDateTime endDate;
     }
 
     @NoArgsConstructor
     @AllArgsConstructor
     @Getter
-    public static class LocationDto {
+    public static class LocationDto implements LocationDtoInterface {
         @Schema(description = "카카오맵 좌표계 상의 x 좌표")
         private Double longitude;
         @Schema(description = "카카오맵 좌표계 상의 y 좌표")

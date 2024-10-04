@@ -1,7 +1,7 @@
 package com.namo.spring.application.external.api.schedule.converter;
 
-import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.ScheduleResponse;
+import com.namo.spring.application.external.api.schedule.dto.interfaces.LocationDtoInterface;
 import com.namo.spring.db.mysql.domains.schedule.type.Location;
 
 public class LocationConverter {
@@ -9,7 +9,7 @@ public class LocationConverter {
         throw new IllegalStateException("Util Class");
     }
 
-    public static Location toLocation(MeetingScheduleRequest.LocationDto dto) {
+    public static Location toLocation(LocationDtoInterface dto) {
         return Location.builder()
                 .longitude(dto.getLongitude())
                 .latitude(dto.getLatitude())
