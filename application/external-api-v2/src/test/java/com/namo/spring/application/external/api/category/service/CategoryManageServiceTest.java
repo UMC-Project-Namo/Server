@@ -67,4 +67,15 @@ class CategoryManageServiceTest {
         assertEquals(category, result);
     }
 
+    @Test
+    @DisplayName("카테고리 조회 실패 : 없는 카테고리에 대해 조회")
+    void failGetMyCategory_WhenNotFoundCategory(){
+        Long memberId = 1L;
+        Long categoryId = 3L;
+
+        when(categoryService.readCategory(categoryId)).thenReturn(Optional.empty());
+
+        assertThrows(CategoryException.class, () -> categoryManageService.getMyCategory(memberId, categoryId));
+    }
+
 }
