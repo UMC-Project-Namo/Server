@@ -2,11 +2,13 @@ package com.namo.spring.application.external.api.category.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 public class CategoryRequest {
 
     @Getter
+    @AllArgsConstructor
     public static class CategoryCreateDto{
         @Schema(description = "생성할 카테고리 이름을 넣어주세요", example = "학교 공부")
         private String categoryName;

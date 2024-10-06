@@ -91,4 +91,16 @@ class CategoryManageServiceTest {
         assertThrows(CategoryException.class, () -> categoryManageService.getMyCategory(memberId, categoryId));
     }
 
+    @Test
+    @DisplayName("카테고리 생성 성공")
+    public void successCreateCategory() throws Exception {
+        // given
+        CategoryRequest.CategoryCreateDto createDto = new CategoryRequest.CategoryCreateDto("testCategory", 1L, true);
+
+        // when
+        categoryManageService.createCategory(member, createDto);
+
+        // then
+        verify(categoryMaker, times(1)).makeCategory(member, "testCategory", 1L, true);
+    }
 }
