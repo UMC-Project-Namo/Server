@@ -29,7 +29,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Tag(name = "게스트", description = "게스트 관련 API, authorization 헤더에 값을 넣지 않습니다.")
+@Tag(name = "*. 게스트", description = "게스트 관련 API, authorization 헤더에 값을 넣지 않습니다.")
 @Slf4j
 @RequiredArgsConstructor
 @RestController

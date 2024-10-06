@@ -16,11 +16,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.RequiredArgsConstructor;
 
-@Tag(name = "3. Image", description = "S3 이미지 업로드 관련 API")
+@Tag(name = "*. Image", description = "S3 이미지 업로드 관련 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v2/s3")
-@Tag(name = "3. Image", description = "S3 이미지 업로드 관련 API")
 public class S3Controller {
 
     private final S3Uploader s3Service;
