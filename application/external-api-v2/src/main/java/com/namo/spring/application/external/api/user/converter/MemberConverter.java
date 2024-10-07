@@ -31,6 +31,7 @@ public class MemberConverter {
 
     public static MemberResponse.SignUpDoneDto toSignUpDoneDto(Member member) {
         return MemberResponse.SignUpDoneDto.builder()
+                .userId(member.getId())
                 .nickname(member.getNickname())
                 .tag(member.getTag())
                 .name(member.getName())
