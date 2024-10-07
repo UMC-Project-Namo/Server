@@ -18,6 +18,7 @@ public class MemberResponse {
     public static class SignUpDto {
         private String accessToken;
         private String refreshToken;
+        private Long userId;
         private boolean newUser;
         private boolean signUpComplete;
         private List<TermsDto> terms;
@@ -33,6 +34,7 @@ public class MemberResponse {
     @Getter
     @Builder
     public static class ReissueDto {
+        private Long userId;
         private String accessToken;
         private String refreshToken;
     }
@@ -40,6 +42,7 @@ public class MemberResponse {
     @Getter
     @Builder
     public static class SignUpDoneDto {
+        private Long userId;
         private String nickname;
         private String tag;
         private String name;

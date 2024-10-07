@@ -84,14 +84,14 @@ public class AuthFacade {
     private MemberResponse.SignUpDto createSignUpResponse(Member savedMember, boolean isNewUser) {
         List<MemberResponse.TermsDto> terms = TermConverter.toTerms(memberManageService.getTerms(savedMember));
         CustomJwts jwts = jwtAuthHelper.createToken(savedMember);
-        return MemberResponseConverter.toSignUpDto(jwts.accessToken(), jwts.refreshToken(), isNewUser,
+        return MemberResponseConverter.toSignUpDto(jwts.accessToken(), jwts.refreshToken(), savedMember.getId(), isNewUser,
                 savedMember.isSignUpComplete(), terms);
     }
 
     @Transactional
     public MemberResponse.ReissueDto reissueAccessToken(String refreshToken) {
         Pair<Long, CustomJwts> member = jwtAuthHelper.refresh(refreshToken);
-        return MemberResponseConverter.toReissueDto(member.getValue().accessToken(), member.getValue().refreshToken());
+        return MemberResponseConverter.toReissueDto(member.getKey(), member.getValue().accessToken(), member.getValue().refreshToken());
     }
 
     @Transactional
