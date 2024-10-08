@@ -53,4 +53,10 @@ public class GuestController {
         return ResponseDto.onSuccess(guestUsecase.createOrValidateGuest(dto, code));
     }
 
+    @Operation(summary = "모임 정보 조회", description = "참여 코드에 대한 모임 정보를 조회합니다.")
+    @GetMapping(path = "/invitations")
+    public ResponseDto<GuestMeetingResponse.GetMeetingScheduleInfoDto> guestMeetingAccess(
+            @Parameter(description = "참여 코드, 웹 링크의 code 파라미터를 입력합니다.") @RequestParam String code) {
+        return ResponseDto.onSuccess(guestUsecase.getScheduleInfo(code));
+    }
 }
