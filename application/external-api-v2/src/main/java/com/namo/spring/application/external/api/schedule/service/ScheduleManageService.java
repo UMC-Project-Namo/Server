@@ -258,8 +258,8 @@ public class ScheduleManageService {
     }
 
     public Participant validateAndGetScheduleOwner(Schedule schedule, Long memberId) {
-        Participant participant = participantManageService.getParticipantWithScheduleAndMember(memberId,
-                schedule.getId());
+        Participant participant = participantManageService.getParticipantWithScheduleAndMember(schedule.getId(),
+                memberId);
         if (participant.getIsOwner() != ParticipantRole.OWNER.getValue()) {
             throw new ScheduleException(ErrorStatus.NOT_SCHEDULE_OWNER);
         }
