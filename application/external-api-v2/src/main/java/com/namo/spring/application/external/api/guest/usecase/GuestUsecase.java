@@ -33,7 +33,7 @@ public class GuestUsecase {
         return toPostGuestParticipantDto(guestManageService.createOrValidateGuest(dto, schedule, code));
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public GuestMeetingResponse.GetMeetingScheduleInfoDto getScheduleInfo(String code){
         Long scheduleId = guestManageService.decodeInviteCode(code);
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
