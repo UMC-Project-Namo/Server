@@ -201,7 +201,7 @@ public class ScheduleManageService {
 
     public void updatePersonalSchedule(PersonalScheduleRequest.PatchPersonalScheduleDto dto, Schedule schedule,
             Long memberId) {
-        Participant participant = validateAndGetScheduleOwner(schedule, memberId);
+        Participant participant = validateAndGetOwnerParticipant(schedule, memberId);
         Category category = categoryManageService.getMyCategory(memberId, dto.getCategoryId());
         participant.updateCategory(category);
         updateScheduleContent(dto.getTitle(), dto.getLocation(), dto.getPeriod(), null, schedule);
@@ -210,17 +210,18 @@ public class ScheduleManageService {
     /**
      * 모임 일정의 정보를 수정합니다.
      */
-    public void updateMeetingSchedule(MeetingScheduleRequest.PatchMeetingScheduleDto dto, Schedule schedule,
+    public void updateMeetingSchedule(MeetingScheduleRequest.PatchMeetingScheduleDto request, Schedule schedule,
                                       Long memberId) {
-        validateAndGetScheduleOwner(schedule, memberId);
-        updateScheduleContent(dto.getTitle(), dto.getLocation(), dto.getPeriod(), dto.getImageUrl(), schedule);
+        Participant participant = validateAndGetOwnerParticipant(schedule, memberId);
+        updateScheduleContent(request.getTitle(), request.getLocation(), request.getPeriod(), request.getImageUrl(), schedule);
+        participant.updateCustomScheduleInfo(request.getTitle(), request.getImageUrl());
         // 기존의 인원과, 초대될 & 삭제될 member  검증
-        if (!dto.getParticipantsToAdd().isEmpty() || !dto.getParticipantsToRemove().isEmpty()) {
+        if (!request.getParticipantsToAdd().isEmpty() || !request.getParticipantsToRemove().isEmpty()) {
             List<Long> participantIds = getScheduleParticipantIds(schedule.getId());
             validateParticipantCount(
-                    participantIds.size() + dto.getParticipantsToAdd().size() - dto.getParticipantsToRemove().size());
-            validateExistingAndNewParticipantIds(participantIds, dto.getParticipantsToAdd());
-            participantManageService.updateMeetingScheduleParticipants(memberId, schedule, dto);
+                    participantIds.size() + request.getParticipantsToAdd().size() - request.getParticipantsToRemove().size());
+            validateExistingAndNewParticipantIds(participantIds, request.getParticipantsToAdd());
+            participantManageService.updateMeetingScheduleParticipants(memberId, schedule, request);
         }
     }
 
@@ -257,7 +258,7 @@ public class ScheduleManageService {
         schedule.updateContent(title, period, location, imageUrl);
     }
 
-    public Participant validateAndGetScheduleOwner(Schedule schedule, Long memberId) {
+    public Participant validateAndGetOwnerParticipant(Schedule schedule, Long memberId) {
         Participant participant = participantManageService.getParticipantWithScheduleAndMember(schedule.getId(),
                 memberId);
         if (participant.getIsOwner() != ParticipantRole.OWNER.getValue()) {
@@ -267,7 +268,7 @@ public class ScheduleManageService {
     }
 
     public void deleteSchedule(Schedule schedule, Long memberId){
-        validateAndGetScheduleOwner(schedule, memberId);
+        validateAndGetOwnerParticipant(schedule, memberId);
         scheduleService.deleteSchedule(schedule.getId());
     }
 
