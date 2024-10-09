@@ -72,19 +72,19 @@ public class ScheduleManageService {
         return schedule;
     }
 
-    public Schedule createPersonalSchedule(PersonalScheduleRequest.PostPersonalScheduleDto dto, Member member) {
-        Period period = getValidatedPeriod(dto.getPeriod().getStartDate(), dto.getPeriod().getEndDate());
-        Schedule schedule = scheduleMaker.createPersonalSchedule(dto, period, member.getNickname());
-        participantManageService.createPersonalScheduleParticipant(member, schedule, dto.getCategoryId());
+    public Schedule createPersonalSchedule(PersonalScheduleRequest.PostPersonalScheduleDto request, Member member) {
+        Period period = getValidatedPeriod(request.getPeriod().getStartDate(), request.getPeriod().getEndDate());
+        Schedule schedule = scheduleMaker.createPersonalSchedule(request, period, member.getNickname());
+        participantManageService.createPersonalScheduleParticipant(member, schedule, request.getCategoryId());
         return schedule;
     }
 
-    public Schedule createMeetingSchedule(MeetingScheduleRequest.PostMeetingScheduleDto dto, Member owner) {
-        validateParticipantCount(dto.getParticipants().size());
+    public Schedule createMeetingSchedule(MeetingScheduleRequest.PostMeetingScheduleDto request, Member owner) {
+        validateParticipantCount(request.getParticipants().size());
         List<Member> participants = participantManageService.getFriendshipValidatedParticipants(owner.getId(),
-                dto.getParticipants());
-        Period period = getValidatedPeriod(dto.getPeriod().getStartDate(), dto.getPeriod().getEndDate());
-        Schedule schedule = scheduleMaker.createMeetingSchedule(dto, period);
+                request.getParticipants());
+        Period period = getValidatedPeriod(request.getPeriod().getStartDate(), request.getPeriod().getEndDate());
+        Schedule schedule = scheduleMaker.createMeetingSchedule(request, period);
         participantManageService.createMeetingScheduleParticipants(owner, schedule, participants);
         return schedule;
     }
@@ -199,38 +199,39 @@ public class ScheduleManageService {
         return participantService.readParticipantsByScheduleIdAndScheduleType(schedule.getId(), ScheduleType.MEETING);
     }
 
-    public void updatePersonalSchedule(PersonalScheduleRequest.PatchPersonalScheduleDto dto, Schedule schedule,
+    public void updatePersonalSchedule(PersonalScheduleRequest.PatchPersonalScheduleDto request, Schedule schedule,
             Long memberId) {
-        Participant participant = validateAndGetScheduleOwner(schedule, memberId);
-        Category category = categoryManageService.getMyCategory(memberId, dto.getCategoryId());
+        Participant participant = validateAndGetOwnerParticipant(schedule, memberId);
+        Category category = categoryManageService.getMyCategory(memberId, request.getCategoryId());
         participant.updateCategory(category);
-        updateScheduleContent(dto.getTitle(), dto.getLocation(), dto.getPeriod(), null, schedule);
+        updateScheduleContent(request.getTitle(), request.getLocation(), request.getPeriod(), null, schedule);
     }
 
     /**
      * 모임 일정의 정보를 수정합니다.
      */
-    public void updateMeetingSchedule(MeetingScheduleRequest.PatchMeetingScheduleDto dto, Schedule schedule,
+    public void updateMeetingSchedule(MeetingScheduleRequest.PatchMeetingScheduleDto request, Schedule schedule,
                                       Long memberId) {
-        validateAndGetScheduleOwner(schedule, memberId);
-        updateScheduleContent(dto.getTitle(), dto.getLocation(), dto.getPeriod(), dto.getImageUrl(), schedule);
+        Participant participant = validateAndGetOwnerParticipant(schedule, memberId);
+        updateScheduleContent(request.getTitle(), request.getLocation(), request.getPeriod(), request.getImageUrl(), schedule);
+        participant.updateCustomScheduleInfo(request.getTitle(), request.getImageUrl());
         // 기존의 인원과, 초대될 & 삭제될 member  검증
-        if (!dto.getParticipantsToAdd().isEmpty() || !dto.getParticipantsToRemove().isEmpty()) {
+        if (!request.getParticipantsToAdd().isEmpty() || !request.getParticipantsToRemove().isEmpty()) {
             List<Long> participantIds = getScheduleParticipantIds(schedule.getId());
             validateParticipantCount(
-                    participantIds.size() + dto.getParticipantsToAdd().size() - dto.getParticipantsToRemove().size());
-            validateExistingAndNewParticipantIds(participantIds, dto.getParticipantsToAdd());
-            participantManageService.updateMeetingScheduleParticipants(memberId, schedule, dto);
+                    participantIds.size() + request.getParticipantsToAdd().size() - request.getParticipantsToRemove().size());
+            validateExistingAndNewParticipantIds(participantIds, request.getParticipantsToAdd());
+            participantManageService.updateMeetingScheduleParticipants(memberId, schedule, request);
         }
     }
 
     /**
      * 모임 일정의 제목, 이미지를 커스텀 합니다.
      */
-    public void updateMeetingScheduleProfile(MeetingScheduleRequest.PatchMeetingScheduleProfileDto dto, Schedule schedule,
+    public void updateMeetingScheduleProfile(MeetingScheduleRequest.PatchMeetingScheduleProfileDto request, Schedule schedule,
                                              Long memberId){
         Participant participant = participantManageService.getParticipantByMemberAndSchedule(memberId, schedule.getId());
-        participant.updateCustomScheduleInfo(dto.getTitle(), dto.getImageUrl());
+        participant.updateCustomScheduleInfo(request.getTitle(), request.getImageUrl());
     }
 
     /**
@@ -257,7 +258,7 @@ public class ScheduleManageService {
         schedule.updateContent(title, period, location, imageUrl);
     }
 
-    public Participant validateAndGetScheduleOwner(Schedule schedule, Long memberId) {
+    public Participant validateAndGetOwnerParticipant(Schedule schedule, Long memberId) {
         Participant participant = participantManageService.getParticipantWithScheduleAndMember(schedule.getId(),
                 memberId);
         if (participant.getIsOwner() != ParticipantRole.OWNER.getValue()) {
@@ -267,7 +268,7 @@ public class ScheduleManageService {
     }
 
     public void deleteSchedule(Schedule schedule, Long memberId){
-        validateAndGetScheduleOwner(schedule, memberId);
+        validateAndGetOwnerParticipant(schedule, memberId);
         scheduleService.deleteSchedule(schedule.getId());
     }
 
