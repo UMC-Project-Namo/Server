@@ -72,19 +72,19 @@ public class ScheduleManageService {
         return schedule;
     }
 
-    public Schedule createPersonalSchedule(PersonalScheduleRequest.PostPersonalScheduleDto dto, Member member) {
-        Period period = getValidatedPeriod(dto.getPeriod().getStartDate(), dto.getPeriod().getEndDate());
-        Schedule schedule = scheduleMaker.createPersonalSchedule(dto, period, member.getNickname());
-        participantManageService.createPersonalScheduleParticipant(member, schedule, dto.getCategoryId());
+    public Schedule createPersonalSchedule(PersonalScheduleRequest.PostPersonalScheduleDto request, Member member) {
+        Period period = getValidatedPeriod(request.getPeriod().getStartDate(), request.getPeriod().getEndDate());
+        Schedule schedule = scheduleMaker.createPersonalSchedule(request, period, member.getNickname());
+        participantManageService.createPersonalScheduleParticipant(member, schedule, request.getCategoryId());
         return schedule;
     }
 
-    public Schedule createMeetingSchedule(MeetingScheduleRequest.PostMeetingScheduleDto dto, Member owner) {
-        validateParticipantCount(dto.getParticipants().size());
+    public Schedule createMeetingSchedule(MeetingScheduleRequest.PostMeetingScheduleDto request, Member owner) {
+        validateParticipantCount(request.getParticipants().size());
         List<Member> participants = participantManageService.getFriendshipValidatedParticipants(owner.getId(),
-                dto.getParticipants());
-        Period period = getValidatedPeriod(dto.getPeriod().getStartDate(), dto.getPeriod().getEndDate());
-        Schedule schedule = scheduleMaker.createMeetingSchedule(dto, period);
+                request.getParticipants());
+        Period period = getValidatedPeriod(request.getPeriod().getStartDate(), request.getPeriod().getEndDate());
+        Schedule schedule = scheduleMaker.createMeetingSchedule(request, period);
         participantManageService.createMeetingScheduleParticipants(owner, schedule, participants);
         return schedule;
     }
@@ -199,12 +199,12 @@ public class ScheduleManageService {
         return participantService.readParticipantsByScheduleIdAndScheduleType(schedule.getId(), ScheduleType.MEETING);
     }
 
-    public void updatePersonalSchedule(PersonalScheduleRequest.PatchPersonalScheduleDto dto, Schedule schedule,
+    public void updatePersonalSchedule(PersonalScheduleRequest.PatchPersonalScheduleDto request, Schedule schedule,
             Long memberId) {
         Participant participant = validateAndGetOwnerParticipant(schedule, memberId);
-        Category category = categoryManageService.getMyCategory(memberId, dto.getCategoryId());
+        Category category = categoryManageService.getMyCategory(memberId, request.getCategoryId());
         participant.updateCategory(category);
-        updateScheduleContent(dto.getTitle(), dto.getLocation(), dto.getPeriod(), null, schedule);
+        updateScheduleContent(request.getTitle(), request.getLocation(), request.getPeriod(), null, schedule);
     }
 
     /**
@@ -228,10 +228,10 @@ public class ScheduleManageService {
     /**
      * 모임 일정의 제목, 이미지를 커스텀 합니다.
      */
-    public void updateMeetingScheduleProfile(MeetingScheduleRequest.PatchMeetingScheduleProfileDto dto, Schedule schedule,
+    public void updateMeetingScheduleProfile(MeetingScheduleRequest.PatchMeetingScheduleProfileDto request, Schedule schedule,
                                              Long memberId){
         Participant participant = participantManageService.getParticipantByMemberAndSchedule(memberId, schedule.getId());
-        participant.updateCustomScheduleInfo(dto.getTitle(), dto.getImageUrl());
+        participant.updateCustomScheduleInfo(request.getTitle(), request.getImageUrl());
     }
 
     /**
