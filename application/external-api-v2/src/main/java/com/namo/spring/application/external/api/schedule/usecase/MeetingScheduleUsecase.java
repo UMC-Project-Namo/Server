@@ -94,7 +94,7 @@ public class MeetingScheduleUsecase {
     @Transactional
     public String getGuestInvitationUrl(Long scheduleId, SecurityUserDetails memberInfo) {
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
-        scheduleManageService.validateAndGetScheduleOwner(schedule, memberInfo.getUserId());
+        scheduleManageService.validateAndGetOwnerParticipant(schedule, memberInfo.getUserId());
         validateParticipantCount(scheduleManageService.getScheduleParticipantIds(schedule.getId()).size());
         return guestManageService.generateInvitationUrl(scheduleId);
     }
