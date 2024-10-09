@@ -1,7 +1,9 @@
 package com.namo.spring.application.external.api.guest.usecase;
 
+import static com.namo.spring.application.external.api.guest.converter.GuestMeetingResponseConverter.toGetMeetingScheduleInfoDto;
 import static com.namo.spring.application.external.api.guest.converter.GuestParticipantResponseConverter.*;
 
+import com.namo.spring.application.external.api.guest.dto.GuestMeetingResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,5 +31,12 @@ public class GuestUsecase {
         Long scheduleId = guestManageService.decodeInviteCode(code);
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
         return toPostGuestParticipantDto(guestManageService.createOrValidateGuest(dto, schedule, code));
+    }
+
+    @Transactional(readOnly = true)
+    public GuestMeetingResponse.GetMeetingScheduleInfoDto getScheduleInfo(String code){
+        Long scheduleId = guestManageService.decodeInviteCode(code);
+        Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
+        return toGetMeetingScheduleInfoDto(schedule);
     }
 }

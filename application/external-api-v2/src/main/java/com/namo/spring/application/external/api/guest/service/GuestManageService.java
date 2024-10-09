@@ -8,6 +8,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.namo.spring.application.external.global.config.properties.WebUrlConfig;
+import com.namo.spring.db.mysql.domains.schedule.service.ScheduleService;
 import org.springframework.stereotype.Service;
 
 import com.namo.spring.application.external.api.guest.dto.GuestParticipantRequest;
@@ -124,7 +125,7 @@ public class GuestManageService {
     }
 
     /**
-     * 참여 코드를 디코딩하여 일정 ID를 추출합니다,.
+     * 참여 코드를 디코딩하여 일정 ID를 추출합니다.
      *
      * @param inviteCode
      * @return scheduleId
