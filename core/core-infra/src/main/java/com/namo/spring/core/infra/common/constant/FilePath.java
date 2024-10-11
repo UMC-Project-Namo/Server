@@ -10,10 +10,16 @@ public enum FilePath {
     MEETING_PROFILE_IMG("", "group/profile/"),
     INVITATION_ACTIVITY_IMG("", "invitation/activity/"),
     //v2
+    // 활동 이미지 전용
     ACTIVITY_IMG("activity", "origin/activity"),
     RESIZED_ACTIVITY_IMG("activity", "resized/origin/activity"),
+    // 기록 이미지 전용
     DIARY_IMG("diary", "origin/diary"),
-    RESIZED_DIARY_IMG("diary", "resized/origin/diary");
+    RESIZED_DIARY_IMG("diary", "resized/origin/diary"),
+    // 커버 사진 전용
+    COVER_IMAGE("cover", "origin/cover"),
+    RESIZED_COVER_IMAGE("cover", "resized/origin/cover");
+
 
     private final String prefix;
     private final String path;
