@@ -12,6 +12,7 @@ import com.namo.spring.core.common.response.ResponseDto;
 import com.namo.spring.core.infra.common.aws.s3.S3Uploader;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,9 @@ public class S3Controller {
             EXPIRATION_REFRESH_TOKEN,
             INTERNET_SERVER_ERROR})
     @GetMapping("/generate-presigned-url")
-    public ResponseDto<String> generatePresignedUrl(@RequestParam String prefix,
+    public ResponseDto<String> generatePresignedUrl(
+            @Parameter(description = "이미지 종류입니다 {activity: 활동 이미지, diary: 일기 이미지, cover: 커버 이미지} 입력 가능합니다.", example = "activity")
+            @RequestParam String prefix,
             @RequestParam String fileName) {
         String preSignedUrl = s3Service.getPreSignedUrl(prefix, fileName);
         return ResponseDto.onSuccess(preSignedUrl);
