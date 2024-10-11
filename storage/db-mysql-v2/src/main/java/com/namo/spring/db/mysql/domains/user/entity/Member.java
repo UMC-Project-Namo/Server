@@ -177,4 +177,8 @@ public class Member extends BaseTimeEntity implements User {
         this.status = MemberStatus.ACTIVE;
         this.profileImage = profileImage;
     }
+
+    public void updatePalette(Palette palette){
+        this.palette = palette;
+    }
 }

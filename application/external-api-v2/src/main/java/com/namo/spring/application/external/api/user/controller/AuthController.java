@@ -25,7 +25,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.RequiredArgsConstructor;
 
-@Tag(name = "1. Auth", description = "로그인, 회원가입 관련 API")
+@Tag(name = "0. Auth", description = "로그인, 회원가입 관련 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v2/auths")
