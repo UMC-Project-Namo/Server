@@ -13,7 +13,7 @@ public enum FilePath {
     // 활동 이미지 전용
     ACTIVITY_IMG("activity", "origin/activity"),
     RESIZED_ACTIVITY_IMG("activity", "resized/origin/activity"),
-    // 기록 이미지 전용
+    // 일기 이미지 전용
     DIARY_IMG("diary", "origin/diary"),
     RESIZED_DIARY_IMG("diary", "resized/origin/diary"),
     // 커버 사진 전용
