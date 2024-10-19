@@ -18,8 +18,10 @@ public enum FilePath {
     RESIZED_DIARY_IMG("diary", "resized/origin/diary"),
     // 커버 사진 전용
     COVER_IMAGE("cover", "origin/cover"),
-    RESIZED_COVER_IMAGE("cover", "resized/origin/cover");
-
+    RESIZED_COVER_IMAGE("cover", "resized/origin/cover"),
+    // 프로필 이미지 전용
+    PROFILE_IMAGE("profile", "origin/user/profile"),
+    RESIZED_PROFILE_IMAGE("profile", "resized/origin/user/profile");
 
     private final String prefix;
     private final String path;
