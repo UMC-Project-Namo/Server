@@ -60,6 +60,8 @@ public class ScheduleResponse {
     public static class ParticipantInfoDto{
         @Schema(description = "유저 ID (회원일 경우 memberId, 비회원인 경우 AnonymousId)", example = "2")
         private Long userId;
+        @Schema(description = "스케줄 참여자 ID", example = "23")
+        private Long participantId;
         @Schema(description = "유저 이름", example = "캐슬")
         private String nickname;
         @Schema(description = "게스트 여부 (true: 비회원/ false: 회원) ", example = "true")

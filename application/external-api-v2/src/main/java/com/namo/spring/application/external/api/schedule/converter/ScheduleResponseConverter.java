@@ -43,6 +43,7 @@ public class ScheduleResponseConverter {
         User user = participant.getUser();
         return ScheduleResponse.ParticipantInfoDto.builder()
                 .userId(user.getId())
+                .participantId(participant.getId())
                 .nickname(user.getNickname())
                 .isGuest(user instanceof Anonymous)
                 .build();
