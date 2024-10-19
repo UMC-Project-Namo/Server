@@ -33,7 +33,8 @@ public class ActivityResponse {
     @AllArgsConstructor
     @Schema(description = "활동 참여자 DTO")
     public static class ActivityParticipantDto {
-        private Long participantMemberId;
+        private Long participantId;
+        private Long activityParticipantId;
         private String participantNickname;
     }
 
