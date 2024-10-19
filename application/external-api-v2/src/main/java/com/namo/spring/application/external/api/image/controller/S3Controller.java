@@ -33,7 +33,7 @@ public class S3Controller {
             INTERNET_SERVER_ERROR})
     @GetMapping("/generate-presigned-url")
     public ResponseDto<String> generatePresignedUrl(
-            @Parameter(description = "이미지 종류입니다 {activity: 활동 이미지, diary: 일기 이미지, cover: 커버 이미지} 입력 가능합니다.", example = "activity")
+            @Parameter(description = "이미지 종류입니다 {activity: 활동 이미지, diary: 일기 이미지, cover: 커버 이미지, profile: 프로필 이미지} 입력 가능합니다.", example = "activity")
             @RequestParam String prefix,
             @RequestParam String fileName) {
         String preSignedUrl = s3Service.getPreSignedUrl(prefix, fileName);
