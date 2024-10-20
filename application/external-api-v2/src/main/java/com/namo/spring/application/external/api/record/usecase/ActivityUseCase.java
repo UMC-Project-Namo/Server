@@ -49,7 +49,7 @@ public class ActivityUseCase {
         List<ActivityParticipant> activityParticipant = activityParticipantManageService.createActivityParticipant(
                 activity, request.getParticipantIdList(), scheduleId);
         // 정산 정보 생성
-        if (request.getSettlement()!=null && request.getSettlement().getParticipantIdList().isEmpty()){
+        if (request.getSettlement() != null && !request.getSettlement().getParticipantIdList().isEmpty()) {
             activity.setSettlementInfo(request.getSettlement().getTotalAmount());
             activityParticipantManageService.addSettlement(request.getSettlement(), activityParticipant);
         }
