@@ -33,7 +33,6 @@ public class MeetingScheduleRequest {
         @NotNull(message = "일정 시작일, 종료일 정보는 필수 입니다.")
         @Schema(description = "기간 정보")
         private PeriodDto period;
-        @NotNull(message = "장소가 없을 시 emtpy object를 전송합니다.")
         @Schema(description = "카카오 맵 장소 정보, 장소가 없을 시 emtpy object를 전송합니다.")
         private LocationDto location;
         @NotNull(message = "모임 일정에 참여할 친구는 1명부터 9명까지 입력 가능합니다.")

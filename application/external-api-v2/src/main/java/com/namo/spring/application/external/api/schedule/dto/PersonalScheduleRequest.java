@@ -36,7 +36,6 @@ public class PersonalScheduleRequest {
         @NotNull(message = "일정 시작일, 종료일 정보는 필수 입니다.")
         @Schema(description = "기간 정보")
         private PersonalScheduleRequest.PeriodDto period;
-        @NotNull(message = "장소 정보가 없을 경우 empty object를 전송합니다.")
         @Schema(description = "카카오 맵 장소 정보")
         private PersonalScheduleRequest.LocationDto location;
         @NotNull(message = "알림이 없을 시 emtpy array를 전송합니다.")
