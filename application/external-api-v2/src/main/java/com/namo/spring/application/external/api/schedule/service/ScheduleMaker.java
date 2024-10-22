@@ -32,8 +32,7 @@ public class ScheduleMaker {
     private final ScheduleService scheduleService;
     private final ImageUrlProperties imageUrlProperties;
 
-    public Schedule createPersonalSchedule(PersonalScheduleRequest.PostPersonalScheduleDto dto, Period period,
-            String nickname) {
+    public Schedule createPersonalSchedule(PersonalScheduleRequest.PostPersonalScheduleDto dto, Period period) {
         Schedule schedule = toSchedule(dto.getTitle(), period, dto.getLocation(), PERSONAL_SCHEDULE_TYPE, null, null,
                 null);
         return scheduleService.createSchedule(schedule);
