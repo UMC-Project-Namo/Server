@@ -120,4 +120,9 @@ public class FriendManageService {
                 Sort.by(Sort.Order.desc("isFavorite"), Sort.Order.desc("createdAt")));
         return friendshipService.readAllFriendshipByStatus(memberId, FriendshipStatus.ACCEPTED, pageable);
     }
+
+    public Friendship getAcceptedFriendship(Long memberId, Long friendId){
+        return friendshipService.readFriendshipByStatus(memberId, friendId, FriendshipStatus.ACCEPTED)
+                .orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_FRIENDSHIP_FAILURE));
+    }
 }

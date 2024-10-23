@@ -50,4 +50,10 @@ public class FriendUseCase {
         Page<Friendship> friendships = friendManageService.getAcceptedFriendship(userId, page);
         return FriendshipConverter.toFriendListDto(friendships);
     }
+
+    @Transactional
+    public void toggleFavorite(Long memberId, Long friendId) {
+        Friendship friendship = friendManageService.getAcceptedFriendship(memberId, friendId);
+        friendship.toggleFavorite();
+    }
 }
