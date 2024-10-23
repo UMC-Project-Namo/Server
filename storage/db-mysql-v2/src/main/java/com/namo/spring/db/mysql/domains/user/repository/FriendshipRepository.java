@@ -49,4 +49,5 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
             LocalDate startDate,
             LocalDate endDate);
 
+    Optional<Friendship> findByMemberIdAndFriendIdAndStatus(Long memberId, Long friendId, FriendshipStatus status);
 }

@@ -41,6 +41,11 @@ public class FriendshipService {
         return friendshipRepository.findByIdAndStatus(friendshipId, status);
     }
 
+    public Optional<Friendship> readFriendshipByStatus(Long memberId, Long friendId, FriendshipStatus status){
+        return friendshipRepository.findByMemberIdAndFriendIdAndStatus(memberId,friendId, status);
+    }
+
+
     public void delete(Friendship friendship) {
         friendshipRepository.delete(friendship);
     }
