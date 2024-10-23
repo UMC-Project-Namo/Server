@@ -2,6 +2,7 @@ package com.namo.spring.application.external.api.user.controller;
 
 import static com.namo.spring.core.common.code.status.ErrorStatus.*;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -90,10 +91,11 @@ public class FriendController {
         return ResponseDto.onSuccess("친구 요청을 거절했습니다.");
     }
 
-    @Operation(summary = "내 친구 목록을 조회합니다.", description = "내 친구 리스트를 보는 API 입니다.")
+    @Operation(summary = "내 친구 목록을 조회합니다. [20명씩 조회]", description = "내 친구 리스트를 보는 API 입니다.")
     @GetMapping("")
-    public ResponseDto<List<FriendshipResponse.FriendInfoDto>> getFriendList(
-            @AuthenticationPrincipal SecurityUserDetails member
+    public ResponseDto<FriendshipResponse.GetFriendListDto> getFriendList(
+            @AuthenticationPrincipal SecurityUserDetails member,
+            @RequestParam(defaultValue = "1") int page
     ){
         return ResponseDto.onSuccess(null);
     }

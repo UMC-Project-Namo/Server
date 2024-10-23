@@ -1,5 +1,7 @@
 package com.namo.spring.application.external.api.user.dto;
 
+import java.util.List;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import lombok.Builder;
@@ -26,6 +28,20 @@ public class FriendshipResponse {
         private String birthday;
         @Schema(description = "친구 요청 유저 선호 색", example = "2")
         private Long favoriteColorId;
+    }
+
+    @Getter
+    @Builder
+    public static class GetFriendListDto{
+        List<FriendInfoDto> friendList;
+        @Schema(description = "총 페이지 수", example = "5")
+        private int totalPages;
+        @Schema(description = "현재 페이지 번호", example = "1")
+        private int currentPage;
+        @Schema(description = "한 페이지당 항목 수", example = "20")
+        private int pageSize;
+        @Schema(description = "전체 항목 수", example = "100")
+        private long totalItems;
     }
 
     @Getter
