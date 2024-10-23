@@ -52,7 +52,7 @@ public class FriendManageService {
      */
     public Page<Friendship> getReceivedFriendRequests(Long memberId, int page) {
         Pageable pageable = PageRequest.of(page - 1, REQUEST_PAGE_SIZE);
-        return friendshipService.readAllFriendshipByStatus(memberId, FriendshipStatus.PENDING, pageable);
+        return friendshipService.readAllReceivedFriendshipByStatus(memberId, FriendshipStatus.PENDING, pageable);
     }
 
     /**
@@ -118,7 +118,7 @@ public class FriendManageService {
     public Page<Friendship> getAcceptedFriendship(Long memberId, int page) {
         Pageable pageable = PageRequest.of(page - 1, REQUEST_PAGE_SIZE,
                 Sort.by(Sort.Order.desc("isFavorite"), Sort.Order.desc("createdAt")));
-        return friendshipService.readAllFriendshipByStatus(memberId, FriendshipStatus.ACCEPTED, pageable);
+        return friendshipService.readAllRequestFriendshipByStatus(memberId, FriendshipStatus.ACCEPTED, pageable);
     }
 
     public Friendship getAcceptedFriendship(Long memberId, Long friendId){
