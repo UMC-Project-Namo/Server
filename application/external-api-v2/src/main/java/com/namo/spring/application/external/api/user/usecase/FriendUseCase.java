@@ -52,8 +52,9 @@ public class FriendUseCase {
     }
 
     @Transactional
-    public void toggleFavorite(Long memberId, Long friendId) {
+    public boolean toggleFavorite(Long memberId, Long friendId) {
         Friendship friendship = friendManageService.getAcceptedFriendship(memberId, friendId);
         friendship.toggleFavorite();
+        return friendship.isFavorite();
     }
 }

@@ -2,6 +2,7 @@ package com.namo.spring.application.external.api.user.controller;
 
 import static com.namo.spring.core.common.code.status.ErrorStatus.*;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -100,4 +101,15 @@ public class FriendController {
                 .getFriendList(member.getUserId(), page));
     }
 
+    @Operation(summary = "친구 즐겨찾기 등록/해제", description = "특정 친구를 즐겨찾기에 등록하거나, 이미 등록되어 있다면 해제합니다.")
+    @PatchMapping("/{friendId}/toggle-favorite")
+    @ApiErrorCodes(value = {
+            NOT_FOUND_FRIENDSHIP_FAILURE,
+    })
+    public ResponseDto<String> toggleFavorite(@AuthenticationPrincipal SecurityUserDetails member,
+            @PathVariable Long friendId) {
+        boolean isFavorite = friendUseCase.toggleFavorite(member.getUserId(), friendId);
+        String message = isFavorite ? "친구를 즐겨찾기에 등록했습니다." : "친구를 즐겨찾기에서 해제했습니다.";
+        return ResponseDto.onSuccess(message);
+    }
 }

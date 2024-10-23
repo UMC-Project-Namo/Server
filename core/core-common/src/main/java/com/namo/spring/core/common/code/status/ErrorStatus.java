@@ -140,7 +140,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     NOT_FOUND_IMAGE(HttpStatus.NOT_FOUND, "이미지를 찾을 수 없습니다."),
 
-    NOT_FOUND_FRIENDSHIP_FAILURE(HttpStatus.NOT_FOUND, "친구인 유저를 찾을 수 없습니다."),
+    NOT_FOUND_FRIENDSHIP_FAILURE(HttpStatus.NOT_FOUND, "친구인 유저를 찾을 수 없습니다. (대기중인 요청일 수 있습니다)"),
 
     NOT_FOUND_MOBILE_DEVICE_FAILURE(HttpStatus.NOT_FOUND, "유저의 모바일 기기 정보를 찾을 수 없습니다."),
 
