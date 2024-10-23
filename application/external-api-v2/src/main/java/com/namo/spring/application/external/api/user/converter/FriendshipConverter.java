@@ -69,6 +69,7 @@ public class FriendshipConverter {
                 .memberId(friend.getId())
                 .favoriteFriend(friendship.isFavorite())
                 .nickname(friend.getNickname())
+                .name(friend.getName())
                 .tag(friend.getTag())
                 .bio(friend.getBio())
                 .birthday(birthday)
