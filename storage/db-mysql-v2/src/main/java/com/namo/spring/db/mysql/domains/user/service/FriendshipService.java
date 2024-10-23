@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.namo.spring.core.common.annotation.DomainService;
@@ -32,7 +33,7 @@ public class FriendshipService {
         return friendshipRepository.save(friendship);
     }
 
-    public List<Friendship> readAllFriendshipByStatus(Long memberId, FriendshipStatus status, Pageable pageable) {
+    public Page<Friendship> readAllFriendshipByStatus(Long memberId, FriendshipStatus status, Pageable pageable) {
         return friendshipRepository.findAllByFriendIdAndStatus(memberId, status, pageable);
     }
 

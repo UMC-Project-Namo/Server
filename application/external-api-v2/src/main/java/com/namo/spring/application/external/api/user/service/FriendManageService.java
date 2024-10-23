@@ -5,8 +5,11 @@ import java.util.List;
 
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
 import com.namo.spring.db.mysql.domains.user.dto.FriendBirthdayQuery;
+
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.namo.spring.application.external.api.user.converter.FriendshipConverter;
@@ -47,7 +50,7 @@ public class FriendManageService {
      * @param memberId 요청을 받는 사용자의 ID
      * @return PENDING 상태의 친구 요청 목록
      */
-    public List<Friendship> getReceivedFriendRequests(Long memberId, int page) {
+    public Page<Friendship> getReceivedFriendRequests(Long memberId, int page) {
         Pageable pageable = PageRequest.of(page - 1, REQUEST_PAGE_SIZE);
         return friendshipService.readAllFriendshipByStatus(memberId, FriendshipStatus.PENDING, pageable);
     }
@@ -103,5 +106,18 @@ public class FriendManageService {
         if (!friendshipService.existsByMemberIdAndFriendId(memberId, friendId)) {
             throw new ScheduleException(ErrorStatus.NOT_FRIENDSHIP_MEMBER);
         }
+    }
+
+    /**
+     * 나의 친구 목록을 가져옵니다.
+     * !! 즐겨찾기에 등록된 친구가 가장 먼저 나오고, 그 후에 최근 추가된 친구들이 조회됩니다.
+     * @param memberId
+     * @param page
+     * @return
+     */
+    public Page<Friendship> getAcceptedFriendship(Long memberId, int page) {
+        Pageable pageable = PageRequest.of(page - 1, REQUEST_PAGE_SIZE,
+                Sort.by(Sort.Order.desc("isFavorite"), Sort.Order.desc("createdAt")));
+        return friendshipService.readAllFriendshipByStatus(memberId, FriendshipStatus.ACCEPTED, pageable);
     }
 }

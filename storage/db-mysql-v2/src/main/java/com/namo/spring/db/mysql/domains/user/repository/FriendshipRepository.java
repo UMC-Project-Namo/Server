@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.namo.spring.db.mysql.domains.user.dto.FriendBirthdayQuery;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,7 +19,7 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
 
     boolean existsByMemberIdAndFriendId(Long memberId, Long friendId);
 
-    List<Friendship> findAllByFriendIdAndStatus(Long memberId, FriendshipStatus status, Pageable pageable);
+    Page<Friendship> findAllByFriendIdAndStatus(Long memberId, FriendshipStatus status, Pageable pageable);
 
     Optional<Friendship> findByIdAndStatus(Long friendshipId, FriendshipStatus status);
 

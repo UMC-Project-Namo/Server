@@ -1,7 +1,6 @@
 package com.namo.spring.application.external.api.user.usecase;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,11 +28,9 @@ public class FriendUseCase {
     }
 
     @Transactional(readOnly = true)
-    public List<FriendshipResponse.FriendRequestDto> getFriendshipRequest(Long memberId, int page) {
-        List<Friendship> receivedRequests = friendManageService.getReceivedFriendRequests(memberId, page);
-        return receivedRequests.stream()
-                .map(FriendshipConverter::toFriendRequestDto)
-                .toList();
+    public FriendshipResponse.FriendRequestListDto getFriendshipRequest(Long memberId, int page) {
+        Page<Friendship> receivedRequests = friendManageService.getReceivedFriendRequests(memberId, page);
+        return FriendshipConverter.toFriendRequestDto(receivedRequests);
     }
 
     @Transactional
@@ -46,5 +43,11 @@ public class FriendUseCase {
     public void rejectFriendRequest(Long memberId, Long friendshipId) {
         Friendship friendship = friendManageService.getPendingFriendship(friendshipId);
         friendManageService.rejectRequest(memberId, friendship);
+    }
+
+    @Transactional(readOnly = true)
+    public FriendshipResponse.FriendListDto getFriendList(Long userId, int page) {
+        Page<Friendship> friendships = friendManageService.getAcceptedFriendship(userId, page);
+        return FriendshipConverter.toFriendListDto(friendships);
     }
 }
