@@ -20,11 +20,11 @@ public class FriendshipConverter {
                 .build();
     }
 
-    public static FriendshipResponse.GetFriendRequestDto toGetFriendRequestDto(Page<Friendship> friendships){
+    public static FriendshipResponse.FriendRequestListDto toFriendRequestDto(Page<Friendship> friendships){
         List<FriendshipResponse.FriendRequestDto> friendRequestDto = friendships.stream()
                 .map(FriendshipConverter::toFriendRequestDto)
                 .toList();
-        return FriendshipResponse.GetFriendRequestDto.builder()
+        return FriendshipResponse.FriendRequestListDto.builder()
                 .friendRequests(friendRequestDto)
                 .currentPage(friendships.getNumber()+1)
                 .pageSize(friendships.getSize())
@@ -33,8 +33,9 @@ public class FriendshipConverter {
                 .build();
     }
 
-    public static FriendshipResponse.FriendRequestDto toFriendRequestDto(Friendship friendship){
+    private static FriendshipResponse.FriendRequestDto toFriendRequestDto(Friendship friendship){
         Member requestMember = friendship.getMember();
+        // todo : birthday 로직 일원화 필요 2024.10.23 Castle
         String birthday = requestMember.isBirthdayVisible() ? requestMember.getBirthday().format(DateTimeFormatter.ofPattern("MM-dd")) : BIRTHDAY_HIDDEN;
         return FriendshipResponse.FriendRequestDto.builder()
                 .friendRequestId(friendship.getId())
@@ -45,6 +46,32 @@ public class FriendshipConverter {
                 .bio(requestMember.getBio())
                 .birthday(birthday)
                 .favoriteColorId(requestMember.getPalette().getId())
+                .build();
+    }
+
+    public static FriendshipResponse.FriendListDto toFriendListDto(Page<Friendship> friendships) {
+        List<FriendshipResponse.FriendInfoDto> friendList = friendships.stream()
+                .map(FriendshipConverter::toFriendInfoDto)
+                .toList();
+        return FriendshipResponse.FriendListDto.builder()
+                .friendList(friendList)
+                .currentPage(friendships.getNumber()+1)
+                .pageSize(friendships.getSize())
+                .totalPages(friendships.getTotalPages())
+                .totalItems(friendships.getTotalElements())
+                .build();
+    }
+
+    private static FriendshipResponse.FriendInfoDto toFriendInfoDto(Friendship friendship){
+        Member friend = friendship.getFriend();
+        String birthday = friend.isBirthdayVisible() ? friend.getBirthday().format(DateTimeFormatter.ofPattern("MM-dd")) : BIRTHDAY_HIDDEN;
+        return FriendshipResponse.FriendInfoDto.builder()
+                .memberId(friend.getId())
+                .nickname(friend.getNickname())
+                .tag(friend.getTag())
+                .bio(friend.getBio())
+                .birthday(birthday)
+                .favoriteColorId(friend.getPalette().getId())
                 .build();
     }
 }

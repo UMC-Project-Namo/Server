@@ -11,7 +11,7 @@ public class FriendshipResponse {
 
     @Getter
     @Builder
-    public static class GetFriendRequestDto{
+    public static class FriendRequestListDto {
         List<FriendRequestDto> friendRequests;
         @Schema(description = "총 페이지 수", example = "5")
         private int totalPages;
@@ -46,7 +46,7 @@ public class FriendshipResponse {
 
     @Getter
     @Builder
-    public static class GetFriendListDto{
+    public static class FriendListDto {
         List<FriendInfoDto> friendList;
         @Schema(description = "총 페이지 수", example = "5")
         private int totalPages;
