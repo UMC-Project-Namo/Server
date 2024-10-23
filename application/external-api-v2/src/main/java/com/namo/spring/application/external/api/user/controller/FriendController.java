@@ -90,4 +90,12 @@ public class FriendController {
         return ResponseDto.onSuccess("친구 요청을 거절했습니다.");
     }
 
+    @Operation(summary = "내 친구 목록을 조회합니다.", description = "내 친구 리스트를 보는 API 입니다.")
+    @GetMapping("")
+    public ResponseDto<List<FriendshipResponse.FriendInfoDto>> getFriendList(
+            @AuthenticationPrincipal SecurityUserDetails member
+    ){
+        return ResponseDto.onSuccess(null);
+    }
+
 }

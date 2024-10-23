@@ -1,9 +1,5 @@
 package com.namo.spring.application.external.api.user.dto;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import lombok.Builder;
@@ -20,7 +16,7 @@ public class FriendshipResponse {
         private Long friendRequestId;
         @Schema(description = "친구 요청 유저 프로필 이미지", example = "https://static.namong.shop/resized/origin/member/image.png")
         private String profileImage;
-        @Schema(description = "친구 요청 유저 닉네임 ID", example = "2")
+        @Schema(description = "친구 요청 유저 닉네임", example = "캐슬")
         private String nickname;
         @Schema(description = "친구 요청 유저 태그", example = "1234")
         private String tag;
@@ -29,6 +25,23 @@ public class FriendshipResponse {
         @Schema(description = "친구 요청 유저 생일 (비공개 존재)", example = "02-22")
         private String birthday;
         @Schema(description = "친구 요청 유저 선호 색", example = "2")
+        private Long favoriteColorId;
+    }
+
+    @Getter
+    @Builder
+    public static class FriendInfoDto{
+        @Schema(description = "친구 memberID", example = "1")
+        private Long memberId;
+        @Schema(description = "친구 닉네임", example = "캐슬")
+        private String nickname;
+        @Schema(description = "친구 태그", example = "1234")
+        private String tag;
+        @Schema(description = "친구 한줄 소개", example = "3")
+        private String bio;
+        @Schema(description = "친구 생일 (비공개 존재)", example = "02-22")
+        private String birthday;
+        @Schema(description = "친구 선호 색", example = "2")
         private Long favoriteColorId;
     }
 }
