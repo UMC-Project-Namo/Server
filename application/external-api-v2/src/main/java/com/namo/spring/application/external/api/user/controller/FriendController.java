@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "8. 친구", description = "친구 관련 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/friends")
+@RequestMapping("/api/v2/friends")
 public class FriendController {
 
     private final FriendUseCase friendUseCase;
