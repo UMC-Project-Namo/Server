@@ -90,7 +90,8 @@ public class FriendController {
     }
 
     @Operation(summary = "내 친구 목록을 조회합니다. [20명씩 조회]", description = "내 친구 리스트를 보는 API 입니다. "
-            + "즐겨찾기에 등록된 친구가 가장 먼저 나오고, 그 후에 닉네임 사전 순으로 정렬됩니다. ")
+            + "즐겨찾기에 등록된 친구가 가장 먼저 나오고, 그 후에 닉네임 사전 순으로 정렬됩니다. "
+            + "검색 조건이 있는경우 search에 넣어 주세요 아닌경우 사용하지 않으셔도 됩니다.")
     @GetMapping("")
     public ResponseDto<FriendshipResponse.FriendListDto> getFriendList(
             @AuthenticationPrincipal SecurityUserDetails member,
