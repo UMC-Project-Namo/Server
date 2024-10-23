@@ -53,12 +53,8 @@ public class Friendship extends BaseTimeEntity {
         this.isFavorite = false;
     }
 
-    public void setFavorite() {
-        this.isFavorite = true;
-    }
-
-    public void setUnFavorite() {
-        this.isFavorite = false;
+    public void toggleFavorite() {
+        this.isFavorite = !isFavorite;
     }
 
     public void accept() {
