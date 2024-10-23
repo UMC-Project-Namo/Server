@@ -44,7 +44,7 @@ public class FriendshipService {
      * memberId(나)에서 시작한 친구 관계로 탐색
      */
     public Page<Friendship> readAllRequestFriendshipByStatus(Long memberId, FriendshipStatus status, Pageable pageable) {
-        return friendshipRepository.findAllByMemberIdAndStatus(memberId, status, pageable);
+        return friendshipRepository.findAllByMemberIdAndStatusFetchJoin(memberId, status, pageable);
     }
 
     public Optional<Friendship> readFriendshipByStatus(Long friendshipId, FriendshipStatus status){
