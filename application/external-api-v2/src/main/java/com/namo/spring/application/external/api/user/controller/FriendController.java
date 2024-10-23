@@ -94,7 +94,7 @@ public class FriendController {
     @GetMapping("")
     public ResponseDto<FriendshipResponse.FriendListDto> getFriendList(
             @AuthenticationPrincipal SecurityUserDetails member,
-            @Parameter(description = "1부터 시작하는 페이지 번호입니다. 20명씩 조회됩니다.", example = "3")
+            @Parameter(description = "1부터 시작하는 페이지 번호입니다. 20명씩 조회됩니다.", example = "1")
             @RequestParam(defaultValue = "1") int page
     ){
         return ResponseDto.onSuccess(friendUseCase
