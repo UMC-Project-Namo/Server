@@ -4,8 +4,10 @@ import com.namo.spring.application.external.api.user.dto.FriendshipResponse;
 import com.namo.spring.db.mysql.domains.user.entity.Friendship;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+
+import org.springframework.data.domain.Page;
 
 public class FriendshipConverter {
 
@@ -15,6 +17,19 @@ public class FriendshipConverter {
         return Friendship.builder()
                 .member(request)
                 .friend(target)
+                .build();
+    }
+
+    public static FriendshipResponse.GetFriendRequestDto toGetFriendRequestDto(Page<Friendship> friendships){
+        List<FriendshipResponse.FriendRequestDto> friendRequestDto = friendships.stream()
+                .map(FriendshipConverter::toFriendRequestDto)
+                .toList();
+        return FriendshipResponse.GetFriendRequestDto.builder()
+                .friendRequests(friendRequestDto)
+                .currentPage(friendships.getNumber()+1)
+                .pageSize(friendships.getSize())
+                .totalPages(friendships.getTotalPages())
+                .totalItems(friendships.getTotalElements())
                 .build();
     }
 

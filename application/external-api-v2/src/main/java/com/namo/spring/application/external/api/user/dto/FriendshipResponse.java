@@ -11,6 +11,20 @@ public class FriendshipResponse {
 
     @Getter
     @Builder
+    public static class GetFriendRequestDto{
+        List<FriendRequestDto> friendRequests;
+        @Schema(description = "총 페이지 수", example = "5")
+        private int totalPages;
+        @Schema(description = "현재 페이지 번호", example = "1")
+        private int currentPage;
+        @Schema(description = "한 페이지당 항목 수", example = "20")
+        private int pageSize;
+        @Schema(description = "전체 항목 수", example = "100")
+        private long totalItems;
+    }
+
+    @Getter
+    @Builder
     public static class FriendRequestDto{
         @Schema(description = "친구 요청 보낸 유저 ID", example = "4")
         private Long memberId;
