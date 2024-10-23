@@ -2,9 +2,6 @@ package com.namo.spring.application.external.api.user.controller;
 
 import static com.namo.spring.core.common.code.status.ErrorStatus.*;
 
-import java.awt.print.Pageable;
-import java.util.List;
-
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -52,7 +49,7 @@ public class FriendController {
 
     @Operation(summary = "나에게 온 친구 요청 목록을 조회합니다.", description = "친구 요청 목록 조회 API 입니다. 수락 또는 거절한 친구 요청은 표시되지 않습니다.")
     @GetMapping("/requests")
-    public ResponseDto<FriendshipResponse.GetFriendRequestDto> getFriendRequestList(
+    public ResponseDto<FriendshipResponse.FriendRequestListDto> getFriendRequestList(
             @AuthenticationPrincipal SecurityUserDetails member,
             @Parameter(description = "1 부터 시작하는 페이지 번호입니다 (기본값 1)", example = "1")
             @RequestParam(value = "page", defaultValue = "1") int page
@@ -91,13 +88,16 @@ public class FriendController {
         return ResponseDto.onSuccess("친구 요청을 거절했습니다.");
     }
 
-    @Operation(summary = "내 친구 목록을 조회합니다. [20명씩 조회]", description = "내 친구 리스트를 보는 API 입니다.")
+    @Operation(summary = "내 친구 목록을 조회합니다. [20명씩 조회]", description = "내 친구 리스트를 보는 API 입니다. "
+            + "즐겨찾기에 등록된 친구가 가장 먼저 나오고, 그 후에 최근 추가된 친구들이 조회됩니다. ")
     @GetMapping("")
-    public ResponseDto<FriendshipResponse.GetFriendListDto> getFriendList(
+    public ResponseDto<FriendshipResponse.FriendListDto> getFriendList(
             @AuthenticationPrincipal SecurityUserDetails member,
+            @Parameter(description = "1부터 시작하는 페이지 번호입니다. 20명씩 조회됩니다.", example = "3")
             @RequestParam(defaultValue = "1") int page
     ){
-        return ResponseDto.onSuccess(null);
+        return ResponseDto.onSuccess(friendUseCase
+                .getFriendList(member.getUserId(), page));
     }
 
 }
