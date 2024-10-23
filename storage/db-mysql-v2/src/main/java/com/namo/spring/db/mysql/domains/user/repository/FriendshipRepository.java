@@ -56,4 +56,11 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
             + "JOIN FETCH f.friend "
             + "WHERE f.member.id = :memberId AND f.status = :status")
     Page<Friendship> findAllByMemberIdAndStatusFetchJoin(@Param("memberId") Long memberId, @Param("status") FriendshipStatus status, Pageable pageable);
+
+    @Query("SELECT f FROM Friendship f "
+            + "JOIN FETCH f.friend "
+            + "WHERE f.member.id = :memberId AND f.status = :status "
+            + "AND (f.friend.name LIKE %:search% OR f.friend.nickname LIKE %:search%)")
+    Page<Friendship> findAllByMemberIdAndStatusAndSearch(@Param("memberId") Long memberId, @Param("status") FriendshipStatus status,
+            @Param("search") String search, Pageable pageable);
 }

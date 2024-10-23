@@ -16,6 +16,8 @@ import com.namo.spring.db.mysql.domains.user.type.FriendshipStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
+import io.micrometer.common.util.StringUtils;
+
 @DomainService
 @RequiredArgsConstructor
 public class FriendshipService {
@@ -42,8 +44,12 @@ public class FriendshipService {
 
     /**
      * memberId(나)에서 시작한 친구 관계로 탐색
+     * @return 검색어 있는 경우 // 검색어 없는 경우
      */
-    public Page<Friendship> readAllRequestFriendshipByStatus(Long memberId, FriendshipStatus status, Pageable pageable) {
+    public Page<Friendship> readAllRequestFriendshipByStatus(Long memberId, FriendshipStatus status, Pageable pageable, String search) {
+        if (!StringUtils.isBlank(search)) {
+            return friendshipRepository.findAllByMemberIdAndStatusAndSearch(memberId, status, search, pageable);
+        }
         return friendshipRepository.findAllByMemberIdAndStatusFetchJoin(memberId, status, pageable);
     }
 
