@@ -67,6 +67,7 @@ public class FriendshipConverter {
         String birthday = friend.isBirthdayVisible() ? friend.getBirthday().format(DateTimeFormatter.ofPattern("MM-dd")) : BIRTHDAY_HIDDEN;
         return FriendshipResponse.FriendInfoDto.builder()
                 .memberId(friend.getId())
+                .favoriteFriend(friendship.isFavorite())
                 .nickname(friend.getNickname())
                 .tag(friend.getTag())
                 .bio(friend.getBio())

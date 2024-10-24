@@ -63,6 +63,8 @@ public class FriendshipResponse {
     public static class FriendInfoDto{
         @Schema(description = "친구 memberID", example = "1")
         private Long memberId;
+        @Schema(description = "선호 친구 여부", example = "true or false")
+        private Boolean favoriteFriend;
         @Schema(description = "친구 닉네임", example = "캐슬")
         private String nickname;
         @Schema(description = "친구 태그", example = "1234")

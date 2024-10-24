@@ -52,7 +52,7 @@ public class FriendManageService {
      */
     public Page<Friendship> getReceivedFriendRequests(Long memberId, int page) {
         Pageable pageable = PageRequest.of(page - 1, REQUEST_PAGE_SIZE);
-        return friendshipService.readAllFriendshipByStatus(memberId, FriendshipStatus.PENDING, pageable);
+        return friendshipService.readAllReceivedFriendshipByStatus(memberId, FriendshipStatus.PENDING, pageable);
     }
 
     /**
@@ -110,14 +110,19 @@ public class FriendManageService {
 
     /**
      * 나의 친구 목록을 가져옵니다.
-     * !! 즐겨찾기에 등록된 친구가 가장 먼저 나오고, 그 후에 최근 추가된 친구들이 조회됩니다.
+     * !! 즐겨찾기에 등록된 친구가 가장 먼저 나오고, 그 후에 친구 닉네임 사전순으로 조회됩니다.
      * @param memberId
      * @param page
      * @return
      */
     public Page<Friendship> getAcceptedFriendship(Long memberId, int page) {
         Pageable pageable = PageRequest.of(page - 1, REQUEST_PAGE_SIZE,
-                Sort.by(Sort.Order.desc("isFavorite"), Sort.Order.desc("createdAt")));
-        return friendshipService.readAllFriendshipByStatus(memberId, FriendshipStatus.ACCEPTED, pageable);
+                Sort.by(Sort.Order.desc("isFavorite"), Sort.Order.asc("friend.nickname")));
+        return friendshipService.readAllRequestFriendshipByStatus(memberId, FriendshipStatus.ACCEPTED, pageable);
+    }
+
+    public Friendship getAcceptedFriendship(Long memberId, Long friendId){
+        return friendshipService.readFriendshipByStatus(memberId, friendId, FriendshipStatus.ACCEPTED)
+                .orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_FRIENDSHIP_FAILURE));
     }
 }

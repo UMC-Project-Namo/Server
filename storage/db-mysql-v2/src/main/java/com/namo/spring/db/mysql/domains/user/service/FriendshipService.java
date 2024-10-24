@@ -33,13 +33,28 @@ public class FriendshipService {
         return friendshipRepository.save(friendship);
     }
 
-    public Page<Friendship> readAllFriendshipByStatus(Long memberId, FriendshipStatus status, Pageable pageable) {
+    /**
+     * memberId(나)에게 도착한 친구 관계로 탐색
+     */
+    public Page<Friendship> readAllReceivedFriendshipByStatus(Long memberId, FriendshipStatus status, Pageable pageable) {
         return friendshipRepository.findAllByFriendIdAndStatus(memberId, status, pageable);
+    }
+
+    /**
+     * memberId(나)에서 시작한 친구 관계로 탐색
+     */
+    public Page<Friendship> readAllRequestFriendshipByStatus(Long memberId, FriendshipStatus status, Pageable pageable) {
+        return friendshipRepository.findAllByMemberIdAndStatusFetchJoin(memberId, status, pageable);
     }
 
     public Optional<Friendship> readFriendshipByStatus(Long friendshipId, FriendshipStatus status){
         return friendshipRepository.findByIdAndStatus(friendshipId, status);
     }
+
+    public Optional<Friendship> readFriendshipByStatus(Long memberId, Long friendId, FriendshipStatus status){
+        return friendshipRepository.findByMemberIdAndFriendIdAndStatus(memberId,friendId, status);
+    }
+
 
     public void delete(Friendship friendship) {
         friendshipRepository.delete(friendship);

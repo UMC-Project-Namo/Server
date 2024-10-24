@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import com.namo.spring.db.mysql.domains.user.dto.FriendBirthdayQuery;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.namo.spring.db.mysql.domains.user.entity.Friendship;
 import com.namo.spring.db.mysql.domains.user.type.FriendshipStatus;
@@ -49,4 +50,10 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
             LocalDate startDate,
             LocalDate endDate);
 
+    Optional<Friendship> findByMemberIdAndFriendIdAndStatus(Long memberId, Long friendId, FriendshipStatus status);
+
+    @Query("SELECT f FROM Friendship f "
+            + "JOIN FETCH f.friend "
+            + "WHERE f.member.id = :memberId AND f.status = :status")
+    Page<Friendship> findAllByMemberIdAndStatusFetchJoin(@Param("memberId") Long memberId, @Param("status") FriendshipStatus status, Pageable pageable);
 }
