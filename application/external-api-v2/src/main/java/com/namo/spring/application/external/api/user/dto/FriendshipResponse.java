@@ -30,9 +30,9 @@ public class FriendshipResponse {
         private Long memberId;
         @Schema(description = "친구요청 정보 ID", example = "2")
         private Long friendRequestId;
-        @Schema(description = "친구 요청 유저 프로필 이미지", example = "https://static.namong.shop/resized/origin/member/image.png")
+        @Schema(description = "친구 요청 유저 프로필 이미지", example = "https://static.namong.shop/resized/origin/user/profile/image.png")
         private String profileImage;
-        @Schema(description = "친구 요청 유저 닉네임", example = "캐슬")
+        @Schema(description = "친구 요청 유저 닉네임", example = "나몽")
         private String nickname;
         @Schema(description = "친구 요청 유저 태그", example = "1234")
         private String tag;
@@ -65,8 +65,12 @@ public class FriendshipResponse {
         private Long memberId;
         @Schema(description = "선호 친구 여부", example = "true or false")
         private Boolean favoriteFriend;
-        @Schema(description = "친구 닉네임", example = "캐슬")
+        @Schema(description = "친구 요청 유저 프로필 이미지", example = "https://static.namong.shop/resized/origin/user/profile/image.png")
+        private String profileImage;
+        @Schema(description = "친구 닉네임", example = "나몽")
         private String nickname;
+        @Schema(description = "친구 이름", example = "이무개")
+        private String name;
         @Schema(description = "친구 태그", example = "1234")
         private String tag;
         @Schema(description = "친구 한줄 소개", example = "3")

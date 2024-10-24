@@ -90,15 +90,18 @@ public class FriendController {
     }
 
     @Operation(summary = "내 친구 목록을 조회합니다. [20명씩 조회]", description = "내 친구 리스트를 보는 API 입니다. "
-            + "즐겨찾기에 등록된 친구가 가장 먼저 나오고, 그 후에 닉네임 사전 순으로 정렬됩니다. ")
+            + "즐겨찾기에 등록된 친구가 가장 먼저 나오고, 그 후에 닉네임 사전 순으로 정렬됩니다. "
+            + "검색 조건이 있는경우 search에 넣어 주세요 아닌경우 사용하지 않으셔도 됩니다.")
     @GetMapping("")
     public ResponseDto<FriendshipResponse.FriendListDto> getFriendList(
             @AuthenticationPrincipal SecurityUserDetails member,
             @Parameter(description = "1부터 시작하는 페이지 번호입니다. 20명씩 조회됩니다.", example = "1")
-            @RequestParam(defaultValue = "1") int page
+            @RequestParam(defaultValue = "1") int page,
+            @Parameter(description = "검색 기능 사용시에만 값을 넣어주세요 (닉네임 or 이름 사용가능)", example = "캐슬")
+            @RequestParam(required = false) String search
     ){
         return ResponseDto.onSuccess(friendUseCase
-                .getFriendList(member.getUserId(), page));
+                .getFriendList(member.getUserId(), page, search));
     }
 
     @Operation(summary = "친구 즐겨찾기 등록/해제", description = "특정 친구를 즐겨찾기에 등록하거나, 이미 등록되어 있다면 해제합니다.")

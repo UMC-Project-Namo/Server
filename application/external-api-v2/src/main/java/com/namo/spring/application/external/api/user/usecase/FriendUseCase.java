@@ -46,8 +46,8 @@ public class FriendUseCase {
     }
 
     @Transactional(readOnly = true)
-    public FriendshipResponse.FriendListDto getFriendList(Long userId, int page) {
-        Page<Friendship> friendships = friendManageService.getAcceptedFriendship(userId, page);
+    public FriendshipResponse.FriendListDto getFriendList(Long userId, int page, String search) {
+        Page<Friendship> friendships = friendManageService.getAcceptedFriendship(userId, page, search);
         return FriendshipConverter.toFriendListDto(friendships);
     }
 
