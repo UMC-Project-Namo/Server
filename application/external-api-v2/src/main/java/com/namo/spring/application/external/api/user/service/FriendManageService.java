@@ -1,6 +1,8 @@
 package com.namo.spring.application.external.api.user.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
@@ -122,5 +124,14 @@ public class FriendManageService {
     public Friendship getAcceptedFriendship(Long memberId, Long friendId){
         return friendshipService.readFriendshipByStatus(memberId, friendId, FriendshipStatus.ACCEPTED)
                 .orElseThrow(() -> new MemberException(ErrorStatus.NOT_FOUND_FRIENDSHIP_FAILURE));
+    }
+
+    /**
+     * 친구 관계는 양방향으로 생성되기 때문에 양방향 입력을 받아 삭제처리 합니다.
+     * @param target
+     * @param reversedTarget
+     */
+    public void deleteFriendShip(Friendship target, Friendship reversedTarget) {
+        friendshipService.deleteAll(Arrays.asList(target, reversedTarget));
     }
 }
