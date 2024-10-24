@@ -68,6 +68,7 @@ public class FriendshipConverter {
         return FriendshipResponse.FriendInfoDto.builder()
                 .memberId(friend.getId())
                 .favoriteFriend(friendship.isFavorite())
+                .profileImage(friend.getProfileImage())
                 .nickname(friend.getNickname())
                 .name(friend.getName())
                 .tag(friend.getTag())
