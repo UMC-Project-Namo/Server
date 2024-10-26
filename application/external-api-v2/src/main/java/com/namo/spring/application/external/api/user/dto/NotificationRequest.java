@@ -1,5 +1,6 @@
 package com.namo.spring.application.external.api.user.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,8 +14,11 @@ public class NotificationRequest {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class CreateDeviceInfoDto {
-        private String receiverDeviceType;
-        private String receiverDeviceToken;
-        private String receiverDeviceAgent;
+        @Schema(description = "기기 type, WEB / IOS / ANDROID")
+        private String deviceType;
+        @Schema(description = "기기 토큰")
+        private String deviceToken;
+        @Schema(description = "기기 상세 정보")
+        private String deviceAgent;
     }
 }
