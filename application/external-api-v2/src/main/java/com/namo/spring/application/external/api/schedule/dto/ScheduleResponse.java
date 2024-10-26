@@ -23,8 +23,10 @@ public class ScheduleResponse {
         private Long scheduleId;
         @Schema(description = "스케줄 제목입니다.", example = "코딩스터디")
         private String scheduleTitle;
-        @Schema(description = "스케줄 시작날짜입니다.")
+        @Schema(description = "스케줄 시작 날짜입니다.")
         private LocalDateTime scheduleStartDate;
+        @Schema(description = "스케줄 종료 날짜입니다.")
+        private LocalDateTime scheduleEndDate;
         private LocationInfoDto locationInfo;
         private CategoryInfoDto categoryInfo;
         private List<ParticipantInfoDto> participantInfo;
