@@ -167,6 +167,14 @@ public class Schedule extends BaseTimeEntity {
         return this.scheduleType == ScheduleType.MEETING.getValue();
     }
 
+    public boolean getIsPersonalSchedule(){
+        return this.scheduleType == ScheduleType.PERSONAL.getValue();
+    }
+
+    public boolean getIsBirthdaySchedule(){
+        return this.scheduleType == ScheduleType.BIRTHDAY.getValue();
+    }
+
     public int getStartDayOfMonth() {
         return this.getPeriod().getStartDate().getDayOfMonth();
     }
