@@ -23,6 +23,7 @@ public class ScheduleResponseConverter {
                 .scheduleId(schedule.getId())
                 .scheduleTitle(schedule.getTitle())
                 .scheduleStartDate(schedule.getPeriod().getStartDate())
+                .scheduleEndDate(schedule.getPeriod().getEndDate())
                 .locationInfo(LocationConverter.toLocationInfoDto(schedule.getLocation()))
                 .categoryInfo(toCategoryInfoDto(participant.getCategory()))
                 .participantCount(schedule.getParticipantCount())
