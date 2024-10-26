@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -53,10 +54,10 @@ public class NotificationManageService {
      * 일정 리마인더 알림 생성
      */
     public void createScheduleReminderNotification(Schedule schedule, Member member, List<String> triggers) {
-        List<LocalDateTime> reminderTimes = ReminderTimeUtils.toLocalDateTimes(schedule.getPeriod().getStartDate(),
+        Map<String, LocalDateTime> reminderMap = ReminderTimeUtils.toLocalDateTimeMap(schedule.getPeriod().getStartDate(),
                 triggers);
         List<Device> devices = getMobileDevices(member.getId());
-        notificationMaker.makeScheduleReminderNotifications(schedule, devices, reminderTimes);
+        notificationMaker.makeScheduleReminderNotifications(schedule, devices, reminderMap);
     }
 
     /**

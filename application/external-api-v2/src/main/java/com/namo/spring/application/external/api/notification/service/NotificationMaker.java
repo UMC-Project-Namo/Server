@@ -4,6 +4,7 @@ import static com.namo.spring.application.external.api.notification.converter.No
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
@@ -31,17 +32,26 @@ public class NotificationMaker {
     private final FcmJsonMessageBuilder fcmJsonMessageBuilder;
     private final NotificationMessageGenerator notificationMessageGenerator;
 
+    /**
+     * 일정 예정 알림 생성
+     *
+     * @param schedule
+     * @param devices
+     * @param remiderMap 일정 예정으로 부터 남은 시간 & 알림 시간 Map
+     */
     public void makeScheduleReminderNotifications(Schedule schedule, List<Device> devices,
-            List<LocalDateTime> reminderTimes) {
+                                                  Map<String, LocalDateTime> remiderMap) {
         List<Notification> newNotifications = devices.stream()
-                .flatMap(device -> reminderTimes.stream()
-                        .map(reminderTime -> {
+                .flatMap(device -> remiderMap.entrySet().stream()
+                        .map(entry -> {
                             try {
-                                String title = notificationMessageGenerator.getScheduleReminderTemplate(
-                                        ReminderTimeUtils.convertToString(schedule.getPeriod().getStartDate()),
-                                        schedule.getTitle());
-                                String body = "";
+                                String triggerTime = entry.getKey();
+                                String title = schedule.getTitle();
+                                String body = notificationMessageGenerator.getScheduleReminderMessageBody(
+                                        schedule.getTitle(),
+                                        ReminderTimeUtils.toViewTime(triggerTime));
                                 String message = makeFcmMessage(device, title, body);
+                                LocalDateTime reminderTime = entry.getValue();
                                 return toScheduleReminderNotification(message, device, schedule, reminderTime);
                             } catch (JsonProcessingException e) {
                                 throw new RuntimeException("JSON 메세지 에러 발생", e);
@@ -67,11 +77,17 @@ public class NotificationMaker {
         notificationService.createNotifications(newNotifications);
     }
 
-    public void makeFriendshipNotification(NotificationType type, Member publisher, List<Device> recieverDevices) throws
-            JsonProcessingException {
-        String message = notificationMessageGenerator.getFriendshipTemplate(type, publisher.getName());
+    public void makeFriendshipNotification(NotificationType type, Member publisher, List<Device> recieverDevices) {
+        String messageTitle = type.getType();
+        String messageBody = notificationMessageGenerator.getFriendshipMessageBody(type, publisher.getName());
         List<Notification> newNotifications = recieverDevices.stream()
-                .map(device -> toFriendshipNotification(message, type, publisher, device))
+                .map(device -> {
+                    try {
+                        return toFriendshipNotification(makeFcmMessage(device, messageTitle, messageBody), type, publisher, device);
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException("JSON 메세지 에러 발생", e);
+                    }
+                })
                 .collect(Collectors.toList());
         notificationService.createNotifications(newNotifications);
     }
