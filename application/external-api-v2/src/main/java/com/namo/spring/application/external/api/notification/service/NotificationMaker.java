@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.namo.spring.application.external.global.utils.ReminderTimeUtils;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.notification.entity.Device;
 import com.namo.spring.db.mysql.domains.notification.entity.Notification;
@@ -48,8 +47,7 @@ public class NotificationMaker {
                                 String triggerTime = entry.getKey();
                                 String title = schedule.getTitle();
                                 String body = notificationMessageGenerator.getScheduleReminderMessageBody(
-                                        schedule.getTitle(),
-                                        ReminderTimeUtils.toViewTime(triggerTime));
+                                        schedule.getTitle(), triggerTime);
                                 String message = makeFcmMessage(device, title, body);
                                 LocalDateTime reminderTime = entry.getValue();
                                 return toScheduleReminderNotification(message, device, schedule, reminderTime);

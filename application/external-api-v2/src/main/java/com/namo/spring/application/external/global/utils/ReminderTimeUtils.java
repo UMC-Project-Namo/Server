@@ -23,7 +23,7 @@ public class ReminderTimeUtils {
     public static Map<String, LocalDateTime> toLocalDateTimeMap(LocalDateTime baseTime, List<String> reminderTriggers) {
         Map<String, LocalDateTime> resultMap = new HashMap<>(reminderTriggers.size());
         for (String reminderTrigger : reminderTriggers) {
-            resultMap.put(toViewTime(reminderTrigger),
+            resultMap.put(reminderTrigger,
                     reminderTrigger.equals(SCHEDULED_TIME_TRIGGER)
                             ? baseTime
                             : baseTime.minusMinutes(toMinutes(reminderTrigger)));
@@ -60,10 +60,8 @@ public class ReminderTimeUtils {
         if (trigger == null || trigger.length() < 2) {
             throw new IllegalArgumentException("길이가 너무 짧아 형식에 맞지 않습니다.");
         }
-
         char unit = trigger.charAt(0);
         int value = Integer.parseInt(trigger.substring(1));
-
         return switch (unit) {
             case 'M' -> value;
             case 'H' -> value * 60;

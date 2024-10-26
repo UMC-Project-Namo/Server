@@ -15,12 +15,6 @@ import lombok.NoArgsConstructor;
 public class ReminderTimeConfig {
 
     /**
-     * 알림 메세지를 위해 시간을 "HH:mm" 형식으로 포맷팅하기 위한 DateTimeFormatter입니다.
-     * 예: "14:30"
-     */
-    public static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
-
-    /**
      * 정시 알림을 나타내는 트리거 값으로, 고정 값입니다.
      * 이 값은 다른 시간 트리거(예: "M30", "H1" 등)과 구분하기 위해 사용됩니다.
      */

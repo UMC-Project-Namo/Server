@@ -22,7 +22,6 @@ public class ReminderTimesValidator implements ConstraintValidator<ValidReminder
             return true;
         }
         for (String reminderTime : reminderTimes) {
-            boolean isValid;
             if (!reminderTime.equals(SCHEDULED_TIME_TRIGGER) && !REMINDER_TRIGGER_PATTERN.matcher(reminderTime)
                     .matches()) {
                 return false;
