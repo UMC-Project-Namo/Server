@@ -2,9 +2,11 @@ package com.namo.spring.application.external.api.record.converter;
 
 import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.TreeSet;
 
 import com.namo.spring.application.external.api.record.dto.DiaryResponse;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
@@ -73,21 +75,24 @@ public class DiaryResponseConverter {
     }
 
     public static DiaryResponse.DiaryExistDateDto toDiaryExistDateDto(List<Participant> participants, YearMonth yearMonth) {
-        List<Integer> diaryForPersonal = new ArrayList<>();
-        List<Integer> diaryForMeeting = new ArrayList<>();
+        var datesByType = new EnumMap<ScheduleType, Set<Integer>>(ScheduleType.class);
         participants.forEach(participant -> {
-            int dayOfMonth = participant.getSchedule().getStartDayOfMonth();
-            if (participant.getSchedule().getScheduleType() ==  ScheduleType.PERSONAL.getValue()) {
-                diaryForPersonal.add(dayOfMonth);
-            } else if (participant.getSchedule().getScheduleType() == ScheduleType.MEETING.getValue()) {
-                diaryForMeeting.add(dayOfMonth);
+            var schedule = participant.getSchedule();
+            var day = schedule.getStartDayOfMonth();
+            if (schedule.getIsPersonalSchedule()) {
+                datesByType.computeIfAbsent(ScheduleType.PERSONAL, k -> new TreeSet<>()).add(day);
+            } else if (schedule.getIsMeetingSchedule()) {
+                datesByType.computeIfAbsent(ScheduleType.MEETING, k -> new TreeSet<>()).add(day);
+            } else if (schedule.getIsBirthdaySchedule()) {
+                datesByType.computeIfAbsent(ScheduleType.BIRTHDAY, k -> new TreeSet<>()).add(day);
             }
         });
         return DiaryResponse.DiaryExistDateDto.builder()
                 .year(yearMonth.getYear())
                 .month(yearMonth.getMonth().getValue())
-                .DiaryDateForPersonal(diaryForPersonal.stream().distinct().sorted().collect(Collectors.toList()))
-                .DiaryDateForMeeting(diaryForMeeting.stream().distinct().sorted().collect(Collectors.toList()))
+                .DiaryDateForPersonal(new ArrayList<>(datesByType.getOrDefault(ScheduleType.PERSONAL, Collections.emptySet())))
+                .DiaryDateForMeeting(new ArrayList<>(datesByType.getOrDefault(ScheduleType.MEETING, Collections.emptySet())))
+                .DiaryDateForBirthday(new ArrayList<>(datesByType.getOrDefault(ScheduleType.BIRTHDAY, Collections.emptySet())))
                 .build();
     }
 
