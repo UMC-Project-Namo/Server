@@ -42,6 +42,7 @@ public enum ErrorStatus implements BaseErrorCode {
     CATEGORY_IN_USE_FAILURE(HttpStatus.BAD_REQUEST, "사용중인 카테고리는 삭제할 수 없습니다."),
     INVALID_NICKNAME_TAG_FORMAT(HttpStatus.BAD_REQUEST, "잘못된 닉네임#태그형식입니다."),
     INVALID_TAG_FORMAT(HttpStatus.BAD_REQUEST, "잘못된 태그 형식입니다."),
+    INVALID_DEVICE_TYPE(HttpStatus.BAD_REQUEST, "잘못된 기기 유형입니다"),
 
     /**
      * 401 : 소셜 로그인 오류
