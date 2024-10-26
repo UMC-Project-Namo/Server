@@ -17,8 +17,13 @@ public enum ReceiverDeviceType implements CodedEnum {
     private final String type;
 
     @JsonCreator
-    public ReceiverDeviceType fromString(String type) {
-        return valueOf(type.toUpperCase());
+    public static ReceiverDeviceType fromString(String value) {
+        for (ReceiverDeviceType deviceType : values()) {
+            if (deviceType.code.equals(value) || deviceType.type.equalsIgnoreCase(value) || deviceType.name().equalsIgnoreCase(value)) {
+                return deviceType;
+            }
+        }
+        return null;
     }
 
     @Override

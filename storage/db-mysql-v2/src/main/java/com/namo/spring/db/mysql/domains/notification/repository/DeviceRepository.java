@@ -14,4 +14,6 @@ public interface DeviceRepository extends JpaRepository<Device, Long> {
 
     List<Device> findAllByMemberIdIn(List<Long> memberId);
 
+    Optional<Device> findByReceiverDeviceTokenAndMemberId(String receiverDeviceToken, Long memberId);
+
 }
