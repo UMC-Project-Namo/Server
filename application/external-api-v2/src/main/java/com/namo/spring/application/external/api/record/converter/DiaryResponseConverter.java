@@ -1,7 +1,9 @@
 package com.namo.spring.application.external.api.record.converter;
 
 import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.namo.spring.application.external.api.record.dto.DiaryResponse;
@@ -10,6 +12,7 @@ import com.namo.spring.db.mysql.domains.record.entity.Diary;
 import com.namo.spring.db.mysql.domains.record.entity.DiaryImage;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
+import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 
 public class DiaryResponseConverter {
 
@@ -69,19 +72,22 @@ public class DiaryResponseConverter {
                 .build();
     }
 
-    public static DiaryResponse.DiaryExistDateDto toDiaryExistDateDto(List<Participant> participants,
-            YearMonth yearMonth) {
+    public static DiaryResponse.DiaryExistDateDto toDiaryExistDateDto(List<Participant> participants, YearMonth yearMonth) {
+        List<Integer> diaryForPersonal = new ArrayList<>();
+        List<Integer> diaryForMeeting = new ArrayList<>();
+        participants.forEach(participant -> {
+            int dayOfMonth = participant.getSchedule().getStartDayOfMonth();
+            if (participant.getSchedule().getScheduleType() ==  ScheduleType.PERSONAL.getValue()) {
+                diaryForPersonal.add(dayOfMonth);
+            } else if (participant.getSchedule().getScheduleType() == ScheduleType.MEETING.getValue()) {
+                diaryForMeeting.add(dayOfMonth);
+            }
+        });
         return DiaryResponse.DiaryExistDateDto.builder()
                 .year(yearMonth.getYear())
                 .month(yearMonth.getMonth().getValue())
-                .dates(participants.stream()
-                        .map(participant -> participant.getSchedule()
-                                .getPeriod()
-                                .getStartDate()
-                                .getDayOfMonth()) // 날짜만 추출
-                        .distinct() // 중복 제거 (만약 중복된 날짜가 있을 경우)
-                        .sorted()
-                        .collect(Collectors.toList()))
+                .DiaryDateForPersonal(diaryForPersonal.stream().distinct().sorted().collect(Collectors.toList()))
+                .DiaryDateForMeeting(diaryForMeeting.stream().distinct().sorted().collect(Collectors.toList()))
                 .build();
     }
 
