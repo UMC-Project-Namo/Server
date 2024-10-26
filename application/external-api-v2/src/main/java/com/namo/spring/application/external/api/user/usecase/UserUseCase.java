@@ -41,7 +41,7 @@ public class UserUseCase {
     }
 
     @Transactional
-    public void updateNotificationEnabled(Long deviceId, boolean request, Long memberId) {
+    public void updateNotificationEnabled(boolean request, Long memberId) {
         Member target = memberManageService.getActiveMember(memberId);
         notificationManageService.updateNotificationSetting(request, target);
     }
