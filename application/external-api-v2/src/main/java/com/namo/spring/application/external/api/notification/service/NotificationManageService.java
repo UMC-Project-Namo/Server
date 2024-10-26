@@ -88,7 +88,7 @@ public class NotificationManageService {
      * 기기 정보 등록 및 푸시 알림 활성화
      */
     public void createDeviceInfoAndNotificationEnabled(NotificationRequest.CreateDeviceInfoDto request, ReceiverDeviceType deviceType, Member member) {
-        Device device = DeviceConverter.toEnabledDevice(request, deviceType, member);
+        Device device = DeviceConverter.toDevice(request, deviceType, member);
         deviceService.createDevice(device);
     }
 

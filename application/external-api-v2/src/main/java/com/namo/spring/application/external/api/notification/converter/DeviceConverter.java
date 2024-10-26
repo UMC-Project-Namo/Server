@@ -10,8 +10,8 @@ public class DeviceConverter {
         return Device.builder()
                 .member(member)
                 .receiverDeviceType(deviceType)
-                .receiverDeviceToken(request.getReceiverDeviceToken())
-                .receiverDeviceAgent(request.getReceiverDeviceAgent())
+                .receiverDeviceToken(request.getDeviceToken())
+                .receiverDeviceAgent(request.getDeviceAgent())
                 .build();
     }
 
