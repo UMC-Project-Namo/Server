@@ -86,8 +86,12 @@ public class DiaryResponse {
     public static class DiaryExistDateDto {
         private int year;
         private int month;
-        @Schema(description = "일기가 존재하는 날짜", example = "1, 2, 3")
-        private List<Integer> dates;
+        @Schema(description = "개인 스케줄에 대한 일기가 존재하는 날짜", example = "1, 2, 3")
+        private List<Integer> DiaryDateForPersonal;
+        @Schema(description = "모임 스케줄에 대한 일기가 존재하는 날짜", example = "2, 3, 6")
+        private List<Integer> DiaryDateForMeeting;
+        @Schema(description = "생일 스케줄에 대한 일기가 존재하는 날짜", example = "22")
+        private List<Integer> DiaryDateForBirthday;
     }
 
     @Builder

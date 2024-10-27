@@ -1,8 +1,12 @@
 package com.namo.spring.application.external.api.record.converter;
 
 import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
+import java.util.TreeSet;
 
 import com.namo.spring.application.external.api.record.dto.DiaryResponse;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
@@ -10,6 +14,7 @@ import com.namo.spring.db.mysql.domains.record.entity.Diary;
 import com.namo.spring.db.mysql.domains.record.entity.DiaryImage;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
+import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 
 public class DiaryResponseConverter {
 
@@ -69,19 +74,25 @@ public class DiaryResponseConverter {
                 .build();
     }
 
-    public static DiaryResponse.DiaryExistDateDto toDiaryExistDateDto(List<Participant> participants,
-            YearMonth yearMonth) {
+    public static DiaryResponse.DiaryExistDateDto toDiaryExistDateDto(List<Participant> participants, YearMonth yearMonth) {
+        var datesByType = new EnumMap<ScheduleType, Set<Integer>>(ScheduleType.class);
+        participants.forEach(participant -> {
+            var schedule = participant.getSchedule();
+            var day = schedule.getStartDayOfMonth();
+            if (schedule.getIsPersonalSchedule()) {
+                datesByType.computeIfAbsent(ScheduleType.PERSONAL, k -> new TreeSet<>()).add(day);
+            } else if (schedule.getIsMeetingSchedule()) {
+                datesByType.computeIfAbsent(ScheduleType.MEETING, k -> new TreeSet<>()).add(day);
+            } else if (schedule.getIsBirthdaySchedule()) {
+                datesByType.computeIfAbsent(ScheduleType.BIRTHDAY, k -> new TreeSet<>()).add(day);
+            }
+        });
         return DiaryResponse.DiaryExistDateDto.builder()
                 .year(yearMonth.getYear())
                 .month(yearMonth.getMonth().getValue())
-                .dates(participants.stream()
-                        .map(participant -> participant.getSchedule()
-                                .getPeriod()
-                                .getStartDate()
-                                .getDayOfMonth()) // 날짜만 추출
-                        .distinct() // 중복 제거 (만약 중복된 날짜가 있을 경우)
-                        .sorted()
-                        .collect(Collectors.toList()))
+                .DiaryDateForPersonal(new ArrayList<>(datesByType.getOrDefault(ScheduleType.PERSONAL, Collections.emptySet())))
+                .DiaryDateForMeeting(new ArrayList<>(datesByType.getOrDefault(ScheduleType.MEETING, Collections.emptySet())))
+                .DiaryDateForBirthday(new ArrayList<>(datesByType.getOrDefault(ScheduleType.BIRTHDAY, Collections.emptySet())))
                 .build();
     }
 
