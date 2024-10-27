@@ -3,6 +3,7 @@ package com.namo.spring.db.mysql.domains.notification.service;
 import com.namo.spring.core.common.annotation.DomainService;
 import com.namo.spring.db.mysql.domains.notification.entity.Device;
 import com.namo.spring.db.mysql.domains.notification.repository.DeviceRepository;
+import com.namo.spring.db.mysql.domains.notification.type.ReceiverDeviceType;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -29,8 +30,8 @@ public class DeviceService {
         deviceRepository.save(device);
     }
 
-    public Optional<Device> readDeviceByTokenAndMemberId(String token, Long memberId) {
-        return deviceRepository.findByReceiverDeviceTokenAndMemberId(token, memberId);
+    public Optional<Device> readDeviceByTokenAndMemberId(ReceiverDeviceType deviceType, String token, Long memberId) {
+        return deviceRepository.findByReceiverDeviceTypeAndReceiverDeviceTokenAndMemberId(deviceType, token, memberId);
     }
 
 
