@@ -2,8 +2,8 @@ package com.namo.spring.application.external.api.user.controller;
 
 import static com.namo.spring.core.common.code.status.ErrorStatus.*;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -114,5 +114,19 @@ public class FriendController {
         boolean isFavorite = friendUseCase.toggleFavorite(member.getUserId(), friendId);
         String message = isFavorite ? "친구를 즐겨찾기에 등록했습니다." : "친구를 즐겨찾기에서 해제했습니다.";
         return ResponseDto.onSuccess(message);
+    }
+
+    @Operation(summary = "친구 삭제", description = "특정 친구를 삭제합니다.")
+    @ApiErrorCodes(value = {
+            NOT_FOUND_FRIENDSHIP_FAILURE,
+    })
+    @DeleteMapping("/{friendId}")
+    public ResponseDto<String> deleteFriend(
+            @AuthenticationPrincipal SecurityUserDetails member,
+            @Parameter(description = "삭제할 친구의 memberId를 입력해주세요", example = "1")
+            @PathVariable Long friendId
+    ){
+        friendUseCase.deleteFriend(member.getUserId(), friendId);
+        return ResponseDto.onSuccess("친구 삭제 완료");
     }
 }

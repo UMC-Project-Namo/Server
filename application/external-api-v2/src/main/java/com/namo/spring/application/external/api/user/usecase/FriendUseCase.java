@@ -57,4 +57,11 @@ public class FriendUseCase {
         friendship.toggleFavorite();
         return friendship.isFavorite();
     }
+
+    @Transactional
+    public void deleteFriend(Long memberId, Long friendId) {
+        Friendship target = friendManageService.getAcceptedFriendship(memberId, friendId);
+        Friendship reversedTarget = friendManageService.getAcceptedFriendship(friendId, memberId);
+        friendManageService.deleteFriendShip(target, reversedTarget);
+    }
 }

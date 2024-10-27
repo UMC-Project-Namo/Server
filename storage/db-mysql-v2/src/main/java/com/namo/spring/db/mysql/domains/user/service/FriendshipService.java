@@ -66,6 +66,10 @@ public class FriendshipService {
         friendshipRepository.delete(friendship);
     }
 
+    public void deleteAll(List<Friendship> friendships){
+        friendshipRepository.deleteAll(friendships);
+    }
+
     /**
      * startDate부터 endDate까지의 날짜가 생일인
      * 친구의 정보와 생일을 조회합니다.
