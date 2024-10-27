@@ -47,9 +47,9 @@ public class UserUseCase {
     }
 
     @Transactional(readOnly = true)
-    public NotificationResponse.GetNotificationSettingInfoDto getNotificationSettingInfo(String deviceToken, Long memberId){
+    public NotificationResponse.GetNotificationSettingInfoDto getNotificationSettingInfo(ReceiverDeviceType deviceType, String deviceToken, Long memberId){
         Member target = memberManageService.getActiveMember(memberId);
-        Device device = notificationManageService.getNotificationSettingInfo(deviceToken, target.getId());
+        Device device = notificationManageService.getNotificationSettingInfo(deviceType, deviceToken, target.getId());
         return toGetNotificationSettingInfoDto(target, device);
     }
 }

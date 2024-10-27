@@ -96,9 +96,8 @@ public class NotificationManageService {
     /**
      * 유저의 푸시 알림 설정 정보 조회
      */
-    public Device getNotificationSettingInfo(String deviceToken, Long memberId) {
-        return deviceService.readDeviceByTokenAndMemberId(deviceToken, memberId)
-                .orElseThrow(() -> new NotificationException(ErrorStatus.NOT_FOUND_MOBILE_DEVICE_FAILURE));
+    public Device getNotificationSettingInfo(ReceiverDeviceType deviceType, String deviceToken, Long memberId) {
+        return deviceService.readDeviceByTokenAndMemberId(deviceType, deviceToken, memberId).orElse(null);
     }
 
     public void updateNotificationSetting(boolean request, Member member) {
