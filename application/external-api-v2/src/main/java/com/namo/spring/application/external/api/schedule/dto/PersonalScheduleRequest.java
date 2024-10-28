@@ -58,8 +58,7 @@ public class PersonalScheduleRequest {
         @NotNull(message = "기간 입력은 필수 입니다. 수정 사항이 없을 시 원본 값을 전송합니다.")
         @Schema(description = "기간, 수정 사항이 없을 시 원본 값을 전송합니다.")
         private MeetingScheduleRequest.PeriodDto period;
-        @NotNull(message = "수정 사항이 없을 경우 empty object를 전송합니다.")
-        @Schema(description = "카카오 맵 장소 정보, 수정 사항이 없을 시 원본 값을 전송합니다.(원래 값이 없을 경우 empty object)")
+        @Schema(description = "카카오 맵 장소 정보, 수정 사항이 없을 시 원본 값을 전송합니다.")
         private MeetingScheduleRequest.LocationDto location;
     }
 

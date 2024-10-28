@@ -1,27 +1,38 @@
 package com.namo.spring.db.mysql.domains.notification.service;
 
-import java.util.List;
-
-import org.springframework.transaction.annotation.Transactional;
-
 import com.namo.spring.core.common.annotation.DomainService;
 import com.namo.spring.db.mysql.domains.notification.entity.Device;
 import com.namo.spring.db.mysql.domains.notification.repository.DeviceRepository;
-
+import com.namo.spring.db.mysql.domains.notification.type.ReceiverDeviceType;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+import java.util.Optional;
 
 @DomainService
 @RequiredArgsConstructor
 public class DeviceService {
     private final DeviceRepository deviceRepository;
 
-    @Transactional(readOnly = true)
+    public Optional<Device> readById(Long id) {
+        return deviceRepository.findById(id);
+    }
+
     public List<Device> readByMemberId(Long memberId) {
         return deviceRepository.findAllByMemberId(memberId);
     }
 
-    @Transactional(readOnly = true)
     public List<Device> readByMemberIds(List<Long> memberIds) {
         return deviceRepository.findAllByMemberIdIn(memberIds);
     }
+
+    public void createDevice(Device device) {
+        deviceRepository.save(device);
+    }
+
+    public Optional<Device> readDeviceByTokenAndMemberId(ReceiverDeviceType deviceType, String token, Long memberId) {
+        return deviceRepository.findByReceiverDeviceTypeAndReceiverDeviceTokenAndMemberId(deviceType, token, memberId);
+    }
+
+
 }

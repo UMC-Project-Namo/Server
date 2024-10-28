@@ -4,20 +4,47 @@ import static com.namo.spring.application.external.global.config.properties.Remi
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 public class ReminderTimeUtils {
 
-    public static List<LocalDateTime> toLocalDateTimes(LocalDateTime baseTime, List<String> reminderTriggers) {
-        return reminderTriggers.stream()
-                .map(reminderTime -> {
-                    if (reminderTime.equals(SCHEDULED_TIME_TRIGGER))
-                        return baseTime;
-                    else
-                        return baseTime.minusMinutes(toMinutes(reminderTime));
-                })
-                .collect(Collectors.toList());
+    private static final String MINUTE_PREFIX = "M";
+    private static final String HOUR_PREFIX = "H";
+    private static final String DAY_PREFIX = "D";
+
+    /**
+     * 일정 시작 시간과 알림 트리거 목록을 기반으로 알림 시간 맵을 반환합니다.
+     *
+     * @param baseTime 일정 시작 시감
+     * @param reminderTriggers 알림 트리거 문자열 목록.
+     * @return 각 트리거 문자열을 키로, 계산된 알림 시간을 값으로 하는 Map.
+     *         키가 SCHEDULED_TIME_TRIGGER인 경우 값은 baseTime과 동일함.
+     *         그 외의 경우, 값은 baseTime에서 해당 트리거 시간만큼 뺀 시간.
+     *
+     */
+    public static Map<String, LocalDateTime> toLocalDateTimeMap(LocalDateTime baseTime, List<String> reminderTriggers) {
+        Map<String, LocalDateTime> resultMap = new HashMap<>(reminderTriggers.size());
+        for (String reminderTrigger : reminderTriggers) {
+            resultMap.put(reminderTrigger,
+                    reminderTrigger.equals(SCHEDULED_TIME_TRIGGER)
+                            ? baseTime
+                            : baseTime.minusMinutes(toMinutes(reminderTrigger)));
+        }
+        return resultMap;
+    }
+
+    public static String toViewTime(String trigger) {
+        String unit = trigger.substring(0,1);
+        int value = Integer.parseInt(trigger.substring(1));
+
+        return switch (unit) {
+            case MINUTE_PREFIX -> value+"분";
+            case HOUR_PREFIX -> value+"시간";
+            case DAY_PREFIX -> value+"일";
+            default -> throw new IllegalArgumentException("유효하지 않은 시간 단위입니다. 'M', 'H', 'D' 중 하나여야 합니다");
+        };
     }
 
     /**
@@ -37,14 +64,12 @@ public class ReminderTimeUtils {
         if (trigger == null || trigger.length() < 2) {
             throw new IllegalArgumentException("길이가 너무 짧아 형식에 맞지 않습니다.");
         }
-
-        char unit = trigger.charAt(0);
+        String unit = trigger.substring(0,1);
         int value = Integer.parseInt(trigger.substring(1));
-
         return switch (unit) {
-            case 'M' -> value;
-            case 'H' -> value * 60;
-            case 'D' -> value * 24 * 60;
+            case MINUTE_PREFIX -> value;
+            case HOUR_PREFIX -> value * 60;
+            case DAY_PREFIX -> value * 24 * 60;
             default -> throw new IllegalArgumentException("유효하지 않은 시간 단위입니다. 'M', 'H', 'D' 중 하나여야 합니다");
         };
     }
@@ -66,24 +91,14 @@ public class ReminderTimeUtils {
         long minutes = ChronoUnit.MINUTES.between(reminderTime, baseTime);
 
         if (minutes < 60) {
-            return "M" + minutes;
+            return MINUTE_PREFIX + minutes;
         } else if (minutes < 24 * 60) {
             long hours = minutes / 60;
-            return "H" + hours;
+            return HOUR_PREFIX + hours;
         } else {
             long days = minutes / (24 * 60);
-            return "D" + days;
+            return DAY_PREFIX + days;
         }
-    }
-
-    /**
-     * LocalDateTime에서 시간과 분을 추출하여 "HH:mm" 형식의 문자열로 반환합니다.
-     *
-     * @param dateTime 파싱할 LocalDateTime 객체
-     * @return "HH:mm" 형식의 시간 문자열
-     */
-    public static String convertToString(LocalDateTime dateTime) {
-        return dateTime.format(TIME_FORMATTER);
     }
 
 }

@@ -108,6 +108,10 @@ public class Member extends BaseTimeEntity implements User {
     @JoinColumn(name = "palette_id")
     private Palette palette;
 
+
+    @Column(nullable = false)
+    private boolean notificationEnabled;
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Friendship> friendships = new HashSet<>();
 
@@ -180,5 +184,9 @@ public class Member extends BaseTimeEntity implements User {
 
     public void updatePalette(Palette palette){
         this.palette = palette;
+    }
+
+    public void updateNotificationEnabled(boolean notificationEnabled){
+        this.notificationEnabled = notificationEnabled;
     }
 }
