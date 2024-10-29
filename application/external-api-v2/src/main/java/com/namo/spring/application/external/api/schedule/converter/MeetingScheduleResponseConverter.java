@@ -34,6 +34,7 @@ public class MeetingScheduleResponseConverter {
                 .imageUrl(schedule.getImageUrl())
                 .participantCount(schedule.getParticipantCount())
                 .participantNicknames(schedule.getParticipantNicknames())
+                .hasDiary(schedule.isHasDiary())
                 .build();
 
     }

@@ -19,7 +19,7 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
     List<Participant> findAllByScheduleId(Long scheduleId);
 
     @Query("SELECT new com.namo.spring.db.mysql.domains.schedule.dto.ScheduleSummaryQuery(" +
-            "s.id, p.customTitle, s.period.startDate, p.customImage, s.participantCount, s.participantNicknames) " +
+            "s.id, p.customTitle, s.period.startDate, p.customImage, s.participantCount, s.participantNicknames, p.hasDiary) " +
             "FROM Participant p JOIN p.schedule s JOIN p.member m " +
             "WHERE p.member.id = :memberId " +
             "AND s.scheduleType = :scheduleType")

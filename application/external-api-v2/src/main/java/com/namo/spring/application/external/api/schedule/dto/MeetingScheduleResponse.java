@@ -32,6 +32,8 @@ public class MeetingScheduleResponse {
         private Integer participantCount;
         @Schema(description = "모임 일정 참여자 이름", example = "뚜뚜, 코코아, 다나, 캐슬, 짱구, 연현, 램프, 반디, 유즈")
         private String participantNicknames;
+        @Schema(description = "기록 작성 여부")
+        private boolean hasDiary;
     }
 
     @AllArgsConstructor
