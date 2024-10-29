@@ -2,6 +2,8 @@ package com.namo.spring.application.external.api.user.controller;
 
 import static com.namo.spring.core.common.code.status.ErrorStatus.*;
 
+import java.util.List;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.namo.spring.application.external.api.user.dto.FriendCategoryResponse;
 import com.namo.spring.application.external.api.user.dto.FriendshipResponse;
 import com.namo.spring.application.external.api.user.usecase.FriendUseCase;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
@@ -128,5 +131,14 @@ public class FriendController {
     ){
         friendUseCase.deleteFriend(member.getUserId(), friendId);
         return ResponseDto.onSuccess("친구 삭제 완료");
+    }
+
+    @GetMapping("/{friendId}/categories")
+    public ResponseDto<List<FriendCategoryResponse.CategoryInfoDto>> getFriendCategories(
+            @AuthenticationPrincipal SecurityUserDetails member,
+            @Parameter(description = "카테고리를 조회 할 친구의 memberId를 입력해주세요", example = "1")
+            @PathVariable Long friendId
+    ){
+        return ResponseDto.onSuccess(null);
     }
 }
