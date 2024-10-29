@@ -2,6 +2,8 @@ package com.namo.spring.application.external.api.user.controller;
 
 import static com.namo.spring.core.common.code.status.ErrorStatus.*;
 
+import java.util.List;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.namo.spring.application.external.api.user.dto.FriendCategoryResponse;
 import com.namo.spring.application.external.api.user.dto.FriendshipResponse;
 import com.namo.spring.application.external.api.user.usecase.FriendUseCase;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
@@ -89,9 +92,10 @@ public class FriendController {
         return ResponseDto.onSuccess("친구 요청을 거절했습니다.");
     }
 
-    @Operation(summary = "내 친구 목록을 조회합니다. [20명씩 조회]", description = "내 친구 리스트를 보는 API 입니다. "
-            + "즐겨찾기에 등록된 친구가 가장 먼저 나오고, 그 후에 닉네임 사전 순으로 정렬됩니다. "
-            + "검색 조건이 있는경우 search에 넣어 주세요 아닌경우 사용하지 않으셔도 됩니다.")
+    @Operation(summary = "내 친구 목록을 조회합니다. [20명씩 조회]", description = """
+            내 친구 리스트를 보는 API 입니다.\s
+            즐겨찾기에 등록된 친구가 가장 먼저 나오고, 그 후에 닉네임 사전 순으로 정렬됩니다.\s
+            검색 조건이 있는경우 search에 넣어 주세요 아닌경우 사용하지 않으셔도 됩니다.""")
     @GetMapping("")
     public ResponseDto<FriendshipResponse.FriendListDto> getFriendList(
             @AuthenticationPrincipal SecurityUserDetails member,
@@ -128,5 +132,19 @@ public class FriendController {
     ){
         friendUseCase.deleteFriend(member.getUserId(), friendId);
         return ResponseDto.onSuccess("친구 삭제 완료");
+    }
+
+    @Operation(summary = "친구의 스케줄 카테고리 정보를 조회", description = "친구가 등록한 카테고리를 조회합니다(공개된 카테고리만 조회됩니다) \n 친구가 아닌경우 조회할 수 없습니다.")
+    @ApiErrorCodes(value = {
+            NOT_FOUND_FRIENDSHIP_FAILURE,
+    })
+    @GetMapping("/{friendId}/categories")
+    public ResponseDto<List<FriendCategoryResponse.CategoryInfoDto>> getFriendCategories(
+            @AuthenticationPrincipal SecurityUserDetails member,
+            @Parameter(description = "카테고리를 조회 할 친구의 memberId를 입력해주세요", example = "1")
+            @PathVariable Long friendId
+    ){
+        return ResponseDto.onSuccess(friendUseCase
+                .getFriendCategories(member.getUserId(), friendId));
     }
 }
