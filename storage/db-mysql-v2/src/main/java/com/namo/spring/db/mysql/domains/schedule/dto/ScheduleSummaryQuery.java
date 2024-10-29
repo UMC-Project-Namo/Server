@@ -16,4 +16,5 @@ public class ScheduleSummaryQuery {
     private String imageUrl;
     private Integer participantCount;
     private String participantNicknames;
+    private boolean hasDiary;
 }
