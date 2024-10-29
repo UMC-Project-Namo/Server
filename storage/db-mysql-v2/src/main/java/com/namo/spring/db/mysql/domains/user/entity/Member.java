@@ -108,6 +108,8 @@ public class Member extends BaseTimeEntity implements User {
     @JoinColumn(name = "palette_id")
     private Palette palette;
 
+    @Column(name = "sign_up_at")
+    private LocalDateTime signUpAt;
 
     @Column(nullable = false)
     private boolean notificationEnabled;
@@ -180,6 +182,7 @@ public class Member extends BaseTimeEntity implements User {
         this.palette = palette;
         this.status = MemberStatus.ACTIVE;
         this.profileImage = profileImage;
+        this.signUpAt = LocalDateTime.now();
     }
 
     public void updatePalette(Palette palette){
