@@ -133,12 +133,14 @@ public class FriendController {
         return ResponseDto.onSuccess("친구 삭제 완료");
     }
 
+    @Operation(summary = "친구의 스케줄 카테고리 정보를 조회", description = "친구가 등록한 카테고리를 조회합니다(공개된 카테고리만 조회됩니다)")
     @GetMapping("/{friendId}/categories")
     public ResponseDto<List<FriendCategoryResponse.CategoryInfoDto>> getFriendCategories(
             @AuthenticationPrincipal SecurityUserDetails member,
             @Parameter(description = "카테고리를 조회 할 친구의 memberId를 입력해주세요", example = "1")
             @PathVariable Long friendId
     ){
-        return ResponseDto.onSuccess(null);
+        return ResponseDto.onSuccess(friendUseCase
+                .getFriendCategories(member.getUserId(), friendId));
     }
 }
