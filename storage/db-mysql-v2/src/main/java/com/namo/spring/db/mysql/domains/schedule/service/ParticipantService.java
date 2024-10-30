@@ -50,35 +50,29 @@ public class ParticipantService {
         return participantRepository.findParticipantByIdAndScheduleId(participantIds, scheduleId);
     }
 
-    @Transactional(readOnly = true)
     public List<ScheduleSummaryQuery> readScheduleParticipantSummaryByScheduleIds(Long memberId) {
         return participantRepository.findScheduleSummaryByMemberAndScheduleType(memberId, ScheduleType.MEETING.getValue());
     }
 
-    @Transactional(readOnly = true)
     public boolean existsByScheduleIdAndMemberId(Long scheduleId, Long memberId) {
         return participantRepository.existsByScheduleIdAndMemberId(scheduleId, memberId);
     }
 
-    @Transactional(readOnly = true)
     public boolean existsByScheduleIdAndAnonymousId(Long scheduleId, Long anonymousId) {
         return participantRepository.existsByScheduleIdAndAnonymousId(scheduleId, anonymousId);
     }
 
-    @Transactional(readOnly = true)
     public List<Participant> readParticipantsWithScheduleAndCategoryByPeriod(Long memberId, Boolean isShared,
             LocalDateTime startDate, LocalDateTime endDate) {
         return participantRepository.findParticipantsWithScheduleAndCategoryByPeriod(memberId, isShared, startDate,
                 endDate);
     }
 
-    @Transactional(readOnly = true)
     public List<ScheduleParticipantQuery> readParticipantsWithUserAndScheduleByPeriod(List<Long> memberIds,
             LocalDateTime startDate, LocalDateTime endDate) {
         return participantRepository.findParticipantsWithUserAndScheduleByPeriod(memberIds, startDate, endDate);
     }
 
-    @Transactional(readOnly = true)
     public List<Participant> readParticipantsByScheduleIdAndScheduleType(Long scheduleId, ScheduleType type) {
         return participantRepository.findParticipantsByScheduleIdAndStatusAndType(scheduleId, type.getValue());
     }
@@ -93,42 +87,42 @@ public class ParticipantService {
         participantRepository.deleteByIdIn(Ids);
     }
 
-    @Transactional(readOnly = true)
+
     public Optional<Participant> readMemberParticipant(Long memberId, Long scheduleId) {
         return participantRepository.findParticipantByMemberIdAndScheduleId(memberId, scheduleId);
     }
 
-    @Transactional(readOnly = true)
+
     public Optional<Participant> readAnonymousParticipant(Long anonymousId, Long scheduleId) {
         return participantRepository.findParticipantByAnonymousIdAndScheduleId(anonymousId, scheduleId);
     }
 
-    @Transactional(readOnly = true)
+
     public Optional<Participant> readFirstParticipantByScheduleId(Long scheduleId){
         return participantRepository.findFirstParticipantByScheduleIdOrderByNickname(scheduleId);
     }
 
-    @Transactional(readOnly = true)
+
     public List<Participant> readParticipantsForDiary(Long memberId, Pageable pageable) {
         return participantRepository.findAllByMemberIdAndHasDiary(memberId, pageable);
     }
 
-    @Transactional(readOnly = true)
+
     public List<Participant> readParticipantHasDiaryByScheduleName(Long memberId, Pageable pageable, String keyword) {
         return participantRepository.findAllByScheduleTitleAndHasDiary(memberId, keyword, pageable);
     }
 
-    @Transactional(readOnly = true)
+
     public List<Participant> readParticipantHasDiaryByDiaryContent(Long memberId, Pageable pageable, String keyword) {
         return participantRepository.findAllByDiaryContentAndHasDiary(memberId, keyword, pageable);
     }
 
-    @Transactional(readOnly = true)
+
     public List<Participant> readParticipantHasDiaryByMember(Long memberId, Pageable pageable, String keyword) {
         return participantRepository.findAllByMemberAndHasDiary(memberId, keyword, pageable);
     }
 
-    @Transactional(readOnly = true)
+
     public List<Participant> readParticipantHasDiaryByDateRange(Long memberId, LocalDateTime startDate,
             LocalDateTime endDate) {
         return participantRepository.findAllByDateRangeAndHasDiary(memberId, startDate, endDate);
