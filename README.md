@@ -54,11 +54,14 @@
 
 ![System Architecture - Service-Logic](https://github.com/Namo-Mongmong/Server/assets/98688494/0ce16cb3-e2a7-45d9-afae-311c3b080a5b)
 
-[ Facade 패턴을 통해 틀린 아키택쳐를 구현하고자 노력합니다. ]
+V1
+
+[ Facade 패턴을 통한 클린 아키택쳐 구현을 노력했습니다.. ]
 
 - 초록: 외부와 연결되는 레이어
 - 빨강: 비지니스 로직을 다루는 레이어
 - 노랑: 도메인 레이어
+
 
 <br>
 
@@ -66,6 +69,21 @@
 
 - 코드의 의존성에 규칙을 두어 코드의 결합도가 올라가지 않도록합니다.
 - 특히 Facade와 Converter의 사용을 통해 API 인터페이스와 내부 로직을 철저히 분리합니다.
+
+v2
+
+[ usecase와 ManageService를 도입했습니다. ]
+
+<img width="297" alt="image" src="https://github.com/user-attachments/assets/98b9b7c4-843b-46ce-87c6-f4eb5d6ee6a0">
+
+- 기존 Facade의 많은 의존성이 걸리며 유지보수가 힘들어져 새로운 방법을 도입했습니다.
+- manageService가 인력사무소의 관리 소장과 같은 역할을 합니다.
+- 각 Usecase에서 각 액션에 대한 행동들을 조합해 사용합니다.
+
+Continue....
+아직 완전한 클린 아키텍처가 되지 못해 한계를 느끼고 계속 더 나은 설계를 하기위해 노력하고 있습니다.
+
+
 
 ### 2️⃣ Infrastructure Architecture
 
@@ -89,6 +107,7 @@
 - [Presigned URL 도입기 : 나모의 이미지 기능 수정 과정 2편](https://namo-log.vercel.app/server-editing-image-2)
 - [AWS Lambda를 활용한 서버리스 이미지 리사이징 도입기 : 나모의 이미기 기능 수정 과정 3편](https://namo-log.vercel.app/server-editing-image-3)
 - [CloudFront를 활용한 CDN 도입 : 나모의 이미지 기능 수정과정 4편](https://namo-log.vercel.app/server-editing-image-4)
+- [객체지향적인 나모 만들기 : 역할과 책임의 재분배](https://tech.namong.shop/object-oriented-namo)
 
 ### 다나/서주원
 
