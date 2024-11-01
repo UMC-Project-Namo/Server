@@ -21,7 +21,7 @@ WHERE s.participant_nicknames IS NULL
 
 -- NOT NULL 변경
 ALTER TABLE schedule
-    MODIFY participant_nicknames VARCHAR(255) NOT NULL;  -- Adjust VARCHAR size as needed
+    MODIFY participant_nicknames VARCHAR(255) NOT NULL;
 
 -- NOT NULL 변경
 ALTER TABLE schedule
