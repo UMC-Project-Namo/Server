@@ -1,12 +1,10 @@
 package com.namo.spring.application.external.api.schedule.service;
 
-import com.namo.spring.application.external.api.schedule.converter.LocationConverter;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.PersonalScheduleRequest;
 import com.namo.spring.core.infra.common.properties.ImageUrlProperties;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.service.ScheduleService;
-import com.namo.spring.db.mysql.domains.schedule.type.Location;
 import com.namo.spring.db.mysql.domains.schedule.type.Period;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
@@ -54,8 +52,8 @@ public class ScheduleMaker {
         String title = member.getNickname() + "님의 생일";
         Period currentYearPeriod = toPeriodOfBirthdaySchedule(member, currentYear);
         Period nextYearPeriod = toPeriodOfBirthdaySchedule(member, currentYear+1);
-        Schedule currentYearBirthday = toBirthdaySchedule(title, currentYearPeriod);
-        Schedule nextYearBirthday = toBirthdaySchedule(title, nextYearPeriod);
+        Schedule currentYearBirthday = toBirthdaySchedule(title, member.getNickname(), currentYearPeriod);
+        Schedule nextYearBirthday = toBirthdaySchedule(title, member.getNickname(), nextYearPeriod);
         scheduleService.createSchedules(List.of(currentYearBirthday, nextYearBirthday));
     }
 

@@ -15,15 +15,15 @@ public class ScheduleConverter {
         throw new IllegalStateException("Util Class");
     }
 
-    public static Schedule toBirthdaySchedule(String title, Period period){
+    public static Schedule toBirthdaySchedule(String title, String nickname, Period period){
         return Schedule.builder()
                 .title(title)
                 .period(period)
                 .location(null)
                 .scheduleType(ScheduleType.BIRTHDAY.getValue())
                 .imageUrl(null)
-                .participantCount(null)
-                .participantNicknames(null)
+                .participantCount(1)
+                .participantNicknames(nickname)
                 .build();
     }
 
