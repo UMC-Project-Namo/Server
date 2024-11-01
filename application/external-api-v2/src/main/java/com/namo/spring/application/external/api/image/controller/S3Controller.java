@@ -78,10 +78,6 @@ public class S3Controller {
             @Parameter(description = "업로드 완료를 위한 요청 정보를 JSON 형식으로 전달합니다. 이 정보에는 파일 이름, 업로드 ID, 각 파트의 ETag 정보가 포함되어야 합니다.")
             @RequestBody MultipartCompleteRequest request
     ) {
-        return ResponseDto.onSuccess(s3Service.completeMultipartUpload(
-                request.getFileName(),
-                request.getUploadId(),
-                request.getPartETags()
-        ));
+        return ResponseDto.onSuccess(s3Service.completeMultipartUpload(request));
     }
 }

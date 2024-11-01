@@ -22,6 +22,7 @@ import com.amazonaws.services.s3.model.InitiateMultipartUploadResult;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PartETag;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.namo.spring.core.infra.common.aws.dto.MultipartCompleteRequest;
 import com.namo.spring.core.infra.common.aws.dto.MultipartStartResponse;
 import com.namo.spring.core.infra.common.constant.FilePath;
 import com.namo.spring.core.infra.config.AwsS3Config;
@@ -176,21 +177,14 @@ public class S3Uploader {
 
     /**
      * part 업로드 완료 처리 (합침, 태깅으로 삭제 방지)
-     * @param fileName
-     * @param uploadId
-     * @param partETags
      * @return
      */
-    public String completeMultipartUpload(
-            String fileName,
-            String uploadId,
-            List<PartETag> partETags
-    ) {
+    public String completeMultipartUpload(MultipartCompleteRequest request) {
         CompleteMultipartUploadRequest completeRequest = new CompleteMultipartUploadRequest(
                 awsS3Config.getBucketName(),
-                fileName,
-                uploadId,
-                partETags
+                request.getFileName(),
+                request.getUploadId(),
+                request.getPartETags()
         );
 
         return amazonS3Client.completeMultipartUpload(completeRequest).getLocation();
