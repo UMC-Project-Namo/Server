@@ -1,4 +1,4 @@
-package com.namo.spring.application.external.api.image.dto;
+package com.namo.spring.core.infra.common.aws.dto;
 
 import java.net.URL;
 import java.util.List;
