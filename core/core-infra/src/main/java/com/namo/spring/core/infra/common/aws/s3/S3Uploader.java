@@ -2,7 +2,6 @@ package com.namo.spring.core.infra.common.aws.s3;
 
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -15,11 +14,13 @@ import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.CompleteMultipartUploadRequest;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.InitiateMultipartUploadRequest;
 import com.amazonaws.services.s3.model.InitiateMultipartUploadResult;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PartETag;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.namo.spring.core.infra.common.aws.dto.MultipartStartResponse;
 import com.namo.spring.core.infra.common.constant.FilePath;
@@ -171,6 +172,28 @@ public class S3Uploader {
         String filepath = FilePath.getPathForPrefix(prefix);
 
         return String.format("%s/%s", filepath, fileId + fileName);
+    }
+
+    /**
+     * part 업로드 완료 처리 (합침, 태깅으로 삭제 방지)
+     * @param fileName
+     * @param uploadId
+     * @param partETags
+     * @return
+     */
+    public String completeMultipartUpload(
+            String fileName,
+            String uploadId,
+            List<PartETag> partETags
+    ) {
+        CompleteMultipartUploadRequest completeRequest = new CompleteMultipartUploadRequest(
+                awsS3Config.getBucketName(),
+                fileName,
+                uploadId,
+                partETags
+        );
+
+        return amazonS3Client.completeMultipartUpload(completeRequest).getLocation();
     }
 }
 
