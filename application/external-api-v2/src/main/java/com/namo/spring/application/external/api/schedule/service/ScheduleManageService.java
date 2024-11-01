@@ -73,7 +73,7 @@ public class ScheduleManageService {
 
     public Schedule createPersonalSchedule(PersonalScheduleRequest.PostPersonalScheduleDto request, Member member) {
         Period period = getValidatedPeriod(request.getPeriod().getStartDate(), request.getPeriod().getEndDate());
-        Schedule schedule = scheduleMaker.createPersonalSchedule(request, period);
+        Schedule schedule = scheduleMaker.createPersonalSchedule(request, period, member.getNickname());
         participantManageService.createPersonalScheduleParticipant(member, schedule, request.getCategoryId());
         return schedule;
     }
@@ -83,7 +83,7 @@ public class ScheduleManageService {
         List<Member> participants = participantManageService.getFriendshipValidatedParticipants(owner.getId(),
                 request.getParticipants());
         Period period = getValidatedPeriod(request.getPeriod().getStartDate(), request.getPeriod().getEndDate());
-        Schedule schedule = scheduleMaker.createMeetingSchedule(request, period);
+        Schedule schedule = scheduleMaker.createMeetingSchedule(request, period, owner.getNickname());
         participantManageService.createMeetingScheduleParticipants(owner, schedule, participants);
         return schedule;
     }

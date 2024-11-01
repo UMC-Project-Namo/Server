@@ -1,12 +1,10 @@
 package com.namo.spring.application.external.api.schedule.service;
 
-import com.namo.spring.application.external.api.schedule.converter.LocationConverter;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.PersonalScheduleRequest;
 import com.namo.spring.core.infra.common.properties.ImageUrlProperties;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.service.ScheduleService;
-import com.namo.spring.db.mysql.domains.schedule.type.Location;
 import com.namo.spring.db.mysql.domains.schedule.type.Period;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
@@ -32,15 +30,15 @@ public class ScheduleMaker {
     private final ScheduleService scheduleService;
     private final ImageUrlProperties imageUrlProperties;
 
-    public Schedule createPersonalSchedule(PersonalScheduleRequest.PostPersonalScheduleDto dto, Period period) {
-        Schedule schedule = toSchedule(dto.getTitle(), period, dto.getLocation(), PERSONAL_SCHEDULE_TYPE, null, null,
-                null);
+    public Schedule createPersonalSchedule(PersonalScheduleRequest.PostPersonalScheduleDto dto, Period period, String nickname) {
+        Schedule schedule = toSchedule(dto.getTitle(), period, dto.getLocation(), PERSONAL_SCHEDULE_TYPE, null, 1,
+                nickname);
         return scheduleService.createSchedule(schedule);
     }
 
-    public Schedule createMeetingSchedule(MeetingScheduleRequest.PostMeetingScheduleDto dto, Period period) {
+    public Schedule createMeetingSchedule(MeetingScheduleRequest.PostMeetingScheduleDto dto, Period period, String nickname) {
         String imageUrl = dto.getImageUrl() != null ? dto.getImageUrl() : imageUrlProperties.getMeeting();
-        Schedule schedule = toSchedule(dto.getTitle(), period, dto.getLocation(), MEETING_SCHEDULE_TYPE, imageUrl, 0, "");
+        Schedule schedule = toSchedule(dto.getTitle(), period, dto.getLocation(), MEETING_SCHEDULE_TYPE, imageUrl, 1, nickname);
         return scheduleService.createSchedule(schedule);
     }
 
@@ -54,8 +52,8 @@ public class ScheduleMaker {
         String title = member.getNickname() + "님의 생일";
         Period currentYearPeriod = toPeriodOfBirthdaySchedule(member, currentYear);
         Period nextYearPeriod = toPeriodOfBirthdaySchedule(member, currentYear+1);
-        Schedule currentYearBirthday = toBirthdaySchedule(title, currentYearPeriod);
-        Schedule nextYearBirthday = toBirthdaySchedule(title, nextYearPeriod);
+        Schedule currentYearBirthday = toBirthdaySchedule(title, member.getNickname(), currentYearPeriod);
+        Schedule nextYearBirthday = toBirthdaySchedule(title, member.getNickname(), nextYearPeriod);
         scheduleService.createSchedules(List.of(currentYearBirthday, nextYearBirthday));
     }
 
