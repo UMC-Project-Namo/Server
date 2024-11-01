@@ -36,9 +36,9 @@ public class ScheduleMaker {
         return scheduleService.createSchedule(schedule);
     }
 
-    public Schedule createMeetingSchedule(MeetingScheduleRequest.PostMeetingScheduleDto dto, Period period) {
+    public Schedule createMeetingSchedule(MeetingScheduleRequest.PostMeetingScheduleDto dto, Period period, String nickname) {
         String imageUrl = dto.getImageUrl() != null ? dto.getImageUrl() : imageUrlProperties.getMeeting();
-        Schedule schedule = toSchedule(dto.getTitle(), period, dto.getLocation(), MEETING_SCHEDULE_TYPE, imageUrl, 0, "");
+        Schedule schedule = toSchedule(dto.getTitle(), period, dto.getLocation(), MEETING_SCHEDULE_TYPE, imageUrl, 1, nickname);
         return scheduleService.createSchedule(schedule);
     }
 

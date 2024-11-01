@@ -83,7 +83,7 @@ public class ScheduleManageService {
         List<Member> participants = participantManageService.getFriendshipValidatedParticipants(owner.getId(),
                 request.getParticipants());
         Period period = getValidatedPeriod(request.getPeriod().getStartDate(), request.getPeriod().getEndDate());
-        Schedule schedule = scheduleMaker.createMeetingSchedule(request, period);
+        Schedule schedule = scheduleMaker.createMeetingSchedule(request, period, owner.getNickname());
         participantManageService.createMeetingScheduleParticipants(owner, schedule, participants);
         return schedule;
     }
