@@ -18,15 +18,9 @@ public class MeetingScheduleResponseConverter {
         throw new IllegalStateException("Util Class");
     }
 
-    public static List<MeetingScheduleResponse.GetMeetingScheduleSummaryDto> toGetMeetingScheduleSummaryDtos(
-            List<ScheduleSummaryQuery> schedules) {
-        return schedules.stream()
-                .map(MeetingScheduleResponseConverter::toGetMeetingScheduleSummaryDto)
-                .collect(Collectors.toList());
-    }
 
     public static MeetingScheduleResponse.GetMeetingScheduleSummaryDto toGetMeetingScheduleSummaryDto(
-            ScheduleSummaryQuery schedule) {
+            ScheduleSummaryQuery schedule, boolean hasRecord) {
         return MeetingScheduleResponse.GetMeetingScheduleSummaryDto.builder()
                 .meetingScheduleId(schedule.getMeetingScheduleId())
                 .title(schedule.getTitle())
@@ -34,9 +28,8 @@ public class MeetingScheduleResponseConverter {
                 .imageUrl(schedule.getImageUrl())
                 .participantCount(schedule.getParticipantCount())
                 .participantNicknames(schedule.getParticipantNicknames())
-                .hasDiary(schedule.isHasDiary())
+                .hasRecord(hasRecord)
                 .build();
-
     }
 
     public static List<MeetingScheduleResponse.GetMonthlyMembersScheduleDto> toGetMonthlyMembersScheduleDtos(

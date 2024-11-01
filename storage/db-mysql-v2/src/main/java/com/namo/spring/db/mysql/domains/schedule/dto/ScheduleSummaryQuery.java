@@ -17,4 +17,5 @@ public class ScheduleSummaryQuery {
     private Integer participantCount;
     private String participantNicknames;
     private boolean hasDiary;
+    private Long activityId;
 }

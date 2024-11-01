@@ -6,7 +6,9 @@ import static com.namo.spring.application.external.global.utils.MeetingParticipa
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleSummaryQuery;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,7 +48,11 @@ public class MeetingScheduleUsecase {
 
     @Transactional(readOnly = true)
     public List<MeetingScheduleResponse.GetMeetingScheduleSummaryDto> getMeetingSchedules(SecurityUserDetails member) {
-        return toGetMeetingScheduleSummaryDtos(scheduleManageService.getMeetingScheduleSummaries(member.getUserId()));
+        List<ScheduleSummaryQuery> schedules = scheduleManageService.getMeetingScheduleSummaries(member.getUserId());
+
+        return schedules.stream()
+                .map(schedule -> toGetMeetingScheduleSummaryDto(schedule, schedule.isHasDiary() || (schedule.getActivityId() != null))) // 기록 또는 활동의 존재 여부
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

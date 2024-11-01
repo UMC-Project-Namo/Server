@@ -41,7 +41,6 @@ public class ScheduleManageService {
     private final ScheduleService scheduleService;
     private final ParticipantManageService participantManageService;
     private final ParticipantService participantService;
-    private final FriendshipService friendshipService;
     private final CategoryManageService categoryManageService;
 
     public Schedule getSchedule(Long scheduleId) {

@@ -19,9 +19,19 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
     List<Participant> findAllByScheduleId(Long scheduleId);
 
     @Query("SELECT new com.namo.spring.db.mysql.domains.schedule.dto.ScheduleSummaryQuery(" +
-            "s.id, p.customTitle, s.period.startDate, p.customImage, s.participantCount, s.participantNicknames, p.hasDiary) " +
-            "FROM Participant p JOIN p.schedule s JOIN p.member m " +
-            "WHERE p.member.id = :memberId " +
+            "s.id, " +
+            "p.customTitle, " +
+            "s.period.startDate, " +
+            "p.customImage, " +
+            "s.participantCount, " +
+            "s.participantNicknames, " +
+            "p.hasDiary, " +
+            "a.id) " +
+            "FROM Participant p " +
+            "LEFT JOIN Schedule s ON p.schedule = s " +
+            "LEFT OUTER JOIN Activity a ON a.schedule = s " +
+            "LEFT JOIN Member m ON p.member = m " +
+            "WHERE m.id = :memberId " +
             "AND s.scheduleType = :scheduleType")
     List<ScheduleSummaryQuery> findScheduleSummaryByMemberAndScheduleType(Long memberId, int scheduleType);
 
