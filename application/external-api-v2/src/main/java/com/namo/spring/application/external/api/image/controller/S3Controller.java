@@ -72,7 +72,8 @@ public class S3Controller {
     @Operation(
             summary = "S3 멀티파트 업로드 완료 요청",
             description = "이 API는 S3에 멀티파트 업로드를 완료하는 요청을 보냅니다. 클라이언트는 모든 파트를 Presigned URLs을 통해 업로드한 후 이 API를 호출하여 업로드를 최종 완료해야 합니다. \n"
-                    + "업로드가 완료되지 않으면 임시 저장된 파일이 일정 기간(7일) 후 삭제될 수 있습니다."
+                    + "업로드가 완료되지 않으면 임시 저장된 파일이 일정 기간(7일) 후 삭제될 수 있습니다. "
+                    + "partETags example  입니다 : \"[{\\\"partNumber\\\": 1, \\\"eTag\\\": \\\"etag_value_1\\\"}, {\\\"partNumber\\\": 2, \\\"eTag\\\": \\\"etag_value_2\\\"}]\")"
     )
     public ResponseDto<String> complete(
             @Parameter(description = "업로드 완료를 위한 요청 정보를 JSON 형식으로 전달합니다. 이 정보에는 파일 이름, 업로드 ID, 각 파트의 ETag 정보가 포함되어야 합니다.")
