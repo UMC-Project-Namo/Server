@@ -58,8 +58,10 @@ public class Schedule extends BaseTimeEntity {
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private String imageUrl;
 
+    @Column(nullable = false)
     private Integer participantCount;
 
+    @Column(nullable = false)
     private String participantNicknames;
 
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
