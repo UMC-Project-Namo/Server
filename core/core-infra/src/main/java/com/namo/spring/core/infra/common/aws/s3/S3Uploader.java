@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.stereotype.Component;
 
@@ -33,6 +35,7 @@ public class S3Uploader {
     private final AmazonS3Client amazonS3Client;
     private final AwsS3Config awsS3Config;
 
+    // v1
     public void uploadFile(InputStream inputStream, ObjectMetadata objectMeTadata, String fileName) {
         amazonS3Client.putObject(
                 new PutObjectRequest(awsS3Config.getBucketName(), fileName, inputStream, objectMeTadata)
@@ -51,38 +54,53 @@ public class S3Uploader {
         amazonS3Client.deleteObject(deleteObjectRequest);
     }
 
+    /**
+     * Part 업로드를 위한 PresignedURLs 발급
+     * @param prefix
+     * @param fileName
+     * @param partCount
+     * @return
+     */
     public MultipartStartResponse getPreSignedUrls(String prefix, String fileName, int partCount) {
         String uniqueFileName = createPath(prefix, fileName);
-
-        // 1. Multipart 업로드 초기화
-        InitiateMultipartUploadRequest initRequest = new InitiateMultipartUploadRequest(
-                awsS3Config.getBucketName(),
-                uniqueFileName
-        )
-                .withCannedACL(CannedAccessControlList.PublicRead);
-
-        InitiateMultipartUploadResult initResult = amazonS3Client.initiateMultipartUpload(initRequest);
-        String uploadId = initResult.getUploadId();
-
-        // 2. 각 파트별 presigned URL 생성
-        List<URL> presignedUrls = new ArrayList<>();
-        for (int i = 1; i <= partCount; i++) {
-            GeneratePresignedUrlRequest presignedUrlRequest = new GeneratePresignedUrlRequest(
-                    awsS3Config.getBucketName(),
-                    uniqueFileName
-            )
-                    .withMethod(HttpMethod.PUT)
-                    .withExpiration(getPreSignedUrlExpiration());
-
-            // Request Parameters에 partNumber와 uploadId 추가
-            presignedUrlRequest.addRequestParameter("partNumber", String.valueOf(i));
-            presignedUrlRequest.addRequestParameter("uploadId", uploadId);
-
-            URL url = amazonS3Client.generatePresignedUrl(presignedUrlRequest);
-            presignedUrls.add(url);
-        }
-
+        String uploadId = initiateMultipartUpload(uniqueFileName);
+        List<URL> presignedUrls = generatePartPresignedUrls(uniqueFileName, uploadId, partCount);
         return new MultipartStartResponse(uploadId, presignedUrls, uniqueFileName);
+    }
+
+    /**
+     * S3에 Multipart Upload를 초기화하고 uploadId를 반환
+     */
+    private String initiateMultipartUpload(String fileName) {
+        InitiateMultipartUploadRequest initRequest = new InitiateMultipartUploadRequest(awsS3Config.getBucketName(), fileName)
+                .withCannedACL(CannedAccessControlList.PublicRead);
+        InitiateMultipartUploadResult initResult = amazonS3Client.initiateMultipartUpload(initRequest);
+
+        return initResult.getUploadId();
+    }
+
+    /**
+     * 각 파트별 업로드를 위한 presigned URL 목록 생성
+     */
+    private List<URL> generatePartPresignedUrls(String fileName, String uploadId, int partCount) {
+        return IntStream.rangeClosed(1, partCount)
+                .mapToObj(partNumber -> generatePresignedUrl(fileName, uploadId, partNumber))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 단일 파트에 대한 presigned URL 생성
+     */
+    private URL generatePresignedUrl(String fileName, String uploadId, int partNumber) {
+        GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(
+                awsS3Config.getBucketName(), fileName)
+                .withMethod(HttpMethod.PUT)
+                .withExpiration(getPreSignedUrlExpiration());
+
+        request.addRequestParameter("partNumber", String.valueOf(partNumber));
+        request.addRequestParameter("uploadId", uploadId);
+
+        return amazonS3Client.generatePresignedUrl(request);
     }
 
     /**
