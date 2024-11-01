@@ -2,13 +2,18 @@ package com.namo.spring.application.external.api.image.controller;
 
 import static com.namo.spring.core.common.code.status.ErrorStatus.*;
 
+import java.net.URL;
+import java.util.List;
+
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.core.common.response.ResponseDto;
+import com.namo.spring.core.infra.common.aws.dto.MultipartStartResponse;
 import com.namo.spring.core.infra.common.aws.s3.S3Uploader;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,4 +44,15 @@ public class S3Controller {
         String preSignedUrl = s3Service.getPreSignedUrl(prefix, fileName);
         return ResponseDto.onSuccess(preSignedUrl);
     }
+
+    @PostMapping("/pre-signed/start")
+    public ResponseDto<MultipartStartResponse> start(
+            @RequestParam String fileName,
+            @Parameter(description = "이미지 종류입니다 {activity: 활동 이미지, diary: 일기 이미지, cover: 커버 이미지, profile: 프로필 이미지} 입력 가능합니다.", example = "activity")
+            @RequestParam String prefix,
+            @RequestParam int partCount
+    ) {
+        return ResponseDto.onSuccess(s3Service.getPreSignedUrls(prefix, fileName, partCount));
+    }
+
 }
