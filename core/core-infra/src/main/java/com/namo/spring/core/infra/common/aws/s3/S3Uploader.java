@@ -3,7 +3,10 @@ package com.namo.spring.core.infra.common.aws.s3;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.stereotype.Component;
 
@@ -11,10 +14,16 @@ import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.CompleteMultipartUploadRequest;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
+import com.amazonaws.services.s3.model.InitiateMultipartUploadRequest;
+import com.amazonaws.services.s3.model.InitiateMultipartUploadResult;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PartETag;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.namo.spring.core.infra.common.aws.dto.MultipartCompleteRequest;
+import com.namo.spring.core.infra.common.aws.dto.MultipartStartResponse;
 import com.namo.spring.core.infra.common.constant.FilePath;
 import com.namo.spring.core.infra.config.AwsS3Config;
 
@@ -28,6 +37,7 @@ public class S3Uploader {
     private final AmazonS3Client amazonS3Client;
     private final AwsS3Config awsS3Config;
 
+    // v1
     public void uploadFile(InputStream inputStream, ObjectMetadata objectMeTadata, String fileName) {
         amazonS3Client.putObject(
                 new PutObjectRequest(awsS3Config.getBucketName(), fileName, inputStream, objectMeTadata)
@@ -44,6 +54,55 @@ public class S3Uploader {
         DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(awsS3Config.getBucketName(), key);
         //Delete
         amazonS3Client.deleteObject(deleteObjectRequest);
+    }
+
+    /**
+     * Part 업로드를 위한 PresignedURLs 발급
+     * @param prefix
+     * @param fileName
+     * @param partCount
+     * @return
+     */
+    public MultipartStartResponse getPreSignedUrls(String prefix, String fileName, int partCount) {
+        String uniqueFileName = createPath(prefix, fileName);
+        String uploadId = initiateMultipartUpload(uniqueFileName);
+        List<URL> presignedUrls = generatePartPresignedUrls(uniqueFileName, uploadId, partCount);
+        return new MultipartStartResponse(uploadId, presignedUrls, uniqueFileName);
+    }
+
+    /**
+     * S3에 Multipart Upload를 초기화하고 uploadId를 반환
+     */
+    private String initiateMultipartUpload(String fileName) {
+        InitiateMultipartUploadRequest initRequest = new InitiateMultipartUploadRequest(awsS3Config.getBucketName(), fileName)
+                .withCannedACL(CannedAccessControlList.PublicRead);
+        InitiateMultipartUploadResult initResult = amazonS3Client.initiateMultipartUpload(initRequest);
+
+        return initResult.getUploadId();
+    }
+
+    /**
+     * 각 파트별 업로드를 위한 presigned URL 목록 생성
+     */
+    private List<URL> generatePartPresignedUrls(String fileName, String uploadId, int partCount) {
+        return IntStream.rangeClosed(1, partCount)
+                .mapToObj(partNumber -> generatePresignedUrl(fileName, uploadId, partNumber))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 단일 파트에 대한 presigned URL 생성
+     */
+    private URL generatePresignedUrl(String fileName, String uploadId, int partNumber) {
+        GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(
+                awsS3Config.getBucketName(), fileName)
+                .withMethod(HttpMethod.PUT)
+                .withExpiration(getPreSignedUrlExpiration());
+
+        request.addRequestParameter("partNumber", String.valueOf(partNumber));
+        request.addRequestParameter("uploadId", uploadId);
+
+        return amazonS3Client.generatePresignedUrl(request);
     }
 
     /**
@@ -114,6 +173,21 @@ public class S3Uploader {
         String filepath = FilePath.getPathForPrefix(prefix);
 
         return String.format("%s/%s", filepath, fileId + fileName);
+    }
+
+    /**
+     * part 업로드 완료 처리 (합침, 태깅으로 삭제 방지)
+     * @return
+     */
+    public String completeMultipartUpload(MultipartCompleteRequest request) {
+        CompleteMultipartUploadRequest completeRequest = new CompleteMultipartUploadRequest(
+                awsS3Config.getBucketName(),
+                request.getFileName(),
+                request.getUploadId(),
+                request.getPartETags()
+        );
+
+        return amazonS3Client.completeMultipartUpload(completeRequest).getLocation();
     }
 }
 
