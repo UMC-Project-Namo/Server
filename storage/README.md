@@ -68,22 +68,12 @@
 
 - Data Cache
 
+
 ## Contributors
 
-| ![루카/최선규](https://avatars.githubusercontent.com/u/98688494?v=4) | ![매실/김현재](https://avatars.githubusercontent.com/u/41482946?v=4) | ![초코/김현지](https://avatars.githubusercontent.com/u/112065014?v=4) |
-|:---------------------------------------------------------------:|:---------------------------------------------------------------:|:----------------------------------------------------------------:|
-|              [루카/최선규](https://github.com/luke0408)              |               [매실/김현재](https://github.com/galug)                |              [초코/김현지](https://github.com/hyeonji91)              |
+| ![루카/최선규](https://avatars.githubusercontent.com/u/98688494?v=4) | ![매실/김현재](https://avatars.githubusercontent.com/u/41482946?v=4) | ![초코/김현지](https://avatars.githubusercontent.com/u/112065014?v=4) | ![캐슬/이호성](https://avatars.githubusercontent.com/u/62132755?v=4) | ![다나/서주원](https://avatars.githubusercontent.com/u/85955988?v=4) |
+|:---------------------------------------------------------------:|:---------------------------------------------------------------:|:----------------------------------------------------------------:|:---------------------------------------------------------------:|:---------------------------------------------------------------:|
+| [루카/최선규](https://github.com/luke0408) | [매실/김현재](https://github.com/galug) | [초코/김현지](https://github.com/hyeonji91) | [캐슬/이호성](https://github.com/hosunglee222) | [다나/서주원](https://github.com/joowojr) |
 
-## Update History
 
-- 2024.06.11
-    - `core` 모듈 및 `core-common` 모듈 생성
-- 2024.06.18
-    - `jpa` 관련 설정 이관 (`external-api` 모듈에서 이동)
-    - `user` 도메인 모듈 분리 (`entity`, `repository` 패키지 `external-api` 모듈에서 이동)
-- 2024.06.20
-    - `individual` 도메인 모듈 분리 (`entity`, `repository` 패키지 `external-api` 모듈에서 이동)
-- 2024.06.24
-    - `group` 도메인 모듈 분리 (`entity`, `repository` 패키지 `external-api` 모듈에서 이동)
-- 2024.08.02
-    - `Schedule` 도메인 통합, V2 엔티티 설정
+
