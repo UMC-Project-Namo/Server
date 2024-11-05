@@ -32,7 +32,7 @@
 
 <img src="https://img.shields.io/badge/Test-555555?style=for-the-badge">![junit5](https://img.shields.io/badge/junit5-25A162?style=for-the-badge&logo=junit5&logoColor=white)![test_containers](https://img.shields.io/badge/test_containers-328ba3?style=for-the-badge&logo=reasonstudios&logoColor=white)![mockito](https://img.shields.io/badge/mockito-DA383E?style=for-the-badge&logo=mockito&logoColor=white)
 
-<img src="https://img.shields.io/badge/Database-555555?style=for-the-badge">![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
+<img src="https://img.shields.io/badge/Database-555555?style=for-the-badge">![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)![Flyway](https://img.shields.io/badge/Flyway-F7B500?style=for-the-badge&logo=flyway&logoColor=white)
 
 ### For Infra
 
@@ -42,12 +42,13 @@
 
 <img src="https://img.shields.io/badge/Data_Storage-555555?style=for-the-badge">![Amazon S3](https://img.shields.io/badge/AWS_S3-569A31.svg?style=for-the-badge&logo=amazons3&logoColor=white)![Amazon RDS](https://img.shields.io/badge/amazon_RDS-527FFF.svg?style=for-the-badge&logo=amazonrds&logoColor=white)![Amazon ElastiCache](https://img.shields.io/badge/amazon_elasticache-C925D1.svg?style=for-the-badge&logo=amazonelasticache&logoColor=white)
 
-<img src="https://img.shields.io/badge/Networking-555555?style=for-the-badge">![Route 53](https://img.shields.io/badge/amazon_rount_53-8C4FFF.svg?style=for-the-badge&logo=amazonroute53&logoColor=white)![Amazon ALB](https://img.shields.io/badge/amazon_alb-8C4FFF.svg?style=for-the-badge&logo=awselasticloadbalancing&logoColor=white)![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white)
+<img src="https://img.shields.io/badge/Networking-555555?style=for-the-badge">![Route 53](https://img.shields.io/badge/amazon_rount_53-8C4FFF.svg?style=for-the-badge&logo=amazonroute53&logoColor=white)![Amazon ALB](https://img.shields.io/badge/amazon_alb-8C4FFF.svg?style=for-the-badge&logo=awselasticloadbalancing&logoColor=white)![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white)![CloudFront](https://img.shields.io/badge/Amazon_CloudFront-FF4E00?style=for-the-badge&logo=amazoncloudfront&logoColor=white)
 
 <img src="https://img.shields.io/badge/Security-555555?style=for-the-badge">![AWS IAM](https://img.shields.io/badge/aws_iam-FF9900.svg?style=for-the-badge&logo=amazoniam&logoColor=white)![AWS Secrets Manager](https://img.shields.io/badge/aws_secrets_manager-DD344C?style=for-the-badge&logo=awssecretsmanager&logoColor=white)
 
 <img src="https://img.shields.io/badge/Monitoring-555555?style=for-the-badge">![Amazon CloudWatch](https://img.shields.io/badge/amazon_cloudwatch-FF4F8B.svg?style=for-the-badge&logo=amazoncloudwatch&logoColor=white)
 
+<img src="https://img.shields.io/badge/Serverless-555555?style=for-the-badge">![AWS Lambda](https://img.shields.io/badge/AWS_Lambda-FF9900?style=for-the-badge&logo=awslambda&logoColor=white)
 ## 🔎 나모의 서버 구조
 
 ### 1️⃣ Service Code
