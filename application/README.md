@@ -26,11 +26,16 @@
 - Response/Request DTO
 - Swagger Documentation
 
-## Contributors
+## V1 Contributors
 
 | ![루카/최선규](https://avatars.githubusercontent.com/u/98688494?v=4) | ![매실/김현재](https://avatars.githubusercontent.com/u/41482946?v=4) | ![초코/김현지](https://avatars.githubusercontent.com/u/112065014?v=4) |
 |:---------------------------------------------------------------:|:---------------------------------------------------------------:|:----------------------------------------------------------------:|
 |              [루카/최선규](https://github.com/luke0408)              |               [매실/김현재](https://github.com/galug)                |              [초코/김현지](https://github.com/hyeonji91)              |
+
+## V2 Contributors
+| ![캐슬/이호성](https://avatars.githubusercontent.com/u/62132755?v=4) | ![다나/서주원](https://avatars.githubusercontent.com/u/85955988?v=4) |
+|:---------------------------------------------------------------:|:---------------------------------------------------------------:
+|              [캐슬/이호성](https://github.com/hosunglee222)              |               [다나/서주원](https://github.com/joowojr)                |         
 
 ## Update History
 
@@ -43,3 +48,5 @@
     - `individual` 도메인 모듈 분리 (`entity`, `repository` 패키지 `db-mysql` 모듈로 이동)
 - 2024.06.24
     - `group` 도메인 모듈 분리 (`entity`, `repository` 패키지 `db-mysql` 모듈로 이동)
+- 2024.07.01
+    - external-api-v2 개발 
