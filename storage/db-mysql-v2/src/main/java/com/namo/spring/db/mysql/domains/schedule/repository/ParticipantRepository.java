@@ -26,10 +26,9 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
             "s.participantCount, " +
             "s.participantNicknames, " +
             "p.hasDiary, " +
-            "a.id) " +
+            " (SELECT a.id FROM Activity a WHERE a.schedule = s ORDER BY a.createdAt DESC LIMIT 1)) " +
             "FROM Participant p " +
             "LEFT JOIN Schedule s ON p.schedule = s " +
-            "LEFT OUTER JOIN Activity a ON a.schedule = s " +
             "LEFT JOIN Member m ON p.member = m " +
             "WHERE m.id = :memberId " +
             "AND s.scheduleType = :scheduleType")
