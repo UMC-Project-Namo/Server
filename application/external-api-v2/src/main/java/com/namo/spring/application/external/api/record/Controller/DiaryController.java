@@ -90,9 +90,9 @@ public class DiaryController {
     @GetMapping("/archive")
     public ResponseDto<List<DiaryResponse.DiaryArchiveDto>> getDiaryArchive(
             @AuthenticationPrincipal SecurityUserDetails memberInfo,
-            @Parameter(description = "ScheduleName(스케쥴 이름 조회) || DiaryContent(일기 내용 조회) || MemberNickname (참여자 조회)")
+            @Parameter(description = "대소문자 구분이 없습니다. 필터 종류 = {schedule_name(스케쥴 이름 조회) || diary_content(일기 내용 조회) || member_nickname (참여자 조회)}")
             @RequestParam(required = false) String filterType,
-            @Parameter(description = "각 필터에 맞는 검색 단어를 입력하시면 됩니다.")
+            @Parameter(description = "각 필터에 맞는 검색 단어(검색어)를 입력하시면 됩니다.")
             @RequestParam(required = false) String keyword,
             @Parameter(description = "1 부터 시작하는 page입니다. 5개의 일기씩 내림차순 조회됩니다. ")
             @RequestParam int page
