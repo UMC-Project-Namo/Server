@@ -2,6 +2,7 @@ package com.namo.spring.application.external.api.record.usecase;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,7 @@ public class ActivityUseCase {
     private final ActivityManageService activityManageService;
     private final ActivityParticipantManageService activityParticipantManageService;
 
+    @Cacheable(value = "activities", key = "#scheduleId", unless = "#result==null || #result.isEmpty()")
     @Transactional(readOnly = true)
     public List<ActivityResponse.ActivityInfoDto> getActivities(Long memberId, Long scheduleId) {
         Schedule schedule = participantManageService.getParticipantByMemberAndSchedule(memberId, scheduleId).getSchedule();
