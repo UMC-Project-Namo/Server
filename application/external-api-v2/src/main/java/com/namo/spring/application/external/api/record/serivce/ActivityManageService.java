@@ -1,5 +1,8 @@
 package com.namo.spring.application.external.api.record.serivce;
 
+import java.util.List;
+
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -12,6 +15,7 @@ import com.namo.spring.db.mysql.domains.record.entity.Activity;
 import com.namo.spring.db.mysql.domains.record.exception.ActivityException;
 import com.namo.spring.db.mysql.domains.record.service.ActivityService;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
+import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.type.Location;
 
 import lombok.RequiredArgsConstructor;
@@ -82,5 +86,10 @@ public class ActivityManageService {
                 activityImageManageService.deleteFromCloud(activityImage.getId()));
         activityImageManageService.deleteImages(activity);
         activityService.deleteActivity(activity);
+    }
+
+    @Cacheable(value = "activities", key = "#schedule.getId()", unless = "#result==null || #result.isEmpty()")
+    public List<Activity> getCachedActivities(Schedule schedule) {
+        return schedule.getActivityList();
     }
 }
