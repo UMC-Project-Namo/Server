@@ -4,23 +4,44 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class ActivityResponse {
 
     @Builder
     @Getter
     @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ActivityInfoDtoList{
+        private List<ActivityInfoDto> activityInfoDto;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
     @Schema(description = "활동 조회 DTO")
     public static class ActivityInfoDto {
         private Long activityId;
         private String activityTitle;
         private List<ActivityParticipantDto> activityParticipants;
+        @JsonSerialize(using = LocalDateTimeSerializer.class)
+        @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+        @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm")
         private LocalDateTime activityStartDate;
+        @JsonSerialize(using = LocalDateTimeSerializer.class)
+        @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+        @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm")
         private LocalDateTime activityEndDate;
         private ActivityLocationDto activityLocation;
         private BigDecimal totalAmount;
@@ -31,6 +52,7 @@ public class ActivityResponse {
     @Builder
     @Getter
     @AllArgsConstructor
+    @NoArgsConstructor
     @Schema(description = "활동 참여자 DTO")
     public static class ActivityParticipantDto {
         private Long participantId;
@@ -41,6 +63,7 @@ public class ActivityResponse {
     @Builder
     @Getter
     @AllArgsConstructor
+    @NoArgsConstructor
     @Schema(description = "활동 장소 DTO")
     public static class ActivityLocationDto {
         @Schema(description = "카카오맵 좌표계 상의 x 좌표")
@@ -76,6 +99,7 @@ public class ActivityResponse {
     @Builder
     @Getter
     @AllArgsConstructor
+    @NoArgsConstructor
     @Schema(description = "활동 이미지 정보 DTO")
     public static class ActivityImageDto {
         @Schema(description = "정렬 순서", example = "1")
