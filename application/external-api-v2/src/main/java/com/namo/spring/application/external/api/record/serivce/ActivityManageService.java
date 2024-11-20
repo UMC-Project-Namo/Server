@@ -87,9 +87,4 @@ public class ActivityManageService {
         activityImageManageService.deleteImages(activity);
         activityService.deleteActivity(activity);
     }
-
-    @Cacheable(value = "activities", key = "#schedule.getId()", unless = "#result==null || #result.isEmpty()")
-    public List<Activity> getCachedActivities(Schedule schedule) {
-        return schedule.getActivityList();
-    }
 }

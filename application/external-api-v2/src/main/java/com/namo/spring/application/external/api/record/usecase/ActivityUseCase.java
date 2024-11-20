@@ -26,13 +26,12 @@ public class ActivityUseCase {
     private final ActivityManageService activityManageService;
     private final ActivityParticipantManageService activityParticipantManageService;
 
+    @Cacheable(value = "ActivityInfoDtoList", key = "#scheduleId", cacheManager = "redisCacheManager", unless = "#result==null")
     @Transactional(readOnly = true)
-    public List<ActivityResponse.ActivityInfoDto> getActivities(Long memberId, Long scheduleId) {
+    public ActivityResponse.ActivityInfoDtoList getActivities(Long memberId, Long scheduleId) {
         Schedule schedule = participantManageService.getParticipantByMemberAndSchedule(memberId, scheduleId).getSchedule();
-        List<Activity> activities = activityManageService.getCachedActivities(schedule);
-        return activities.stream()
-                .map(ActivityResponseConverter::toActivityInfoDto)
-                .toList();
+        List<Activity> activities = schedule.getActivityList();
+        return ActivityResponseConverter.toActivityInfoDtoList(activities);
     }
 
     @Transactional(readOnly = true)
