@@ -63,18 +63,12 @@ public class RedisConfig {
 
 	@Bean
 	@DomainRedisCacheManager
-	public RedisCacheManager redisCacheManager(
-		@DomainRedisConnectionFactory RedisConnectionFactory cf
-	) {
+	public RedisCacheManager redisCacheManager(@DomainRedisConnectionFactory RedisConnectionFactory cf) {
 		RedisCacheConfiguration cacheConfiguration =
 			RedisCacheConfiguration.defaultCacheConfig()
-				.serializeKeysWith(
-					RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
-				)
-				.serializeValuesWith(
-					RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
-				)
-				.entryTtl(Duration.ofHours(1L));
+				.serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
+				.serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()))
+				.entryTtl(Duration.ofHours(3L));
 
 		return RedisCacheManager.RedisCacheManagerBuilder.fromConnectionFactory(cf)
 			.cacheDefaults(cacheConfiguration)
