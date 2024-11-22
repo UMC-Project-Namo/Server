@@ -1,7 +1,6 @@
 package com.namo.spring.application.external.api.record.serivce;
 
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -83,7 +82,8 @@ public class ActivityManageService {
         activityImageManageService.updateImages(activity, request);
     }
 
-    public void removeActivity(Activity activity) {
+    @CacheEvict(value = "ActivityInfoDtoList", key = "#scheduleId")
+    public void removeActivity(Activity activity, Long scheduleId) {
         activity.getActivityImages().forEach(activityImage ->
                 activityImageManageService.deleteFromCloud(activityImage.getId()));
         activityImageManageService.deleteImages(activity);
