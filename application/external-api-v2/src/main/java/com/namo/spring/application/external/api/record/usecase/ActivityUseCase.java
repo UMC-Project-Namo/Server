@@ -57,7 +57,8 @@ public class ActivityUseCase {
     @Transactional
     public void updateActivity(Long memberId, Long activityId, ActivityRequest.UpdateActivityDto request) {
         Activity target = activityManageService.getMyActivity(memberId, activityId);
-        activityManageService.updateActivity(target, request);
+        Long scheduleId = target.getSchedule().getId();
+        activityManageService.updateActivity(target, request, scheduleId);
     }
 
     @Transactional
