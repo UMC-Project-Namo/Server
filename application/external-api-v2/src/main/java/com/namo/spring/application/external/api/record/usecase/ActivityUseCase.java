@@ -85,6 +85,7 @@ public class ActivityUseCase {
     @Transactional
     public void deleteActivity(Long memberId, Long activityId) {
         Activity target = activityManageService.getMyActivity(memberId, activityId);
-        activityManageService.removeActivity(target);
+        Long scheduleId = target.getSchedule().getId();
+        activityManageService.removeActivity(target, scheduleId);
     }
 }
