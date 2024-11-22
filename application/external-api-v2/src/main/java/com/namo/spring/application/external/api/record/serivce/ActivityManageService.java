@@ -1,7 +1,6 @@
 package com.namo.spring.application.external.api.record.serivce;
 
-import java.util.List;
-
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -15,7 +14,6 @@ import com.namo.spring.db.mysql.domains.record.entity.Activity;
 import com.namo.spring.db.mysql.domains.record.exception.ActivityException;
 import com.namo.spring.db.mysql.domains.record.service.ActivityService;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
-import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.type.Location;
 
 import lombok.RequiredArgsConstructor;
@@ -70,11 +68,15 @@ public class ActivityManageService {
     /**
      * 활동을 업데이트 하는 메서드입니다.
      * 활동 제목, 시작-종료시간, 장소, 이미지를 업데이트 합니다.
+     * 캐시를 무효화 합니다.
      * !! 이미지 업데이트 책임은 activityImageManageService 에 있습니다.
+     *
      * @param activity
      * @param request
+     * @param scheduleId
      */
-    public void updateActivity(Activity activity, ActivityRequest.UpdateActivityDto request) {
+    @CacheEvict(value = "ActivityInfoDtoList", key = "#scheduleId")
+    public void updateActivity(Activity activity, ActivityRequest.UpdateActivityDto request, Long scheduleId) {
         activity.updateInfo(request.getTitle(), request.getActivityStartDate(), request.getActivityEndDate());
         Location newLocation = ActivityConverter.toLocation(request.getLocation());
         activity.updateLocation(newLocation);
