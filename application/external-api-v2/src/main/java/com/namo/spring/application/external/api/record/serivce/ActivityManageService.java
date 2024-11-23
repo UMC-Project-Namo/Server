@@ -54,6 +54,7 @@ public class ActivityManageService {
      * @param request
      * @return
      */
+    @CacheEvict(value = "ActivityInfoDtoList", key = "#scheduleId")
     public Activity createActivity(Long memberId, Long scheduleId, ActivityRequest.CreateActivityDto request) {
         Participant myParticipant = participantManageService.getParticipantByMemberAndSchedule(memberId, scheduleId);
         Activity activity = activityService.createActivity(ActivityConverter.toActivity(myParticipant.getSchedule(), request));
