@@ -2,6 +2,7 @@ package com.namo.spring.application.external.api.record.converter;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import com.namo.spring.application.external.api.record.dto.ActivityResponse;
@@ -11,6 +12,16 @@ import com.namo.spring.db.mysql.domains.record.entity.ActivityParticipant;
 import com.namo.spring.db.mysql.domains.schedule.type.Location;
 
 public class ActivityResponseConverter {
+
+    public static ActivityResponse.ActivityInfoDtoList toActivityInfoDtoList(List<Activity> activity){
+        List<ActivityResponse.ActivityInfoDto> list = activity.stream()
+                .map(ActivityResponseConverter::toActivityInfoDto)
+                .toList();
+
+        return ActivityResponse.ActivityInfoDtoList.builder()
+                .activityInfoDto(list)
+                .build();
+    }
 
     public static ActivityResponse.ActivityInfoDto toActivityInfoDto(Activity activity) {
         return ActivityResponse.ActivityInfoDto.builder()

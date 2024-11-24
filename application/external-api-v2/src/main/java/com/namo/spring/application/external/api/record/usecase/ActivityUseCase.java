@@ -2,6 +2,7 @@ package com.namo.spring.application.external.api.record.usecase;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,14 +26,12 @@ public class ActivityUseCase {
     private final ActivityManageService activityManageService;
     private final ActivityParticipantManageService activityParticipantManageService;
 
+    @Cacheable(value = "ActivityInfoDtoList", key = "#scheduleId", cacheManager = "redisCacheManager", unless = "#result==null")
     @Transactional(readOnly = true)
-    public List<ActivityResponse.ActivityInfoDto> getActivities(Long memberId, Long scheduleId) {
+    public ActivityResponse.ActivityInfoDtoList getActivities(Long memberId, Long scheduleId) {
         Schedule schedule = participantManageService.getParticipantByMemberAndSchedule(memberId, scheduleId).getSchedule();
         List<Activity> activities = schedule.getActivityList();
-
-        return activities.stream()
-                .map(ActivityResponseConverter::toActivityInfoDto)
-                .toList();
+        return ActivityResponseConverter.toActivityInfoDtoList(activities);
     }
 
     @Transactional(readOnly = true)
@@ -58,7 +57,8 @@ public class ActivityUseCase {
     @Transactional
     public void updateActivity(Long memberId, Long activityId, ActivityRequest.UpdateActivityDto request) {
         Activity target = activityManageService.getMyActivity(memberId, activityId);
-        activityManageService.updateActivity(target, request);
+        Long scheduleId = target.getSchedule().getId();
+        activityManageService.updateActivity(target, request, scheduleId);
     }
 
     @Transactional
@@ -85,6 +85,7 @@ public class ActivityUseCase {
     @Transactional
     public void deleteActivity(Long memberId, Long activityId) {
         Activity target = activityManageService.getMyActivity(memberId, activityId);
-        activityManageService.removeActivity(target);
+        Long scheduleId = target.getSchedule().getId();
+        activityManageService.removeActivity(target, scheduleId);
     }
 }

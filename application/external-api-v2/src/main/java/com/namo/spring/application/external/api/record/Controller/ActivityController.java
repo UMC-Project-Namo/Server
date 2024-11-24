@@ -43,7 +43,7 @@ public class ActivityController {
             NOT_FOUND_SCHEDULE_FAILURE,
     })
     @GetMapping("/{scheduleId}")
-    public ResponseDto<List<ActivityResponse.ActivityInfoDto>> getActivity(
+    public ResponseDto<ActivityResponse.ActivityInfoDtoList> getActivity(
             @AuthenticationPrincipal SecurityUserDetails memberInfo,
             @Parameter(description = "활동을 조회할 스케줄 ID 입니다..", example = "1")
             @PathVariable Long scheduleId) {
