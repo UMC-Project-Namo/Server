@@ -8,7 +8,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.namo.spring.application.external.global.config.properties.WebUrlConfig;
-import com.namo.spring.db.mysql.domains.schedule.service.ScheduleService;
 import org.springframework.stereotype.Service;
 
 import com.namo.spring.application.external.api.guest.dto.GuestParticipantRequest;
@@ -23,7 +22,7 @@ import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.exception.ParticipantException;
 import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
-import com.namo.spring.db.mysql.domains.user.dto.AnonymousInviteCodeQuery;
+import com.namo.spring.db.mysql.domains.user.model.query.AnonymousInviteCodeQuery;
 import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
 import com.namo.spring.db.mysql.domains.user.exception.AnonymousException;
 import com.namo.spring.db.mysql.domains.user.service.AnonymousService;

@@ -4,9 +4,12 @@ import static com.namo.spring.application.external.api.schedule.converter.Person
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.namo.spring.application.external.api.user.service.FriendManageService;
-import com.namo.spring.db.mysql.domains.user.dto.FriendBirthdayQuery;
+import com.namo.spring.db.mysql.domains.user.model.dto.FriendBirthdayListDto;
+import com.namo.spring.db.mysql.domains.user.model.query.FriendBirthdayQuery;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +27,7 @@ import com.namo.spring.db.mysql.domains.user.entity.Member;
 
 import lombok.RequiredArgsConstructor;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Component
@@ -56,9 +60,16 @@ public class PersonalScheduleUsecase {
 
     @Transactional(readOnly = true)
     public List<PersonalScheduleResponse.GetMonthlyFriendBirthdayDto> getMonthlyFriendsBirthday(LocalDate startDate, LocalDate endDate,
-                                                                                      SecurityUserDetails memberInfo) {
-        List<FriendBirthdayQuery> friendsBirthday = friendManageService.getMonthlyFriendsBirthday(memberInfo.getUserId(), startDate, endDate);
-        return toGetMonthlyFriendBirthdayDtos(friendsBirthday, startDate, endDate);
+                                                                                                Long memberId) {
+        List<FriendBirthdayListDto.FriendBirthdayDto> friendsBirthdays = friendManageService.getFriendsBirthday(memberId).getFriendsBirthdayDtoList();
+
+        List<FriendBirthdayListDto.FriendBirthdayDto> friendsBirthdaysOfPeriod = friendsBirthdays.stream()
+                .filter(friend -> {
+                    int birthdayMonth = friend.getBirthday().getMonthValue();
+                    return birthdayMonth >= startDate.getMonthValue() && birthdayMonth <= endDate.getMonthValue();
+                })
+                .collect(Collectors.toList());
+        return toGetMonthlyFriendBirthdayListDto(friendsBirthdaysOfPeriod, startDate, endDate);
     }
 
     @Transactional

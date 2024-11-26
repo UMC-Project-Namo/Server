@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import com.namo.spring.db.mysql.domains.user.dto.FriendBirthdayQuery;
+import com.namo.spring.db.mysql.domains.user.model.query.FriendBirthdayQuery;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -32,7 +32,7 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
      * @param endDate
      * @return 친구 memberId, nickname, birthday
      */
-    @Query("SELECT new com.namo.spring.db.mysql.domains.user.dto.FriendBirthdayQuery(fr.id, fr.nickname, fr.birthday) " +
+    @Query("SELECT new com.namo.spring.db.mysql.domains.user.model.query.FriendBirthdayQuery(fr.id, fr.nickname, fr.birthday) " +
             "FROM Friendship f JOIN f.friend fr " +
             "WHERE f.member.id = :memberId " +
             "AND fr.birthdayVisible = true " +
@@ -49,6 +49,19 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
             Long memberId,
             LocalDate startDate,
             LocalDate endDate);
+
+
+    /**
+     * 모든 친구들의 생일을 조회합니다.
+     * @param memberId
+     * @return 친구 memberId, nickname, birthday
+     */
+    @Query("SELECT new com.namo.spring.db.mysql.domains.user.model.query.FriendBirthdayQuery(fr.id, fr.nickname, fr.birthday) " +
+            "FROM Friendship f JOIN f.friend fr " +
+            "WHERE f.member.id = :memberId " +
+            "AND fr.birthdayVisible = true " +
+            "AND f.status = 'ACCEPTED'")
+    List<FriendBirthdayQuery> findBirthdayVisibleFriends(Long memberId);
 
     Optional<Friendship> findByMemberIdAndFriendIdAndStatus(Long memberId, Long friendId, FriendshipStatus status);
 

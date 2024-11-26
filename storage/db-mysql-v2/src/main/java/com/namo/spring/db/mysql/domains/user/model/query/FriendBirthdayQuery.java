@@ -1,4 +1,4 @@
-package com.namo.spring.db.mysql.domains.user.dto;
+package com.namo.spring.db.mysql.domains.user.model.query;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

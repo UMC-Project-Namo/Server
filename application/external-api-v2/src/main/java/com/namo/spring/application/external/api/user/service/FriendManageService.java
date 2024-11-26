@@ -1,30 +1,30 @@
 package com.namo.spring.application.external.api.user.service;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import com.namo.spring.application.external.api.user.converter.FriendshipConverter;
+import com.namo.spring.application.external.global.utils.FriendshipValidator;
+import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
-import com.namo.spring.db.mysql.domains.user.dto.FriendBirthdayQuery;
-
+import com.namo.spring.db.mysql.domains.user.entity.Friendship;
+import com.namo.spring.db.mysql.domains.user.entity.Member;
+import com.namo.spring.db.mysql.domains.user.exception.MemberException;
+import com.namo.spring.db.mysql.domains.user.model.dto.FriendBirthdayListDto;
+import com.namo.spring.db.mysql.domains.user.service.FriendshipService;
+import com.namo.spring.db.mysql.domains.user.type.FriendshipStatus;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.namo.spring.application.external.api.user.converter.FriendshipConverter;
-import com.namo.spring.application.external.global.utils.FriendshipValidator;
-import com.namo.spring.core.common.code.status.ErrorStatus;
-import com.namo.spring.db.mysql.domains.user.entity.Friendship;
-import com.namo.spring.db.mysql.domains.user.entity.Member;
-import com.namo.spring.db.mysql.domains.user.exception.MemberException;
-import com.namo.spring.db.mysql.domains.user.service.FriendshipService;
-import com.namo.spring.db.mysql.domains.user.type.FriendshipStatus;
+import java.time.LocalDate;
+import java.util.Arrays;
 
-import lombok.RequiredArgsConstructor;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class FriendManageService {
@@ -68,11 +68,17 @@ public class FriendManageService {
     }
 
     /**
-     * 친구 요청을 수락하는 메서입니다.
+     * 친구 요청을 수락하는 메서드입니다.
      * !! 나에게 온 요청이 맞는지 검증합니다.
+     * 수락 시 내 친구 생일 조회 및
+     * 친구 사용자의 친구 생일 조회 데이터가 무효화 됩니다.
      * @param memberId 수락할 사람 ID
      * @param friendship 수락할 요청 건
      */
+    @Caching(evict = {
+            @CacheEvict(value = "friendsBirthdayDtoList", key = "#memberId"),
+            @CacheEvict(value = "friendsBirthdayDtoList", key = "#friendship.member.id")
+    })
     public void acceptRequest(Long memberId, Friendship friendship) {
         friendshipValidator.validateFriendshipToMember(friendship, memberId);
         friendship.accept();
@@ -100,8 +106,18 @@ public class FriendManageService {
      * @param endDate
      * @return 친구 memberId, nickname, birthday
      */
-    public List<FriendBirthdayQuery> getMonthlyFriendsBirthday(Long memberId, LocalDate startDate, LocalDate endDate){
+    public FriendBirthdayListDto getMonthlyFriendsBirthday(Long memberId, LocalDate startDate, LocalDate endDate){
         return friendshipService.readBirthdayVisibleFriendsByPeriod(memberId, startDate, endDate);
+    }
+
+    /**
+     * 모든 친구들의 생일을 조회합니다.
+     * @param memberId
+     * @return 친구 memberId, nickname, birthday
+     */
+    @Cacheable(value = "friendsBirthdayDtoList", key = "#memberId", cacheManager = "redisCacheManager", unless = "#result == null || #result.friendsBirthdayDtoList.isEmpty()")
+    public FriendBirthdayListDto getFriendsBirthday(Long memberId){
+        return friendshipService.readBirthdayVisibleFriendsByPeriod(memberId);
     }
 
     public void checkMemberIsFriend(Long memberId, Long friendId) {
@@ -131,6 +147,10 @@ public class FriendManageService {
      * @param target
      * @param reversedTarget
      */
+    @Caching(evict = {
+            @CacheEvict(value = "friendsBirthdayDtoList", key = "#target.member.id"),
+            @CacheEvict(value = "friendsBirthdayDtoList", key = "#target.friend.id")
+    })
     public void deleteFriendShip(Friendship target, Friendship reversedTarget) {
         friendshipService.deleteAll(Arrays.asList(target, reversedTarget));
     }

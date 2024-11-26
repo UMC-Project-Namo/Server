@@ -1,4 +1,4 @@
-package com.namo.spring.db.mysql.domains.schedule.dto;
+package com.namo.spring.db.mysql.domains.schedule.model.query;
 
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 

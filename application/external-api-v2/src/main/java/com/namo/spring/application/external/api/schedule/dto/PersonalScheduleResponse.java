@@ -1,5 +1,6 @@
 package com.namo.spring.application.external.api.schedule.dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class PersonalScheduleResponse {
     private PersonalScheduleResponse() {
@@ -92,7 +94,7 @@ public class PersonalScheduleResponse {
         @Schema(description = "알림 트리거, 정시 -> 'ST', 일-> 'D{1-59 까지의 정수}', 시-> 'H{1-36 까지의 정수}', 분-> 'M{1-7 까지의 정수}")
         private String trigger;
     }
-
+    
     @AllArgsConstructor
     @Getter
     @Builder
@@ -100,8 +102,8 @@ public class PersonalScheduleResponse {
     public static class GetMonthlyFriendBirthdayDto {
         @Schema(description = "친구 이름", example = "나몽")
         private String nickname;
-        @Schema(description = "친구의 생일(현재 년도 기준)", example = "2024-10-04 00:00:00")
-        private LocalDateTime birthdayDate;
+        @Schema(description = "친구의 생일(현재 년도 기준)", example = "2024-10-04")
+        private LocalDate birthdayDate;
     }
 
     @AllArgsConstructor

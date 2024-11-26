@@ -1,4 +1,4 @@
-package com.namo.spring.db.mysql.domains.schedule.dto;
+package com.namo.spring.db.mysql.domains.schedule.model.query;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

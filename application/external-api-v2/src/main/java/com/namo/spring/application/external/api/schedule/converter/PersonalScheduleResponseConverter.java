@@ -9,14 +9,14 @@ import java.util.stream.Collectors;
 
 import com.namo.spring.application.external.api.schedule.dto.PersonalScheduleResponse;
 import com.namo.spring.application.external.global.utils.ReminderTimeUtils;
-import com.namo.spring.core.common.utils.DateUtil;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
 import com.namo.spring.db.mysql.domains.notification.dto.ScheduleNotificationQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.type.Location;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
-import com.namo.spring.db.mysql.domains.user.dto.FriendBirthdayQuery;
+import com.namo.spring.db.mysql.domains.user.model.dto.FriendBirthdayListDto;
+import com.namo.spring.db.mysql.domains.user.model.query.FriendBirthdayQuery;
 
 public class PersonalScheduleResponseConverter {
     private PersonalScheduleResponseConverter() {
@@ -122,17 +122,17 @@ public class PersonalScheduleResponseConverter {
                 .build();
     }
 
-    public static List<PersonalScheduleResponse.GetMonthlyFriendBirthdayDto> toGetMonthlyFriendBirthdayDtos(List<FriendBirthdayQuery> friendBirthdays, LocalDate startDate, LocalDate endDate){
+    public static List<PersonalScheduleResponse.GetMonthlyFriendBirthdayDto> toGetMonthlyFriendBirthdayListDto(List<FriendBirthdayListDto.FriendBirthdayDto> friendBirthdays, LocalDate startDate, LocalDate endDate){
         return friendBirthdays.stream()
                 .map(friendBirthday -> toGetMonthlyFriendBirthdayDto(friendBirthday, startDate, endDate))
                 .collect(Collectors.toList());
     }
 
-    public static PersonalScheduleResponse.GetMonthlyFriendBirthdayDto toGetMonthlyFriendBirthdayDto(FriendBirthdayQuery friendBirthday, LocalDate startDate, LocalDate endDate){
+    public static PersonalScheduleResponse.GetMonthlyFriendBirthdayDto toGetMonthlyFriendBirthdayDto(FriendBirthdayListDto.FriendBirthdayDto friendBirthday, LocalDate startDate, LocalDate endDate){
         int year = friendBirthday.getBirthday().getMonthValue() == startDate.getMonthValue() ? startDate.getYear() : endDate.getYear();
         return PersonalScheduleResponse.GetMonthlyFriendBirthdayDto.builder()
                 .nickname(friendBirthday.getNickname())
-                .birthdayDate(friendBirthday.getBirthday().withYear(year).atStartOfDay())
+                .birthdayDate(friendBirthday.getBirthday().withYear(year))
                 .build();
     }
 

@@ -4,11 +4,12 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import com.namo.spring.db.mysql.domains.user.model.dto.FriendBirthdayListDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.namo.spring.core.common.annotation.DomainService;
-import com.namo.spring.db.mysql.domains.user.dto.FriendBirthdayQuery;
+import com.namo.spring.db.mysql.domains.user.model.query.FriendBirthdayQuery;
 import com.namo.spring.db.mysql.domains.user.entity.Friendship;
 import com.namo.spring.db.mysql.domains.user.repository.FriendshipRepository;
 import com.namo.spring.db.mysql.domains.user.type.FriendshipStatus;
@@ -79,8 +80,18 @@ public class FriendshipService {
      * @return 친구 memberId, nickname, birthday
      */
     @Transactional(readOnly = true)
-    public List<FriendBirthdayQuery> readBirthdayVisibleFriendsByPeriod(Long memberId, LocalDate startDate,
+    public FriendBirthdayListDto readBirthdayVisibleFriendsByPeriod(Long memberId, LocalDate startDate,
                                                                         LocalDate endDate){
-        return friendshipRepository.findBirthdayVisibleFriendIdsByPeriod(memberId, startDate, endDate);
+        return FriendBirthdayListDto.of(friendshipRepository.findBirthdayVisibleFriendIdsByPeriod(memberId, startDate, endDate));
+    }
+
+    /**
+     * 모든 친구들의 생일을 조회합니다.
+     * @param memberId
+     * @return 친구 memberId, nickname, birthday
+     */
+    @Transactional(readOnly = true)
+    public FriendBirthdayListDto readBirthdayVisibleFriendsByPeriod(Long memberId){
+        return FriendBirthdayListDto.of(friendshipRepository.findBirthdayVisibleFriends(memberId));
     }
 }
