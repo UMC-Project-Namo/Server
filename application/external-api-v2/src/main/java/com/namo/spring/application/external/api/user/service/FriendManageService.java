@@ -4,11 +4,10 @@ import com.namo.spring.application.external.api.user.converter.FriendshipConvert
 import com.namo.spring.application.external.global.utils.FriendshipValidator;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
-import com.namo.spring.db.mysql.domains.user.model.dto.FriendBirthdayListDto;
-import com.namo.spring.db.mysql.domains.user.model.query.FriendBirthdayQuery;
 import com.namo.spring.db.mysql.domains.user.entity.Friendship;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.exception.MemberException;
+import com.namo.spring.db.mysql.domains.user.model.dto.FriendBirthdayListDto;
 import com.namo.spring.db.mysql.domains.user.service.FriendshipService;
 import com.namo.spring.db.mysql.domains.user.type.FriendshipStatus;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -72,9 +70,15 @@ public class FriendManageService {
     /**
      * 친구 요청을 수락하는 메서드입니다.
      * !! 나에게 온 요청이 맞는지 검증합니다.
+     * 수락 시 내 친구 생일 조회 및
+     * 친구 사용자의 친구 생일 조회 데이터가 무효화 됩니다.
      * @param memberId 수락할 사람 ID
      * @param friendship 수락할 요청 건
      */
+    @Caching(evict = {
+            @CacheEvict(value = "friendsBirthdayDtoList", key = "#memberId"),
+            @CacheEvict(value = "friendsBirthdayDtoList", key = "#friendship.member.id")
+    })
     public void acceptRequest(Long memberId, Friendship friendship) {
         friendshipValidator.validateFriendshipToMember(friendship, memberId);
         friendship.accept();
