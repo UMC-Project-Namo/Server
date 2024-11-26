@@ -11,7 +11,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,7 +59,7 @@ public class PersonalScheduleController implements PersonalScheduleApi {
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
             @AuthenticationPrincipal SecurityUserDetails member) {
         validatePeriod(startDate, endDate);
-        return ResponseDto.onSuccess(personalScheduleUsecase.getMonthlyFriendsBirthday(startDate, endDate, member));
+        return ResponseDto.onSuccess(personalScheduleUsecase.getMonthlyFriendsBirthday(startDate, endDate, member.getUserId()));
     }
 
     /**
