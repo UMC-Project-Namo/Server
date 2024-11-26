@@ -147,6 +147,10 @@ public class FriendManageService {
      * @param target
      * @param reversedTarget
      */
+    @Caching(evict = {
+            @CacheEvict(value = "friendsBirthdayDtoList", key = "#target.member.id"),
+            @CacheEvict(value = "friendsBirthdayDtoList", key = "#target.friend.id")
+    })
     public void deleteFriendShip(Friendship target, Friendship reversedTarget) {
         friendshipService.deleteAll(Arrays.asList(target, reversedTarget));
     }
