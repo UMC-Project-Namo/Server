@@ -1,8 +1,8 @@
 package com.namo.spring.application.external.api.schedule.converter;
 
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleResponse;
-import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
-import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleSummaryQuery;
+import com.namo.spring.db.mysql.domains.schedule.model.query.ScheduleParticipantQuery;
+import com.namo.spring.db.mysql.domains.schedule.model.query.ScheduleSummaryQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.type.Location;

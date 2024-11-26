@@ -9,14 +9,14 @@ import java.util.stream.Collectors;
 
 import com.namo.spring.application.external.api.category.service.CategoryManageService;
 import com.namo.spring.db.mysql.domains.category.entity.Category;
-import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleSummaryQuery;
+import com.namo.spring.db.mysql.domains.schedule.model.query.ScheduleSummaryQuery;
 import org.springframework.stereotype.Service;
 
 import com.namo.spring.application.external.api.schedule.converter.LocationConverter;
 import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.api.schedule.dto.PersonalScheduleRequest;
 import com.namo.spring.core.common.code.status.ErrorStatus;
-import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
+import com.namo.spring.db.mysql.domains.schedule.model.query.ScheduleParticipantQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
@@ -28,7 +28,6 @@ import com.namo.spring.db.mysql.domains.schedule.type.Period;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
 import com.namo.spring.db.mysql.domains.user.entity.User;
-import com.namo.spring.db.mysql.domains.user.service.FriendshipService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
