@@ -4,21 +4,21 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleSummaryQuery;
+import com.namo.spring.db.mysql.domains.schedule.model.query.ScheduleSummaryQuery;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.namo.spring.db.mysql.domains.category.entity.Category;
-import com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery;
+import com.namo.spring.db.mysql.domains.schedule.model.query.ScheduleParticipantQuery;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 
 public interface ParticipantRepository extends JpaRepository<Participant, Long> {
 
     List<Participant> findAllByScheduleId(Long scheduleId);
 
-    @Query("SELECT new com.namo.spring.db.mysql.domains.schedule.dto.ScheduleSummaryQuery(" +
+    @Query("SELECT new com.namo.spring.db.mysql.domains.schedule.model.query.ScheduleSummaryQuery(" +
             "s.id, " +
             "p.customTitle, " +
             "s.period.startDate, " +
@@ -59,7 +59,7 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
             "WHERE p.id in :ids AND s.id = :scheduleId")
     List<Participant> findParticipantByIdAndScheduleId(List<Long> ids, Long scheduleId);
 
-    @Query("SELECT DISTINCT new com.namo.spring.db.mysql.domains.schedule.dto.ScheduleParticipantQuery(" +
+    @Query("SELECT DISTINCT new com.namo.spring.db.mysql.domains.schedule.model.query.ScheduleParticipantQuery(" +
             "p.id, m.palette.id, m.id, m.nickname, s, p.customTitle, p.customImage, p.category.isShared, m.birthdayVisible" +
             ") FROM Participant p " +
             "JOIN p.schedule s " +

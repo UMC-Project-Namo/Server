@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.namo.spring.core.common.annotation.DomainService;
-import com.namo.spring.db.mysql.domains.user.dto.AnonymousInviteCodeQuery;
+import com.namo.spring.db.mysql.domains.user.model.query.AnonymousInviteCodeQuery;
 import com.namo.spring.db.mysql.domains.user.entity.Anonymous;
 import com.namo.spring.db.mysql.domains.user.repository.AnonymousRepository;
 
