@@ -26,6 +26,8 @@ public class MeetingScheduleResponse {
         private String title;
         @Schema(description = "일정 시작일", example = "2024-10-04 00:00:00")
         private LocalDateTime startDate;
+        @Schema(description = "일정 종료일", example = "2024-10-05 00:00:00")
+        private LocalDateTime endDate;
         @Schema(description = "모임 일정 이미지  url")
         private String imageUrl;
         @Schema(description = "모임 일정 참여자 수", example = "9")

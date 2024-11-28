@@ -22,6 +22,7 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
             "s.id, " +
             "p.customTitle, " +
             "s.period.startDate, " +
+            "s.period.endDate, " +
             "p.customImage, " +
             "s.participantCount, " +
             "s.participantNicknames, " +

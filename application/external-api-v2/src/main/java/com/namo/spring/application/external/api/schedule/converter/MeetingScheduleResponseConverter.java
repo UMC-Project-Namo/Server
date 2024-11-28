@@ -25,6 +25,7 @@ public class MeetingScheduleResponseConverter {
                 .meetingScheduleId(schedule.getMeetingScheduleId())
                 .title(schedule.getTitle())
                 .startDate(schedule.getStartDate())
+                .endDate(schedule.getEndDate())
                 .imageUrl(schedule.getImageUrl())
                 .participantCount(schedule.getParticipantCount())
                 .participantNicknames(schedule.getParticipantNicknames())
