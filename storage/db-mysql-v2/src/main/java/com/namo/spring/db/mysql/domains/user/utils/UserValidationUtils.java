@@ -24,6 +24,13 @@ public class UserValidationUtils {
         return nickname.trim();
     }
 
+    public static String validateTag(String tag){
+        if (!StringUtils.hasText(tag)) {
+            throw new IllegalArgumentException("tag는 null이거나 빈 문자열일 수 없습니다.");
+        }
+        return tag;
+    }
+
     public static LocalDate validateBirthday(LocalDate birthday) {
         if (birthday == null) {
             throw new IllegalArgumentException("생일은 null일 수 없습니다.");

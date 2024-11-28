@@ -37,7 +37,6 @@ import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
 import com.namo.spring.db.mysql.domains.user.type.MemberRole;
 import com.namo.spring.db.mysql.domains.user.type.MemberStatus;
 import com.namo.spring.db.mysql.domains.user.type.SocialType;
-import com.namo.spring.db.mysql.domains.user.utils.UserValidationUtils;
 
 import lombok.AccessLevel;
 import lombok.Builder;
