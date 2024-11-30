@@ -39,11 +39,17 @@ public class MeetingScheduleUsecase {
     private final GuestManageService guestManageService;
 
     @Transactional
-    public Long createMeetingSchedule(MeetingScheduleRequest.PostMeetingScheduleDto dto, SecurityUserDetails memberInfo) {
-        validateUniqueParticipantIds(memberInfo.getUserId(), dto.getParticipants());
+    public Long createMeetingSchedule(MeetingScheduleRequest.PostMeetingScheduleDto request, SecurityUserDetails memberInfo) {
         Member owner = memberManageService.getActiveMember(memberInfo.getUserId());
-        Schedule schedule = scheduleManageService.createMeetingSchedule(dto, owner);
+        Schedule schedule = scheduleManageService.createMeetingSchedule(request, owner);
         return schedule.getId();
+    }
+
+    @Transactional
+    public void createMeetingParticipants(Long scheduleId, MeetingScheduleRequest.PostMeetingParticipantsDto request, SecurityUserDetails memberInfo){
+        Member owner = memberManageService.getActiveMember(memberInfo.getUserId());
+        Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
+        participantManageService.createMeetingParticipants(owner, schedule, request.getParticipants());
     }
 
     @Transactional(readOnly = true)

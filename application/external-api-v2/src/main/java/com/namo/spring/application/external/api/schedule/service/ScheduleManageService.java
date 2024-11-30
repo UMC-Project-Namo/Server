@@ -73,17 +73,14 @@ public class ScheduleManageService {
     public Schedule createPersonalSchedule(PersonalScheduleRequest.PostPersonalScheduleDto request, Member member) {
         Period period = getValidatedPeriod(request.getPeriod().getStartDate(), request.getPeriod().getEndDate());
         Schedule schedule = scheduleMaker.createPersonalSchedule(request, period, member.getNickname());
-        participantManageService.createPersonalScheduleParticipant(member, schedule, request.getCategoryId());
+        participantManageService.createScheduleOwner(member, schedule, request.getCategoryId(), null);
         return schedule;
     }
 
     public Schedule createMeetingSchedule(MeetingScheduleRequest.PostMeetingScheduleDto request, Member owner) {
-        validateParticipantCount(request.getParticipants().size());
-        List<Member> participants = participantManageService.getFriendshipValidatedParticipants(owner.getId(),
-                request.getParticipants());
         Period period = getValidatedPeriod(request.getPeriod().getStartDate(), request.getPeriod().getEndDate());
         Schedule schedule = scheduleMaker.createMeetingSchedule(request, period, owner.getNickname());
-        participantManageService.createMeetingScheduleParticipants(owner, schedule, participants);
+        participantManageService.createScheduleOwner(owner, schedule, null, owner.getPalette().getId());
         return schedule;
     }
 
@@ -214,10 +211,10 @@ public class ScheduleManageService {
         updateScheduleContent(request.getTitle(), request.getLocation(), request.getPeriod(), request.getImageUrl(), schedule);
         participant.updateCustomScheduleInfo(request.getTitle(), request.getImageUrl());
         // 기존의 인원과, 초대될 & 삭제될 member  검증
-        if (!request.getParticipantsToAdd().isEmpty() || !request.getParticipantsToRemove().isEmpty()) {
+        if (!request.getParticipantsToAdd().isEmpty()) {
             List<Long> participantIds = getScheduleParticipantIds(schedule.getId());
             validateParticipantCount(
-                    participantIds.size() + request.getParticipantsToAdd().size() - request.getParticipantsToRemove().size());
+                    participantIds.size() + request.getParticipantsToAdd().size());
             validateExistingAndNewParticipantIds(participantIds, request.getParticipantsToAdd());
             participantManageService.updateMeetingScheduleParticipants(memberId, schedule, request);
         }

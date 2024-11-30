@@ -21,7 +21,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,15 +34,14 @@ public class ParticipantManageService {
     private final FriendshipService friendshipService;
     private final ParticipantService participantService;
 
-    public void createPersonalScheduleParticipant(Member member, Schedule schedule, Long categoryId) {
-        participantMaker.makeScheduleOwner(schedule, member, categoryId, null);
+    public void createScheduleOwner(Member member, Schedule schedule, Long categoryId, Long paletteId) {
+        participantMaker.makeScheduleOwner(schedule, member, categoryId, paletteId);
     }
 
-    public void createMeetingScheduleParticipants(Member owner, Schedule schedule, List<Member> participants) {
-        participantMaker.makeScheduleOwner(schedule, owner, null, owner.getPalette().getId());
+    public void createMeetingParticipants(Member owner, Schedule schedule, List<Long> memberIds){
+        List<Member> participants = getFriendshipValidatedParticipants(owner.getId(), memberIds);
         participantMaker.makeMeetingScheduleParticipants(schedule, participants);
         List<String> participantNicknames = new ArrayList<>();
-        participantNicknames.add(owner.getNickname());
         participantNicknames.addAll(participants.stream().map(Member::getNickname).collect(Collectors.toList()));
         schedule.setMemberParticipantsInfo(participantNicknames);
     }
@@ -81,15 +79,6 @@ public class ParticipantManageService {
         if (!dto.getParticipantsToAdd().isEmpty()) {
             List<Member> participantsToAdd = getFriendshipValidatedParticipants(ownerId, dto.getParticipantsToAdd());
             participantMaker.makeMeetingScheduleParticipants(schedule, participantsToAdd);
-        }
-
-        if (!dto.getParticipantsToRemove().isEmpty()) {
-            List<Participant> participantsToRemove = participantService.readParticipantsByIdsAndScheduleIdFetchUser(
-                    dto.getParticipantsToRemove(), schedule.getId());
-            if (participantsToRemove.isEmpty()) {
-                throw new ScheduleException(ErrorStatus.NOT_FOUND_PARTICIPANT_FAILURE);
-            }
-            removeParticipants(schedule, participantsToRemove);
         }
     }
 
