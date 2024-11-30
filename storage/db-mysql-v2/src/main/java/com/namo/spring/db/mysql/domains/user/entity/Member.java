@@ -1,5 +1,7 @@
 package com.namo.spring.db.mysql.domains.user.entity;
 
+import static com.namo.spring.db.mysql.domains.user.utils.UserValidationUtils.*;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -134,7 +136,7 @@ public class Member extends BaseTimeEntity implements User {
         this.tag = tag;
         this.email = email;
         this.authId = authId;
-        this.birthday = birthday;
+        this.birthday = validateBirthday(birthday);
         this.birthdayVisible = true;
         this.memberRole = MemberRole.USER;
         this.status = MemberStatus.PENDING;
@@ -172,16 +174,16 @@ public class Member extends BaseTimeEntity implements User {
         return !status.equals(MemberStatus.PENDING);
     }
 
-    public void signUpComplete(String name, String nickname, LocalDate birthday, String bio, String tag, Palette palette,
-            String profileImage) {
+    public void signUpComplete(String name, String nickname, LocalDate birthday, String bio,
+            String tag, Palette palette, String profileImage) {
         this.name = name;
-        this.nickname = nickname;
-        this.birthday = birthday;
-        this.bio = bio;
+        this.nickname = validateNickname(nickname);
+        this.birthday = validateBirthday(birthday);
+        this.bio = validateBio(bio);
         this.tag = tag;
         this.palette = palette;
         this.status = MemberStatus.ACTIVE;
-        this.profileImage = profileImage;
+        this.profileImage = validateProfileImage(profileImage);
         this.signUpAt = LocalDateTime.now();
     }
 
@@ -191,5 +193,15 @@ public class Member extends BaseTimeEntity implements User {
 
     public void updateNotificationEnabled(boolean notificationEnabled){
         this.notificationEnabled = notificationEnabled;
+    }
+
+    public void updateProfile(String nickname, boolean nameVisible, LocalDate birthday,
+            boolean birthdayVisible, String bio, String profileImage) {
+        this.nickname = validateNickname(nickname);
+        this.nameVisible = nameVisible;
+        this.birthday = validateBirthday(birthday);
+        this.birthdayVisible = birthdayVisible;
+        this.bio = validateBio(bio);
+        this.profileImage = validateProfileImage(profileImage);
     }
 }

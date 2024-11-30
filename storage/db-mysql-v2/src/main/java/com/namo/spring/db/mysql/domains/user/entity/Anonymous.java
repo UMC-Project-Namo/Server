@@ -1,5 +1,7 @@
 package com.namo.spring.db.mysql.domains.user.entity;
 
+import static com.namo.spring.db.mysql.domains.user.utils.UserValidationUtils.*;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -14,6 +16,7 @@ import org.springframework.util.StringUtils;
 
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import com.namo.spring.db.mysql.domains.user.type.Password;
+import com.namo.spring.db.mysql.domains.user.utils.UserValidationUtils;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -52,14 +55,10 @@ public class Anonymous extends BaseTimeEntity implements User {
     @Builder
     public Anonymous(String name, Boolean nameVisible, String tag,
             String nickname, String password, String inviteCode) {
-        if (!StringUtils.hasText(nickname))
-            throw new IllegalArgumentException("nickname은 null이거나 빈 문자열일 수 없습니다.");
-        if (!StringUtils.hasText(tag))
-            throw new IllegalArgumentException("tag는 null이거나 빈 문자열일 수 없습니다.");
         this.name = name;
         this.nameVisible = nameVisible;
-        this.tag = tag;
-        this.nickname = nickname;
+        this.tag = validateTag(tag);
+        this.nickname = validateNickname(nickname);
         this.password = Password.encrypt(password);
         this.inviteCode = inviteCode;
     }

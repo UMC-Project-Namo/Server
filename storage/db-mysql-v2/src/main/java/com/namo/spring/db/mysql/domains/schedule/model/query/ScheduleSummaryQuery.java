@@ -13,6 +13,7 @@ public class ScheduleSummaryQuery {
     private Long meetingScheduleId;
     private String title;
     private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private String imageUrl;
     private Integer participantCount;
     private String participantNicknames;
