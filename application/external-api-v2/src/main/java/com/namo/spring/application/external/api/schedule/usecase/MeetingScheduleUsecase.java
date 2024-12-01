@@ -106,7 +106,7 @@ public class MeetingScheduleUsecase {
     public String getGuestInvitationUrl(Long scheduleId, SecurityUserDetails memberInfo) {
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
         scheduleManageService.validateAndGetOwnerParticipant(schedule, memberInfo.getUserId());
-        validateParticipantCount(participantManageService.getScheduleParticipantIds(schedule.getId()).size());
+        validateParticipantCount(schedule.getParticipantCount());
         return guestManageService.generateInvitationUrl(scheduleId);
     }
 
