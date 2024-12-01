@@ -44,7 +44,7 @@ public class MeetingScheduleRequest {
     public static class PostMeetingParticipantsDto {
         @NotNull(message = "모임 일정에 참여할 친구는 1명부터 9명까지 입력 가능합니다.")
         @Schema(description = "스케줄에 참여할 유저 ID")
-        private List<Long> participants;
+        private List<Long> memberIds;
     }
 
     @NoArgsConstructor

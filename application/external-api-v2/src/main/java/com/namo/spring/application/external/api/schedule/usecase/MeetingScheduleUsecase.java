@@ -49,7 +49,7 @@ public class MeetingScheduleUsecase {
     public void createMeetingParticipants(Long scheduleId, MeetingScheduleRequest.PostMeetingParticipantsDto request, SecurityUserDetails memberInfo){
         Member owner = memberManageService.getActiveMember(memberInfo.getUserId());
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
-        participantManageService.createMeetingParticipants(owner, schedule, request.getParticipants());
+        participantManageService.createMeetingParticipants(owner, schedule, request.getMemberIds());
     }
 
     @Transactional(readOnly = true)
