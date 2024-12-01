@@ -96,5 +96,14 @@ public class RedisConfig {
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .disable(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS); // redis를 활용할 객체들에 날짜 정보가 TimeStamp 형식으로 적용되어있을 경우 그대로 RedisTemplate을 사용하면 에러가 발생하므로 그것에 대비하기 위한 설정값
     }
-    
+
+    @Bean
+    public ObjectMapper objectMapper(){
+        return new ObjectMapper()
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                .registerModule(new JavaTimeModule())
+                .disable(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS)
+                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .disable(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS);
+    }
 }
