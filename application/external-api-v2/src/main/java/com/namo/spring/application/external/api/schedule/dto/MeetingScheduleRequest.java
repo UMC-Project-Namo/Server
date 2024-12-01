@@ -89,9 +89,6 @@ public class MeetingScheduleRequest {
         private PeriodDto period;
         @Schema(description = "카카오 맵 장소 정보, 수정 사항이 없을 시 원본 값을 전송합니다.")
         private LocationDto location;
-        @NotNull(message = "추가할 유저가 없을 시 empty array를 전송하세요.")
-        @Schema(description = "스케줄에 추가할 유저 ID(userId), 추가할 유저가 없을 시 empty array를 전송합니다.")
-        private List<Long> participantsToAdd;
     }
 
     @NoArgsConstructor

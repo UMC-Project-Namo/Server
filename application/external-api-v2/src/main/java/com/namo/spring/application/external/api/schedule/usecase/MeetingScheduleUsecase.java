@@ -91,7 +91,6 @@ public class MeetingScheduleUsecase {
     @Transactional
     public void updateMeetingSchedule(MeetingScheduleRequest.PatchMeetingScheduleDto request, Long scheduleId,
                                       SecurityUserDetails memberInfo) {
-        validateUniqueParticipantIds(memberInfo.getUserId(), request);
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
         scheduleManageService.updateMeetingSchedule(request, schedule, memberInfo.getUserId());
     }
@@ -107,7 +106,7 @@ public class MeetingScheduleUsecase {
     public String getGuestInvitationUrl(Long scheduleId, SecurityUserDetails memberInfo) {
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
         scheduleManageService.validateAndGetOwnerParticipant(schedule, memberInfo.getUserId());
-        validateParticipantCount(scheduleManageService.getScheduleParticipantIds(schedule.getId()).size());
+        validateParticipantCount(participantManageService.getScheduleParticipantIds(schedule.getId()).size());
         return guestManageService.generateInvitationUrl(scheduleId);
     }
 
