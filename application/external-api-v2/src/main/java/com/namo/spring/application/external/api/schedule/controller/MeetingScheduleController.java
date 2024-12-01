@@ -65,7 +65,6 @@ public class MeetingScheduleController {
             @PathVariable Long meetingScheduleId,
             @Valid @RequestBody MeetingScheduleRequest.PostMeetingParticipantsDto request,
             @AuthenticationPrincipal SecurityUserDetails memberInfo) {
-        validateParticipantCount(request.getParticipants().size());
         validateUniqueParticipantIds(memberInfo.getUserId(), request.getParticipants());
         meetingScheduleUsecase.createMeetingParticipants(meetingScheduleId, request, memberInfo);
         return ResponseDto.onSuccess("모임 초대 성공");
