@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.namo.spring.core.common.annotation.DomainService;
-import com.namo.spring.db.mysql.domains.user.model.query.FriendBirthdayQuery;
 import com.namo.spring.db.mysql.domains.user.entity.Friendship;
 import com.namo.spring.db.mysql.domains.user.repository.FriendshipRepository;
 import com.namo.spring.db.mysql.domains.user.type.FriendshipStatus;

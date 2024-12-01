@@ -1,10 +1,5 @@
 package com.namo.spring.db.mysql.domains.user.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.namo.spring.db.mysql.domains.user.model.query.FriendBirthdayQuery;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,9 +23,6 @@ public class FriendBirthdayListDto {
     public static class FriendBirthdayDto {
         private Long memberId;
         private String nickname;
-        @JsonSerialize(using = LocalDateSerializer.class)
-        @JsonDeserialize(using = LocalDateDeserializer.class)
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDate birthday;
     }
 
