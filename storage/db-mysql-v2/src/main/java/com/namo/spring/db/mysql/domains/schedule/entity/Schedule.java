@@ -114,8 +114,15 @@ public class Schedule extends BaseTimeEntity {
     public void setMemberParticipantsInfo(List<String> nicknames) {
         if (nicknames.isEmpty())
             throw new IllegalArgumentException("nickname은 null이거나 빈 list일 수 없습니다.");
-        this.participantNicknames = String.join(", ", nicknames);
-        this.participantCount = nicknames.size();
+
+        if (this.participantNicknames != null && !this.participantNicknames.isEmpty()) {
+            List<String> allNicknames = new ArrayList<>(Arrays.asList(this.participantNicknames.split(", ")));
+            allNicknames.addAll(nicknames);
+            this.participantNicknames = String.join(", ", allNicknames);
+        } else {
+            this.participantNicknames = String.join(", ", nicknames);
+        }
+        this.participantCount += nicknames.size();
     }
 
     public void setGuestParticipantsInfo(String nickname) {

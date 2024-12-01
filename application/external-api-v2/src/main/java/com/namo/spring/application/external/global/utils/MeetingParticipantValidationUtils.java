@@ -45,21 +45,6 @@ public class MeetingParticipantValidationUtils {
     }
 
     /**
-     * 모임 일정에 초대 / 삭제할 유저에
-     * 모임 일정 생성자가 포함되어있는지,
-     * 중복되는 ID가 있는지 검증합니다.
-     *
-     * @param ownerId 모임 일정 생정자 ID
-     * @param dto     참석자 ID 배열
-     */
-    public static void validateUniqueParticipantIds(Long ownerId, MeetingScheduleRequest.PatchMeetingScheduleDto dto) {
-        List<Long> participantIds = new ArrayList<>();
-        participantIds.addAll(dto.getParticipantsToAdd());
-        participantIds.addAll(dto.getParticipantsToRemove());
-        validateUniqueParticipantIds(ownerId, participantIds);
-    }
-
-    /**
      * 기존에 초대된 참석자와 새로 초대할 참석자에
      * 중복되는 참석자가 있는지 검증합니다.
      *

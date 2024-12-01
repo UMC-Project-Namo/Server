@@ -1,6 +1,5 @@
 package com.namo.spring.application.external.api.schedule.controller;
 
-import static com.namo.spring.application.external.global.utils.MeetingParticipantValidationUtils.validateParticipantCount;
 import static com.namo.spring.application.external.global.utils.MeetingParticipantValidationUtils.validateUniqueParticipantIds;
 import static com.namo.spring.application.external.global.utils.PeriodValidationUtils.validatePeriod;
 import static com.namo.spring.core.common.code.status.ErrorStatus.*;
@@ -13,7 +12,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,7 +63,7 @@ public class MeetingScheduleController {
             @PathVariable Long meetingScheduleId,
             @Valid @RequestBody MeetingScheduleRequest.PostMeetingParticipantsDto request,
             @AuthenticationPrincipal SecurityUserDetails memberInfo) {
-        validateUniqueParticipantIds(memberInfo.getUserId(), request.getParticipants());
+        validateUniqueParticipantIds(memberInfo.getUserId(), request.getMemberIds());
         meetingScheduleUsecase.createMeetingParticipants(meetingScheduleId, request, memberInfo);
         return ResponseDto.onSuccess("모임 초대 성공");
     }
