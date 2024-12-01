@@ -16,5 +16,4 @@ dependencies {
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.flywaydb:flyway-mysql'
 
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 }
