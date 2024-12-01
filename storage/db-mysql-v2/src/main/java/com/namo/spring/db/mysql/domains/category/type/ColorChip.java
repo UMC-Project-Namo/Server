@@ -34,11 +34,11 @@ public enum ColorChip {
     }
 
     public static Long getBaseCategoryPaletteId() {
-        return NAMO_ORANGE.id;
+        return NAMO_PINK.id;
     }
 
     public static Long getBaseMeetingCategoryPaletteId() {
-        return NAMO_PINK.id;
+        return NAMO_ORANGE.id;
     }
 
     public static Long getBaseBirthdayCategoryPaletteId() {
