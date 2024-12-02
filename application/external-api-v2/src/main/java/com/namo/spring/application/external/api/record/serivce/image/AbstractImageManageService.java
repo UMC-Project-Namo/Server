@@ -32,6 +32,7 @@ public abstract class AbstractImageManageService<T, R> implements ImageManageSer
             long timestamp = System.currentTimeMillis();
             String redisKey = generateImageRedisKey(entity, imageId, timestamp);
             redisUtil.saveWithTTL(redisKey, url, 100);
+            redisUtil.zAdd("imageKeys", redisKey, timestamp);
         });
     }
 
