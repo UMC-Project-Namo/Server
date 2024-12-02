@@ -48,6 +48,18 @@ public class RedisUtil {
             log.error("Redis에서 key={} 삭제 실패: 이유={}", key, e.getMessage());
         }
     }
-    
+
+    // Redis의 Sorted Set 데이터 구조를 사용 기능
+    public void zAdd(String key, String value, double score) {
+        redisTemplate.opsForZSet().add(key, value, score);
+    }
+
+    public Set<String> zRangeByScore(String key, double min, double max) {
+        return redisTemplate.opsForZSet().rangeByScore(key, min, max);
+    }
+
+    public void zRem(String key, String value) {
+        redisTemplate.opsForZSet().remove(key, value);
+    }
 
 }
