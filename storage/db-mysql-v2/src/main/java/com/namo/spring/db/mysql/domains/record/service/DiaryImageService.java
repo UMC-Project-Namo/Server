@@ -34,4 +34,8 @@ public class DiaryImageService {
     public void deleteAll(Diary diary) {
         diaryImageRepository.deleteAllByDiary(diary);
     }
+
+    public void save(DiaryImage diaryImage){
+        diaryImageRepository.save(diaryImage);
+    }
 }
