@@ -3,11 +3,14 @@ package com.namo.spring.application.external.api.record.serivce.image;
 import org.springframework.stereotype.Component;
 
 import com.namo.spring.application.external.api.record.dto.DiaryRequest;
+import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.core.infra.common.aws.s3.FileUtils;
 import com.namo.spring.core.infra.common.constant.FilePath;
 import com.namo.spring.db.mysql.domains.record.entity.Diary;
 import com.namo.spring.db.mysql.domains.record.entity.DiaryImage;
+import com.namo.spring.db.mysql.domains.record.exception.DiaryImageException;
 import com.namo.spring.db.mysql.domains.record.service.DiaryImageService;
+import com.namo.spring.db.redis.util.RedisUtil;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +22,8 @@ public class DiaryImageManageService extends AbstractImageManageService<Diary, D
 
     private final DiaryImageService diaryImageService;
 
-    public DiaryImageManageService(FileUtils fileUtils, DiaryImageService diaryImageService) {
-        super(fileUtils);
+    public DiaryImageManageService(FileUtils fileUtils, RedisUtil redisUtil, DiaryImageService diaryImageService) {
+        super(fileUtils, redisUtil);
         this.diaryImageService = diaryImageService;
     }
 
@@ -44,9 +47,10 @@ public class DiaryImageManageService extends AbstractImageManageService<Diary, D
     }
 
     @Override
-    protected void createImage(Diary diary, String imageUrl) {
+    protected Long createImage(Diary diary, String imageUrl) {
         DiaryImage image = DiaryImage.of(diary, imageUrl, 0);
         diaryImageService.createDiaryImage(image);
+        return image.getId();
     }
 
     @Override
@@ -59,5 +63,12 @@ public class DiaryImageManageService extends AbstractImageManageService<Diary, D
         return diaryImageService.readDiaryImage(imageId)
                 .map(DiaryImage::getImageUrl)
                 .orElse(null);
+    }
+
+    public void updateImageUrl(Long imageId, String resizedUrl) {
+        DiaryImage diaryImage = diaryImageService.readDiaryImage(imageId)
+                .orElseThrow(() -> new DiaryImageException(ErrorStatus.NOT_FOUND_IMAGE));
+        diaryImage.updateImageUrl(resizedUrl);
+        diaryImageService.save(diaryImage);
     }
 }
