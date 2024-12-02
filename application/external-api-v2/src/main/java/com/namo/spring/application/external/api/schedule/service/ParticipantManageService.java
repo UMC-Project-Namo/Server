@@ -1,7 +1,6 @@
 package com.namo.spring.application.external.api.schedule.service;
 
 import com.namo.spring.application.external.api.record.enums.DiaryFilter;
-import com.namo.spring.application.external.api.schedule.dto.MeetingScheduleRequest;
 import com.namo.spring.application.external.global.utils.PeriodValidationUtils;
 import com.namo.spring.core.common.code.status.ErrorStatus;
 import com.namo.spring.db.mysql.domains.schedule.entity.Participant;
@@ -9,6 +8,7 @@ import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.exception.ParticipantException;
 import com.namo.spring.db.mysql.domains.schedule.exception.ScheduleException;
 import com.namo.spring.db.mysql.domains.schedule.service.ParticipantService;
+import com.namo.spring.db.mysql.domains.schedule.type.ParticipantRole;
 import com.namo.spring.db.mysql.domains.schedule.type.Period;
 import com.namo.spring.db.mysql.domains.user.entity.Friendship;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
@@ -21,11 +21,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.namo.spring.application.external.global.utils.MeetingParticipantValidationUtils.validateParticipantCount;
 
 @Slf4j
 @Service
@@ -35,15 +36,16 @@ public class ParticipantManageService {
     private final FriendshipService friendshipService;
     private final ParticipantService participantService;
 
-    public void createPersonalScheduleParticipant(Member member, Schedule schedule, Long categoryId) {
-        participantMaker.makeScheduleOwner(schedule, member, categoryId, null);
+    public void createScheduleOwner(Member member, Schedule schedule, Long categoryId, Long paletteId) {
+        participantMaker.makeScheduleOwner(schedule, member, categoryId, paletteId);
     }
 
-    public void createMeetingScheduleParticipants(Member owner, Schedule schedule, List<Member> participants) {
-        participantMaker.makeScheduleOwner(schedule, owner, null, owner.getPalette().getId());
+    public void createMeetingParticipants(Member owner, Schedule schedule, List<Long> memberIds){
+        // 방장의 인원 제외하고 참여자 계산
+        validateParticipantCount(schedule.getParticipantCount() - 1 + memberIds.size());
+        List<Member> participants = getFriendshipValidatedParticipants(owner.getId(), memberIds);
         participantMaker.makeMeetingScheduleParticipants(schedule, participants);
         List<String> participantNicknames = new ArrayList<>();
-        participantNicknames.add(owner.getNickname());
         participantNicknames.addAll(participants.stream().map(Member::getNickname).collect(Collectors.toList()));
         schedule.setMemberParticipantsInfo(participantNicknames);
     }
@@ -56,6 +58,22 @@ public class ParticipantManageService {
             throw new MemberException(ErrorStatus.NOT_FOUND_FRIENDSHIP_FAILURE);
         }
         return friends;
+    }
+
+    /**
+     * 모임 일정에 대한 모든 참여자의 ID를 반환합니다,
+     * 반환 값에는 활성, 비활성 모든 상태의 참여자가 포함됩니다.
+     * 모임 일정 초대 인원 수를 검증하기 위해 사용합니다.
+     *
+     * @param scheduleId
+     * @return 모임 일정에 대한 모든 참여자의 ID 배열
+     */
+    public List<Long> getScheduleParticipantIds(Long scheduleId) {
+        return participantService.readParticipantsByScheduleId(scheduleId).stream()
+                .filter(participant -> participant.getIsOwner() == ParticipantRole.NON_OWNER.getValue())
+                .map(Participant::getMember)
+                .map(Member::getId)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -74,23 +92,6 @@ public class ParticipantManageService {
     public void deleteParticipant(Participant participant, Schedule schedule) {
         participantService.deleteParticipant(participant.getId());
         schedule.removeParticipant(participant.getMember().getNickname());
-    }
-
-    public void updateMeetingScheduleParticipants(Long ownerId, Schedule schedule,
-            MeetingScheduleRequest.PatchMeetingScheduleDto dto) {
-        if (!dto.getParticipantsToAdd().isEmpty()) {
-            List<Member> participantsToAdd = getFriendshipValidatedParticipants(ownerId, dto.getParticipantsToAdd());
-            participantMaker.makeMeetingScheduleParticipants(schedule, participantsToAdd);
-        }
-
-        if (!dto.getParticipantsToRemove().isEmpty()) {
-            List<Participant> participantsToRemove = participantService.readParticipantsByIdsAndScheduleIdFetchUser(
-                    dto.getParticipantsToRemove(), schedule.getId());
-            if (participantsToRemove.isEmpty()) {
-                throw new ScheduleException(ErrorStatus.NOT_FOUND_PARTICIPANT_FAILURE);
-            }
-            removeParticipants(schedule, participantsToRemove);
-        }
     }
 
     private void removeParticipants(Schedule schedule, List<Participant> participants) {

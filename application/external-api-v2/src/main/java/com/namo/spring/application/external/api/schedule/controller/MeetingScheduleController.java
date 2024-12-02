@@ -1,5 +1,6 @@
 package com.namo.spring.application.external.api.schedule.controller;
 
+import static com.namo.spring.application.external.global.utils.MeetingParticipantValidationUtils.validateUniqueParticipantIds;
 import static com.namo.spring.application.external.global.utils.PeriodValidationUtils.validatePeriod;
 import static com.namo.spring.core.common.code.status.ErrorStatus.*;
 
@@ -11,7 +12,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,10 +37,7 @@ public class MeetingScheduleController {
 
     @Operation(summary = "모임 일정 생성", description = "모임 일정을 생성합니다. 요청 성공 시 모임 일정 ID를 전송합니다.")
     @ApiErrorCodes(value = {
-            NOT_INCLUDE_OWNER_IN_REQUEST,
-            DUPLICATE_MEETING_PARTICIPANT,
             NOT_FOUND_USER_FAILURE,
-            INVALID_MEETING_PARTICIPANT_COUNT,
             NOT_FOUND_FRIENDSHIP_FAILURE,
             INVALID_DATE,
             NOT_FOUND_CATEGORY_FAILURE,
@@ -51,6 +48,24 @@ public class MeetingScheduleController {
             @Valid @RequestBody MeetingScheduleRequest.PostMeetingScheduleDto request,
             @AuthenticationPrincipal SecurityUserDetails memberInfo) {
         return ResponseDto.onSuccess(meetingScheduleUsecase.createMeetingSchedule(request, memberInfo));
+    }
+
+    @Operation(summary = "모임 일정 초대하기")
+    @ApiErrorCodes(value = {
+            NOT_INCLUDE_OWNER_IN_REQUEST,
+            DUPLICATE_MEETING_PARTICIPANT,
+            INVALID_MEETING_PARTICIPANT_COUNT,
+            NOT_FOUND_CATEGORY_FAILURE,
+            NOT_FOUND_PALETTE_FAILURE,
+    })
+    @PostMapping(path = "/{meetingScheduleId}/invitations")
+    public ResponseDto<String> inviteMeetingParticipants(
+            @PathVariable Long meetingScheduleId,
+            @Valid @RequestBody MeetingScheduleRequest.PostMeetingParticipantsDto request,
+            @AuthenticationPrincipal SecurityUserDetails memberInfo) {
+        validateUniqueParticipantIds(memberInfo.getUserId(), request.getMemberIds());
+        meetingScheduleUsecase.createMeetingParticipants(meetingScheduleId, request, memberInfo);
+        return ResponseDto.onSuccess("모임 초대 성공");
     }
 
     @Operation(summary = "모임 일정 목록 조회", description = "모임 일정 목록을 조회합니다.")
@@ -167,7 +182,7 @@ public class MeetingScheduleController {
     })
     @DeleteMapping(path = "/{meetingScheduleId}/withdraw")
     public ResponseDto<String> leaveMeeting(@PathVariable Long meetingScheduleId,
-                                            @AuthenticationPrincipal SecurityUserDetails memberInfo){
+                                            @AuthenticationPrincipal SecurityUserDetails memberInfo) {
         meetingScheduleUsecase.leaveMeetingSchedule(meetingScheduleId, memberInfo);
         return ResponseDto.onSuccess("모임 나가기 성공");
     }
@@ -181,7 +196,7 @@ public class MeetingScheduleController {
             @AuthenticationPrincipal SecurityUserDetails memberInfo,
             @Parameter(description = "전체 정산할 스케줄(scheduleId) ID 입니다.", example = "1")
             @PathVariable Long scheduleId
-    ){
+    ) {
         return ResponseDto.onSuccess(meetingScheduleUsecase
                 .getScheduleSettlement(memberInfo.getUserId(), scheduleId));
     }

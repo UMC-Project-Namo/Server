@@ -35,9 +35,16 @@ public class MeetingScheduleRequest {
         private PeriodDto period;
         @Schema(description = "카카오 맵 장소 정보, 장소가 없을 시 null을 전송합니다.")
         private LocationDto location;
+    }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    @Schema(title = "모임 일정 초대하기 DTO")
+    public static class PostMeetingParticipantsDto {
         @NotNull(message = "모임 일정에 참여할 친구는 1명부터 9명까지 입력 가능합니다.")
         @Schema(description = "스케줄에 참여할 유저 ID")
-        private List<Long> participants;
+        private List<Long> memberIds;
     }
 
     @NoArgsConstructor
@@ -82,12 +89,6 @@ public class MeetingScheduleRequest {
         private PeriodDto period;
         @Schema(description = "카카오 맵 장소 정보, 수정 사항이 없을 시 원본 값을 전송합니다.")
         private LocationDto location;
-        @NotNull(message = "추가할 유저가 없을 시 empty array를 전송하세요.")
-        @Schema(description = "스케줄에 추가할 유저 ID(userId), 추가할 유저가 없을 시 empty array를 전송합니다.")
-        private List<Long> participantsToAdd;
-        @NotNull(message = "삭제할 유저가 없을 시 empty array를 전송하세요.")
-        @Schema(description = "스케줄에서 삭제할 참가자 ID(participantId), 삭제할 유저가 없을 시 empty array를 전송합니다.")
-        private List<Long> participantsToRemove;
     }
 
     @NoArgsConstructor

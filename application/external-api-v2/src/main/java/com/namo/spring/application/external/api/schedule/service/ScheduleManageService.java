@@ -73,17 +73,14 @@ public class ScheduleManageService {
     public Schedule createPersonalSchedule(PersonalScheduleRequest.PostPersonalScheduleDto request, Member member) {
         Period period = getValidatedPeriod(request.getPeriod().getStartDate(), request.getPeriod().getEndDate());
         Schedule schedule = scheduleMaker.createPersonalSchedule(request, period, member.getNickname());
-        participantManageService.createPersonalScheduleParticipant(member, schedule, request.getCategoryId());
+        participantManageService.createScheduleOwner(member, schedule, request.getCategoryId(), null);
         return schedule;
     }
 
     public Schedule createMeetingSchedule(MeetingScheduleRequest.PostMeetingScheduleDto request, Member owner) {
-        validateParticipantCount(request.getParticipants().size());
-        List<Member> participants = participantManageService.getFriendshipValidatedParticipants(owner.getId(),
-                request.getParticipants());
         Period period = getValidatedPeriod(request.getPeriod().getStartDate(), request.getPeriod().getEndDate());
         Schedule schedule = scheduleMaker.createMeetingSchedule(request, period, owner.getNickname());
-        participantManageService.createMeetingScheduleParticipants(owner, schedule, participants);
+        participantManageService.createScheduleOwner(owner, schedule, null, owner.getPalette().getId());
         return schedule;
     }
 
@@ -213,14 +210,6 @@ public class ScheduleManageService {
         Participant participant = validateAndGetOwnerParticipant(schedule, memberId);
         updateScheduleContent(request.getTitle(), request.getLocation(), request.getPeriod(), request.getImageUrl(), schedule);
         participant.updateCustomScheduleInfo(request.getTitle(), request.getImageUrl());
-        // 기존의 인원과, 초대될 & 삭제될 member  검증
-        if (!request.getParticipantsToAdd().isEmpty() || !request.getParticipantsToRemove().isEmpty()) {
-            List<Long> participantIds = getScheduleParticipantIds(schedule.getId());
-            validateParticipantCount(
-                    participantIds.size() + request.getParticipantsToAdd().size() - request.getParticipantsToRemove().size());
-            validateExistingAndNewParticipantIds(participantIds, request.getParticipantsToAdd());
-            participantManageService.updateMeetingScheduleParticipants(memberId, schedule, request);
-        }
     }
 
     /**
@@ -230,23 +219,6 @@ public class ScheduleManageService {
                                              Long memberId){
         Participant participant = participantManageService.getParticipantByMemberAndSchedule(memberId, schedule.getId());
         participant.updateCustomScheduleInfo(request.getTitle(), request.getImageUrl());
-    }
-
-    /**
-     * 모임 일정에 대한 모든 참여자의 ID를 반환합니다,
-     * 반환 값에는 활성, 비활성 모든 상태의 참여자가 포함됩니다.
-     * 모임 일정 초대 인원 수를 검증하기 위해 사용합니다.
-     *
-     * @param scheduleId
-     * @return 모임 일정에 대한 모든 참여자의 ID 배열
-     */
-    public List<Long> getScheduleParticipantIds(Long scheduleId) {
-        List<Long> participantIds = participantService.readParticipantsByScheduleId(scheduleId).stream()
-                .filter(participant -> participant.getIsOwner() == ParticipantRole.NON_OWNER.getValue())
-                .map(Participant::getMember)
-                .map(Member::getId)
-                .collect(Collectors.toList());
-        return participantIds;
     }
 
     private void updateScheduleContent(String title, MeetingScheduleRequest.LocationDto locationDto,

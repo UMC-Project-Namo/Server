@@ -39,11 +39,17 @@ public class MeetingScheduleUsecase {
     private final GuestManageService guestManageService;
 
     @Transactional
-    public Long createMeetingSchedule(MeetingScheduleRequest.PostMeetingScheduleDto dto, SecurityUserDetails memberInfo) {
-        validateUniqueParticipantIds(memberInfo.getUserId(), dto.getParticipants());
+    public Long createMeetingSchedule(MeetingScheduleRequest.PostMeetingScheduleDto request, SecurityUserDetails memberInfo) {
         Member owner = memberManageService.getActiveMember(memberInfo.getUserId());
-        Schedule schedule = scheduleManageService.createMeetingSchedule(dto, owner);
+        Schedule schedule = scheduleManageService.createMeetingSchedule(request, owner);
         return schedule.getId();
+    }
+
+    @Transactional
+    public void createMeetingParticipants(Long scheduleId, MeetingScheduleRequest.PostMeetingParticipantsDto request, SecurityUserDetails memberInfo){
+        Member owner = memberManageService.getActiveMember(memberInfo.getUserId());
+        Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
+        participantManageService.createMeetingParticipants(owner, schedule, request.getMemberIds());
     }
 
     @Transactional(readOnly = true)
@@ -85,7 +91,6 @@ public class MeetingScheduleUsecase {
     @Transactional
     public void updateMeetingSchedule(MeetingScheduleRequest.PatchMeetingScheduleDto request, Long scheduleId,
                                       SecurityUserDetails memberInfo) {
-        validateUniqueParticipantIds(memberInfo.getUserId(), request);
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
         scheduleManageService.updateMeetingSchedule(request, schedule, memberInfo.getUserId());
     }
@@ -101,7 +106,7 @@ public class MeetingScheduleUsecase {
     public String getGuestInvitationUrl(Long scheduleId, SecurityUserDetails memberInfo) {
         Schedule schedule = scheduleManageService.getMeetingSchedule(scheduleId);
         scheduleManageService.validateAndGetOwnerParticipant(schedule, memberInfo.getUserId());
-        validateParticipantCount(scheduleManageService.getScheduleParticipantIds(schedule.getId()).size());
+        validateParticipantCount(schedule.getParticipantCount());
         return guestManageService.generateInvitationUrl(scheduleId);
     }
 
