@@ -136,7 +136,7 @@ public class Member extends BaseTimeEntity implements User {
         this.tag = tag;
         this.email = email;
         this.authId = authId;
-        this.birthday = validateBirthday(birthday);
+        this.birthday = birthday;
         this.birthdayVisible = true;
         this.memberRole = MemberRole.USER;
         this.status = MemberStatus.PENDING;
