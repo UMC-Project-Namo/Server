@@ -110,7 +110,7 @@ Continue....
 - [CloudFront를 활용한 CDN 도입 : 나모의 이미지 기능 수정과정 4편](https://namo-log.vercel.app/server-editing-image-4)
 - [객체지향적인 나모 만들기 : 역할과 책임의 재분배](https://tech.namong.shop/object-oriented-namo)
 - [더 빠른 모임 기록 제공하기 : Redis 활용기](https://namo-log.vercel.app/faster-faster-cache)
-
+- [중단 없는 이미지 제공하기 : Redis 활용기 2탄](https://namo-log.vercel.app/uninterrupted-image-delivery)
 
 ### 다나/서주원
 
