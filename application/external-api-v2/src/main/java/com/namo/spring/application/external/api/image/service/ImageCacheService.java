@@ -6,6 +6,7 @@ import com.namo.spring.application.external.api.image.util.ImageKeyParser;
 import com.namo.spring.application.external.api.record.serivce.image.ActivityImageManageService;
 import com.namo.spring.application.external.api.record.serivce.image.DiaryImageManageService;
 import com.namo.spring.core.infra.common.constant.FilePath;
+import com.namo.spring.core.infra.config.AwsS3Config;
 import com.namo.spring.db.redis.util.RedisUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public class ImageCacheService {
     private final ActivityImageManageService activityImageManageService;
     private final DiaryImageManageService diaryImageManageService;
     private final RedisUtil redisUtil;
+    private final AwsS3Config awsS3Config;
 
     public void convertToResizedImage(String redisKey, ImageKeyParser.ParsedKey parsedKey) {
         try {
@@ -59,7 +61,12 @@ public class ImageCacheService {
         FilePath originalPath = findOriginalFilePath(entityType);
         FilePath resizedPath = findResizedFilePath(entityType);
 
-        return originalUrl.replace(originalPath.getPath(), resizedPath.getPath());
+        String s3Domain = awsS3Config.getS3Domain();
+        String updatedUrl = originalUrl.contains(s3Domain)
+                ? originalUrl.replace(s3Domain, awsS3Config.getCdnPath())
+                : originalUrl;
+
+        return updatedUrl.replace(originalPath.getPath(), resizedPath.getPath());
     }
 
     private FilePath findOriginalFilePath(String entityType) {
