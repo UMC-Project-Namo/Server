@@ -19,7 +19,7 @@ import java.util.List;
 
 import static com.namo.spring.application.external.global.utils.PeriodValidationUtils.validatePeriod;
 
-@Tag(name = "4. 개인 일정", description = "개인 일정 API")
+@Tag(name = "04. 개인 일정", description = "개인 일정 API")
 @Slf4j
 @RequiredArgsConstructor
 @RestController

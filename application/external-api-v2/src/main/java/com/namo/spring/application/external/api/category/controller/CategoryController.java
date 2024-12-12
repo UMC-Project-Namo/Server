@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.RequiredArgsConstructor;
 
-@Tag(name = "9. 카테고리", description = "카테고리 관리 API")
+@Tag(name = "09. 카테고리", description = "카테고리 관리 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v2/categories")
