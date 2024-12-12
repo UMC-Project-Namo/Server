@@ -14,7 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 import com.namo.spring.core.common.code.status.ErrorStatus;
-import com.namo.spring.db.mysql.domains.point.enums.PointStatus;
+import com.namo.spring.db.mysql.domains.point.enums.TransactionStatus;
 import com.namo.spring.db.mysql.domains.point.enums.TransactionType;
 import com.namo.spring.db.mysql.domains.point.exception.PointException;
 
@@ -42,7 +42,7 @@ public class PointTransaction {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private PointStatus pointStatus;
+    private TransactionStatus transactionStatus;
 
     @Column(nullable = false)
     private Long amount;
@@ -54,14 +54,17 @@ public class PointTransaction {
     private String description; // 거래 설명
 
     @Builder
-    public PointTransaction(Point point, TransactionType transactionType, Long amount, String description) {
+    public PointTransaction(Point point, TransactionType transactionType, Long amount, String description, TransactionStatus transactionStatus) {
         if (amount <= 0) {
             throw new PointException(ErrorStatus.INVALID_AMOUNT);
         }
         this.point = point;
         this.transactionType = transactionType;
+        this.transactionStatus = transactionStatus;
         this.amount = amount;
         this.transactionDate = LocalDateTime.now();
         this.description = description;
     }
+
+
 }

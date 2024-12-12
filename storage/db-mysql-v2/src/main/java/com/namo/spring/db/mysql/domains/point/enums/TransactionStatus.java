@@ -3,7 +3,7 @@ package com.namo.spring.db.mysql.domains.point.enums;
 import lombok.Getter;
 
 @Getter
-public enum PointStatus {
+public enum TransactionStatus {
     FAILED("실패"),
     PENDING("대기 중"),
     CANCELED("취소"),
@@ -11,7 +11,7 @@ public enum PointStatus {
 
     private final String description;
 
-    PointStatus(String description) {
+    TransactionStatus(String description) {
         this.description = description;
     }
 }
