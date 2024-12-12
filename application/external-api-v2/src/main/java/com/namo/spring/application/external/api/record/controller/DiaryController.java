@@ -1,4 +1,4 @@
-package com.namo.spring.application.external.api.record.Controller;
+package com.namo.spring.application.external.api.record.controller;
 
 import static com.namo.spring.core.common.code.status.ErrorStatus.*;
 

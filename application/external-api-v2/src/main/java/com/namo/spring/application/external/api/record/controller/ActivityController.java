@@ -1,9 +1,7 @@
-package com.namo.spring.application.external.api.record.Controller;
+package com.namo.spring.application.external.api.record.controller;
 
 import static com.namo.spring.application.external.global.utils.PeriodValidationUtils.*;
 import static com.namo.spring.core.common.code.status.ErrorStatus.*;
-
-import java.util.List;
 
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
