@@ -1,11 +1,8 @@
 package com.namo.spring.application.external.api.point.controller;
 
-
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,29 +13,20 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.RequiredArgsConstructor;
 
-@Tag(name = "11. 포인트 ", description = "포인트 관련 API")
+@Tag(name = "11. 포인트 - 관리자", description = "포인트 관련 관리자 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v2/users/points")
-public class PointController {
+@RequestMapping("/api/v2/admin/points")
+public class AdminPointController {
 
     private final PointChargeUseCase pointChargeUseCase;
 
-    @PostMapping("/charge/{amount}")
-    public ResponseDto<String> requestChargePoints(
-            @AuthenticationPrincipal Long memberId,
-            @PathVariable Long amount
-    ){
-        pointChargeUseCase.requestChargePoints(memberId, amount);
-        return ResponseDto.onSuccess(amount + "충전 요청 완료");
-    }
-
     @PreAuthorize("hasRole('ADMIN')")
-    @PatchMapping("/{pointTransactionId}")
+    @PatchMapping("/{pointTransactionId}/accept")
     public ResponseDto<String> acceptChargeRequest(
             @PathVariable Long pointTransactionId
-    ){
+    ) {
         pointChargeUseCase.acceptRequest(pointTransactionId);
-        return ResponseDto.onSuccess(pointTransactionId + "수락 완료");
+        return ResponseDto.onSuccess(pointTransactionId + " 수락 완료");
     }
 }
