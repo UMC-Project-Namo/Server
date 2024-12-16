@@ -155,6 +155,7 @@ public enum ErrorStatus implements BaseErrorCode {
     NOT_PARTICIPATING_ACTIVITY(NOT_FOUND, "참여한 활동이 아닙니다." ),
 
     NOT_FOUND_FRIENDSHIP_REQUEST(NOT_FOUND, "친구 요청을 찾을 수 없습니다."),
+    NOT_FOUND_POINT_REQUEST(NOT_FOUND, "대기중인 포인트 입금 요청을 찾을 수 없습니다."),
     /**
      * 404 : 예외 상황 에러
      */
