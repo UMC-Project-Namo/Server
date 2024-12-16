@@ -66,5 +66,7 @@ public class PointTransaction {
         this.description = description;
     }
 
-
+    public void accept() {
+        this.transactionStatus = TransactionStatus.ACCEPTED;
+    }
 }
