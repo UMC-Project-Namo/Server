@@ -36,9 +36,9 @@ public class PointController {
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{pointTransactionId}")
     public ResponseDto<String> acceptChargeRequest(
-            @AuthenticationPrincipal Long memberId,
             @PathVariable Long pointTransactionId
     ){
+        pointChargeUseCase.acceptRequest(pointTransactionId);
         return ResponseDto.onSuccess(pointTransactionId + "수락 완료");
     }
 }
