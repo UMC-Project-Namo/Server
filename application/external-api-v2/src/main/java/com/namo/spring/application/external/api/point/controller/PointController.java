@@ -1,7 +1,9 @@
 package com.namo.spring.application.external.api.point.controller;
 
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,5 +31,14 @@ public class PointController {
     ){
         pointChargeUseCase.requestChargePoints(memberId, amount);
         return ResponseDto.onSuccess(amount + "충전 요청 완료");
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/{pointTransactionId}")
+    public ResponseDto<String> acceptChargeRequest(
+            @AuthenticationPrincipal Long memberId,
+            @PathVariable Long pointTransactionId
+    ){
+        return ResponseDto.onSuccess(pointTransactionId + "수락 완료");
     }
 }
