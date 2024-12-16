@@ -1,11 +1,15 @@
 package com.namo.spring.application.external.api.point.controller;
 
+import java.util.List;
+
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.namo.spring.application.external.api.point.dto.PointResponse;
 import com.namo.spring.application.external.api.point.usecase.PointChargeUseCase;
 import com.namo.spring.core.common.response.ResponseDto;
 
@@ -20,6 +24,12 @@ import lombok.RequiredArgsConstructor;
 public class AdminPointController {
 
     private final PointChargeUseCase pointChargeUseCase;
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/transactions")
+    public ResponseDto<List<PointResponse.ChargePointRequestDto>> getAllChargeRequests() {
+        return ResponseDto.onSuccess(null);
+    }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{pointTransactionId}/accept")
