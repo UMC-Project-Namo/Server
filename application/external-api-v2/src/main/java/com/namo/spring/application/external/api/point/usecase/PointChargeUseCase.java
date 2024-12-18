@@ -1,8 +1,11 @@
 package com.namo.spring.application.external.api.point.usecase;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.namo.spring.application.external.api.point.converter.PointTransactionConverter;
+import com.namo.spring.application.external.api.point.dto.PointResponse;
 import com.namo.spring.application.external.api.point.service.PointManageService;
 import com.namo.spring.application.external.api.point.service.PointTransactionManageService;
 import com.namo.spring.application.external.api.user.service.MemberManageService;
@@ -33,5 +36,12 @@ public class PointChargeUseCase {
 
         // Point 입금
         pointManageService.depositPoint(pendingTransaction);
+    }
+
+    @Transactional(readOnly = true)
+    public PointResponse.ChargePointRequestListDto getAllChargeRequests(int page) {
+        Page<PointTransaction> requestList = pointTransactionManageService.getAllChargeRequest(page);
+        return PointTransactionConverter
+                .toChargePointRequestListDto(requestList);
     }
 }
