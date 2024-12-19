@@ -11,7 +11,7 @@ CREATE TABLE point_transaction (
                                    id BIGINT AUTO_INCREMENT PRIMARY KEY,
                                    point_id BIGINT NOT NULL,
                                    transaction_type VARCHAR(20) NOT NULL,
-                                   point_status VARCHAR(20) NOT NULL,
+                                   transaction_status VARCHAR(20) NOT NULL,
                                    amount BIGINT NOT NULL,
                                    transaction_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                    description VARCHAR(255),
