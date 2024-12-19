@@ -29,7 +29,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import static com.namo.spring.core.common.code.status.ErrorStatus.*;
 
-@Tag(name = "4. 개인 일정", description = "개인 일정 관련 API")
+@Tag(name = "04. 개인 일정", description = "개인 일정 관련 API")
 public interface PersonalScheduleApi {
     @Operation(summary = "개인 일정 생성", description = "개인 일정을 생성합니다. 요청 성공 시 개인 일정 ID를 전송합니다.")
     @ApiErrorCodes(value = {
