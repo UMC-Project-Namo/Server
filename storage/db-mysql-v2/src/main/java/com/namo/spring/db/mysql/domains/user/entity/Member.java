@@ -118,8 +118,7 @@ public class Member extends BaseTimeEntity implements User {
     @Column(nullable = false)
     private boolean notificationEnabled;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "point_id", nullable = false)
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Point point;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
