@@ -22,8 +22,9 @@ public class MemberService {
 
     @Transactional
     public Member createMember(Member member) {
-        eventPublisher.publishEvent(new MemberCreatedEvent(member));
-        return memberRepository.save(member);
+        Member saveMember = memberRepository.save(member);
+        eventPublisher.publishEvent(new MemberCreatedEvent(saveMember));
+        return memberRepository.save(saveMember);
     }
 
     @Transactional(readOnly = true)
