@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.namo.spring.application.external.api.point.usecase.PointChargeUseCase;
 import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
+import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.core.common.response.ResponseDto;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,11 +33,11 @@ public class MemberPointController {
     })
     @PostMapping("/charge/{amount}")
     public ResponseDto<String> requestChargePoints(
-            @AuthenticationPrincipal Long memberId,
+            @AuthenticationPrincipal SecurityUserDetails memberInfo,
             @Parameter(description = "충전 요청 포인트 금액", example = "5000")
             @PathVariable Long amount
     ){
-        pointChargeUseCase.requestChargePoints(memberId, amount);
+        pointChargeUseCase.requestChargePoints(memberInfo.getUserId(), amount);
         return ResponseDto.onSuccess(amount + "충전 요청 완료");
     }
 
