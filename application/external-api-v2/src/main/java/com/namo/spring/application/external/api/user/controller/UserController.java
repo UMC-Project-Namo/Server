@@ -21,7 +21,7 @@ import static com.namo.spring.application.external.global.utils.DeviceTypeValida
 import static com.namo.spring.core.common.code.status.ErrorStatus.*;
 
 
-@Tag(name = "1. 유저 정보 및 설정", description = "유저 정보 및 설정 관련 API")
+@Tag(name = "01. 유저 정보 및 설정", description = "유저 정보 및 설정 관련 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v2/users")

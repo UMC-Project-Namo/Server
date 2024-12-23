@@ -1,4 +1,4 @@
-package com.namo.spring.application.external.api.record.Controller;
+package com.namo.spring.application.external.api.record.controller;
 
 import static com.namo.spring.core.common.code.status.ErrorStatus.*;
 
@@ -32,7 +32,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.RequiredArgsConstructor;
 
-@Tag(name = "6. 기록 - 일기", description = "일기(diary) 관련 API [개인 기록]")
+@Tag(name = "06. 기록 - 일기", description = "일기(diary) 관련 API [개인 기록]")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v2/diaries")
