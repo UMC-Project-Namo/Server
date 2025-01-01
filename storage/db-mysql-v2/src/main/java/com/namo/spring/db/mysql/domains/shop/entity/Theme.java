@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 
 import org.hibernate.annotations.DynamicInsert;
 
+import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
 import com.namo.spring.db.mysql.domains.shop.enums.ThemeType;
 
 import lombok.AccessLevel;
@@ -21,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
-public class Theme {
+public class Theme extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
