@@ -16,6 +16,7 @@ import jakarta.persistence.OneToMany;
 import org.hibernate.annotations.DynamicInsert;
 
 import com.namo.spring.db.mysql.common.model.BaseTimeEntity;
+import com.namo.spring.db.mysql.domains.shop.enums.ThemeStatus;
 import com.namo.spring.db.mysql.domains.shop.enums.ThemeType;
 
 import lombok.AccessLevel;
@@ -47,6 +48,10 @@ public class Theme extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private ThemeType type; // 테마 유형 (배경 테마, 프로필 테마 등)
+
+    @Enumerated(EnumType.STRING)
+    private ThemeStatus status; // 테마 판매 상태
+
 
     @Builder
     public Theme(String name, String description, Integer price, String previewImageUrl, ThemeType type) {
