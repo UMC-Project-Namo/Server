@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "12. 테마샵", description = "테마샵 쇼핑 관련 API ")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/themes")
+@RequestMapping("/api/v2/shop/themes")
 public class ShoppingController {
 
     private final ShoppingUseCase shoppingUseCase;
