@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 
 import com.namo.spring.application.external.api.shop.dto.ThemeResponse;
 import com.namo.spring.db.mysql.domains.shop.entity.Theme;
+import com.namo.spring.db.mysql.domains.shop.entity.ThemeDetailImage;
 
 public class ThemeConverter {
 
@@ -31,6 +32,21 @@ public class ThemeConverter {
             .description(theme.getDescription())
             .price(theme.getPrice())
             .previewImageUrl(theme.getPreviewImageUrl())
+            .build();
+    }
+
+    public static ThemeResponse.ThemeInfoDto toThemeInfoDto(Theme theme) {
+        List<String> detailImages = theme.getDetailImages().stream()
+            .map(ThemeDetailImage::getImageUrl)
+            .toList();
+
+        return ThemeResponse.ThemeInfoDto.builder()
+            .id(theme.getId())
+            .name(theme.getName())
+            .description(theme.getDescription())
+            .price(theme.getPrice())
+            .detailImages(detailImages)
+            .isOwned(theme.isOwned())
             .build();
     }
 }

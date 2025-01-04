@@ -23,11 +23,24 @@ public class ThemeManageService {
     private final ThemeService themeService;
     private final MemberThemeService memberThemeService;
 
+    /**
+     * 테마 타입에 따른 테마 목록을 반환 합니다.
+     * @param themeType (프로필, 배경)
+     * @param page
+     * @param size
+     * @return
+     */
     public Page<Theme> getSellingThemesByType(ThemeType themeType, int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         return themeService.findByTypeAndStatus(themeType, pageable, ThemeStatus.SELLING);
     }
 
+    /**
+     * 테마 정보와 소유 여부를 반환 합니다.
+     * @param memberId
+     * @param themeId
+     * @return
+     */
     public Theme getThemeByIdWithOwnership(Long memberId, Long themeId) {
         Theme theme = themeService.findByIdAndStatus(themeId, ThemeStatus.SELLING)
                 .orElseThrow(() -> new ThemeException(ErrorStatus.NOT_FOUND_THEME));
