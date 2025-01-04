@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
 
 import org.hibernate.annotations.DynamicInsert;
 
@@ -23,6 +24,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Entity
@@ -52,6 +54,9 @@ public class Theme extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private ThemeStatus status; // 테마 판매 상태
 
+    @Setter
+    @Transient // DB에 저장되지 않는 필드
+    private boolean isOwned;
 
     @Builder
     public Theme(String name, String description, Integer price, String previewImageUrl, ThemeType type) {
