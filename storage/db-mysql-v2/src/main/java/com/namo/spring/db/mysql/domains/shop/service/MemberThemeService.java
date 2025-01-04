@@ -11,4 +11,7 @@ public class MemberThemeService {
 
     private final MemberThemeRepository memberThemeRepository;
 
+    public boolean purchaseInfo(Long memberId, Long themeId) {
+        return memberThemeRepository.existsByMemberIdAndThemeId(memberId, themeId);
+    }
 }
