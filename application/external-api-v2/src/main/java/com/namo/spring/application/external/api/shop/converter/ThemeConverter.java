@@ -11,7 +11,7 @@ import com.namo.spring.db.mysql.domains.shop.entity.Theme;
 public class ThemeConverter {
 
     public static ThemeResponse.ThemeDtoList toThemeDtoList(Page<Theme> themes) {
-        List<ThemeResponse.ThemeResponseDto> themeDtoList = themes.stream()
+        List<ThemeResponse.ThemePreviewDto> themeDtoList = themes.stream()
                 .map(ThemeConverter::toThemeResponseDto)
                 .collect(Collectors.toList());
 
@@ -24,8 +24,8 @@ public class ThemeConverter {
                 .build();
     }
 
-    public static ThemeResponse.ThemeResponseDto toThemeResponseDto(Theme theme) {
-        return ThemeResponse.ThemeResponseDto.builder()
+    public static ThemeResponse.ThemePreviewDto toThemeResponseDto(Theme theme) {
+        return ThemeResponse.ThemePreviewDto.builder()
             .id(theme.getId())
             .name(theme.getName())
             .description(theme.getDescription())

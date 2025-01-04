@@ -24,7 +24,7 @@ public class ThemeResponse {
         private int pageSize;
         @Schema(description = "전체 항목 수", example = "100")
         private long totalItems;
-        private List<ThemeResponseDto> themes;
+        private List<ThemePreviewDto> themes;
 
     }
 
@@ -32,12 +32,24 @@ public class ThemeResponse {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class ThemeResponseDto {
+    public static class ThemePreviewDto {
         private Long id;
         private String name;
         private String description;
         private Integer price;
         private String previewImageUrl;
+    }
 
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ThemeInfoDto {
+        private Long id;
+        private String name;
+        private String description;
+        private Integer price;
+        private String type;
+        private List<String> detailImages;
     }
 }

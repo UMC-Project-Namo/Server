@@ -1,6 +1,5 @@
 package com.namo.spring.application.external.api.shop.controller;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,5 +38,14 @@ public class ShoppingController {
 
         return ResponseDto.onSuccess(shoppingUseCase
                 .getThemesByType(themeType, page, size));
+    }
+
+    @GetMapping("{/themeId}")
+    @Operation(summary = "테마 상세 조회", description = "테마 상세 정보를 조회합니다.")
+    public ResponseDto<ThemeResponse.ThemeInfoDto> getThemeDetail(
+            @Parameter(description = "조회할 테마 ID입니다.", example = "1")
+            @RequestParam("themeId") Long themeId) {
+
+        return ResponseDto.onSuccess(shoppingUseCase.getThemeDetail(themeId));
     }
 }
