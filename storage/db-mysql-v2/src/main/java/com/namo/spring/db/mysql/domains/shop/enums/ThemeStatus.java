@@ -1,8 +1,10 @@
 package com.namo.spring.db.mysql.domains.shop.enums;
 
 public enum ThemeStatus {
-    ACTIVE, // 판매중
-    INACTIVE, // 판매중지
-    DELETED, // 삭제처리 (soft delete)
-    PENDING // 판매대기
+    SELLING,        // 판매 중
+    SOLD_OUT,       // 품절
+    DISCONTINUED,   // 판매 중지
+    DELETED,        // 삭제 처리 (soft delete)
+    PENDING,        // 판매 대기
+    ARCHIVED        // 과거 아카이브 상태 (사용자는 볼 수 있지만 판매되지 않음)
 }
