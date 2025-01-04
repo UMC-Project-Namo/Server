@@ -51,5 +51,6 @@ public class ThemeResponse {
         private Integer price;
         private String type;
         private List<String> detailImages;
+        private Boolean isOwned; // 테마 보유 여부
     }
 }
