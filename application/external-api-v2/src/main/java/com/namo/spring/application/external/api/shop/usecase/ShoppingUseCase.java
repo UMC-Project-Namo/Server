@@ -23,4 +23,10 @@ public class ShoppingUseCase {
         Page<Theme> themes = themeManageService.getSellingThemesByType(themeType, page, size);
         return ThemeConverter.toThemeDtoList(themes);
     }
+
+    @Transactional(readOnly = true)
+    public ThemeResponse.ThemeInfoDto getThemeDetail(Long memberId, Long themeId) {
+        Theme theme = themeManageService.getThemeByIdWithOwnership(memberId, themeId);
+        return ThemeConverter.toThemeInfoDto(theme);
+    }
 }
