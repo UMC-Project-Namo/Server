@@ -16,7 +16,6 @@ import com.namo.spring.db.mysql.domains.schedule.entity.Schedule;
 import com.namo.spring.db.mysql.domains.schedule.type.Location;
 import com.namo.spring.db.mysql.domains.schedule.type.ScheduleType;
 import com.namo.spring.db.mysql.domains.user.model.dto.FriendBirthdayListDto;
-import com.namo.spring.db.mysql.domains.user.model.query.FriendBirthdayQuery;
 
 public class PersonalScheduleResponseConverter {
     private PersonalScheduleResponseConverter() {
@@ -129,10 +128,10 @@ public class PersonalScheduleResponseConverter {
     }
 
     public static PersonalScheduleResponse.GetMonthlyFriendBirthdayDto toGetMonthlyFriendBirthdayDto(FriendBirthdayListDto.FriendBirthdayDto friendBirthday, LocalDate startDate, LocalDate endDate){
-        int year = friendBirthday.getBirthday().getMonthValue() == startDate.getMonthValue() ? startDate.getYear() : endDate.getYear();
+        int year = friendBirthday.birthday().getMonthValue() == startDate.getMonthValue() ? startDate.getYear() : endDate.getYear();
         return PersonalScheduleResponse.GetMonthlyFriendBirthdayDto.builder()
-                .nickname(friendBirthday.getNickname())
-                .birthdayDate(friendBirthday.getBirthday().withYear(year))
+                .nickname(friendBirthday.nickname())
+                .birthdayDate(friendBirthday.birthday().withYear(year))
                 .build();
     }
 

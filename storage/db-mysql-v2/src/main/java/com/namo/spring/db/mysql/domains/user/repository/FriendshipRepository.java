@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import com.namo.spring.db.mysql.domains.user.model.query.FriendBirthdayQuery;
+import com.namo.spring.db.mysql.domains.user.model.query.FriendshipWithBirthdayQuery;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -45,7 +45,7 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
             "     AND (FUNCTION('DAYOFYEAR', fr.birthday) >= FUNCTION('DAYOFYEAR', :startDate) " +
             "          OR FUNCTION('DAYOFYEAR', fr.birthday) <= FUNCTION('DAYOFYEAR', :endDate))) " +
             ")")
-    List<FriendBirthdayQuery> findBirthdayVisibleFriendIdsByPeriod(
+    List<FriendshipWithBirthdayQuery> findBirthdayVisibleFriendIdsByPeriod(
             Long memberId,
             LocalDate startDate,
             LocalDate endDate);
@@ -61,7 +61,7 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
             "WHERE f.member.id = :memberId " +
             "AND fr.birthdayVisible = true " +
             "AND f.status = 'ACCEPTED'")
-    List<FriendBirthdayQuery> findBirthdayVisibleFriends(Long memberId);
+    List<FriendshipWithBirthdayQuery> findBirthdayVisibleFriends(Long memberId);
 
     Optional<Friendship> findByMemberIdAndFriendIdAndStatus(Long memberId, Long friendId, FriendshipStatus status);
 
