@@ -2,12 +2,8 @@ package com.namo.spring.db.mysql.domains.user.entity;
 
 import static com.namo.spring.db.mysql.domains.user.utils.UserValidationUtils.*;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.namo.spring.db.mysql.domains.category.entity.Palette;
+import jakarta.persistence.*;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -50,27 +46,33 @@ public class Anonymous extends BaseTimeEntity implements User {
     @Embedded
     private Password password;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "palette_id")
+    private Palette palette;
+
     private String inviteCode;
 
     @Builder
     public Anonymous(String name, Boolean nameVisible, String tag,
-            String nickname, String password, String inviteCode) {
+            String nickname, String password, String inviteCode, Palette palette) {
         this.name = name;
         this.nameVisible = nameVisible;
         this.tag = validateTag(tag);
         this.nickname = validateNickname(nickname);
         this.password = Password.encrypt(password);
+        this.palette = palette;
         this.inviteCode = inviteCode;
     }
 
     public static Anonymous of(String name, Boolean nameVisible, String tag,
-            String nickname, String password, String inviteCode) {
+            String nickname, String password, String inviteCode, Palette palette) {
         return Anonymous.builder()
                 .nickname(nickname)
                 .name(name)
                 .nameVisible(nameVisible)
                 .tag(tag)
                 .password(password)
+                .palette(palette)
                 .inviteCode(inviteCode)
                 .build();
     }
