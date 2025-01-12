@@ -35,8 +35,8 @@ public class ParticipantManageService {
     private final FriendshipService friendshipService;
     private final ParticipantService participantService;
 
-    public void createScheduleOwner(Member member, Schedule schedule, Long categoryId, Long paletteId) {
-        participantMaker.makeScheduleOwner(schedule, member, categoryId, paletteId);
+    public void createScheduleOwner(Member member, Schedule schedule, Long categoryId) {
+        participantMaker.makeScheduleOwner(schedule, member, categoryId);
     }
 
     public void createMeetingParticipants(Member owner, Schedule schedule, List<Long> memberIds){
