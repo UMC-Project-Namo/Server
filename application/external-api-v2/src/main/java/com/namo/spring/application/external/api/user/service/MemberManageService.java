@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.namo.spring.db.mysql.domains.user.model.query.MemberWithFriendshipStatusQuery;
 import org.springframework.stereotype.Service;
 
 import com.namo.spring.application.external.api.category.service.CategoryMaker;
@@ -140,6 +141,10 @@ public class MemberManageService {
         if (memberRepository.existsByEmailAndSocialType(email, socialType)) {
             throw new MemberException(ErrorStatus.DUPLICATE_EMAIL_FAILURE);
         }
+    }
+
+    public MemberWithFriendshipStatusQuery getMemberProfile(Long memberId, Long targetId) {
+        return memberService.findMemberWithFriendshipStatus(memberId, targetId);
     }
 
 }
