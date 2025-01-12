@@ -112,7 +112,7 @@ public class GuestManageService {
     private String generateInviteCode(Long scheduleId) {
         List<String> existCodes = anonymousService.readAllInviteCodes()
                 .stream()
-                .map(AnonymousInviteCodeQuery::getCode)
+                .map(AnonymousInviteCodeQuery::code)
                 .toList();
         String inviteCode;
         do {

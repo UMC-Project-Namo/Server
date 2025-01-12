@@ -2,20 +2,17 @@ package com.namo.spring.application.external.api.user.controller;
 
 import com.namo.spring.application.external.api.user.dto.NotificationRequest;
 import com.namo.spring.application.external.api.user.dto.NotificationResponse;
-import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
-import com.namo.spring.db.mysql.domains.notification.type.ReceiverDeviceType;
-import io.swagger.v3.oas.annotations.Parameter;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
-
 import com.namo.spring.application.external.api.user.usecase.UserUseCase;
+import com.namo.spring.application.external.global.annotation.swagger.ApiErrorCodes;
 import com.namo.spring.application.external.global.common.security.authentication.SecurityUserDetails;
 import com.namo.spring.core.common.response.ResponseDto;
-
+import com.namo.spring.db.mysql.domains.notification.type.ReceiverDeviceType;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 import static com.namo.spring.application.external.global.utils.DeviceTypeValidationUtil.validatedDeviceType;
 import static com.namo.spring.core.common.code.status.ErrorStatus.*;

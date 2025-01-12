@@ -12,7 +12,6 @@ import com.namo.spring.db.mysql.domains.schedule.type.ParticipantRole;
 import com.namo.spring.db.mysql.domains.schedule.type.Period;
 import com.namo.spring.db.mysql.domains.user.entity.Friendship;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
-import com.namo.spring.db.mysql.domains.user.entity.User;
 import com.namo.spring.db.mysql.domains.user.exception.MemberException;
 import com.namo.spring.db.mysql.domains.user.service.FriendshipService;
 import lombok.RequiredArgsConstructor;
@@ -92,12 +91,6 @@ public class ParticipantManageService {
     public void deleteParticipant(Participant participant, Schedule schedule) {
         participantService.deleteParticipant(participant.getId());
         schedule.removeParticipant(participant.getMember().getNickname());
-    }
-
-    private void removeParticipants(Schedule schedule, List<Participant> participants) {
-        List<User> users = participants.stream().map(Participant::getUser).collect(Collectors.toList());
-        schedule.removeParticipants(users.stream().map(User::getNickname).collect(Collectors.toList()));
-        participantService.deleteByIdIn(participants.stream().map(Participant::getId).collect(Collectors.toList()));
     }
 
     /**

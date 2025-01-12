@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 import com.namo.spring.application.external.api.user.service.FriendManageService;
 import com.namo.spring.db.mysql.domains.user.model.dto.FriendBirthdayListDto;
-import com.namo.spring.db.mysql.domains.user.model.query.FriendBirthdayQuery;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -61,11 +60,11 @@ public class PersonalScheduleUsecase {
     @Transactional(readOnly = true)
     public List<PersonalScheduleResponse.GetMonthlyFriendBirthdayDto> getMonthlyFriendsBirthday(LocalDate startDate, LocalDate endDate,
                                                                                                 Long memberId) {
-        List<FriendBirthdayListDto.FriendBirthdayDto> friendsBirthdays = friendManageService.getFriendsBirthday(memberId).getFriendsBirthdayDtoList();
+        List<FriendBirthdayListDto.FriendBirthdayDto> friendsBirthdays = friendManageService.getFriendsBirthday(memberId).friendsBirthdayDtoList();
 
         List<FriendBirthdayListDto.FriendBirthdayDto> friendsBirthdaysOfPeriod = friendsBirthdays.stream()
                 .filter(friend -> {
-                    int birthdayMonth = friend.getBirthday().getMonthValue();
+                    int birthdayMonth = friend.birthday().getMonthValue();
                     return birthdayMonth >= startDate.getMonthValue() && birthdayMonth <= endDate.getMonthValue();
                 })
                 .collect(Collectors.toList());

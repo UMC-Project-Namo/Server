@@ -158,6 +158,8 @@ public class MeetingScheduleResponse {
         private Long userId;
         @Schema(description = "게스트 여부")
         private Boolean isGuest;
+        @Schema(description = "태그")
+        private String tag;
         @Schema(description = "닉네임")
         private String nickname;
         @Schema(description = "색상 ID")
