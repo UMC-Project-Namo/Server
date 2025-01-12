@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberProfileController {
     private final MemberProfileUsecase memberProfileUsecase;
 
-    @Operation(summary = "유저 프로필 및 친구 상태 조회", description = "유저 프로필 및 친구 상태를 조회합니다.")
+    @Operation(summary = "유저 프로필 및 친구 상태 조회", description = "유저 프로필 및 친구 상태를 조회합니다. 닉네임#태그 형식으로 요청해주세요.")
     @GetMapping("/{nickname-tag}/profile")
     public ResponseDto<MemberProfileResponse.MemberProfileDto> getMemberProfile(
             @AuthenticationPrincipal SecurityUserDetails member,
