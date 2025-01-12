@@ -61,10 +61,6 @@ public class Participant extends BaseTimeEntity {
     @JoinColumn(name = "category_id", nullable = true)
     private Category category;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "palette_id", nullable = true)
-    private Palette palette;
-
     @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(length = 50)
     private String customTitle;
@@ -78,27 +74,23 @@ public class Participant extends BaseTimeEntity {
     private Diary diary;
 
     @Builder
-    public Participant(int isOwner, User user, Schedule schedule, Category category,
-            Palette palette, String customTitle, String customImage) {
+    public Participant(int isOwner, User user, Schedule schedule, Category category, String customTitle, String customImage) {
         this.isOwner = Objects.requireNonNull(isOwner, "isOwner은 null일 수 없습니다.");
         this.member = user instanceof Member ? (Member)user : null;
         this.anonymous = user instanceof Anonymous ? (Anonymous)user : null;
         this.schedule = Objects.requireNonNull(schedule, "schedule은 null일 수 없습니다.");
         this.category = category;
-        this.palette = palette;
         this.hasDiary = false;
         this.customTitle = customTitle;
         this.customImage =customImage;
     }
 
-    public static Participant of(int isOwner, User user, Schedule schedule, Category category,
-            Palette palette, String customTitle, String customImage) {
+    public static Participant of(int isOwner, User user, Schedule schedule, Category category, String customTitle, String customImage) {
         return Participant.builder()
                 .isOwner(isOwner)
                 .user(user)
                 .schedule(schedule)
                 .category(category)
-                .palette(palette)
                 .customTitle(customTitle)
                 .customImage(customImage)
                 .build();
@@ -111,6 +103,15 @@ public class Participant extends BaseTimeEntity {
             return this.anonymous;
         }
         return null;
+    }
+
+    public Palette getPalette() {
+        if(this.getUser() instanceof Member){
+            return this.member.getPalette();
+        }
+        else {
+            return this.anonymous.getPalette();
+        }
     }
 
     public void setIsOwner(ParticipantRole role) {

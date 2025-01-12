@@ -8,6 +8,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.namo.spring.application.external.global.config.properties.WebUrlConfig;
+import com.namo.spring.db.mysql.domains.category.service.PaletteService;
+import com.namo.spring.db.mysql.domains.user.entity.Member;
 import org.springframework.stereotype.Service;
 
 import com.namo.spring.application.external.api.guest.dto.GuestParticipantRequest;
@@ -38,21 +40,22 @@ public class GuestManageService {
     private final AnonymousService anonymousService;
     private final ParticipantService participantService;
     private final ParticipantMaker participantMaker;
+    private final PaletteService paletteService;
     private final TagGenerator tagGenerator;
     private final WebUrlConfig webUrlConfig;
 
-    public Anonymous createAnonymous(GuestParticipantRequest.PostGuestParticipantDto dto, Schedule schedule,
-            String code, String tag) {
-        Anonymous anonymous = Anonymous.of(null, null, tag, dto.getNickname(), dto.getPassword(), code);
+    public Anonymous createAnonymous(GuestParticipantRequest.PostGuestParticipantDto dto, String code, String tag, Palette palette) {
+        Anonymous anonymous = Anonymous.of(null, null, tag, dto.getNickname(), dto.getPassword(), code, palette);
         return anonymousService.createAnonymous(anonymous);
     }
 
     private Participant createGuest(GuestParticipantRequest.PostGuestParticipantDto dto, Schedule schedule,
             String code) {
         String tag = tagGenerator.generateTag(dto.getNickname());
-        Anonymous anonymous = createAnonymous(dto, schedule, code, tag);
         Long paletteId = selectPaletteColorId(schedule.getId());
-        return participantMaker.makeGuestParticipant(schedule, anonymous, paletteId);
+        Palette palette = paletteService.readPalette(paletteId).orElseThrow(()-> new PaletteException(ErrorStatus.NOT_FOUND_COLOR));
+        Anonymous anonymous = createAnonymous(dto, code, tag, palette);
+        return participantMaker.makeGuestParticipant(schedule, anonymous);
     }
 
     public Participant getAnonymousParticipant(Long anonymousId, Long scheduleId) {
@@ -71,7 +74,7 @@ public class GuestManageService {
     private Long selectPaletteColorId(Long scheduleId) {
         List<Long> participantsColors = participantService.readParticipantsByScheduleIdAndScheduleType(scheduleId,
                         ScheduleType.MEETING)
-                .stream().map(Participant::getPalette).map(Palette::getId).collect(Collectors.toList());
+                .stream().map(Participant::getMember).map(Member::getPalette).map(Palette::getId).collect(Collectors.toList());
         return Arrays.stream(PALETTE_IDS)
                 .filter((color) -> !participantsColors.contains(color))
                 .findFirst()

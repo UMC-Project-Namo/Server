@@ -172,7 +172,7 @@ public class MeetingScheduleResponseConverter {
                 .isGuest(participant.getUser() instanceof Anonymous)
                 .tag(participant.getUser().getTag())
                 .nickname(participant.getUser().getNickname())
-                .colorId(participant.getPalette() != null ? participant.getPalette().getId() : null)
+                .colorId(participant.getPalette().getId())
                 .isOwner(getParticipantIsOwner(participant.getIsOwner()))
                 .build();
     }

@@ -27,18 +27,17 @@ public class ParticipantMaker {
     private final CategoryService categoryService;
     private final ParticipantService participantService;
 
-    public void makeScheduleOwner(Schedule schedule, Member member, Long categoryId, Long paletteId) {
+    public void makeScheduleOwner(Schedule schedule, Member member, Long categoryId) {
         Category category;
         if (categoryId != null) {
             category = categoryService.readCategoryByMemberAndId(categoryId, member);
         } else
             category = categoryService.readMeetingCategoryByMember(member);
-        Palette palette = paletteId != null ? paletteService.getPalette(paletteId) :  null;
 
         Participant participant;
         if(schedule.getIsMeetingSchedule()){
-            participant = Participant.of(ParticipantRole.OWNER.getValue(), member, schedule, category, palette, schedule.getTitle(), schedule.getImageUrl());
-        } else participant = Participant.of(ParticipantRole.OWNER.getValue(), member, schedule, category, palette, null, null);
+            participant = Participant.of(ParticipantRole.OWNER.getValue(), member, schedule, category, schedule.getTitle(), schedule.getImageUrl());
+        } else participant = Participant.of(ParticipantRole.OWNER.getValue(), member, schedule, category,null, null);
         participantService.createParticipant(participant);
     }
 
@@ -47,16 +46,15 @@ public class ParticipantMaker {
                 .map(member -> {
                     Category category = categoryService.readMeetingCategoryByMember(member);
                     return Participant.of(ParticipantRole.NON_OWNER.getValue(), member, schedule,
-                            category, member.getPalette(), schedule.getTitle(), schedule.getImageUrl());
+                            category, schedule.getTitle(), schedule.getImageUrl());
                 })
                 .collect(Collectors.toList());
         participantService.createParticipants(participants);
     }
 
-    public Participant makeGuestParticipant(Schedule schedule, Anonymous anonymous, Long paletteId) {
-        Palette palette = paletteService.getPalette(paletteId);
+    public Participant makeGuestParticipant(Schedule schedule, Anonymous anonymous) {
         Participant participant = Participant.of(ParticipantRole.NON_OWNER.getValue(), anonymous, schedule,
-                null, palette, schedule.getTitle(), schedule.getImageUrl());
+                null, schedule.getTitle(), schedule.getImageUrl());
         Participant savedParticipant = participantService.createParticipant(participant);
         schedule.setGuestParticipantsInfo(anonymous.getNickname());
         return savedParticipant;

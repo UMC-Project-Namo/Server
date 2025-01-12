@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "11. Profile", description = "유저 프로필 API")
+@Tag(name = "11. Member Profile", description = "유저 프로필 API")
 @RequestMapping("/api/v2/members")
 public class MemberProfileController {
     private final MemberProfileUsecase memberProfileUsecase;
