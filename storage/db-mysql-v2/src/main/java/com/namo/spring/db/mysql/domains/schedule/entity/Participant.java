@@ -61,10 +61,6 @@ public class Participant extends BaseTimeEntity {
     @JoinColumn(name = "category_id", nullable = true)
     private Category category;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "palette_id", nullable = true)
-    private Palette palette;
-
     @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(length = 50)
     private String customTitle;
@@ -107,6 +103,15 @@ public class Participant extends BaseTimeEntity {
             return this.anonymous;
         }
         return null;
+    }
+
+    public Palette getPalette() {
+        if(this.getUser() instanceof Member){
+            return this.member.getPalette();
+        }
+        else {
+            return this.anonymous.getPalette();
+        }
     }
 
     public void setIsOwner(ParticipantRole role) {
