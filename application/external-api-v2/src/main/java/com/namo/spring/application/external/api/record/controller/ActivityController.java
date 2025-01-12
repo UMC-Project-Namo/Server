@@ -1,9 +1,7 @@
-package com.namo.spring.application.external.api.record.Controller;
+package com.namo.spring.application.external.api.record.controller;
 
 import static com.namo.spring.application.external.global.utils.PeriodValidationUtils.*;
 import static com.namo.spring.core.common.code.status.ErrorStatus.*;
-
-import java.util.List;
 
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,7 +28,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.RequiredArgsConstructor;
 
-@Tag(name = "7. 기록 - 활동", description = "활동(Activity) 관련 API [단체 기록]")
+@Tag(name = "07. 기록 - 활동", description = "활동(Activity) 관련 API [단체 기록]")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v2/activities")

@@ -20,7 +20,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.RequiredArgsConstructor;
 
-@Tag(name = "3. 공통 일정", description = "공통 일정 API")
+@Tag(name = "03. 공통 일정", description = "공통 일정 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v2/schedules")

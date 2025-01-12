@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import com.namo.spring.db.mysql.domains.user.model.query.MemberWithFriendshipStatusQuery;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.namo.spring.core.common.annotation.DomainService;
 import com.namo.spring.db.mysql.domains.user.entity.Member;
+import com.namo.spring.db.mysql.domains.user.event.MemberCreatedEvent;
 import com.namo.spring.db.mysql.domains.user.repository.MemberRepository;
 import com.namo.spring.db.mysql.domains.user.type.MemberStatus;
 
@@ -17,10 +19,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public Member createMember(Member member) {
-        return memberRepository.save(member);
+        Member saveMember = memberRepository.save(member);
+        eventPublisher.publishEvent(new MemberCreatedEvent(saveMember));
+        return memberRepository.save(saveMember);
     }
 
     @Transactional(readOnly = true)

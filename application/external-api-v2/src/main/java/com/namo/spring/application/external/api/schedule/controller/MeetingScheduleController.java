@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Tag(name = "5. 모임 일정", description = "모임 일정 관련 API")
+@Tag(name = "05. 모임 일정", description = "모임 일정 관련 API")
 @Slf4j
 @RequiredArgsConstructor
 @RestController
