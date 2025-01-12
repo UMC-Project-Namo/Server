@@ -3,6 +3,7 @@ package com.namo.spring.db.mysql.domains.user.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.namo.spring.db.mysql.domains.user.model.query.MemberWithFriendshipStatusQuery;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.namo.spring.core.common.annotation.DomainService;
@@ -38,5 +39,9 @@ public class MemberService {
 
     public Optional<Member> readMemberByStatus(String nickname, String tag, MemberStatus status){
         return memberRepository.findByNicknameAndTagAndStatus(nickname, tag, status);
+    }
+
+    public MemberWithFriendshipStatusQuery findMemberWithFriendshipStatus(Long memberId, Long targetId) {
+        return memberRepository.findByMemberIdWithFriendStatus(memberId, targetId);
     }
 }

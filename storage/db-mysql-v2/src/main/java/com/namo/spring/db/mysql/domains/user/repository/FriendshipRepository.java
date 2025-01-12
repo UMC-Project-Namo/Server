@@ -32,7 +32,7 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
      * @param endDate
      * @return 친구 memberId, nickname, birthday
      */
-    @Query("SELECT new com.namo.spring.db.mysql.domains.user.model.query.FriendBirthdayQuery(fr.id, fr.nickname, fr.birthday) " +
+    @Query("SELECT new com.namo.spring.db.mysql.domains.user.model.query.FriendshipWithBirthdayQuery(fr.id, fr.nickname, fr.birthday) " +
             "FROM Friendship f JOIN f.friend fr " +
             "WHERE f.member.id = :memberId " +
             "AND fr.birthdayVisible = true " +
@@ -56,7 +56,7 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
      * @param memberId
      * @return 친구 memberId, nickname, birthday
      */
-    @Query("SELECT new com.namo.spring.db.mysql.domains.user.model.query.FriendBirthdayQuery(fr.id, fr.nickname, fr.birthday) " +
+    @Query("SELECT new com.namo.spring.db.mysql.domains.user.model.query.FriendshipWithBirthdayQuery(fr.id, fr.nickname, fr.birthday) " +
             "FROM Friendship f JOIN f.friend fr " +
             "WHERE f.member.id = :memberId " +
             "AND fr.birthdayVisible = true " +
